@@ -1,0 +1,141 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens for an interface read by people in their seventies and eighties, often with
+ * presbyopia, cataracts or reduced contrast sensitivity, frequently on an old Android
+ * phone in daylight.
+ *
+ * Two decisions here are unusual and deliberate:
+ *
+ * 1. No webfont. A flash of invisible text on mobile data is a real cost to this
+ *    audience, and it outranks having a distinctive typeface. The system stack resolves
+ *    to Roboto, SF Pro or Segoe UI — all humanist, all legible at these sizes.
+ * 2. No border or divider tokens. Structure is carried entirely by size and space.
+ *    Rules and boxes add visual noise that competes with the one thing on screen.
+ */
+
+:root {
+	--paper: #fbfaf7;
+	--ink: #14181a;
+	--quiet: #5b6569;
+	/* The single action colour. Teal rather than a red/green pair so it stays
+	   distinguishable under deuteranopia and protanopia. */
+	--speak: #0f6b5c;
+	--speak-press: #0b5044;
+	/* Only ever shown while the microphone is actually open. Colour carries state. */
+	--live: #c6402a;
+
+	--font-sans:
+		system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/*
+ * Dark mode follows the device rather than offering a toggle. A setting this audience
+ * has to find and understand is a setting that does not get used, and a toggle is one
+ * more control competing with the microphone.
+ */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--paper: #101314;
+		--ink: #f2f0ec;
+		--quiet: #9aa4a8;
+		--speak: #2f9e89;
+		--speak-press: #26816f;
+		--live: #e8674f;
+	}
+}
+
+@theme inline {
+	--color-paper: var(--paper);
+	--color-ink: var(--ink);
+	--color-quiet: var(--quiet);
+	--color-speak: var(--speak);
+	--color-speak-press: var(--speak-press);
+	--color-live: var(--live);
+	--font-sans: var(--font-sans);
+
+	/* A wide scale. Steps must be obvious at arm's length, so they are far apart. */
+	--text-micro: 1.125rem; /* 18 */
+	--text-body: 1.375rem; /* 22 */
+	--text-lead: 1.75rem; /* 28 */
+	--text-title: 2.5rem; /* 40 */
+	--text-display: 3.5rem; /* 56 */
+}
+
+@layer base {
+	html {
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-sans);
+		font-size: 100%;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		margin: 0;
+		min-height: 100svh;
+		font-size: var(--text-body);
+		line-height: 1.45;
+	}
+
+	/*
+	 * Focus must be obvious, not tasteful. Some users navigate with a stylus or an
+	 * assistive switch, and a subtle ring is the same as no ring.
+	 */
+	:focus-visible {
+		outline: 4px solid var(--speak);
+		outline-offset: 3px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+}
+
+@layer components {
+	/*
+	 * Every tappable thing is at least 72px tall and full width. Tremor and imprecise
+	 * aim are the norm in this population, so targets are sized for a thumb that misses.
+	 */
+	.tap {
+		display: block;
+		width: 100%;
+		min-height: 4.5rem;
+		padding: 1rem 1.25rem;
+		border: 0;
+		border-radius: 0.75rem;
+		font: inherit;
+		font-size: var(--text-lead);
+		font-weight: 600;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.tap-quiet {
+		background: transparent;
+		color: var(--ink);
+		box-shadow: inset 0 0 0 3px var(--ink);
+	}
+
+	.tap-speak {
+		background: var(--speak);
+		color: var(--paper);
+		font-size: var(--text-title);
+		min-height: 6rem;
+		text-align: center;
+	}
+
+	.tap-speak:active {
+		background: var(--speak-press);
+	}
+
+	.tap-speak[data-live='true'] {
+		background: var(--live);
+	}
+}

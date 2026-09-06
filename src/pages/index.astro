@@ -1,0 +1,16 @@
+---
+import Voice from '../components/Voice.tsx';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * client:load, because talking is the only thing this page does. Deferring hydration
+ * would mean the microphone button is dead for the first moment it is on screen, and a
+ * button that does nothing when pressed is how this audience concludes the thing is
+ * broken and stops.
+ */
+export const prerender = false;
+---
+
+<BaseLayout title="Suara">
+	<Voice client:load />
+</BaseLayout>

@@ -1,0 +1,23 @@
+{
+	// Server-rendered Astro on Cloudflare Workers.
+	//
+	// Unlike my-blog, this one has an adapter and a server entrypoint: every voice turn
+	// is a POST that calls a model, so there is nothing to prerender.
+	//
+	// `main` points at the adapter's own entrypoint, not at dist — the build output does
+	// not exist when this file is read. `assets` and `compatibility_date` are filled in
+	// by Astro, so they are deliberately absent.
+	//
+	// GEMINI_API_KEY is a secret, not a var. Set it with:
+	//   npx wrangler secret put GEMINI_API_KEY
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "suara",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		"SUARA_PROVIDER": "gemini",
+		"SUARA_MODEL": "gemini-2.5-flash-lite"
+	}
+}
