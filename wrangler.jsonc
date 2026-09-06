@@ -13,6 +13,11 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "suara",
 	"main": "@astrojs/cloudflare/entrypoints/server",
+	// The transcript channel. Cross-checks the audio model rather than driving decisions;
+	// without this binding the turn still works, just uncorroborated.
+	"ai": {
+		"binding": "AI"
+	},
 	"observability": {
 		"enabled": true
 	},

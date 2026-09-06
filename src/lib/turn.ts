@@ -1,5 +1,8 @@
 import { z } from 'zod';
+import { factsFor } from './catalogue';
+import { corroborate, type Agreement } from './corroborate';
 import { decide, nextContext, type PolicyContext } from './policy';
+import type { TranscriptProvider } from './providers/transcript';
 import type { VoiceProvider } from './providers/types';
 import { screenFor, type Screen } from './uispec';
 import { Understanding, type Intent } from './understanding';
@@ -31,36 +34,77 @@ export const TurnRequest = z.discriminatedUnion('kind', [
 
 export type TurnRequest = z.infer<typeof TurnRequest>;
 
+/**
+ * The audit record for one turn.
+ *
+ * This is what compliance actually needs, and it is better than a transcript alone: the
+ * literal words heard, what each channel concluded, whether they agreed, the confidence
+ * before and after adjustment, and what the system did about it. A transcript on its own
+ * records what might have been said; this records why the system did what it did.
+ */
+export interface TurnAudit {
+	transcript: string;
+	audioIntent: Intent;
+	transcriptIntent: string | null;
+	agreement: Agreement;
+	rawConfidence: number;
+	adjustedConfidence: number;
+	decision: string;
+}
+
 export interface TurnResponse {
 	screen: Screen;
 	language: string;
 	history: Understanding[];
 	unclearStreak: number;
+	audit?: TurnAudit;
 }
 
 /**
- * One turn, start to finish. Pure apart from the provider call, so it is testable
- * against `FakeProvider` with no network.
+ * One turn, start to finish.
+ *
+ * Both channels run, and they run concurrently — the transcriber is not on the critical
+ * path behind the audio model, so corroboration costs a few cents per thousand users
+ * and no extra latency.
  */
 export async function runTurn(
 	req: TurnRequest,
 	provider: VoiceProvider,
+	transcriber?: TranscriptProvider,
 ): Promise<TurnResponse> {
 	if (req.kind === 'confirmation') {
 		return handleConfirmation(req.accepted, req.intent, req.history);
 	}
 
 	const audio = decodeBase64(req.audioBase64);
-	const { understanding } = await provider.understand(audio, { history: req.history });
+
+	const [voice, transcript] = await Promise.all([
+		provider.understand(audio, { history: req.history }),
+		transcriber?.transcribe(audio) ?? Promise.resolve(null),
+	]);
+
+	// With no transcriber configured this is a no-op that reports 'no-signal', so the
+	// single-channel path stays exactly as it was.
+	const cross = corroborate(voice.understanding, transcript?.text ?? '');
+	const understanding = cross.understanding;
 
 	const ctx: PolicyContext = { consecutiveUnclear: req.unclearStreak };
 	const decision = decide(understanding, ctx);
 
 	return {
-		screen: screenFor(decision),
+		screen: screenFor(decision, factsFor(understanding.intent)),
 		language: understanding.language,
 		history: [...req.history, understanding],
 		unclearStreak: nextContext(understanding, ctx).consecutiveUnclear,
+		audit: {
+			transcript: cross.transcript,
+			audioIntent: voice.understanding.intent,
+			transcriptIntent: cross.transcriptIntent,
+			agreement: cross.agreement,
+			rawConfidence: cross.rawConfidence,
+			adjustedConfidence: understanding.confidence,
+			decision: decision.kind,
+		},
 	};
 }
 
@@ -82,11 +126,10 @@ function handleConfirmation(
 
 	if (accepted) {
 		return {
-			screen: screenFor({
-				kind: 'act',
-				intent,
-				say: last?.reply ?? 'Let me get that for you.',
-			}),
+			screen: screenFor(
+				{ kind: 'act', intent, say: last?.reply ?? 'Let me get that for you.' },
+				factsFor(intent),
+			),
 			language,
 			history,
 			unclearStreak: 0,

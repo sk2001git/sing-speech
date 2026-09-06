@@ -60,14 +60,19 @@ const HELPLINE = '1800 222 0000';
  * screen whose only affordance is failure, because a dead end for this population means
  * giving up on the service entirely.
  */
-export function screenFor(decision: Decision): Screen {
+export function screenFor(
+	decision: Decision,
+	facts: { label: string; value: string }[] = [],
+): Screen {
 	switch (decision.kind) {
 		case 'act':
 			return {
 				kind: 'answer',
 				title: capitalise(INTENT_LABELS[decision.intent]),
 				say: decision.say,
-				facts: [],
+				// Empty when the catalogue row is unverified. The caller must not fill the
+				// gap with something plausible — see `factsFor`.
+				facts,
 			};
 
 		case 'confirm':

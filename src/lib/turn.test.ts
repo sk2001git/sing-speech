@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { anUnderstanding, FakeProvider } from './providers/fake';
+import { FakeTranscriber } from './providers/transcript';
 import { runTurn } from './turn';
 
 /** A short silence. Content does not matter — the fake ignores it. */
@@ -106,5 +107,53 @@ describe('runTurn', () => {
 		);
 		expect(res.screen.kind).toBe('repeat');
 		expect(res.unclearStreak).toBe(0);
+	});
+
+	it('lets the transcript veto a confident but wrong audio guess', async () => {
+		// The reason both channels are paid for. Alone, the audio model would have acted
+		// on 0.9 confidence and sent someone to the wrong service.
+		const provider = new FakeProvider([
+			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.9 }),
+		]);
+		const res = await runTurn(
+			speech(),
+			provider,
+			new FakeTranscriber('i am asking about the silver support payout'),
+		);
+		expect(res.screen.kind).not.toBe('act');
+		expect(res.audit?.agreement).toBe('disagreed');
+	});
+
+	it('records both channels and both confidences, which is a better audit trail than a transcript alone', async () => {
+		const provider = new FakeProvider([
+			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.7 }),
+		]);
+		const res = await runTurn(speech(), provider, new FakeTranscriber('chas card please'));
+
+		expect(res.audit).toMatchObject({
+			transcript: 'chas card please',
+			audioIntent: 'chas_subsidy',
+			transcriptIntent: 'chas_subsidy',
+			agreement: 'agreed',
+			rawConfidence: 0.7,
+		});
+		expect(res.audit!.adjustedConfidence).toBeGreaterThan(0.7);
+	});
+
+	it('behaves exactly as before when no transcriber is configured', async () => {
+		const provider = new FakeProvider([
+			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.9 }),
+		]);
+		const res = await runTurn(speech(), provider);
+		expect(res.screen.kind).toBe('answer');
+		expect(res.audit?.agreement).toBe('no-signal');
+	});
+
+	it('shows no facts while the catalogue row is unverified, rather than inventing policy', async () => {
+		const provider = new FakeProvider([
+			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.95 }),
+		]);
+		const res = await runTurn(speech(), provider);
+		expect(res.screen).toMatchObject({ kind: 'answer', facts: [] });
 	});
 });
