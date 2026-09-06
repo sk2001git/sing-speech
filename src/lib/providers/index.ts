@@ -27,7 +27,7 @@ export function providerFrom(env: ProviderEnv): VoiceProvider {
 			if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 			return new GeminiProvider({
 				apiKey,
-				model: env.SUARA_MODEL as 'gemini-2.5-flash-lite' | undefined,
+				model: env.SUARA_MODEL as 'gemini-3.5-flash-lite' | undefined,
 			});
 		}
 		default:

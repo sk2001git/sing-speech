@@ -6,10 +6,22 @@ import type { Pricing, ProviderResult, TurnContext, VoiceProvider } from './type
  * Prices checked 2026-09-07 against ai.google.dev/gemini-api/docs/pricing.
  * Audio bills at 32 tokens per second, so a minute is 1,920 tokens.
  *
- * Re-check before trusting the cost harness — these move, and a stale number here makes
- * every downstream projection wrong. See obs-0008 in the vault.
+ * Note what the table shows: 3.5 Flash-Lite costs the SAME per audio minute as the much
+ * weaker 2.5 Flash-Lite. Only output tokens are dearer. Since audio dominates a voice
+ * turn and our replies are capped at 400 characters, the smarter model is close to free
+ * here — which is why it is the default rather than the cheapest line in the table.
+ *
+ * Re-check before trusting the cost harness. These move, and a stale number makes every
+ * downstream projection wrong. See obs-0008 in the vault.
  */
 const PRICES: Record<string, Pricing> = {
+	// Default. Same audio price as 2.5 Flash-Lite, materially better reasoning.
+	'gemini-3.5-flash-lite': {
+		audioPerMinUsd: (0.3 / 1_000_000) * 1920,
+		inPerMTokUsd: 0.3,
+		outPerMTokUsd: 2.5,
+	},
+	// Kept only as the floor for cost comparisons. Too weak to ship on.
 	'gemini-2.5-flash-lite': {
 		audioPerMinUsd: (0.3 / 1_000_000) * 1920,
 		inPerMTokUsd: 0.1,
@@ -51,7 +63,7 @@ export class GeminiProvider implements VoiceProvider {
 	private readonly doFetch: typeof fetch;
 
 	constructor(opts: GeminiOptions) {
-		const model = opts.model ?? 'gemini-2.5-flash-lite';
+		const model = opts.model ?? 'gemini-3.5-flash-lite';
 		const price = PRICES[model];
 		if (!price) throw new Error(`no pricing recorded for model ${model}`);
 
