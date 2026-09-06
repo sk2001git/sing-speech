@@ -80,10 +80,47 @@ npx wrangler secret put GEMINI_API_KEY
 npm run deploy
 ```
 
+## Speech out is the unsolved half
+
+Understanding dialect speech is handled. Speaking it back is not, and that is the
+harder problem.
+
+Android and iOS ship no Hokkien or Teochew voice, so the on-device synthesis this
+depends on covers English, Mandarin, Malay and Tamil and stops there. No commercial TTS
+API sells Hokkien either. The system therefore understands a Hokkien-speaking
+eighty-year-old and answers in a language they may not read — failing precisely the
+users it exists for.
+
+The one available path is `MERaLiON/MERaLiON-OmniVoice-Hokkien-TTS`: 0.8B parameters,
+2.7GB, fp16, Chinese characters in and 24kHz WAV out. It takes arbitrary text rather
+than a fixed phrase list, so it works with model-generated replies. There is no hosted
+API, but at that size it runs on a cheap always-on CPU box rather than a GPU — a fixed
+monthly cost that serves every dialect user.
+
+Replies are generated per turn rather than authored from a fixed set. That is a
+deliberate trade: it costs roughly $6 more per month per thousand users and puts
+unreviewed Tamil and Malay in front of users, and it buys replies that answer what the
+person actually said rather than what category they fall into.
+
+### Where the budget lands
+
+| Line | 1000 users |
+|---|---|
+| Audio in and understanding | ~$2.30 |
+| Generated replies, 3.5 Flash-Lite output | ~$6 |
+| Dialect TTS box, fixed | ~$8 |
+| **Total** | **~$16-17/mo** |
+
+Over the $10 target at exactly a thousand users, and under it from roughly 2,500
+onward, because the TTS box is a fixed cost that does not grow. The levers if $10 must
+hold at 1000: author the replies instead of generating them, halve the 400-character
+cap, or give dialect speakers Mandarin audio alongside text in their own language.
+
 ## Not built yet
 
 Named here so nobody assumes otherwise:
 
+- **Dialect speech output.** See above. The largest known gap.
 - **The profile vault.** `screenFor` returns an empty `facts` array. The "don't ask,
   fetch" half of the product does not exist yet — the schema is meant to mirror Myinfo's
   fields so that Myinfo later becomes a second implementation of one interface.
