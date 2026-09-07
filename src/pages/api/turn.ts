@@ -8,7 +8,31 @@ import { runTurn, TurnRequest } from '../../lib/turn';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+interface RuntimeEnv extends ProviderEnv {
+	AI?: WorkersAiBinding;
+}
+
+/**
+ * Read Worker bindings and secrets.
+ *
+ * `Astro.locals.runtime.env` was removed in Astro 6; bindings now come from the
+ * `cloudflare:workers` virtual module. It is imported dynamically and guarded because
+ * that module only exists inside workerd — under plain Node (tests, or a non-Worker
+ * runtime) the import throws, and falling back to `import.meta.env` keeps the route
+ * working rather than turning a missing binding into a 500.
+ */
+async function runtimeEnv(): Promise<RuntimeEnv> {
+	let bindings: RuntimeEnv = {};
+	try {
+		const mod = (await import('cloudflare:workers')) as { env?: RuntimeEnv };
+		bindings = mod.env ?? {};
+	} catch {
+		// Not running inside a Worker. import.meta.env alone is correct here.
+	}
+	return { ...(import.meta.env as unknown as RuntimeEnv), ...bindings };
+}
+
+export const POST: APIRoute = async ({ request }) => {
 	let parsed: TurnRequest;
 	try {
 		parsed = TurnRequest.parse(await request.json());
@@ -16,20 +40,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		return json({ error: 'bad request' }, 400);
 	}
 
-	// Cloudflare bindings arrive on locals.runtime.env in a deployed Worker. Under
-	// `astro dev` there is no Worker, so fall back to import.meta.env, which Astro fills
-	// from .env. There is no `process` in either runtime, so nothing reads it.
-	const env = {
-		...(import.meta.env as unknown as ProviderEnv),
-		...((locals as { runtime?: { env?: ProviderEnv } }).runtime?.env ?? {}),
-	} satisfies ProviderEnv;
+	const env = await runtimeEnv();
 
 	// The second channel runs only where the Workers AI binding exists. Without it the
 	// turn still works on the audio model alone, just without corroboration — so a
 	// missing binding degrades the cross-check rather than breaking the product.
-	const ai = (locals as { runtime?: { env?: { AI?: WorkersAiBinding } } }).runtime?.env
-		?.AI;
-	const transcriber = ai ? new WorkersAiTranscriber(ai) : undefined;
+	const transcriber = env.AI ? new WorkersAiTranscriber(env.AI) : undefined;
 
 	try {
 		return json(await runTurn(parsed, providerFrom(env), transcriber));

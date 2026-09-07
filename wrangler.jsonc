@@ -13,6 +13,10 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "suara",
 	"main": "@astrojs/cloudflare/entrypoints/server",
+	// Astro sets this for the build, but wrangler's own commands (`types`, `deploy`)
+	// require it in the file, so it is explicit.
+	"compatibility_date": "2026-09-07",
+	"compatibility_flags": ["nodejs_compat"],
 	// The transcript channel. Cross-checks the audio model rather than driving decisions;
 	// without this binding the turn still works, just uncorroborated.
 	"ai": {

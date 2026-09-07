@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "npm run typecheck && npm run build && npm run test"
+    "verify": "npm run types && npm run typecheck && npm run build && npm run test",
+    "types": "wrangler types"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.0",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.5.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
