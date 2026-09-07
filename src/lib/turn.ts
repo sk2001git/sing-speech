@@ -82,7 +82,7 @@ export async function runTurn(
 
 	const [voice, transcript] = await Promise.all([
 		provider.understand(audio, { history: req.history, mimeType: req.mimeType }),
-		transcriber?.transcribe(audio) ?? Promise.resolve(null),
+		transcriber?.transcribe(audio, req.mimeType) ?? Promise.resolve(null),
 	]);
 
 	// With no transcriber configured this is a no-op that reports 'no-signal', so the

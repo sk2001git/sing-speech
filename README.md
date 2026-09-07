@@ -80,6 +80,24 @@ npx wrangler secret put GEMINI_API_KEY
 npm run deploy
 ```
 
+## Verified end to end
+
+Run against the live APIs on 2026-09-08 with real synthesised speech, not fixtures:
+
+| Utterance | Audio model | Transcript | Agreement | Decision |
+|---|---|---|---|---|
+| "I need help paying for the doctor. The medicine is too expensive." | `chas_subsidy` 0.95 | transcribed correctly | agreed | act |
+| "Which bus number should I take to go there?" | `wayfinding` 0.95 | agreed | agreed | act |
+| "I want to talk to a real person please." | `human_handoff` 1.0 | correct | no-signal | handoff |
+| "Ah... the thing, you know. My paper. I don't know lah." | `human_handoff` 0.4 | "I don't know **law**" | no-signal | handoff |
+
+1.76s for a full turn, both channels running concurrently.
+
+The last row is the design working as intended in miniature. Whisper heard Singlish
+"lah" as "law", the cue matcher found nothing, and rather than manufacture a false
+disagreement it reported no signal — while the audio model, hearing the hesitation
+rather than reading the mangled words, correctly routed to a human.
+
 ## Speech out is the unsolved half
 
 Understanding dialect speech is handled. Speaking it back is not, and that is the

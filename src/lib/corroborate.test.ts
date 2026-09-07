@@ -13,12 +13,23 @@ describe('corroborate', () => {
 		expect(c.understanding.confidence).toBeGreaterThan(0.7);
 	});
 
+	it('never lowers confidence when the channels agree, even above the ceiling', () => {
+		// Found by a live run: 0.99 agreed came back as 0.97, because the ceiling was
+		// clamping unconditionally. Confirmation must never cost confidence.
+		const c = corroborate(
+			anUnderstanding({ intent: 'wayfinding', confidence: 0.99 }),
+			'which bus number should I take',
+		);
+		expect(c.agreement).toBe('agreed');
+		expect(c.understanding.confidence).toBeGreaterThanOrEqual(0.99);
+	});
+
 	it('never lets corroboration reach certainty, since both channels share one input', () => {
 		const c = corroborate(
-			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.99 }),
+			anUnderstanding({ intent: 'chas_subsidy', confidence: 0.8 }),
 			'chas card',
 		);
-		expect(c.understanding.confidence).toBeLessThan(1);
+		expect(c.understanding.confidence).toBeLessThanOrEqual(0.97);
 	});
 
 	it('drops a confident guess below the act threshold when the transcript disagrees', () => {

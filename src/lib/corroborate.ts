@@ -56,7 +56,11 @@ export function corroborate(
 
 	if (transcriptIntent === understanding.intent) {
 		agreement = 'agreed';
-		confidence = Math.min(raw + AGREEMENT_BOOST, AGREEMENT_CEILING);
+		// Never below `raw`. The ceiling caps how far agreement can *raise* confidence; on
+		// its own, `min(raw + boost, ceiling)` also pulls an already-higher confidence
+		// down, so a second channel confirming the first would penalise it. Observed live:
+		// 0.99 agreed became 0.97.
+		confidence = Math.max(raw, Math.min(raw + AGREEMENT_BOOST, AGREEMENT_CEILING));
 	} else if (transcriptIntent !== null) {
 		agreement = 'disagreed';
 		confidence = Math.max(raw - DISAGREEMENT_PENALTY, 0);

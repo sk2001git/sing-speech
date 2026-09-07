@@ -23,7 +23,7 @@ Rules:
 2. Report honest confidence. If the audio is unclear, or they could plausibly mean two different things, say so with a low number. A confident wrong answer causes far more harm here than an admitted uncertainty — someone will act on it.
 3. Set needsHuman when they are distressed, when they ask for a person, or when the request is outside the list above.
 4. Write "reply" in the SAME language they spoke, as one or two short sentences meant to be read aloud. Plain words. No lists, no formatting, no jargon. Assume it is being spoken by a machine to someone who may be hard of hearing.
-5. Put anything specific they mentioned into "slots" — a clinic name, a person, a date. Do not invent entries. An empty slots object is the correct answer when they mentioned nothing specific.
+5. Put anything specific they mentioned into "slots", as a list of {key, value} pairs — a clinic name, a person, a date. Do not invent entries. An empty list is the correct answer when they mentioned nothing specific.
 6. Choose "language" from: ${LANGUAGES.join(', ')}. Use "sg" for code-switched Singlish and "unknown" only when you genuinely cannot tell.
 
 Never guess to be helpful. A low confidence score gets them a clarifying question, which is a good outcome. A wrong high-confidence answer gets them the wrong government service, which is not.`;
@@ -34,6 +34,11 @@ Never guess to be helpful. A low confidence score gets them a clarifying questio
  * accept. Deliberately hand-written rather than generated from the Zod schema: the
  * wire contract and the internal type serve different masters, and the response is
  * re-validated with Zod on arrival anyway.
+ *
+ * `slots` is a list of key/value pairs rather than an open-ended object because
+ * Gemini's response schema rejects `additionalProperties` outright — a 400, not a
+ * warning. The provider folds the list back into a record before validation, so the
+ * shape the rest of the codebase sees is unaffected.
  */
 export const RESPONSE_SCHEMA = {
 	type: 'object',
@@ -41,7 +46,14 @@ export const RESPONSE_SCHEMA = {
 		intent: { type: 'string', enum: [...INTENTS] },
 		confidence: { type: 'number' },
 		language: { type: 'string', enum: [...LANGUAGES] },
-		slots: { type: 'object', additionalProperties: { type: 'string' } },
+		slots: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: { key: { type: 'string' }, value: { type: 'string' } },
+				required: ['key', 'value'],
+			},
+		},
 		reply: { type: 'string' },
 		needsHuman: { type: 'boolean' },
 	},

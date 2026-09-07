@@ -1,9 +1,10 @@
 import type { APIRoute } from 'astro';
-import { providerFrom, type ProviderEnv } from '../../lib/providers';
 import {
-	WorkersAiTranscriber,
+	providerFrom,
+	transcriberFrom,
+	type ProviderEnv,
 	type WorkersAiBinding,
-} from '../../lib/providers/transcript';
+} from '../../lib/providers';
 import { runTurn, TurnRequest } from '../../lib/turn';
 
 export const prerender = false;
@@ -42,10 +43,9 @@ export const POST: APIRoute = async ({ request }) => {
 
 	const env = await runtimeEnv();
 
-	// The second channel runs only where the Workers AI binding exists. Without it the
-	// turn still works on the audio model alone, just without corroboration — so a
-	// missing binding degrades the cross-check rather than breaking the product.
-	const transcriber = env.AI ? new WorkersAiTranscriber(env.AI) : undefined;
+	// Undefined here is fine: the turn runs on the audio model alone and reports
+	// 'no-signal', so a missing binding degrades the cross-check rather than the product.
+	const transcriber = transcriberFrom(env);
 
 	try {
 		return json(await runTurn(parsed, providerFrom(env), transcriber));
