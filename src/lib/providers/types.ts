@@ -15,6 +15,13 @@ export interface TurnContext {
 	candidates?: readonly string[];
 	/** Set by the helper during setup when the user speaks a dialect. Routes providers. */
 	dialectHint?: string;
+	/**
+	 * The container the browser actually recorded, e.g. `audio/webm`. Browsers disagree
+	 * about what MediaRecorder can produce — Chrome and Android give WebM/Opus, Safari
+	 * gives MP4/AAC — so the format is detected at record time and travels with the audio
+	 * rather than being assumed here.
+	 */
+	mimeType?: string;
 }
 
 /**

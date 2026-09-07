@@ -86,7 +86,7 @@ export class GeminiProvider implements VoiceProvider {
 						{ text: turnPreamble(ctx) },
 						{
 							inlineData: {
-								mimeType: 'audio/ogg',
+								mimeType: geminiMime(ctx.mimeType),
 								data: toBase64(audio),
 							},
 						},
@@ -153,6 +153,26 @@ function turnPreamble(ctx: TurnContext): string {
 		.map((h, i) => `Turn ${i + 1}: they wanted ${h.intent} (confidence ${h.confidence}).`)
 		.join('\n');
 	return `Earlier in this conversation:\n${prior}\n\nNow listen to the new audio.`;
+}
+
+/**
+ * Map what the browser recorded onto what Gemini accepts.
+ *
+ * Gemini takes wav, mp3, aiff, aac, ogg, flac, mpeg, m4a, l16, opus and webm. Safari's
+ * MediaRecorder emits `audio/mp4`, which is not on that list but is the same container
+ * as m4a, so it is relabelled rather than rejected. Anything unrecognised falls back to
+ * webm, which is what every non-Safari browser here produces.
+ */
+function geminiMime(recorded: string | undefined): string {
+	if (!recorded) return 'audio/webm';
+	const base = recorded.split(';')[0]!.trim().toLowerCase();
+	if (base === 'audio/mp4') return 'audio/m4a';
+	const accepted = [
+		'audio/wav', 'audio/mp3', 'audio/aiff', 'audio/aac', 'audio/ogg',
+		'audio/flac', 'audio/mpeg', 'audio/m4a', 'audio/l16', 'audio/opus',
+		'audio/webm',
+	];
+	return accepted.includes(base) ? base : 'audio/webm';
 }
 
 function toBase64(buf: ArrayBuffer): string {

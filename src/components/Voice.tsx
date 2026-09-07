@@ -38,6 +38,26 @@ function speak(text: string, lang: string): void {
 	speechSynthesis.speak(u);
 }
 
+/**
+ * Pick a container this browser can actually record.
+ *
+ * Hardcoding `audio/webm;codecs=opus` throws on iOS Safari, which records MP4/AAC — so
+ * that one line would have made the app dead on every iPhone, silently, at the moment
+ * the user first presses the button. Candidates are ordered by preference and every one
+ * of them is a format Gemini accepts. An empty string means "browser default", which is
+ * the honest fallback when nothing is recognised.
+ */
+function pickMimeType(): string {
+	const candidates = [
+		'audio/webm;codecs=opus',
+		'audio/webm',
+		'audio/ogg;codecs=opus',
+		'audio/mp4',
+	];
+	if (typeof MediaRecorder === 'undefined') return '';
+	return candidates.find((t) => MediaRecorder.isTypeSupported(t)) ?? '';
+}
+
 async function toBase64(blob: Blob): Promise<string> {
 	const bytes = new Uint8Array(await blob.arrayBuffer());
 	let binary = '';
@@ -114,16 +134,21 @@ export default function Voice() {
 			const stream = await navigator.mediaDevices.getUserMedia({
 				audio: { channelCount: 1, sampleRate: 16000, noiseSuppression: true },
 			});
-			const rec = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+			const mimeType = pickMimeType();
+			const rec = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
 			chunks.current = [];
 			rec.ondataavailable = (e) => chunks.current.push(e.data);
 			rec.onstop = async () => {
 				stream.getTracks().forEach((t) => t.stop());
 				setRecording(false);
-				const blob = new Blob(chunks.current, { type: 'audio/webm' });
+				// rec.mimeType is what the browser actually chose, which is not always what
+				// was asked for. Send that, not the request.
+				const type = rec.mimeType || mimeType || 'audio/webm';
+				const blob = new Blob(chunks.current, { type });
 				await post({
 					kind: 'speech',
 					audioBase64: await toBase64(blob),
+					mimeType: type,
 					history: history.current,
 					unclearStreak: unclearStreak.current,
 				});
@@ -133,6 +158,9 @@ export default function Voice() {
 			rec.start();
 			setRecording(true);
 		} catch {
+			// Covers a denied permission, no microphone, and an insecure origin —
+			// getUserMedia needs HTTPS or localhost, so this fires on a phone hitting a
+			// plain-http dev server. The user gets one instruction either way.
 			setScreen({
 				kind: 'repeat',
 				say: 'I cannot use the microphone. Please allow microphone access, then press the green button.',

@@ -20,6 +20,8 @@ export const TurnRequest = z.discriminatedUnion('kind', [
 	z.object({
 		kind: z.literal('speech'),
 		audioBase64: z.string().min(1),
+		/** What the browser recorded. Absent means assume WebM. */
+		mimeType: z.string().max(100).optional(),
 		history: z.array(Understanding).max(20).default([]),
 		unclearStreak: z.number().int().min(0).max(10).default(0),
 	}),
@@ -79,7 +81,7 @@ export async function runTurn(
 	const audio = decodeBase64(req.audioBase64);
 
 	const [voice, transcript] = await Promise.all([
-		provider.understand(audio, { history: req.history }),
+		provider.understand(audio, { history: req.history, mimeType: req.mimeType }),
 		transcriber?.transcribe(audio) ?? Promise.resolve(null),
 	]);
 
