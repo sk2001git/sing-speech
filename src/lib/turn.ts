@@ -45,6 +45,8 @@ export type TurnRequest = z.infer<typeof TurnRequest>;
  * records what might have been said; this records why the system did what it did.
  */
 export interface TurnAudit {
+	/** Which corroboration channel ran, or null when none was configured. */
+	transcriber: string | null;
 	transcript: string;
 	audioIntent: Intent;
 	transcriptIntent: string | null;
@@ -99,6 +101,7 @@ export async function runTurn(
 		history: [...req.history, understanding],
 		unclearStreak: nextContext(understanding, ctx).consecutiveUnclear,
 		audit: {
+			transcriber: transcriber?.id ?? null,
 			transcript: cross.transcript,
 			audioIntent: voice.understanding.intent,
 			transcriptIntent: cross.transcriptIntent,

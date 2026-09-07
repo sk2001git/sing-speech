@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { startCaptions, type CaptionSession } from '../lib/caption';
 import type { Screen } from '../lib/uispec';
 import type { Understanding } from '../lib/understanding';
 
@@ -71,10 +72,16 @@ export default function Voice() {
 	const [busy, setBusy] = useState(false);
 	const [lang, setLang] = useState('en');
 
+	// What the user is saying, shown as they say it. Display only — see lib/caption.ts.
+	const [caption, setCaption] = useState('');
+	// True once the caption has been replaced by the transcript we actually acted on.
+	const [captionConfirmed, setCaptionConfirmed] = useState(false);
+
 	const history = useRef<Understanding[]>([]);
 	const unclearStreak = useRef(0);
 	const recorder = useRef<MediaRecorder | null>(null);
 	const chunks = useRef<Blob[]>([]);
+	const captions = useRef<CaptionSession | null>(null);
 
 	// Say every new screen aloud. The spoken text and the shown text are the same string,
 	// so a user who hears it and a user who reads it get the same thing and there is
@@ -97,9 +104,16 @@ export default function Voice() {
 				language: string;
 				history: Understanding[];
 				unclearStreak: number;
+				audit?: { transcript: string };
 			};
 			history.current = next.history;
 			unclearStreak.current = next.unclearStreak;
+			// Replace the browser's guess with the transcript the decision was actually
+			// made on. If the two differ, what is shown is the one that counted.
+			if (next.audit?.transcript) {
+				setCaption(next.audit.transcript);
+				setCaptionConfirmed(true);
+			}
 			setLang(next.language);
 			setScreen(next.screen);
 		} catch {
@@ -140,6 +154,8 @@ export default function Voice() {
 			rec.ondataavailable = (e) => chunks.current.push(e.data);
 			rec.onstop = async () => {
 				stream.getTracks().forEach((t) => t.stop());
+				captions.current?.stop();
+				captions.current = null;
 				setRecording(false);
 				// rec.mimeType is what the browser actually chose, which is not always what
 				// was asked for. Send that, not the request.
@@ -155,6 +171,10 @@ export default function Voice() {
 			};
 			recorder.current = rec;
 			speechSynthesis?.cancel();
+			setCaption('');
+			setCaptionConfirmed(false);
+			// Captions run alongside the recording and never end the turn. The button does.
+			captions.current = startCaptions(VOICE_LANG[lang] ?? 'en-SG', setCaption);
 			rec.start();
 			setRecording(true);
 		} catch {
@@ -194,6 +214,33 @@ export default function Voice() {
 				<p className="text-[length:var(--text-title)] font-semibold leading-tight text-balance">
 					{screen.say}
 				</p>
+
+				{/*
+				  Subtitles. The height is reserved whether or not there is text, so the
+				  question above never jumps as words arrive — a moving target is hard to
+				  read for anyone, and worse for the eyes this is built for.
+
+				  aria-live is polite and the region is not focusable: a screen reader user
+				  is already hearing themselves speak and does not need it announced over
+				  the top.
+				*/}
+				<div className="mt-8 min-h-28" aria-live="polite">
+					{(recording || caption) && (
+						<>
+							<p className="text-quiet text-[length:var(--text-micro)]">
+								{recording ? 'I am hearing' : captionConfirmed ? 'You said' : 'I heard'}
+							</p>
+							<p
+								className={`mt-1 text-[length:var(--text-lead)] leading-snug ${
+									recording ? 'text-ink' : 'text-quiet'
+								}`}
+							>
+								{caption || (recording ? '…' : '')}
+								{recording && <span className="caret" aria-hidden="true" />}
+							</p>
+						</>
+					)}
+				</div>
 
 				{screen.kind === 'repeat' && (
 					<p className="text-quiet mt-6 text-[length:var(--text-lead)]">

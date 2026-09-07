@@ -138,4 +138,27 @@
 	.tap-speak[data-live='true'] {
 		background: var(--live);
 	}
+
+	/*
+	 * A caret after the live caption. The one piece of non-user-triggered motion in the
+	 * interface, and it earns its place: it is the signal that the microphone is open
+	 * even during a silence, which is exactly when someone unsure of technology decides
+	 * the thing is broken. Reduced motion is respected globally, and the caret stays
+	 * visible when animation is off.
+	 */
+	.caret {
+		display: inline-block;
+		width: 0.12em;
+		height: 1em;
+		margin-left: 0.12em;
+		vertical-align: -0.12em;
+		background: var(--live);
+		animation: caret-blink 1.1s step-end infinite;
+	}
+
+	@keyframes caret-blink {
+		50% {
+			opacity: 0;
+		}
+	}
 }
