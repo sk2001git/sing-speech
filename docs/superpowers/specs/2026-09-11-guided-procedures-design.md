@@ -1,9 +1,9 @@
 ---
 type: design
-status: draft
+status: approved
 date: 2026-09-11
 confidence: 0.6
-open_questions: 7
+open_questions: 5 open, 2 resolved by decision
 supersedes: 2026-09-08-feel-layer-design.md (sections 3 and 4)
 ---
 
@@ -475,8 +475,9 @@ Every row lands somewhere the user can act. No dead ends.
 
 ## Open questions
 
-Carried per `kb-open-questions`. These are guesses, not confirmations. Approving this spec
-is not an answer to any of them.
+Carried per `kb-open-questions`. 1 through 5 are guesses, not confirmations, and approving
+this spec did not answer them. 6 and 7 were answered by decision on 2026-09-11 and are
+kept here with their resolutions rather than deleted.
 
 | # | Question | Assumption I will make | Cost if wrong |
 |---|---|---|---|
@@ -485,9 +486,12 @@ is not an answer to any of them.
 | 3 | What is the staleness budget for a step image? | 90 days, after which the image is hidden and the step renders text-only | Images hidden that were still accurate, or a stale screenshot sending someone to a button that moved |
 | 4 | Does Gemini TTS audio *output* bill near 32 tokens/second, as audio input does? Unverified — the figure is documented for input | Yes | The pre-synthesis budget is wrong by that ratio. It is one-time and small either way, so this is cheap to be wrong about |
 | 5 | Do the quoted prices expire on 31 Dec 2026 and double? A third-party tracker claims so; not confirmed on Google's own pricing page | They hold | Every projection in this spec and the README doubles |
-| 6 | Is a prompt-steered Singaporean accent acceptable to Singaporean listeners? Unmeasured | It is, at least better than `en-US` | Worse than a neutral voice. An imitation that misses reads as mockery to the exact users this serves |
-| 7 | Can an eighty-year-old actually complete a five-step guided flow on a phone? Unmeasured | They can, with one step expanded and confirmation per step | The central product bet. If false, procedures must be shorter or handed to a person sooner |
+| 6 | ~~Is a prompt-steered Singaporean accent acceptable to Singaporean listeners?~~ **Resolved 2026-09-11.** Owner rejected the mockery framing and directed best-effort accent steering | Proceed with prompt-steered `en-SG`. No listening test gates the MVP | Accepted by the owner. Revisit before any public release |
+| 7 | Can an eighty-year-old actually complete a five-step guided flow on a phone? Unmeasured | Build it, then judge it. **The owner is the judge** and will assess the built MVP directly | Still the central product bet. If it fails on inspection, procedures shorten or hand off sooner |
 
-**Questions 6 and 7 are the ones that change the work.** Both need real people — a
-listening test and a walkthrough — and neither can be answered from a desk. 1 through 5
-have safe defaults or cheap recoveries.
+**Question 2 is now the one that changes the work.** It is measurable from a desk once the
+knowledge base has content, and it decides whether the classification shape survives past
+a handful of procedures. 1, 3, 4 and 5 have safe defaults or cheap recoveries.
+
+Question 7 is not resolved, only assigned. The MVP is built to be judged, and the
+judgement is the owner's to make against a running build rather than a document.
