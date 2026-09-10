@@ -161,4 +161,39 @@
 			opacity: 0;
 		}
 	}
+
+	/*
+	 * A step in a guided flow. Three states, distinguished by weight and opacity rather
+	 * than by a border — `global.css` carries structure with size and space, and a stack
+	 * of six outlined boxes is exactly the visual noise that rule exists to prevent.
+	 */
+	.step {
+		margin-top: 1.75rem;
+		transition: opacity 200ms ease-out;
+	}
+
+	.step[data-state='done'] {
+		opacity: 0.45;
+	}
+
+	.step[data-state='future'] {
+		opacity: 0.55;
+	}
+
+	.step[data-state='active'] {
+		opacity: 1;
+	}
+
+	/*
+	 * Reserve the picture's box before it loads. An image that arrives and pushes the
+	 * instruction down is a layout shift, and the CLS assertion in the browser tests
+	 * fails on it — correctly, because a moving instruction is hard to follow.
+	 */
+	.step img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		background: color-mix(in srgb, var(--ink) 8%, transparent);
+	}
 }
