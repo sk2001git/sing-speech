@@ -17,11 +17,11 @@
 	// require it in the file, so it is explicit.
 	"compatibility_date": "2026-09-07",
 	"compatibility_flags": ["nodejs_compat"],
-	// The transcript channel. Cross-checks the audio model rather than driving decisions;
-	// without this binding the turn still works, just uncorroborated.
-	"ai": {
-		"binding": "AI"
-	},
+	// The Whisper transcript channel is not attached by default (owner, 2026-09-14): it is a
+	// separate, ongoing piece of work, and on Singlish it hallucinated Malay for 5 of 10 test
+	// clips (vault obs-0024). To attach it, add the binding below and set
+	// SUARA_TRANSCRIBER to "workers-ai". The binding alone never switches it on.
+	//   "ai": { "binding": "AI" },
 	"observability": {
 		"enabled": true
 	},
@@ -31,6 +31,7 @@
 		"SUARA_PROVIDER": "gemini",
 		"SUARA_MODEL": "gemini-3.5-flash-lite",
 		"SUARA_MODE": "gemini",
+		"SUARA_TRANSCRIBER": "none",
 		"SUARA_OPENAI_MODEL": "gpt-realtime-2.1",
 		"SUARA_DEMO": "false"
 	}

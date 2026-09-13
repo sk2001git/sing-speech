@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; background: #fbfbfd; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #1d1d1f; } a:hover { color: #000000; }
+    svg { display: block; }
+  </style>
+</helmet>
+<div style="width: 390px; min-height: 844px; background: #fbfbfd;">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 72px; padding: 0 20px; border-bottom: 1px solid #e5e5ea; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 44px; height: 44px; border-radius: 14px; background: #000000; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"></path></svg>
+      </div>
+      <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Suara</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 48px; padding: 0 16px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; font-size: 16px; font-weight: 600;">English</div>
+      <div style="width: 48px; height: 48px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 20px; padding: 16px 20px 32px;">
+    <div style="display: flex; align-items: center; gap: 6px; min-height: 48px; font-size: 18px; font-weight: 600;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      Answers
+    </div>
+
+    <h1 style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.15; letter-spacing: -0.025em; white-space: nowrap;">Start these steps?</h1>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; padding: 20px; border: 2px solid #1d1d1f; border-radius: 20px; background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+      <div style="font-size: 22px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">GPFirst at A&amp;E</div>
+      <div style="font-size: 16px; color: #5f5f64;">5 steps · you confirm each one</div>
+      <div style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 14px; border-radius: 12px; background: #f5f5f7; font-size: 16px; font-weight: 600; color: #5f5f64;">
+        <span>See all steps</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 12px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 12px; border-radius: 20px; background: #ffffff; border: 1px solid #e5e5ea;">
+        <div style="width: 88px; height: 88px; border-radius: 999px; background: #248a3d; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+        </div>
+        <span style="font-size: 20px; font-weight: 700;">Yes, start</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 12px; border-radius: 20px; background: #ffffff; border: 1px solid #e5e5ea;">
+        <div style="width: 88px; height: 88px; border-radius: 999px; background: #d70015; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        </div>
+        <span style="font-size: 20px; font-weight: 700;">Not this</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

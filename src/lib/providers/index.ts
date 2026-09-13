@@ -87,13 +87,16 @@ export function routeTurn(
  * turn runs on the audio model alone and simply reports 'no-signal'. Corroboration is
  * an upgrade, so a missing binding or an unset variable must not break a turn.
  *
- * `workers-ai` is the default because it costs $0.00045 a minute against Gemini
- * Transcribe's $0.005 — roughly $1.80 versus $20 a month per thousand users.
+ * Only `SUARA_TRANSCRIBER` picks one; unset means none. An attached Workers AI binding
+ * never switches Whisper on by itself (owner, 2026-09-14): Whisper is attached on purpose,
+ * and on Singlish test clips it hallucinated Malay for 5 of 10 (vault obs-0024). Whisper
+ * is still the cheaper channel when attached — $0.00045 a minute against Gemini
+ * Transcribe's $0.005.
  */
 export function transcriberFrom(
 	env: ProviderEnv & { AI?: WorkersAiBinding },
 ): TranscriptProvider | undefined {
-	switch (env.SUARA_TRANSCRIBER ?? (env.AI ? 'workers-ai' : 'none')) {
+	switch (env.SUARA_TRANSCRIBER ?? 'none') {
 		case 'none':
 			return undefined;
 		case 'workers-ai':

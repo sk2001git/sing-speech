@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; background: #fbfbfd; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #1d1d1f; } a:hover { color: #000000; }
+    svg { display: block; }
+  </style>
+</helmet>
+<div style="width: 390px; min-height: 900px; background: #fbfbfd;">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 72px; padding: 0 20px; border-bottom: 1px solid #e5e5ea; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 44px; height: 44px; border-radius: 14px; background: #000000; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"></path></svg>
+      </div>
+      <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Suara</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 48px; padding: 0 16px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; font-size: 16px; font-weight: 600;">English</div>
+      <div style="width: 48px; height: 48px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 32px;">
+    <div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 16px 0 20px; border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff;">
+      <span style="font-size: 16px; color: #5f5f64; white-space: nowrap;">You asked</span>
+      <span style="flex: 1; min-width: 0; font-size: 20px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">A card, and money</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 16px; border: 1px solid #f0d9a0; border-radius: 16px; background: #fff6de; color: #7a5200; font-size: 18px; font-weight: 600;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5.5M12 7.5v.01"></path></svg>
+      <span style="white-space: nowrap;">Closest I have, not a sure match</span>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <span style="font-size: 18px; font-weight: 600;">4 answers</span>
+      <div style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #f5f5f7; border: 1px solid #e5e5ea;">
+        <div style="width: 48px; height: 44px; border-radius: 999px; background: #000000; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+        </div>
+        <div style="width: 48px; height: 44px; border-radius: 999px; color: #1d1d1f; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="1.5"></rect><rect x="4" y="13" width="16" height="7" rx="1.5"></rect></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 8px; min-height: 104px; padding: 14px; border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff; box-sizing: border-box;">
+        <span style="font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Pioneer card</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 16px; color: #5f5f64;">1 step</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; min-height: 104px; padding: 14px; border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff; box-sizing: border-box;">
+        <span style="font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">CareShield fee</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 16px; color: #5f5f64;">2 steps</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; min-height: 104px; padding: 14px; border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff; box-sizing: border-box;">
+        <span style="font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Premium help</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 16px; color: #5f5f64;">2 steps</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; min-height: 104px; padding: 14px; border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff; box-sizing: border-box;">
+        <span style="font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">CHAS referral</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="font-size: 16px; color: #5f5f64;">1 step</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 72px; border-radius: 16px; background: #000000; color: #ffffff; font-size: 20px; font-weight: 600;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"></path></svg>
+      Ask again
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

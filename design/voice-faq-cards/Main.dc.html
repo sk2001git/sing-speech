@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; background: #fbfbfd; color: #1d1d1f; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #1d1d1f; } a:hover { color: #000000; }
+    svg { display: block; }
+    button { font: inherit; color: inherit; }
+  </style>
+</helmet>
+<div style="width: 390px; min-height: 1300px; background: #fbfbfd;">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 72px; padding: 0 20px; border-bottom: 1px solid #e5e5ea; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 44px; height: 44px; border-radius: 14px; background: #000000; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"></path></svg>
+      </div>
+      <span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Suara</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="height: 48px; padding: 0 16px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; font-size: 16px; font-weight: 600;">English</div>
+      <div style="width: 48px; height: 48px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 32px;">
+    <div style="border: 1px solid #e5e5ea; border-radius: 20px; background: #ffffff;">
+      <button type="button" onClick="{{ toggleHeard }}" style="display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 0 16px 0 20px; border: 0; background: transparent; text-align: left; cursor: pointer;">
+        <span style="font-size: 16px; color: #5f5f64; white-space: nowrap;">You asked</span>
+        <span style="flex: 1; min-width: 0; font-size: 20px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">A&amp;E referral costs</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; transform: {{ heardChevron }}; transition: transform 160ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ heardOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 12px; padding: 0 20px 20px;">
+          <div style="font-size: 18px; line-height: 1.45; color: #5f5f64;">Your doctor sent you to A&amp;E, and you want to know if it costs less.</div>
+          <div style="align-self: flex-start; height: 48px; padding: 0 14px; border-radius: 999px; border: 1px solid #e5e5ea; background: #f5f5f7; display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 600;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>Read aloud
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <span style="font-size: 18px; font-weight: 600;">6 answers</span>
+      <div style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #f5f5f7; border: 1px solid #e5e5ea;">
+        <button type="button" onClick="{{ showGrid }}" aria-label="Grid view" style="width: 48px; height: 44px; border: 0; border-radius: 999px; background: {{ gridBg }}; color: {{ gridFg }}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+        </button>
+        <button type="button" onClick="{{ showSingle }}" aria-label="Single card view" style="width: 48px; height: 44px; border: 0; border-radius: 999px; background: {{ singleBg }}; color: {{ singleFg }}; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="1.5"></rect><rect x="4" y="13" width="16" height="7" rx="1.5"></rect></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: {{ cols }}; gap: 12px;">
+      <sc-for list="{{ cards }}" as="card" hint-placeholder-count="6">
+        <div style="grid-column: {{ card.span }}; display: flex; flex-direction: column; border: {{ card.border }}; border-radius: 20px; background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+          <button type="button" onClick="{{ card.toggle }}" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; width: 100%; min-height: {{ cardMinH }}px; padding: 14px; border: 0; background: transparent; text-align: left; cursor: pointer; box-sizing: border-box;">
+            <sc-if value="{{ card.best }}" hint-placeholder-val="{{ false }}">
+              <span style="align-self: flex-start; padding: 2px 10px; border-radius: 999px; background: #1d1d1f; color: #ffffff; font-size: 14px; font-weight: 600;">Best match</span>
+            </sc-if>
+            <span style="font-size: {{ titleSize }}px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ card.short }}</span>
+            <span style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <span style="font-size: 16px; color: #5f5f64;">{{ card.meta }}</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; transform: {{ card.chevron }}; transition: transform 160ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+            </span>
+          </button>
+          <sc-if value="{{ card.isOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px;">
+              <div style="font-size: 18px; line-height: 1.45;">{{ card.answer }}</div>
+              <div style="font-size: 16px; color: #5f5f64;">From {{ card.source }}</div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 64px; border-radius: 16px; background: #000000; color: #ffffff; font-size: 19px; font-weight: 600;">{{ card.action }}</div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; border-radius: 16px; background: #ffffff; box-shadow: inset 0 0 0 2px #c7c7cc; font-size: 18px; font-weight: 600;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>Read aloud
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 72px; border-radius: 16px; background: #ffffff; box-shadow: inset 0 0 0 2px #c7c7cc; font-size: 20px; font-weight: 600;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      Show 6 more
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; font-size: 18px; font-weight: 600; color: #1d1d1f;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"></path></svg>
+      None fit? Ask again
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'grid', open: 'gpfirst', heardOpen: false };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const grid = s.view === 'grid';
+    const data = [
+      { id: 'gpfirst', short: 'GPFirst at A&E', meta: '5 steps', answer: "Bring your doctor's original GPFirst form to a partner hospital's A&E the same day.", source: 'MOH, ask.gov.sg', action: 'Start guide' },
+      { id: 'chas', short: 'CHAS referral', meta: '1 step', answer: 'A CHAS clinic or polyclinic can refer you for subsidised specialist care.', source: 'MOH, ask.gov.sg', action: 'Open' },
+      { id: 'shield', short: 'MediShield', meta: '1 step', answer: 'MediShield Life helps with big hospital bills. CareShield Life pays cash for severe disability care.', source: 'MOH, ask.gov.sg', action: 'Open' },
+      { id: 'aps', short: 'Premium help', meta: '2 steps', answer: "Can't afford your MediShield Life premiums? You can apply for Additional Premium Support.", source: 'MOH, ask.gov.sg', action: 'Open' },
+      { id: 'pioneer', short: 'Pioneer card', meta: '1 step', answer: 'Lost your Pioneer Generation card? Call to get a replacement.', source: 'MOH, ask.gov.sg', action: 'Call 1800-650-6060' },
+      { id: 'careshield', short: 'CareShield fee', meta: '2 steps', answer: 'Check your CareShield Life premium online. If it looks wrong, call 1800-222-3399.', source: 'MOH, ask.gov.sg', action: 'Open' },
+    ];
+    const cards = data.map((c, i) => {
+      const isOpen = s.open === c.id;
+      return {
+        ...c,
+        best: i === 0,
+        isOpen,
+        span: grid && isOpen ? '1 / -1' : 'auto',
+        border: i === 0 ? '2px solid #1d1d1f' : '1px solid #e5e5ea',
+        chevron: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+        toggle: () => this.setState({ open: isOpen ? null : c.id }),
+      };
+    });
+    return {
+      cards,
+      cols: grid ? 'repeat(2, minmax(0, 1fr))' : 'minmax(0, 1fr)',
+      titleSize: grid ? '17' : '24',
+      cardMinH: grid ? '104' : '96',
+      gridBg: grid ? '#000000' : 'transparent',
+      gridFg: grid ? '#ffffff' : '#1d1d1f',
+      singleBg: grid ? 'transparent' : '#000000',
+      singleFg: grid ? '#1d1d1f' : '#ffffff',
+      showGrid: () => this.setState({ view: 'grid' }),
+      showSingle: () => this.setState({ view: 'single' }),
+      heardOpen: s.heardOpen,
+      heardChevron: s.heardOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+      toggleHeard: () => this.setState({ heardOpen: !s.heardOpen }),
+    };
+  }
+}
+</script>
+</body>
+</html>

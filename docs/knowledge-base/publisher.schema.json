@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://suara.sg/schema/publisher/1.0.0",
+  "title": "Suara publisher",
+  "description": "One official body in the central registry. Entries reference a publisher by code. Only publishers listed here may be collected from.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "name", "type", "domains", "sources", "active"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "code": {
+      "description": "Short, uppercase, stable. The same code the entry id uses in lowercase.",
+      "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,11}$"
+    },
+    "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+    "type": {
+      "description": "configured: an official source added by configuration that is not a ministry or statutory board.",
+      "enum": ["ministry", "statutory-board", "organ-of-state", "configured"]
+    },
+    "parent_ministry": {
+      "description": "For a statutory board, the code of its parent ministry.",
+      "type": ["string", "null"], "pattern": "^[A-Z][A-Z0-9]{1,11}$"
+    },
+    "domains": {
+      "description": "Hostnames whose pages count as this publisher's own. A quote from any other host is rejected.",
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$" }
+    },
+    "sources": {
+      "description": "Where collection starts for this publisher.",
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "url"],
+        "properties": {
+          "kind": { "enum": ["faq-index", "sitemap", "page"] },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "robots_checked_at": { "type": ["string", "null"], "format": "date" },
+          "robots_allows": { "type": ["boolean", "null"] },
+          "notes": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "active": { "type": "boolean" }
+  }
+}

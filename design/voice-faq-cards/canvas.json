@@ -1,0 +1,31 @@
+{
+  "artboards": [
+    { "file": "Home.dc.html", "title": "1 Home", "x": 0, "y": 0, "w": 390, "h": 860 },
+    { "file": "Listening.dc.html", "title": "2 Listening", "x": 470, "y": 0, "w": 390, "h": 844 },
+    { "file": "Main.dc.html", "title": "3 Results (try it: grid or single, tap a card)", "x": 940, "y": 0, "w": 390, "h": 1400, "is_interactive": true },
+    { "file": "ConfirmProcess.dc.html", "title": "4 Start these steps?", "x": 1410, "y": 0, "w": 390, "h": 844 },
+    { "file": "Guide.dc.html", "title": "5 Guide, confirm each step", "x": 1880, "y": 0, "w": 390, "h": 1150 },
+    { "file": "Closest.dc.html", "title": "6 Weak match", "x": 0, "y": 1540, "w": 390, "h": 900 },
+    { "file": "Greeting.dc.html", "title": "7 Hello", "x": 470, "y": 1540, "w": 390, "h": 844 },
+    { "file": "NotInSuara.dc.html", "title": "8 Not in Suara yet", "x": 940, "y": 1540, "w": 390, "h": 860 },
+    { "file": "ResultsWeb.dc.html", "title": "9 Results on the web", "x": 0, "y": 2580, "w": 1280, "h": 860 }
+  ],
+  "annotations": [
+    {
+      "id": "rules",
+      "x": 2370, "y": 0, "w": 380,
+      "text": "Rules on every screen:\n- Headings are one line.\n- Details open with the chevron.\n- An open card ends in one action.\n- No person, anywhere. A knowledge base, not a helpdesk.\n\nScreen 3 works: switch grid and single, tap cards."
+    },
+    {
+      "id": "flow",
+      "x": 2370, "y": 360, "w": 380,
+      "text": "Flow: speak (2) > 6 cards, Show 6 more (3) > a process card asks Start these steps? (4) > steps appear one at a time, each confirmed (5)."
+    },
+    {
+      "id": "real-data",
+      "x": 2370, "y": 560, "w": 380,
+      "text": "Cards are real MOH answers from ask.gov.sg. Data format: suara/docs/knowledge-base."
+    }
+  ],
+  "launch": { "view": "canvas" }
+}

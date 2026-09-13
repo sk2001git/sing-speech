@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://suara.sg/schema/entry/1.0.0",
+  "title": "Suara knowledge entry",
+  "description": "One answer or process in the Suara knowledge base. Every line a person sees points at a verbatim quote from an official or configured source, so grounding can be checked automatically. Field names follow schema.org FAQPage/HowTo where one exists; the mapping is in README.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "id", "kind", "language", "title", "summary",
+    "topic", "search", "sources", "quotes", "provenance", "verification", "lifecycle"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+
+    "id": {
+      "description": "Stable, human-readable. <country>.<publisher code>.<slug>. Never reused, never changed after first publish.",
+      "type": "string",
+      "pattern": "^sg\\.[a-z0-9]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+
+    "kind": {
+      "description": "answer: information shown as a card that expands. process: a guide walked step by step, each step confirmed by the person (schema.org HowTo).",
+      "enum": ["answer", "process"]
+    },
+
+    "language": {
+      "description": "BCP 47 tag of this entry's text. One language per entry; translations are separate entries linked by translation_of.",
+      "enum": ["en", "zh-Hans"]
+    },
+    "translation_of": {
+      "description": "The id of the entry this translates, or null for an original.",
+      "type": ["string", "null"]
+    },
+
+    "title": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["short", "full"],
+      "properties": {
+        "short": {
+          "description": "Fits one line in a two-per-row card on a 390px phone.",
+          "type": "string", "minLength": 1, "maxLength": 16
+        },
+        "full": {
+          "description": "Fits one line in single-card view.",
+          "type": "string", "minLength": 1, "maxLength": 60
+        }
+      }
+    },
+
+    "summary": {
+      "description": "The one line read aloud and shown when a card opens. Must be grounded.",
+      "$ref": "#/$defs/groundedLine",
+      "properties": { "text": { "maxLength": 140 } }
+    },
+
+    "details": {
+      "description": "Layers revealed on demand, most important first. Long official answers live here, never in the summary.",
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["heading", "body", "quote_refs"],
+        "properties": {
+          "heading": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "body": { "type": "string", "minLength": 1, "maxLength": 600 },
+          "quote_refs": { "$ref": "#/$defs/quoteRefs" }
+        }
+      }
+    },
+
+    "steps": {
+      "description": "Required when kind is process (schema.org HowToStep). Shown one at a time; the next appears only after the person confirms this one.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["position", "name", "text", "confirm_label", "quote_refs"],
+        "properties": {
+          "position": { "type": "integer", "minimum": 1 },
+          "name": {
+            "description": "The step as one line.",
+            "type": "string", "minLength": 1, "maxLength": 40
+          },
+          "text": {
+            "description": "What to do, revealed when the step is open.",
+            "type": "string", "minLength": 1, "maxLength": 300
+          },
+          "confirm_label": {
+            "description": "What the person taps to say this step is done.",
+            "type": "string", "minLength": 1, "maxLength": 24
+          },
+          "action": { "$ref": "#/$defs/action" },
+          "quote_refs": { "$ref": "#/$defs/quoteRefs" }
+        }
+      }
+    },
+
+    "action": {
+      "description": "The main thing an opened card lets the person do.",
+      "$ref": "#/$defs/action"
+    },
+
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["area"],
+      "properties": {
+        "area": {
+          "enum": ["health", "cpf-and-support", "scams", "transport", "bills-and-housing", "digital-services"]
+        },
+        "tags": {
+          "type": "array", "maxItems": 12, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+        }
+      }
+    },
+
+    "audience": {
+      "description": "Who the entry applies to, when the source says so. Used to rank, never to hide an entry.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_age": { "type": "integer", "minimum": 0, "maximum": 120 },
+        "residency": {
+          "type": "array", "uniqueItems": true,
+          "items": { "enum": ["citizen", "permanent-resident", "foreigner"] }
+        },
+        "card_holders": {
+          "type": "array", "uniqueItems": true,
+          "items": { "enum": ["pioneer-generation", "merdeka-generation", "chas-blue", "chas-orange", "chas-green"] }
+        }
+      }
+    },
+
+    "search": {
+      "description": "What the matcher compares a spoken request against. Vectors live in the search index keyed by id and lifecycle.content_hash, not in the entry.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["example_phrasings"],
+      "properties": {
+        "example_phrasings": {
+          "description": "How an older person might actually say it, including Singlish.",
+          "type": "array", "minItems": 3, "maxItems": 12,
+          "items": { "type": "string", "minLength": 3, "maxLength": 120 }
+        },
+        "keywords": {
+          "type": "array", "maxItems": 20, "uniqueItems": true,
+          "items": { "type": "string", "minLength": 2, "maxLength": 40 }
+        }
+      }
+    },
+
+    "sources": {
+      "description": "The pages quotes were taken from (schema.org isBasedOn).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "publisher", "url", "page_title", "retrieved_at"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^src[0-9]+$" },
+          "publisher": {
+            "description": "A code from the publisher registry.",
+            "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,11}$"
+          },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "page_title": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "source_modified_at": {
+            "description": "When the publisher last changed the page, from its sitemap or page, or null when unknown.",
+            "type": ["string", "null"], "format": "date"
+          },
+          "retrieved_at": { "type": "string", "format": "date-time" },
+          "content_hash": {
+            "description": "sha256 of the page's main text at retrieval. A different hash on re-check means the source changed.",
+            "type": "string", "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        }
+      }
+    },
+
+    "quotes": {
+      "description": "Verbatim text from a source. Every summary, detail and step cites at least one. A quote that cannot be found on its page fails grounding.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source", "text"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^q[0-9]+$" },
+          "source": { "type": "string", "pattern": "^src[0-9]+$" },
+          "text": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      }
+    },
+
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["collected", "structured"],
+      "properties": {
+        "collected": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "at"],
+          "properties": {
+            "method": { "enum": ["web-search", "sitemap-crawl", "manual"] },
+            "model": { "description": "Model id used to collect, or null for manual.", "type": ["string", "null"] },
+            "at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "structured": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "at"],
+          "properties": {
+            "method": { "enum": ["model", "manual"] },
+            "model": { "type": ["string", "null"] },
+            "prompt_version": { "type": ["string", "null"] },
+            "at": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "checks"],
+      "properties": {
+        "status": {
+          "description": "Only grounded entries are served. draft: never checked. stale: a source changed. withdrawn: a source is gone or a check failed.",
+          "enum": ["draft", "grounded", "stale", "withdrawn"]
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "passed", "at"],
+            "properties": {
+              "type": { "enum": ["quotes-found", "url-live", "source-unchanged", "refs-resolve", "lengths"] },
+              "passed": { "type": "boolean" },
+              "at": { "type": "string", "format": "date-time" },
+              "note": { "type": "string", "maxLength": 300 }
+            }
+          }
+        },
+        "next_check_due": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "created_at", "updated_at"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "supersedes_version": { "type": ["integer", "null"], "minimum": 1 },
+        "content_hash": {
+          "description": "sha256 of the entry's served text; the search index re-embeds when it changes.",
+          "type": "string", "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "related": {
+      "type": "array", "maxItems": 6, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^sg\\.[a-z0-9]+\\.[a-z0-9]+(-[a-z0-9]+)*$" }
+    }
+  },
+
+  "allOf": [
+    {
+      "if": { "properties": { "kind": { "const": "process" } } },
+      "then": { "required": ["steps"] },
+      "else": { "not": { "required": ["steps"] } }
+    }
+  ],
+
+  "$defs": {
+    "quoteRefs": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^q[0-9]+$" }
+    },
+    "groundedLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "quote_refs"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "quote_refs": { "$ref": "#/$defs/quoteRefs" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "label"],
+      "properties": {
+        "type": { "enum": ["start-steps", "call", "open-website", "go-to-place", "bring-items", "none"] },
+        "label": { "type": "string", "minLength": 1, "maxLength": 24 },
+        "value": {
+          "description": "tel: number for call, https URL for open-website, place name for go-to-place; absent otherwise.",
+          "type": "string", "maxLength": 300
+        },
+        "quote_refs": { "$ref": "#/$defs/quoteRefs" }
+      }
+    }
+  }
+}

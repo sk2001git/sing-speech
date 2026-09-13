@@ -1,0 +1,73 @@
+{
+  "base": "http://127.0.0.1:4321",
+  "ran_at": "2026-09-13T17:08:43.875Z",
+  "results": [
+    {
+      "id": "sg-en-hello",
+      "status": 200,
+      "ms": 12193,
+      "expect": {
+        "path": "P5"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.5,
+      "needs_human": true,
+      "restatement": "You are trying to see if someone can hear you.",
+      "transcript": "Hello? Hello? Can you hear me or not?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-scam-police-call",
+      "status": 200,
+      "ms": 9303,
+      "expect": {
+        "path": "P1",
+        "topic": "scams"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.5,
+      "needs_human": true,
+      "restatement": "You want to speak to a person to check your bank account or see why someone called you.",
+      "transcript": "Hey, sekarang, satu menurut saya, lihat dia, perlukan perlukan perangkatan. Bukan berapa saja?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-gpfirst-referral",
+      "status": 200,
+      "ms": 11424,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to know about your CHAS subsidy because your doctor gave you a letter.",
+      "transcript": "My Doctor give me one letter. Ask me go emergency. Gotchipo no ah?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-cpf-check",
+      "status": 200,
+      "ms": 11316,
+      "expect": {
+        "path": "P2",
+        "topic": "cpf-and-support"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "pioneer_merdeka",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to check your Pioneer or Merdeka Generation benefits.",
+      "transcript": "I want to check my CPF. How to do a...",
+      "agreement": "no-signal"
+    }
+  ]
+}

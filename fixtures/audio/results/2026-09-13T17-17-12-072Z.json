@@ -1,0 +1,172 @@
+{
+  "base": "http://127.0.0.1:4321",
+  "ran_at": "2026-09-13T17:17:12.072Z",
+  "results": [
+    {
+      "id": "sg-en-hello",
+      "status": 200,
+      "ms": 1793,
+      "expect": {
+        "path": "P5"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.5,
+      "needs_human": true,
+      "restatement": "You want to check if someone can hear you.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-scam-police-call",
+      "status": 200,
+      "ms": 1672,
+      "expect": {
+        "path": "P1",
+        "topic": "scams"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.85,
+      "needs_human": true,
+      "restatement": "You want to speak to someone because a man called you about your bank account.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-gpfirst-referral",
+      "status": 200,
+      "ms": 1476,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "restatement": "You want to check about your CHAS subsidy for the doctor's letter.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-cpf-check",
+      "status": 200,
+      "ms": 1904,
+      "expect": {
+        "path": "P2",
+        "topic": "cpf-and-support"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "pioneer_merdeka",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to check your Pioneer or Merdeka Generation benefits.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-asks-for-person",
+      "status": 200,
+      "ms": 1555,
+      "expect": {
+        "path": "P4"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.99,
+      "needs_human": true,
+      "restatement": "You want to speak to a real person.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-passport-out-of-scope",
+      "status": 200,
+      "ms": 9181,
+      "expect": {
+        "path": "P4"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.9,
+      "needs_human": true,
+      "restatement": "You want to know how to renew your passport.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-vague-card-money",
+      "status": 200,
+      "ms": 1551,
+      "expect": {
+        "path": "P3"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "silver_support",
+      "confidence": 0.95,
+      "needs_human": false,
+      "restatement": "You want to check about your Silver Support money from the government.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "ms-accent-en-gpfirst",
+      "status": 200,
+      "ms": 2009,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to know if your clinic visit is cheaper with CHAS.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "ta-accent-en-gpfirst",
+      "status": 200,
+      "ms": 2524,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.95,
+      "needs_human": false,
+      "restatement": "You want to know if your polyclinic bill will cost less with CHAS.",
+      "transcript": "",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "zh-gpfirst-referral",
+      "status": 200,
+      "ms": 1859,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "restatement": "你想知道用转诊信去急诊看病会不会比较便宜。",
+      "transcript": "",
+      "agreement": "no-signal"
+    }
+  ]
+}

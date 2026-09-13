@@ -1,0 +1,172 @@
+{
+  "base": "http://127.0.0.1:4321",
+  "ran_at": "2026-09-13T17:12:26.365Z",
+  "results": [
+    {
+      "id": "sg-en-hello",
+      "status": 200,
+      "ms": 10095,
+      "expect": {
+        "path": "P5"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.5,
+      "needs_human": true,
+      "restatement": "You are trying to see if someone can hear you.",
+      "transcript": "Hello? Hello? Can you hear me or not?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-scam-police-call",
+      "status": 200,
+      "ms": 12852,
+      "expect": {
+        "path": "P1",
+        "topic": "scams"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.85,
+      "needs_human": true,
+      "restatement": "You want to talk to someone about a phone call you received concerning your bank account.",
+      "transcript": "Hey, sekarang, satu menurut saya, lihat dia, perlukan perlukan perangkatan. Bukan berapa saja?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-gpfirst-referral",
+      "status": 200,
+      "ms": 8488,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "wayfinding",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to know how to get to the place on your doctor's letter.",
+      "transcript": "My Doctor give me one letter. Ask me go emergency. Gotchipo no ah?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-cpf-check",
+      "status": 200,
+      "ms": 8523,
+      "expect": {
+        "path": "P2",
+        "topic": "cpf-and-support"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You want to check your CHAS subsidy.",
+      "transcript": "I want to check my CPF. How to do a...",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-asks-for-person",
+      "status": 200,
+      "ms": 7330,
+      "expect": {
+        "path": "P4"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 1,
+      "needs_human": true,
+      "restatement": "You want to speak to a real person.",
+      "transcript": "Saya tak mahu membuat rancangan yang sangat mencari.",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-passport-out-of-scope",
+      "status": 200,
+      "ms": 9122,
+      "expect": {
+        "path": "P4"
+      },
+      "screen": "handoff",
+      "decision": "handoff",
+      "intent": "human_handoff",
+      "confidence": 0.9,
+      "needs_human": true,
+      "restatement": "You want to know how to renew your passport.",
+      "transcript": "Macam mana untuk mencari saya? Saya sudah mencari.",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "sg-en-vague-card-money",
+      "status": 200,
+      "ms": 8919,
+      "expect": {
+        "path": "P3"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "silver_support",
+      "confidence": 0.95,
+      "needs_human": false,
+      "restatement": "You want to ask about the Silver Support government payout.",
+      "transcript": "Kami mempunyai untuk menyebabkan kejutan.",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "ms-accent-en-gpfirst",
+      "status": 200,
+      "ms": 8204,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.97,
+      "needs_human": false,
+      "restatement": "You want to know about subsidy when referred to Dr Asmi Goi.",
+      "transcript": "Dr. Asmi Go A and E. Is it cheaper if the clinic send me?",
+      "agreement": "agreed"
+    },
+    {
+      "id": "ta-accent-en-gpfirst",
+      "status": 200,
+      "ms": 10224,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "restatement": "You are asking if the polyclinic doctor's letter means your visit will cost less.",
+      "transcript": "The polycleaning doctor gave me a letter for emergency. Will it cost less?",
+      "agreement": "no-signal"
+    },
+    {
+      "id": "zh-gpfirst-referral",
+      "status": 200,
+      "ms": 10843,
+      "expect": {
+        "path": "P1",
+        "entry": "sg.moh.gpfirst-emergency-referral"
+      },
+      "screen": "answer",
+      "decision": "act",
+      "intent": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "restatement": "你想知用转介信去急诊室系咪会平啲。",
+      "transcript": "一生給我一張轉界性叫我去急診,這樣會不會比較便宜?",
+      "agreement": "no-signal"
+    }
+  ]
+}
