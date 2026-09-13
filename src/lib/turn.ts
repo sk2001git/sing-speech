@@ -118,12 +118,40 @@ export async function runTurn(
 
 	const audio = decodeBase64(req.audioBase64);
 
-	const [voice, transcript] = await Promise.all([
+	const [voice, heard] = await Promise.all([
 		provider.understand(audio, { history: req.history, mimeType: req.mimeType }),
-		transcriber?.transcribe(audio, req.mimeType) ?? Promise.resolve(null),
+		transcribeSafely(transcriber, audio, req.mimeType),
 	]);
 
-	return conclude(voice.understanding, transcript?.text ?? '', transcriber?.id ?? null, req);
+	const channel = transcriber ? `${transcriber.id}${heard.failed ? ' (failed)' : ''}` : null;
+	return conclude(voice.understanding, heard.text, channel, req);
+}
+
+/**
+ * The corroboration channel, never allowed to fail the turn.
+ *
+ * The audio model decides; the transcript only cross-checks. So a transcriber that throws
+ * degrades the turn to no signal instead of taking it down. Seen live on 2026-09-13: the
+ * Workers AI binding threw "error code: 1031" when its remote session token expired, and
+ * inside `Promise.all` that one failure turned a good Gemini answer into a 502 and an
+ * offline screen. The failure is still named in the audit record.
+ */
+async function transcribeSafely(
+	transcriber: TranscriptProvider | undefined,
+	audio: ArrayBuffer,
+	mimeType: string | undefined,
+): Promise<{ text: string; failed: boolean }> {
+	if (!transcriber) return { text: '', failed: false };
+	try {
+		const result = await transcriber.transcribe(audio, mimeType);
+		return { text: result.text, failed: false };
+	} catch (err) {
+		console.warn(
+			`transcriber ${transcriber.id} failed, continuing without corroboration:`,
+			err instanceof Error ? err.message : err,
+		);
+		return { text: '', failed: true };
+	}
 }
 
 /**
