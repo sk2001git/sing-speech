@@ -25,6 +25,7 @@ Rules:
 4. Write "reply" in the SAME language they spoke, as one or two short sentences meant to be read aloud. Plain words. No lists, no formatting, no jargon. Assume it is being spoken by a machine to someone who may be hard of hearing.
 5. Put anything specific they mentioned into "slots", as a list of {key, value} pairs — a clinic name, a person, a date. Do not invent entries. An empty list is the correct answer when they mentioned nothing specific.
 6. Choose "language" from: ${LANGUAGES.join(', ')}. Use "sg" for code-switched Singlish and "unknown" only when you genuinely cannot tell.
+7. Write "restatement" as ONE short sentence that says back what they need, in the same language they spoke, addressed to them — for example "You want to know what to bring to your hospital appointment tomorrow." State the meaning, not their exact words. Include a name, date or place only if you clearly heard it. It is shown to them to confirm, so never add anything they did not ask for.
 
 Never guess to be helpful. A low confidence score gets them a clarifying question, which is a good outcome. A wrong high-confidence answer gets them the wrong government service, which is not.`;
 }
@@ -55,7 +56,8 @@ export const RESPONSE_SCHEMA = {
 			},
 		},
 		reply: { type: 'string' },
+		restatement: { type: 'string' },
 		needsHuman: { type: 'boolean' },
 	},
-	required: ['intent', 'confidence', 'language', 'reply', 'needsHuman'],
+	required: ['intent', 'confidence', 'language', 'reply', 'restatement', 'needsHuman'],
 } as const;

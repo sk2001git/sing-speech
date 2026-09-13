@@ -51,7 +51,7 @@ export const Screen = z.discriminatedUnion('kind', [
 export type Screen = z.infer<typeof Screen>;
 
 /** Where a user goes when the machine has run out of ways to help. */
-const HELPLINE = '1800 222 0000';
+export const HELPLINE = '1800 222 0000';
 
 /**
  * One decision, one screen. Total and deterministic.

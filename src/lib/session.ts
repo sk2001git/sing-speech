@@ -63,9 +63,11 @@ export type SessionEvent =
 	| { type: 'REPLY'; screen: Screen; understanding: Understanding }
 	| { type: 'FAIL' }
 	| { type: 'ENTER'; cursor: Cursor }
-	| { type: 'CONFIRM'; accepted: boolean }
+	/** `screen` is what an accepted readback leads to, when the driver already knows it. */
+	| { type: 'CONFIRM'; accepted: boolean; screen?: Screen }
 	| { type: 'ADVANCE'; cursor: Cursor }
-	| { type: 'FINISH' }
+	/** `screen` closes a flow — without it the last thing said would be the opening question. */
+	| { type: 'FINISH'; screen?: Screen }
 	| { type: 'SPOKEN' };
 
 export function initialState(screen: Screen): SessionState {
@@ -126,7 +128,10 @@ export function next(state: SessionState, event: SessionEvent): SessionState {
 				: state;
 
 		case 'FAIL':
-			return state.phase === 'submitting'
+			// From arming too: the realtime mode connects when the button is first pressed, and
+			// a connection that fails there is a network problem, not a refused microphone.
+			// The two need different words.
+			return state.phase === 'submitting' || state.phase === 'arming'
 				? { phase: 'offline', screen: state.screen }
 				: state;
 
@@ -138,7 +143,7 @@ export function next(state: SessionState, event: SessionEvent): SessionState {
 		case 'CONFIRM':
 			if (state.phase !== 'readback') return state;
 			return event.accepted
-				? { phase: 'answering', screen: state.screen }
+				? { phase: 'answering', screen: event.screen ?? state.screen }
 				: { phase: 'idle', screen: state.screen };
 
 		case 'ADVANCE':
@@ -146,7 +151,7 @@ export function next(state: SessionState, event: SessionEvent): SessionState {
 
 		case 'FINISH':
 			return state.phase === 'guiding'
-				? { phase: 'answering', screen: state.screen }
+				? { phase: 'answering', screen: event.screen ?? state.screen }
 				: state;
 
 		case 'SPOKEN':

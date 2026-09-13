@@ -76,6 +76,14 @@ export const Understanding = z.object({
 	 */
 	reply: z.string().min(1).max(400),
 
+	/**
+	 * What the person needs, said back to them as one short plain sentence — "You want to
+	 * know what to bring to your hospital appointment tomorrow." This is the readback the
+	 * user confirms: meaning, not a transcript. Optional so history stored before the field
+	 * existed still parses; the readback falls back to the intent label.
+	 */
+	restatement: z.string().min(1).max(240).optional(),
+
 	/** The model's own judgement that this needs a person, independent of confidence. */
 	needsHuman: z.boolean().default(false),
 

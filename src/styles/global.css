@@ -1,80 +1,93 @@
 @import 'tailwindcss';
 
 /*
- * Tokens for an interface read by people in their seventies and eighties, often with
- * presbyopia, cataracts or reduced contrast sensitivity, frequently on an old Android
- * phone in daylight.
- *
- * Two decisions here are unusual and deliberate:
+ * Suara, in the Clarion direction the owner chose on 2026-09-13: a quiet near-white
+ * ground, white cards on hairline borders, one black primary action, colour only for
+ * state. It replaces the earlier "no borders, structure by size alone" rule — the owner
+ * picked cards — but keeps the floor that rule protected, for readers in their seventies
+ * and eighties, often with presbyopia, cataracts or reduced contrast sensitivity, on an
+ * old phone in daylight:
  *
  * 1. No webfont. A flash of invisible text on mobile data is a real cost to this
- *    audience, and it outranks having a distinctive typeface. The system stack resolves
- *    to Roboto, SF Pro or Segoe UI — all humanist, all legible at these sizes.
- * 2. No border or divider tokens. Structure is carried entirely by size and space.
- *    Rules and boxes add visual noise that competes with the one thing on screen.
+ *    audience. The system stack resolves to SF Pro, Roboto or Segoe UI.
+ * 2. Every action is at least 72px tall and full width. Tremor and imprecise aim are the
+ *    norm, so targets are sized for a thumb that misses.
+ * 3. No readable text under 16px, and secondary text still clears 4.5:1 contrast.
  */
 
 :root {
-	--paper: #fbfaf7;
-	--ink: #14181a;
-	--quiet: #5b6569;
-	/* The single action colour. Teal rather than a red/green pair so it stays
-	   distinguishable under deuteranopia and protanopia. */
-	--speak: #0f6b5c;
-	--speak-press: #0b5044;
-	/* Only ever shown while the microphone is actually open. Colour carries state. */
-	--live: #c6402a;
+	--ground: #fbfbfd;
+	--surface: #ffffff;
+	--subtle: #f5f5f7;
+	--line: #e5e5ea;
+	--line-strong: #c7c7cc;
+	--ink: #1d1d1f;
+	/* 5.9:1 on white. The lightest grey any readable text may use. */
+	--muted: #5f5f64;
+
+	--primary: #000000;
+	--primary-press: #2c2c2e;
+	--on-primary: #ffffff;
+
+	/* Only while the microphone is open, and for the help line. Colour carries state. */
+	--live: #d70015;
+	--ready: #248a3d;
+	--busy: #8e8e93;
+	--sample-ink: #7a5200;
+	--sample-bg: #fff6de;
+	--sample-line: #f0d9a0;
 
 	--font-sans:
-		system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto,
+		'Helvetica Neue', Arial, sans-serif;
+
+	--radius-card: 1.25rem;
+	--radius-btn: 1rem;
+	--shadow-card: 0 2px 12px rgb(0 0 0 / 4%);
+	--shadow-orb: 0 16px 36px rgb(0 0 0 / 22%), 0 4px 10px rgb(0 0 0 / 8%);
 }
 
 /*
  * Dark mode follows the device rather than offering a toggle. A setting this audience
- * has to find and understand is a setting that does not get used, and a toggle is one
- * more control competing with the microphone.
+ * has to find and understand is a setting that does not get used.
  */
 @media (prefers-color-scheme: dark) {
 	:root {
-		--paper: #101314;
-		--ink: #f2f0ec;
-		--quiet: #9aa4a8;
-		--speak: #2f9e89;
-		--speak-press: #26816f;
-		--live: #e8674f;
+		--ground: #000000;
+		--surface: #1c1c1e;
+		--subtle: #2c2c2e;
+		--line: #38383a;
+		--line-strong: #545458;
+		--ink: #f5f5f7;
+		--muted: #aeaeb2;
+		--primary: #ffffff;
+		--primary-press: #e5e5ea;
+		--on-primary: #000000;
+		--live: #ff453a;
+		--ready: #30d158;
+		--busy: #98989d;
+		--sample-ink: #ffd60a;
+		--sample-bg: #2e2600;
+		--sample-line: #5c4d00;
+		--shadow-card: none;
+		--shadow-orb: 0 16px 36px rgb(0 0 0 / 60%);
 	}
-}
-
-@theme inline {
-	--color-paper: var(--paper);
-	--color-ink: var(--ink);
-	--color-quiet: var(--quiet);
-	--color-speak: var(--speak);
-	--color-speak-press: var(--speak-press);
-	--color-live: var(--live);
-	--font-sans: var(--font-sans);
-
-	/* A wide scale. Steps must be obvious at arm's length, so they are far apart. */
-	--text-micro: 1.125rem; /* 18 */
-	--text-body: 1.375rem; /* 22 */
-	--text-lead: 1.75rem; /* 28 */
-	--text-title: 2.5rem; /* 40 */
-	--text-display: 3.5rem; /* 56 */
 }
 
 @layer base {
 	html {
-		background: var(--paper);
+		background: var(--ground);
 		color: var(--ink);
 		font-family: var(--font-sans);
 		font-size: 100%;
 		-webkit-text-size-adjust: 100%;
+		-webkit-font-smoothing: antialiased;
 	}
 
 	body {
 		margin: 0;
 		min-height: 100svh;
-		font-size: var(--text-body);
+		font-size: 1.25rem;
 		line-height: 1.45;
 	}
 
@@ -83,7 +96,7 @@
 	 * assistive switch, and a subtle ring is the same as no ring.
 	 */
 	:focus-visible {
-		outline: 4px solid var(--speak);
+		outline: 4px solid var(--ink);
 		outline-offset: 3px;
 	}
 
@@ -99,101 +112,689 @@
 }
 
 @layer components {
-	/*
-	 * Every tappable thing is at least 72px tall and full width. Tremor and imprecise
-	 * aim are the norm in this population, so targets are sized for a thumb that misses.
-	 */
-	.tap {
-		display: block;
-		width: 100%;
+	.icon {
+		width: 1.5rem;
+		height: 1.5rem;
+		flex: none;
+	}
+
+	.icon-alert {
+		color: var(--live);
+	}
+
+	/* Header */
+
+	.bar {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		padding-top: env(safe-area-inset-top, 0px);
+		background: color-mix(in srgb, var(--ground) 86%, transparent);
+		backdrop-filter: saturate(180%) blur(20px);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.bar-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		max-width: 36rem;
 		min-height: 4.5rem;
-		padding: 1rem 1.25rem;
-		border: 0;
-		border-radius: 0.75rem;
+		margin: 0 auto;
+		padding: 0 1.25rem;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-width: 0;
+	}
+
+	.brand-mark {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 0.875rem;
+		background: var(--primary);
+		color: var(--on-primary);
+	}
+
+	.brand-text {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.15;
+	}
+
+	.brand-text strong {
+		font-size: 1.25rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.brand-text small {
+		color: var(--muted);
+		font-size: 1rem;
+	}
+
+	.bar-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.pill-btn,
+	.round-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.375rem;
+		min-width: 3rem;
+		min-height: 3rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--subtle);
+		color: var(--ink);
 		font: inherit;
-		font-size: var(--text-lead);
+		font-size: 1rem;
 		font-weight: 600;
-		text-align: left;
+		text-decoration: none;
 		cursor: pointer;
 	}
 
-	.tap-quiet {
-		background: transparent;
-		color: var(--ink);
-		box-shadow: inset 0 0 0 3px var(--ink);
+	.pill-btn {
+		padding: 0 1rem;
 	}
 
-	.tap-speak {
-		background: var(--speak);
-		color: var(--paper);
-		font-size: var(--text-title);
-		min-height: 6rem;
+	/* Page */
+
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		max-width: 36rem;
+		margin: 0 auto;
+		padding: 1.5rem 1.25rem calc(2rem + env(safe-area-inset-bottom, 0px));
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		align-self: flex-start;
+		margin: 0;
+		padding: 0.375rem 0.875rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--subtle);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.chip-dot {
+		width: 0.625rem;
+		height: 0.625rem;
+		border-radius: 50%;
+		background: var(--busy);
+	}
+
+	.chip[data-tone='ready'] .chip-dot {
+		background: var(--ready);
+	}
+
+	.chip[data-tone='live'] .chip-dot,
+	.chip[data-tone='alert'] .chip-dot {
+		background: var(--live);
+	}
+
+	.chip[data-tone='live'] .chip-dot {
+		animation: pulse 1.2s ease-in-out infinite;
+	}
+
+	.headline {
+		margin: 0;
+		font-size: clamp(1.875rem, 7vw, 2.375rem);
+		font-weight: 700;
+		line-height: 1.15;
+		letter-spacing: -0.025em;
+		text-wrap: balance;
+	}
+
+	.lead {
+		margin: -0.5rem 0 0;
+		color: var(--muted);
+		font-size: 1.25rem;
+	}
+
+	.label {
+		margin: 0;
+		color: var(--muted);
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.label-gap {
+		margin-top: 1rem;
+	}
+
+	/* Cards */
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.25rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		box-shadow: var(--shadow-card);
+	}
+
+	.card-text {
+		margin: 0;
+		font-size: 1.375rem;
+		line-height: 1.4;
+	}
+
+	.card-notice {
+		border-color: color-mix(in srgb, var(--live) 35%, var(--line));
+	}
+
+	.card-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.readback {
+		margin: 0.25rem 0 0;
+		font-size: 1.75rem;
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: -0.015em;
+	}
+
+	.quote {
+		margin: 0;
+		padding: 0.875rem 1rem;
+		border-radius: 0.875rem;
+		background: var(--subtle);
+		font-size: 1.375rem;
+		font-weight: 500;
+	}
+
+	.link-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		min-height: 3rem;
+		padding: 0 0.875rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--subtle);
+		color: var(--ink);
+		font: inherit;
+		font-size: 1rem;
+		font-weight: 600;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.facts {
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+		margin: 0.5rem 0 0;
+		padding: 1rem;
+		border-radius: 0.875rem;
+		background: var(--subtle);
+	}
+
+	.fact dt {
+		color: var(--muted);
+		font-size: 1rem;
+	}
+
+	.fact dd {
+		margin: 0;
+		font-size: 1.375rem;
+		font-weight: 600;
+	}
+
+	/* Actions */
+
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.actions-row {
+		flex-direction: row;
+	}
+
+	.actions-row .btn {
+		flex: 1;
+	}
+
+	.btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.625rem;
+		width: 100%;
+		min-height: 4.5rem;
+		padding: 0.75rem 1.25rem;
+		border: 0;
+		border-radius: var(--radius-btn);
+		font: inherit;
+		font-size: 1.25rem;
+		font-weight: 600;
+		text-align: center;
+		text-decoration: none;
+		cursor: pointer;
+		transition: transform 120ms ease-out, background-color 120ms ease-out;
+	}
+
+	.btn:active {
+		transform: scale(0.98);
+	}
+
+	.btn-primary {
+		background: var(--primary);
+		color: var(--on-primary);
+	}
+
+	.btn-primary:active {
+		background: var(--primary-press);
+	}
+
+	/* A 2px outline, not a hairline: a quiet button still has to be findable. */
+	.btn-quiet {
+		background: var(--surface);
+		color: var(--ink);
+		box-shadow: inset 0 0 0 2px var(--line-strong);
+	}
+
+	.btn-gap {
+		margin-top: 0.75rem;
+	}
+
+	/* The orb */
+
+	.orb-zone {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 0 0.5rem;
+	}
+
+	.orb {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 8.5rem;
+		height: 8.5rem;
+		border: 0;
+		border-radius: 50%;
+		background: var(--primary);
+		color: var(--on-primary);
+		box-shadow: var(--shadow-orb);
+		cursor: pointer;
+		transition: transform 160ms ease-out, background-color 160ms ease-out;
+	}
+
+	.orb .icon {
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.orb::before {
+		content: '';
+		position: absolute;
+		inset: -0.75rem;
+		border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+		border-radius: 50%;
+	}
+
+	.orb:active {
+		transform: scale(0.96);
+	}
+
+	.orb:disabled {
+		cursor: default;
+		opacity: 0.55;
+	}
+
+	.orb[data-live='true'] {
+		background: var(--live);
+		color: #ffffff;
+	}
+
+	.orb[data-live='true']::before {
+		border-color: color-mix(in srgb, var(--live) 45%, transparent);
+		animation: ring 1.6s ease-out infinite;
+	}
+
+	.icon-dots circle {
+		animation: pulse 1s ease-in-out infinite;
+	}
+
+	.icon-dots circle:nth-child(2) {
+		animation-delay: 150ms;
+	}
+
+	.icon-dots circle:nth-child(3) {
+		animation-delay: 300ms;
+	}
+
+	/* The waveform. Reserved height, so the label below never jumps when it appears. */
+	.wave {
+		display: flex;
+		align-items: center;
+		gap: 0.375rem;
+		height: 2rem;
+		/* Clears the orb's outer ring, which sits 0.75rem outside the button. */
+		margin-top: 0.75rem;
+		visibility: hidden;
+	}
+
+	.wave[data-on='true'] {
+		visibility: visible;
+	}
+
+	.wave i {
+		display: block;
+		width: 0.375rem;
+		height: 0.875rem;
+		border-radius: 999px;
+		background: var(--live);
+		animation: wave 900ms ease-in-out infinite alternate;
+	}
+
+	.wave i:nth-child(2) {
+		animation-delay: 120ms;
+	}
+	.wave i:nth-child(3) {
+		animation-delay: 240ms;
+	}
+	.wave i:nth-child(4) {
+		animation-delay: 90ms;
+	}
+	.wave i:nth-child(5) {
+		animation-delay: 200ms;
+	}
+
+	.orb-label {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
+	/* Tracker */
+
+	.tracker {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		list-style: none;
+	}
+
+	.tracker li {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 1rem;
+		color: var(--muted);
+	}
+
+	.tracker li + li::before {
+		content: '';
+		flex: 1;
+		min-width: 0.75rem;
+		max-width: 2rem;
+		height: 2px;
+		margin-right: 0.25rem;
+		border-radius: 1px;
+		background: var(--line);
+	}
+
+	.tracker li[data-state='done'] + li::before,
+	.tracker li[data-state='active']::before {
+		background: var(--ink);
+	}
+
+	.tracker-dot {
+		display: grid;
+		place-items: center;
+		width: 1.75rem;
+		height: 1.75rem;
+		border-radius: 50%;
+		background: var(--subtle);
+		border: 1px solid var(--line);
+		font-size: 0.9375rem;
+		font-weight: 700;
+	}
+
+	.tracker-dot .icon {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.tracker li[data-state='done'] .tracker-dot {
+		background: var(--line);
+		color: var(--ink);
+	}
+
+	.tracker li[data-state='active'] {
+		color: var(--ink);
+		font-weight: 700;
+	}
+
+	.tracker li[data-state='active'] .tracker-dot {
+		border-color: var(--primary);
+		background: var(--primary);
+		color: var(--on-primary);
+	}
+
+	/* Guided steps */
+
+	.sample-banner {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--sample-line);
+		border-radius: 0.875rem;
+		background: var(--sample-bg);
+		color: var(--sample-ink);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.guide-head {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.timeline {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+		padding: 1.25rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		box-shadow: var(--shadow-card);
+		list-style: none;
+	}
+
+	.tl-item {
+		position: relative;
+		display: grid;
+		grid-template-columns: 2.25rem 1fr;
+		gap: 0.875rem;
+		padding-bottom: 1.25rem;
+	}
+
+	.tl-item:last-child {
+		padding-bottom: 0;
+	}
+
+	/* The connecting rule between dots. */
+	.tl-item:not(:last-child)::before {
+		content: '';
+		position: absolute;
+		top: 2.5rem;
+		bottom: 0.25rem;
+		left: calc(1.125rem - 1px);
+		width: 2px;
+		background: var(--line);
+	}
+
+	.tl-item[data-state='done']::before {
+		background: var(--line-strong);
+	}
+
+	.tl-dot {
+		display: grid;
+		place-items: center;
+		width: 2.25rem;
+		height: 2.25rem;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+		background: var(--subtle);
+		color: var(--muted);
+		font-size: 1rem;
+		font-weight: 700;
+	}
+
+	.tl-dot .icon {
+		width: 1.125rem;
+		height: 1.125rem;
+	}
+
+	.tl-item[data-state='done'] .tl-dot {
+		border-color: var(--ink);
+		background: var(--ink);
+		color: var(--ground);
+	}
+
+	.tl-item[data-state='active'] .tl-dot {
+		border-color: var(--primary);
+		background: var(--primary);
+		color: var(--on-primary);
+	}
+
+	.tl-text {
+		margin: 0.25rem 0 0;
+		font-size: 1.25rem;
+		line-height: 1.4;
+		color: var(--muted);
+	}
+
+	.tl-item[data-state='done'] .tl-text {
+		text-decoration: none;
+	}
+
+	.tl-item[data-state='active'] .tl-body {
+		padding: 1rem;
+		border: 1px solid var(--line);
+		border-radius: 1rem;
+		background: var(--subtle);
+	}
+
+	.tl-item[data-state='active'] .tl-text {
+		margin: 0;
+		color: var(--ink);
+		font-size: 1.375rem;
+		font-weight: 600;
+	}
+
+	.tl-branch {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-top: 1rem;
+	}
+
+	.tl-question {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
+	/* Reserve the picture's box before it loads, so the instruction never moves. */
+	.tl-image {
+		display: block;
+		width: 100%;
+		margin-top: 0.875rem;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: 0.75rem;
+		background: color-mix(in srgb, var(--ink) 8%, transparent);
+	}
+
+	/* Footer */
+
+	.reassure {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin: 0.5rem 0 0;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--subtle);
+		color: var(--muted);
+		font-size: 1.125rem;
+	}
+
+	.reassure .icon {
+		color: var(--ink);
+	}
+
+	.meta {
+		margin: 0;
+		color: var(--muted);
+		font-size: 1rem;
 		text-align: center;
 	}
 
-	.tap-speak:active {
-		background: var(--speak-press);
-	}
-
-	.tap-speak[data-live='true'] {
-		background: var(--live);
-	}
-
-	/*
-	 * A caret after the live caption. The one piece of non-user-triggered motion in the
-	 * interface, and it earns its place: it is the signal that the microphone is open
-	 * even during a silence, which is exactly when someone unsure of technology decides
-	 * the thing is broken. Reduced motion is respected globally, and the caret stays
-	 * visible when animation is off.
-	 */
-	.caret {
-		display: inline-block;
-		width: 0.12em;
-		height: 1em;
-		margin-left: 0.12em;
-		vertical-align: -0.12em;
-		background: var(--live);
-		animation: caret-blink 1.1s step-end infinite;
-	}
-
-	@keyframes caret-blink {
+	@keyframes pulse {
 		50% {
+			opacity: 0.35;
+		}
+	}
+
+	@keyframes ring {
+		from {
+			transform: scale(1);
+			opacity: 1;
+		}
+		to {
+			transform: scale(1.18);
 			opacity: 0;
 		}
 	}
 
-	/*
-	 * A step in a guided flow. Three states, distinguished by weight and opacity rather
-	 * than by a border — `global.css` carries structure with size and space, and a stack
-	 * of six outlined boxes is exactly the visual noise that rule exists to prevent.
-	 */
-	.step {
-		margin-top: 1.75rem;
-		transition: opacity 200ms ease-out;
-	}
-
-	.step[data-state='done'] {
-		opacity: 0.45;
-	}
-
-	.step[data-state='future'] {
-		opacity: 0.55;
-	}
-
-	.step[data-state='active'] {
-		opacity: 1;
-	}
-
-	/*
-	 * Reserve the picture's box before it loads. An image that arrives and pushes the
-	 * instruction down is a layout shift, and the CLS assertion in the browser tests
-	 * fails on it — correctly, because a moving instruction is hard to follow.
-	 */
-	.step img {
-		display: block;
-		width: 100%;
-		aspect-ratio: 4 / 3;
-		object-fit: cover;
-		background: color-mix(in srgb, var(--ink) 8%, transparent);
+	@keyframes wave {
+		to {
+			height: 2rem;
+		}
 	}
 }

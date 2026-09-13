@@ -53,6 +53,12 @@ export interface Procedure {
 	verified: boolean;
 	source: string;
 	checkedOn: string | null;
+	/**
+	 * Authored for design review and never checked against a source. A sample stays
+	 * `verified: false`: it renders only where the caller has explicitly allowed samples,
+	 * and always under a label saying what it is.
+	 */
+	sample?: boolean;
 }
 
 /** Where a user is in a procedure. Held by the client, validated by the server. */
@@ -72,6 +78,24 @@ export function successors(step: Step): string[] {
 	if (step.next === null) return [];
 	if (typeof step.next === 'string') return [step.next];
 	return [step.next.yes, step.next.no];
+}
+
+/**
+ * The cursor after finishing the current step, or null when nothing follows it.
+ *
+ * A branch does not move without an answer. The question is the step, and moving on
+ * without one would choose an arm on the user's behalf.
+ */
+export function advance(proc: Procedure, cursor: Cursor, answer?: boolean): Cursor | null {
+	const step = stepById(proc, cursor.stepId);
+	if (!step || step.next === null) return null;
+
+	let target: string;
+	if (typeof step.next === 'string') target = step.next;
+	else if (answer === undefined) return cursor;
+	else target = answer ? step.next.yes : step.next.no;
+
+	return { ...cursor, stepId: target, done: [...cursor.done, cursor.stepId] };
 }
 
 /**

@@ -1,6 +1,8 @@
 ---
 import Voice from '../components/Voice.tsx';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { runtimeEnv } from '../lib/env';
+import { resolveMode } from '../lib/mode';
 
 /**
  * client:load, because talking is the only thing this page does. Deferring hydration
@@ -9,8 +11,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * broken and stops.
  */
 export const prerender = false;
+
+const env = await runtimeEnv();
+
+// `?mode=gemini` or `?mode=openai` overrides SUARA_MODE, for review. No on-screen toggle:
+// it would be one more control competing with the microphone.
+const mode = resolveMode(Astro.url.searchParams.get('mode'), env.SUARA_MODE);
+
+// Unverified sample flows show on the dev server, or on a deploy that opts in. Never by
+// default in production.
+const demo = import.meta.env.DEV || env.SUARA_DEMO === 'true';
 ---
 
 <BaseLayout title="Suara">
-	<Voice client:load />
+	<Voice client:load mode={mode} demo={demo} />
 </BaseLayout>

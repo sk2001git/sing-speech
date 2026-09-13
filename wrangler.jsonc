@@ -25,8 +25,13 @@
 	"observability": {
 		"enabled": true
 	},
+	// OPENAI_API_KEY is also a secret, needed only when SUARA_MODE is "openai":
+	//   npx wrangler secret put OPENAI_API_KEY
 	"vars": {
 		"SUARA_PROVIDER": "gemini",
-		"SUARA_MODEL": "gemini-3.5-flash-lite"
+		"SUARA_MODEL": "gemini-3.5-flash-lite",
+		"SUARA_MODE": "gemini",
+		"SUARA_OPENAI_MODEL": "gpt-realtime-2.1",
+		"SUARA_DEMO": "false"
 	}
 }

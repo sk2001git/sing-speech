@@ -1,5 +1,6 @@
 import { Understanding } from '../understanding';
 import { RESPONSE_SCHEMA, systemPrompt } from './prompt';
+import { foldSlots } from './slots';
 import type { Pricing, ProviderResult, TurnContext, VoiceProvider } from './types';
 
 /**
@@ -177,28 +178,6 @@ function geminiMime(recorded: string | undefined): string {
 		'audio/webm',
 	];
 	return accepted.includes(base) ? base : 'audio/webm';
-}
-
-/**
- * Fold the wire's key/value list back into a record.
- *
- * Gemini cannot express an open-ended map in a response schema, so slots travel as an
- * array. This is the only place that knows about that, which is the point of having a
- * provider layer at all.
- */
-function foldSlots(raw: unknown): unknown {
-	if (typeof raw !== 'object' || raw === null) return raw;
-	const obj = raw as Record<string, unknown>;
-	if (!Array.isArray(obj.slots)) return obj;
-
-	const slots: Record<string, string> = {};
-	for (const entry of obj.slots) {
-		if (entry && typeof entry === 'object' && 'key' in entry && 'value' in entry) {
-			const { key, value } = entry as { key: unknown; value: unknown };
-			if (typeof key === 'string' && typeof value === 'string') slots[key] = value;
-		}
-	}
-	return { ...obj, slots };
 }
 
 function toBase64(buf: ArrayBuffer): string {

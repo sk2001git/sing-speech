@@ -45,6 +45,7 @@ export function cardsFor(
 	proc: Procedure | null,
 	lang: Language,
 	now: Date,
+	opts: { samples?: boolean } = {},
 ): Card[] {
 	switch (state.phase) {
 		case 'submitting':
@@ -56,7 +57,10 @@ export function cardsFor(
 			return state.heard ? [{ kind: 'heard', key: 'heard', text: state.heard }] : [];
 
 		case 'guiding': {
-			if (!proc || !proc.verified) return [];
+			// A sample is the one exception, and only when the caller asked for samples. It is
+			// still unverified; the screen labels it as such.
+			const allowed = proc && (proc.verified || (opts.samples === true && proc.sample === true));
+			if (!proc || !allowed) return [];
 			return proc.steps.map((step, i) => {
 				const done = state.cursor.done.includes(step.id);
 				const active = state.cursor.stepId === step.id;

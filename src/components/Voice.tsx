@@ -1,7 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { startCaptions, type CaptionSession } from '../lib/caption';
-import type { Screen } from '../lib/uispec';
-import type { Understanding } from '../lib/understanding';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import { cardsFor } from '../lib/cards';
+import { factsFor } from '../lib/catalogue';
+import { procedureFor, usableProcedure } from '../lib/guide';
+import { micFailure } from '../lib/mic';
+import type { Mode } from '../lib/mode';
+import { advance, localise, stepById, type Procedure } from '../lib/procedure';
+import { connectRealtime, RealtimeUnavailable, type RealtimeLink } from '../lib/realtime';
+import { readbackFor } from '../lib/readback';
+import { canPress, initialState, next, type SessionState } from '../lib/session';
+import { screenFor, type Screen } from '../lib/uispec';
+import { LANGUAGES, type Language, type Understanding } from '../lib/understanding';
+import ScreenView, { MIC_HELP, OFFLINE_HELP } from './Screen';
 
 /** BCP-47 tags for the on-device voice, keyed by the language the model reported. */
 const VOICE_LANG: Record<string, string> = {
@@ -15,12 +24,20 @@ const VOICE_LANG: Record<string, string> = {
 	unknown: 'en-SG',
 };
 
-const EXAMPLE = 'I need help paying for the doctor';
-
 const OPENING: Screen = {
 	kind: 'listening',
 	say: 'What do you need help with today?',
 };
+
+const FINISHED_SAY =
+	'That is every step. If anything was different on the day, press the button and tell me.';
+
+interface TurnReply {
+	screen: Screen;
+	language: string;
+	history: Understanding[];
+	unclearStreak: number;
+}
 
 /**
  * Speak the text on the device.
@@ -28,15 +45,26 @@ const OPENING: Screen = {
  * On-device synthesis is the only TTS that fits the budget — a per-character API costs
  * $17 to $69 a month at a thousand users against a ten dollar ceiling. It is also
  * instant and works with no network, which matters more here than voice quality.
+ * Returns false when the device cannot speak, so the caller does not wait for an end
+ * event that will never come.
  */
-function speak(text: string, lang: string): void {
-	if (typeof speechSynthesis === 'undefined') return;
+function speak(text: string, lang: string, onEnd?: () => void): boolean {
+	if (typeof speechSynthesis === 'undefined') return false;
 	speechSynthesis.cancel();
 	const u = new SpeechSynthesisUtterance(text);
 	u.lang = VOICE_LANG[lang] ?? 'en-SG';
 	// Slower than default. Comprehension, not throughput, is the constraint.
 	u.rate = 0.85;
+	if (onEnd) {
+		u.onend = onEnd;
+		u.onerror = onEnd;
+	}
 	speechSynthesis.speak(u);
+	return true;
+}
+
+function silence(): void {
+	if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
 }
 
 /**
@@ -49,12 +77,7 @@ function speak(text: string, lang: string): void {
  * the honest fallback when nothing is recognised.
  */
 function pickMimeType(): string {
-	const candidates = [
-		'audio/webm;codecs=opus',
-		'audio/webm',
-		'audio/ogg;codecs=opus',
-		'audio/mp4',
-	];
+	const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4'];
 	if (typeof MediaRecorder === 'undefined') return '';
 	return candidates.find((t) => MediaRecorder.isTypeSupported(t)) ?? '';
 }
@@ -66,246 +89,251 @@ async function toBase64(blob: Blob): Promise<string> {
 	return btoa(binary);
 }
 
-export default function Voice() {
-	const [screen, setScreen] = useState<Screen>(OPENING);
-	const [recording, setRecording] = useState(false);
-	const [busy, setBusy] = useState(false);
-	const [lang, setLang] = useState('en');
+function asLanguage(code: string): Language {
+	return (LANGUAGES as readonly string[]).includes(code) ? (code as Language) : 'en';
+}
 
-	// What the user is saying, shown as they say it. Display only — see lib/caption.ts.
-	const [caption, setCaption] = useState('');
-	// True once the caption has been replaced by the transcript we actually acted on.
-	const [captionConfirmed, setCaptionConfirmed] = useState(false);
+/**
+ * The words for a state — spoken and shown alike, so a user who hears it and a user who
+ * reads it get the same thing. Empty while the microphone is open: nothing talks over
+ * the person speaking.
+ */
+function lineFor(state: SessionState, proc: Procedure | null, lang: Language): string {
+	switch (state.phase) {
+		case 'arming':
+		case 'recording':
+		case 'submitting':
+			return '';
+		case 'readback':
+			return readbackFor(state).spoken;
+		case 'guiding': {
+			const step = proc ? stepById(proc, state.cursor.stepId) : undefined;
+			if (!step) return state.screen.say;
+			const instruction = localise(step.instruction, lang);
+			return step.next !== null && typeof step.next === 'object'
+				? `${instruction} ${localise(step.next.question, lang)}`
+				: instruction;
+		}
+		case 'denied':
+			return MIC_HELP[state.reason] ?? MIC_HELP.permission!;
+		case 'offline':
+			return OFFLINE_HELP;
+		default:
+			return state.screen.say;
+	}
+}
+
+interface Recording {
+	rec: MediaRecorder;
+	stream: MediaStream;
+	mimeType: string;
+	chunks: Blob[];
+}
+
+/**
+ * The driver: microphone, network and speech. Every pixel is in `Screen.tsx`.
+ *
+ * Two ways to hear a turn, one way to decide it. In `gemini` mode the utterance is
+ * recorded and posted whole. In `openai` mode it streams to OpenAI Realtime over WebRTC
+ * and the resulting understanding is posted instead. Either way `/api/turn` applies the
+ * same thresholds, and the user sees the same readback card.
+ *
+ * Tap to start, tap to stop — never press-and-hold, and no voice-activity detection in
+ * either mode. The user decides when they have finished.
+ */
+export default function Voice({ mode, demo }: { mode: Mode; demo: boolean }) {
+	const [state, dispatch] = useReducer(next, OPENING, initialState);
+	const [lang, setLang] = useState<Language>('en');
+	const [procedure, setProcedure] = useState<Procedure | null>(null);
 
 	const history = useRef<Understanding[]>([]);
 	const unclearStreak = useRef(0);
-	const recorder = useRef<MediaRecorder | null>(null);
-	const chunks = useRef<Blob[]>([]);
-	const captions = useRef<CaptionSession | null>(null);
+	const recording = useRef<Recording | null>(null);
+	const link = useRef<RealtimeLink | null>(null);
 
-	// Say every new screen aloud. The spoken text and the shown text are the same string,
-	// so a user who hears it and a user who reads it get the same thing and there is
-	// never a caption that disagrees with the audio.
+	const line = lineFor(state, procedure, lang);
+
+	// Say every new line aloud. `answering` waits for the speech to end before the button
+	// comes back; a fallback timer covers a synthesiser that never reports the end.
 	useEffect(() => {
-		speak(screen.say, lang);
-	}, [screen, lang]);
-
-	const post = useCallback(async (body: unknown) => {
-		setBusy(true);
-		try {
-			const res = await fetch('/api/turn', {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify(body),
-			});
-			if (!res.ok) throw new Error(String(res.status));
-			const next = (await res.json()) as {
-				screen: Screen;
-				language: string;
-				history: Understanding[];
-				unclearStreak: number;
-				audit?: { transcript: string };
-			};
-			history.current = next.history;
-			unclearStreak.current = next.unclearStreak;
-			// Replace the browser's guess with the transcript the decision was actually
-			// made on. If the two differ, what is shown is the one that counted.
-			if (next.audit?.transcript) {
-				setCaption(next.audit.transcript);
-				setCaptionConfirmed(true);
-			}
-			setLang(next.language);
-			setScreen(next.screen);
-		} catch {
-			// Errors give direction, never an apology and never a code. The user can
-			// always act on what this says.
-			setScreen({
-				kind: 'repeat',
-				say: 'I could not hear that. Please press the green button and say it again.',
-				example: EXAMPLE,
-			});
-		} finally {
-			setBusy(false);
+		if (!line) {
+			silence();
+			return;
 		}
-	}, []);
+		const spoken = () => dispatch({ type: 'SPOKEN' });
+		if (!speak(line, lang, spoken)) {
+			spoken();
+			return;
+		}
+		const fallback = setTimeout(spoken, Math.max(4000, line.length * 90));
+		return () => clearTimeout(fallback);
+	}, [line, lang]);
 
-	/**
-	 * Tap to start, tap to stop. Not press-and-hold.
-	 *
-	 * Holding a button steady is exactly what a hand with a tremor cannot do, and
-	 * releasing early truncates the sentence. Tap-to-stop also means a long pause
-	 * mid-sentence never ends the turn — the user decides when they have finished, not a
-	 * silence detector. That is the whole non-interruptive promise, and it is why there
-	 * is no voice-activity detection anywhere in this file.
-	 */
-	const toggle = useCallback(async () => {
-		if (recording) {
-			recorder.current?.stop();
+	useEffect(
+		() => () => {
+			link.current?.close();
+			recording.current?.stream.getTracks().forEach((t) => t.stop());
+		},
+		[],
+	);
+
+	async function startCapture(): Promise<void> {
+		if (mode === 'openai') {
+			link.current ??= await connectRealtime();
+			link.current.begin();
+			return;
+		}
+		const stream = await navigator.mediaDevices.getUserMedia({
+			audio: { channelCount: 1, sampleRate: 16000, noiseSuppression: true },
+		});
+		const mimeType = pickMimeType();
+		const rec = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+		const chunks: Blob[] = [];
+		rec.ondataavailable = (e) => chunks.push(e.data);
+		recording.current = { rec, stream, mimeType, chunks };
+		rec.start();
+	}
+
+	async function finishCapture(): Promise<unknown> {
+		if (mode === 'openai') {
+			const current = link.current;
+			if (!current) throw new RealtimeUnavailable('not connected');
+			try {
+				const turn = await current.finish(history.current);
+				return {
+					kind: 'understanding',
+					understanding: turn.understanding,
+					transcript: turn.transcript,
+					history: history.current,
+					unclearStreak: unclearStreak.current,
+				};
+			} catch (err) {
+				// Reconnect on the next press rather than reuse a session in an unknown state.
+				current.close();
+				link.current = null;
+				throw err;
+			}
+		}
+
+		const current = recording.current;
+		if (!current) throw new Error('not recording');
+		const stopped = new Promise<void>((resolve) => {
+			current.rec.onstop = () => resolve();
+		});
+		current.rec.stop();
+		await stopped;
+		current.stream.getTracks().forEach((t) => t.stop());
+		recording.current = null;
+
+		// rec.mimeType is what the browser actually chose, which is not always what was
+		// asked for. Send that, not the request.
+		const type = current.rec.mimeType || current.mimeType || 'audio/webm';
+		return {
+			kind: 'speech',
+			audioBase64: await toBase64(new Blob(current.chunks, { type })),
+			mimeType: type,
+			history: history.current,
+			unclearStreak: unclearStreak.current,
+		};
+	}
+
+	async function onPress(): Promise<void> {
+		if (state.phase === 'recording') {
+			dispatch({ type: 'RELEASE' });
+			try {
+				const body = await finishCapture();
+				const res = await fetch('/api/turn', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify(body),
+				});
+				if (!res.ok) throw new Error(String(res.status));
+				const reply = (await res.json()) as TurnReply;
+				const understanding = reply.history[reply.history.length - 1];
+				if (!understanding) throw new Error('reply carried no understanding');
+				history.current = reply.history;
+				unclearStreak.current = reply.unclearStreak;
+				setLang(asLanguage(reply.language));
+				dispatch({ type: 'REPLY', screen: reply.screen, understanding });
+			} catch {
+				dispatch({ type: 'FAIL' });
+			}
 			return;
 		}
 
+		if (!canPress(state)) return;
+		silence();
+		dispatch({ type: 'PRESS' });
 		try {
-			const stream = await navigator.mediaDevices.getUserMedia({
-				audio: { channelCount: 1, sampleRate: 16000, noiseSuppression: true },
-			});
-			const mimeType = pickMimeType();
-			const rec = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-			chunks.current = [];
-			rec.ondataavailable = (e) => chunks.current.push(e.data);
-			rec.onstop = async () => {
-				stream.getTracks().forEach((t) => t.stop());
-				captions.current?.stop();
-				captions.current = null;
-				setRecording(false);
-				// rec.mimeType is what the browser actually chose, which is not always what
-				// was asked for. Send that, not the request.
-				const type = rec.mimeType || mimeType || 'audio/webm';
-				const blob = new Blob(chunks.current, { type });
-				await post({
-					kind: 'speech',
-					audioBase64: await toBase64(blob),
-					mimeType: type,
-					history: history.current,
-					unclearStreak: unclearStreak.current,
-				});
-			};
-			recorder.current = rec;
-			speechSynthesis?.cancel();
-			setCaption('');
-			setCaptionConfirmed(false);
-			// Captions run alongside the recording and never end the turn. The button does.
-			captions.current = startCaptions(VOICE_LANG[lang] ?? 'en-SG', setCaption);
-			rec.start();
-			setRecording(true);
-		} catch {
-			// Covers a denied permission, no microphone, and an insecure origin —
-			// getUserMedia needs HTTPS or localhost, so this fires on a phone hitting a
-			// plain-http dev server. The user gets one instruction either way.
-			setScreen({
-				kind: 'repeat',
-				say: 'I cannot use the microphone. Please allow microphone access, then press the green button.',
-				example: EXAMPLE,
-			});
+			await startCapture();
+			dispatch({ type: 'GRANTED' });
+		} catch (err) {
+			dispatch(
+				err instanceof RealtimeUnavailable
+					? { type: 'FAIL' }
+					: { type: 'DENIED', reason: micFailure(err, window.isSecureContext) },
+			);
 		}
-	}, [recording, post]);
+	}
 
-	const answerConfirm = useCallback(
-		(accepted: boolean) => {
-			if (screen.kind !== 'confirm') return;
-			void post({
-				kind: 'confirmation',
-				accepted,
-				intent: screen.intent,
-				history: history.current,
+	/** "Yes, that is right." Into a flow if one may be shown, otherwise to the answer. */
+	function onContinue(): void {
+		if (state.phase !== 'readback') return;
+		const u = state.understanding;
+		const proc = usableProcedure(procedureFor(u.intent), demo);
+		unclearStreak.current = 0;
+
+		if (proc) {
+			setProcedure(proc);
+			dispatch({
+				type: 'ENTER',
+				cursor: {
+					procedureId: proc.id,
+					stepId: proc.entry,
+					done: [],
+					startedAt: new Date().toISOString(),
+				},
 			});
-		},
-		[screen, post],
-	);
+			return;
+		}
+
+		dispatch({
+			type: 'CONFIRM',
+			accepted: true,
+			screen: screenFor({ kind: 'act', intent: u.intent, say: u.reply }, factsFor(u.intent)),
+		});
+	}
+
+	/** "Done", or the answer to a step's yes/no question. */
+	function onStep(answer?: boolean): void {
+		if (state.phase !== 'guiding' || !procedure) return;
+		const cursor = advance(procedure, state.cursor, answer);
+		if (cursor === null) {
+			dispatch({
+				type: 'FINISH',
+				screen: { kind: 'answer', title: localise(procedure.title, lang), say: FINISHED_SAY, facts: [] },
+			});
+			return;
+		}
+		dispatch({ type: 'ADVANCE', cursor });
+	}
+
+	function onReplay(): void {
+		speak(line || state.screen.say, lang);
+	}
 
 	return (
-		<main className="mx-auto flex min-h-svh max-w-xl flex-col justify-between px-6 py-8">
-			<div className="pt-6">
-				{recording && (
-					<p className="text-live mb-6 text-[length:var(--text-micro)] font-semibold">
-						Listening. Press the button again when you finish.
-					</p>
-				)}
-
-				<p className="text-[length:var(--text-title)] font-semibold leading-tight text-balance">
-					{screen.say}
-				</p>
-
-				{/*
-				  Subtitles. The height is reserved whether or not there is text, so the
-				  question above never jumps as words arrive — a moving target is hard to
-				  read for anyone, and worse for the eyes this is built for.
-
-				  aria-live is polite and the region is not focusable: a screen reader user
-				  is already hearing themselves speak and does not need it announced over
-				  the top.
-				*/}
-				<div className="mt-8 min-h-28" aria-live="polite">
-					{(recording || caption) && (
-						<>
-							<p className="text-quiet text-[length:var(--text-micro)]">
-								{recording ? 'I am hearing' : captionConfirmed ? 'You said' : 'I heard'}
-							</p>
-							<p
-								className={`mt-1 text-[length:var(--text-lead)] leading-snug ${
-									recording ? 'text-ink' : 'text-quiet'
-								}`}
-							>
-								{caption || (recording ? '…' : '')}
-								{recording && <span className="caret" aria-hidden="true" />}
-							</p>
-						</>
-					)}
-				</div>
-
-				{screen.kind === 'repeat' && (
-					<p className="text-quiet mt-6 text-[length:var(--text-lead)]">
-						For example: &ldquo;{screen.example}&rdquo;
-					</p>
-				)}
-
-				{screen.kind === 'answer' && screen.facts.length > 0 && (
-					// Label above value, value large. The user is verifying the values, so
-					// the values are what must be legible from arm's length — the reverse
-					// of how a form usually prints them.
-					<dl className="mt-10 space-y-7">
-						{screen.facts.map((f) => (
-							<div key={f.label}>
-								<dt className="text-quiet text-[length:var(--text-micro)]">
-									{f.label}
-								</dt>
-								<dd className="m-0 text-[length:var(--text-lead)] font-semibold">
-									{f.value}
-								</dd>
-							</div>
-						))}
-					</dl>
-				)}
-
-				{screen.kind === 'handoff' && (
-					<a
-						href={`tel:${screen.phone.replace(/\s/g, '')}`}
-						className="tap tap-quiet mt-10 text-center no-underline"
-					>
-						Call {screen.phone}
-					</a>
-				)}
-			</div>
-
-			<div className="space-y-4 pb-2">
-				{screen.kind === 'confirm' && (
-					<>
-						<button
-							className="tap tap-quiet"
-							onClick={() => answerConfirm(true)}
-							disabled={busy}
-						>
-							{screen.yes}
-						</button>
-						<button
-							className="tap tap-quiet"
-							onClick={() => answerConfirm(false)}
-							disabled={busy}
-						>
-							{screen.no}
-						</button>
-					</>
-				)}
-
-				<button
-					className="tap tap-speak"
-					data-live={recording}
-					onClick={toggle}
-					disabled={busy}
-					aria-label={recording ? 'Stop speaking' : 'Press to speak'}
-				>
-					{busy ? 'One moment' : recording ? 'I have finished' : 'Press to speak'}
-				</button>
-			</div>
-		</main>
+		<ScreenView
+			state={state}
+			cards={cardsFor(state, procedure, lang, new Date(), { samples: demo })}
+			procedure={procedure}
+			lang={lang}
+			mode={mode}
+			demo={demo}
+			onPress={onPress}
+			onContinue={onContinue}
+			onStep={onStep}
+			onReplay={onReplay}
+		/>
 	);
 }

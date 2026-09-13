@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { factsFor } from './catalogue';
 import { corroborate, type Agreement } from './corroborate';
 import { decide, nextContext, type PolicyContext } from './policy';
+import { foldSlots } from './providers/slots';
 import type { TranscriptProvider } from './providers/transcript';
 import type { VoiceProvider } from './providers/types';
 import { screenFor, type Screen } from './uispec';
@@ -26,6 +27,23 @@ export const TurnRequest = z.discriminatedUnion('kind', [
 		unclearStreak: z.number().int().min(0).max(10).default(0),
 	}),
 	z.object({
+		/**
+		 * An understanding the realtime model already produced, relayed by the browser.
+		 *
+		 * The audio went straight from the phone to OpenAI over WebRTC, so there is no audio
+		 * here to send to a provider. What the server still owns is everything after
+		 * hearing: validation, corroboration, the thresholds and the screen. The same caveat
+		 * as `history` applies — a tampered client could claim any confidence — and it is
+		 * acceptable for the same reason: v1 writes nothing.
+		 */
+		kind: z.literal('understanding'),
+		understanding: z.preprocess(foldSlots, Understanding),
+		/** The realtime session's own input transcription. Corroborates; never decides. */
+		transcript: z.string().max(4000).default(''),
+		history: z.array(Understanding).max(20).default([]),
+		unclearStreak: z.number().int().min(0).max(10).default(0),
+	}),
+	z.object({
 		/** The user answered a read-back question by button rather than by voice. */
 		kind: z.literal('confirmation'),
 		accepted: z.boolean(),
@@ -35,6 +53,9 @@ export const TurnRequest = z.discriminatedUnion('kind', [
 ]);
 
 export type TurnRequest = z.infer<typeof TurnRequest>;
+
+/** The corroboration channel named in the audit record for a relayed realtime turn. */
+const REALTIME_TRANSCRIBER = 'openai-realtime:gpt-4o-transcribe';
 
 /**
  * The audit record for one turn.
@@ -70,15 +91,30 @@ export interface TurnResponse {
  * Both channels run, and they run concurrently — the transcriber is not on the critical
  * path behind the audio model, so corroboration costs a few cents per thousand users
  * and no extra latency.
+ *
+ * `provider` is optional because only a speech turn needs one. A relayed understanding
+ * was already heard elsewhere, and demanding a Gemini key to process it would make the
+ * OpenAI mode depend on a vendor it does not use.
  */
 export async function runTurn(
 	req: TurnRequest,
-	provider: VoiceProvider,
+	provider?: VoiceProvider,
 	transcriber?: TranscriptProvider,
 ): Promise<TurnResponse> {
 	if (req.kind === 'confirmation') {
 		return handleConfirmation(req.accepted, req.intent, req.history);
 	}
+
+	if (req.kind === 'understanding') {
+		return conclude(
+			req.understanding,
+			req.transcript,
+			req.transcript ? REALTIME_TRANSCRIBER : null,
+			req,
+		);
+	}
+
+	if (!provider) throw new Error('no audio provider configured for a speech turn');
 
 	const audio = decodeBase64(req.audioBase64);
 
@@ -87,9 +123,24 @@ export async function runTurn(
 		transcriber?.transcribe(audio, req.mimeType) ?? Promise.resolve(null),
 	]);
 
-	// With no transcriber configured this is a no-op that reports 'no-signal', so the
-	// single-channel path stays exactly as it was.
-	const cross = corroborate(voice.understanding, transcript?.text ?? '');
+	return conclude(voice.understanding, transcript?.text ?? '', transcriber?.id ?? null, req);
+}
+
+/**
+ * Everything after hearing, shared by both ways of hearing.
+ *
+ * One function on purpose: the thresholds, the corroboration arithmetic and the screen
+ * whitelist must not be able to drift between the Gemini path and the realtime path.
+ */
+function conclude(
+	heard: Understanding,
+	transcript: string,
+	transcriber: string | null,
+	req: { history: Understanding[]; unclearStreak: number },
+): TurnResponse {
+	// With no transcript this is a no-op that reports 'no-signal', so the single-channel
+	// path stays exactly as it was.
+	const cross = corroborate(heard, transcript);
 	const understanding = cross.understanding;
 
 	const ctx: PolicyContext = { consecutiveUnclear: req.unclearStreak };
@@ -101,9 +152,9 @@ export async function runTurn(
 		history: [...req.history, understanding],
 		unclearStreak: nextContext(understanding, ctx).consecutiveUnclear,
 		audit: {
-			transcriber: transcriber?.id ?? null,
+			transcriber,
 			transcript: cross.transcript,
-			audioIntent: voice.understanding.intent,
+			audioIntent: heard.intent,
 			transcriptIntent: cross.transcriptIntent,
 			agreement: cross.agreement,
 			rawConfidence: cross.rawConfidence,
