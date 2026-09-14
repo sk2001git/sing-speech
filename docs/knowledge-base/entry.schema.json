@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://suara.sg/schema/entry/1.0.0",
+  "$id": "https://suara.sg/schema/entry/1.1.0",
   "title": "Suara knowledge entry",
   "description": "One answer or process in the Suara knowledge base. Every line a person sees points at a verbatim quote from an official or configured source, so grounding can be checked automatically. Field names follow schema.org FAQPage/HowTo where one exists; the mapping is in README.md.",
   "type": "object",
@@ -10,10 +10,10 @@
     "topic", "search", "sources", "quotes", "provenance", "verification", "lifecycle"
   ],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "1.1.0" },
 
     "id": {
-      "description": "Stable, human-readable. <country>.<publisher code>.<slug>. Never reused, never changed after first publish.",
+      "description": "Stable, human-readable. <country>.<publisher code>.<slug>. Never reused, never changed after first publish. A translation keeps its original's id; an entry is stored under (id, language).",
       "type": "string",
       "pattern": "^sg\\.[a-z0-9]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
     },
@@ -24,12 +24,40 @@
     },
 
     "language": {
-      "description": "BCP 47 tag of this entry's text. One language per entry; translations are separate entries linked by translation_of.",
+      "description": "BCP 47 tag of this entry's text. One language per stored entry. Quotes stay in the language of their source page.",
       "enum": ["en", "zh-Hans"]
     },
     "translation_of": {
-      "description": "The id of the entry this translates, or null for an original.",
-      "type": ["string", "null"]
+      "description": "For a translation, the original it was made from. null for an original.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^sg\\.[a-z0-9]+\\.[a-z0-9]+(-[a-z0-9]+)*$" },
+            "version": {
+              "description": "The original's lifecycle.version when translated. Behind the original's current version means the translation is out of date.",
+              "type": "integer", "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "translations": {
+      "description": "Originals only. Which translations exist, so a reader's language can be checked from this entry alone. Not part of the served text: updating it changes neither lifecycle.version nor lifecycle.content_hash.",
+      "type": "object",
+      "propertyNames": { "enum": ["zh-Hans"] },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from_version", "at"],
+        "properties": {
+          "from_version": { "type": "integer", "minimum": 1 },
+          "at": { "type": "string", "format": "date-time" }
+        }
+      }
     },
 
     "title": {
@@ -184,7 +212,7 @@
     },
 
     "quotes": {
-      "description": "Verbatim text from a source. Every summary, detail and step cites at least one. A quote that cannot be found on its page fails grounding.",
+      "description": "Verbatim text from a source, in the source's language, including in translations. Every summary, detail and step cites at least one. A quote that cannot be found on its page fails grounding.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -224,6 +252,18 @@
             "prompt_version": { "type": ["string", "null"] },
             "at": { "type": "string", "format": "date-time" }
           }
+        },
+        "translated": {
+          "description": "Translations only. The model that actually served the translation, which may be a fallback in the rotation.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "model", "at"],
+          "properties": {
+            "method": { "enum": ["model", "manual"] },
+            "model": { "type": ["string", "null"] },
+            "prompt_version": { "type": ["string", "null"] },
+            "at": { "type": "string", "format": "date-time" }
+          }
         }
       }
     },
@@ -234,7 +274,7 @@
       "required": ["status", "checks"],
       "properties": {
         "status": {
-          "description": "Only grounded entries are served. draft: never checked. stale: a source changed. withdrawn: a source is gone or a check failed.",
+          "description": "Only grounded entries are served. draft: never checked. stale: a source or the original changed. withdrawn: a source is gone or a check failed.",
           "enum": ["draft", "grounded", "stale", "withdrawn"]
         },
         "checks": {
@@ -244,7 +284,7 @@
             "additionalProperties": false,
             "required": ["type", "passed", "at"],
             "properties": {
-              "type": { "enum": ["quotes-found", "url-live", "source-unchanged", "refs-resolve", "lengths"] },
+              "type": { "enum": ["quotes-found", "url-live", "source-unchanged", "refs-resolve", "lengths", "translation-matches-original"] },
               "passed": { "type": "boolean" },
               "at": { "type": "string", "format": "date-time" },
               "note": { "type": "string", "maxLength": 300 }
@@ -282,6 +322,16 @@
       "if": { "properties": { "kind": { "const": "process" } } },
       "then": { "required": ["steps"] },
       "else": { "not": { "required": ["steps"] } }
+    },
+    {
+      "if": { "required": ["translation_of"], "properties": { "translation_of": { "type": "object" } } },
+      "then": {
+        "properties": { "provenance": { "required": ["translated"] } },
+        "not": { "required": ["translations"] }
+      },
+      "else": {
+        "properties": { "provenance": { "not": { "required": ["translated"] } } }
+      }
     }
   ],
 
