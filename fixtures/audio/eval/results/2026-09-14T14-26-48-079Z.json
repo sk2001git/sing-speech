@@ -1,0 +1,700 @@
+{
+  "base": "http://127.0.0.1:4321",
+  "ran_at": "2026-09-14T14:26:48.080Z",
+  "rows": [
+    {
+      "id": "chas-clean",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2050,
+      "pred": "chas_subsidy",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know if there is any subsidy to help pay for your doctor or medicine.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "chas-self-correction",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "self_correction"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1731,
+      "pred": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to ask about your CHAS subsidy for the clinic.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "chas-wrong-term",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "wrong_term"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1826,
+      "pred": "chas_subsidy",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to apply for the CHAS card to help pay for your doctor visits and medicine.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "silver-clean",
+      "gold": "silver_support",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1688,
+      "pred": "silver_support",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know when your Silver Support money for this quarter is coming.",
+      "correct": true,
+      "scored_gold": "silver_support"
+    },
+    {
+      "id": "silver-wrong-term",
+      "gold": "silver_support",
+      "also": [
+        "pioneer_merdeka"
+      ],
+      "perturbation": [
+        "wrong_term"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 2792,
+      "pred": "pioneer_merdeka",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know why your Pioneer or Merdeka Generation money has not been paid.",
+      "correct": true,
+      "scored_gold": "pioneer_merdeka"
+    },
+    {
+      "id": "silver-fast",
+      "gold": "silver_support",
+      "also": [],
+      "perturbation": [
+        "fast"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2307,
+      "pred": "silver_support",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know when your Silver Support payout will come because your bank account is still empty.",
+      "correct": true,
+      "scored_gold": "silver_support"
+    },
+    {
+      "id": "silver-zh",
+      "gold": "silver_support",
+      "also": [],
+      "perturbation": [
+        "mandarin"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2577,
+      "pred": "silver_support",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "Li beh zai ang gong tio ho lim poo thia zhi u zhin lai bo.",
+      "correct": true,
+      "scored_gold": "silver_support"
+    },
+    {
+      "id": "pioneer-clean",
+      "gold": "pioneer_merdeka",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2784,
+      "pred": "pioneer_merdeka",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know what benefits you can use with your Merdeka Generation card.",
+      "correct": true,
+      "scored_gold": "pioneer_merdeka"
+    },
+    {
+      "id": "pioneer-disfluent",
+      "gold": "pioneer_merdeka",
+      "also": [],
+      "perturbation": [
+        "disfluent"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 2169,
+      "pred": "pioneer_merdeka",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know what you can claim under the Merdeka Generation package.",
+      "correct": true,
+      "scored_gold": "pioneer_merdeka"
+    },
+    {
+      "id": "appt-clean",
+      "gold": "appointment_prep",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1787,
+      "pred": "appointment_prep",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know what to bring for your polyclinic appointment.",
+      "correct": true,
+      "scored_gold": "appointment_prep"
+    },
+    {
+      "id": "reuse-hello",
+      "gold": "none",
+      "also": [],
+      "perturbation": [
+        "greeting"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2736,
+      "pred": "human_handoff",
+      "confidence": 0.3,
+      "needs_human": true,
+      "decision": "handoff",
+      "screen": "handoff",
+      "restatement": "You want to speak with someone right now.",
+      "correct": false,
+      "scored_gold": "none"
+    },
+    {
+      "id": "reuse-scam-police",
+      "gold": "none",
+      "also": [],
+      "perturbation": [
+        "scam"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1577,
+      "pred": "human_handoff",
+      "confidence": 0.8,
+      "needs_human": true,
+      "decision": "handoff",
+      "screen": "handoff",
+      "restatement": "You want to speak to someone to check your bank account.",
+      "correct": false,
+      "scored_gold": "none"
+    },
+    {
+      "id": "reuse-gpfirst",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1862,
+      "pred": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know about CHAS subsidies for your doctor and medicine.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "reuse-cpf-check",
+      "gold": "none",
+      "also": [],
+      "perturbation": [
+        "out_of_label_set"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1670,
+      "pred": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to check your CHAS subsidy.",
+      "correct": false,
+      "scored_gold": "none"
+    },
+    {
+      "id": "reuse-asks-person",
+      "gold": "human_handoff",
+      "also": [],
+      "perturbation": [
+        "clean"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1904,
+      "pred": "human_handoff",
+      "confidence": 0.99,
+      "needs_human": true,
+      "decision": "handoff",
+      "screen": "handoff",
+      "restatement": "You want to speak to a real person.",
+      "correct": true,
+      "scored_gold": "human_handoff"
+    },
+    {
+      "id": "reuse-passport",
+      "gold": "none",
+      "also": [],
+      "perturbation": [
+        "out_of_scope"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1573,
+      "pred": "human_handoff",
+      "confidence": 0.9,
+      "needs_human": true,
+      "decision": "handoff",
+      "screen": "handoff",
+      "restatement": "You want to renew your passport.",
+      "correct": false,
+      "scored_gold": "none"
+    },
+    {
+      "id": "reuse-vague-card",
+      "gold": "silver_support",
+      "also": [
+        "pioneer_merdeka"
+      ],
+      "perturbation": [
+        "vague"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1937,
+      "pred": "silver_support",
+      "confidence": 0.9,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to ask about your Silver Support payout.",
+      "correct": true,
+      "scored_gold": "silver_support"
+    },
+    {
+      "id": "reuse-ms-gpfirst",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "accent"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2422,
+      "pred": "chas_subsidy",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You are asking if the clinic visit with Dr Asmi Goan-E is cheaper.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "reuse-ta-gpfirst",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "accent"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 2234,
+      "pred": "chas_subsidy",
+      "confidence": 0.9,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know about the subsidy for your polyclinic doctor and medicine.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "reuse-zh-gpfirst",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "mandarin"
+      ],
+      "difficulty": "normal",
+      "status": 200,
+      "ms": 1853,
+      "pred": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "你想了解看医生怎样可以比较便宜。",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "chas-clean-noise",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "noise"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1877,
+      "pred": "chas_subsidy",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know if there are subsidies to help pay for your doctor and medicine.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    },
+    {
+      "id": "silver-clean-noise",
+      "gold": "silver_support",
+      "also": [],
+      "perturbation": [
+        "noise"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 4283,
+      "pred": "silver_support",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know why your Silver Support money has not come this quarter.",
+      "correct": true,
+      "scored_gold": "silver_support"
+    },
+    {
+      "id": "pioneer-clean-noise",
+      "gold": "pioneer_merdeka",
+      "also": [],
+      "perturbation": [
+        "noise"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1859,
+      "pred": "pioneer_merdeka",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You are asking about the benefits you can get with your Merdeka Generation card.",
+      "correct": true,
+      "scored_gold": "pioneer_merdeka"
+    },
+    {
+      "id": "appt-clean-noise",
+      "gold": "appointment_prep",
+      "also": [],
+      "perturbation": [
+        "noise"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 1990,
+      "pred": "appointment_prep",
+      "confidence": 0.95,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know what to bring to your polyclinic appointment tomorrow.",
+      "correct": true,
+      "scored_gold": "appointment_prep"
+    },
+    {
+      "id": "gpfirst-heavy-noise",
+      "gold": "chas_subsidy",
+      "also": [],
+      "perturbation": [
+        "heavy_noise"
+      ],
+      "difficulty": "hard",
+      "status": 200,
+      "ms": 7108,
+      "pred": "chas_subsidy",
+      "confidence": 0.85,
+      "needs_human": false,
+      "decision": "act",
+      "screen": "answer",
+      "restatement": "You want to know if your doctor letter helps you get cheaper medicine with CHAS.",
+      "correct": true,
+      "scored_gold": "chas_subsidy"
+    }
+  ],
+  "perLabel": [
+    {
+      "label": "chas_subsidy",
+      "support": 9,
+      "tp": 9,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.9,
+      "recall": 1,
+      "f1": 0.9473684210526316
+    },
+    {
+      "label": "silver_support",
+      "support": 5,
+      "tp": 5,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    {
+      "label": "pioneer_merdeka",
+      "support": 4,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    {
+      "label": "appointment_prep",
+      "support": 2,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    {
+      "label": "wayfinding",
+      "support": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    },
+    {
+      "label": "human_handoff",
+      "support": 1,
+      "tp": 1,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.25,
+      "recall": 1,
+      "f1": 0.4
+    },
+    {
+      "label": "none",
+      "support": 4,
+      "tp": 0,
+      "fp": 0,
+      "fn": 4,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    }
+  ],
+  "macro": {
+    "precision": 0.6916666666666668,
+    "recall": 0.8333333333333334,
+    "f1": 0.7245614035087721
+  },
+  "weighted": {
+    "precision": 0.774,
+    "recall": 0.84,
+    "f1": 0.7970526315789473
+  },
+  "micro": 0.84,
+  "action": {
+    "acted": 21,
+    "acted_correctly": 20,
+    "should_act": 20,
+    "precision": 0.9523809523809523,
+    "recall": 1,
+    "f1": 0.975609756097561
+  },
+  "byPerturbation": {
+    "clean": {
+      "n": 6,
+      "correct": 6
+    },
+    "self_correction": {
+      "n": 1,
+      "correct": 1
+    },
+    "wrong_term": {
+      "n": 2,
+      "correct": 2
+    },
+    "fast": {
+      "n": 1,
+      "correct": 1
+    },
+    "mandarin": {
+      "n": 2,
+      "correct": 2
+    },
+    "disfluent": {
+      "n": 1,
+      "correct": 1
+    },
+    "greeting": {
+      "n": 1,
+      "correct": 0
+    },
+    "scam": {
+      "n": 1,
+      "correct": 0
+    },
+    "out_of_label_set": {
+      "n": 1,
+      "correct": 0
+    },
+    "out_of_scope": {
+      "n": 1,
+      "correct": 0
+    },
+    "vague": {
+      "n": 1,
+      "correct": 1
+    },
+    "accent": {
+      "n": 2,
+      "correct": 2
+    },
+    "noise": {
+      "n": 4,
+      "correct": 4
+    },
+    "heavy_noise": {
+      "n": 1,
+      "correct": 1
+    }
+  },
+  "confusion": {
+    "chas_subsidy": {
+      "chas_subsidy": 9,
+      "silver_support": 0,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 0,
+      "none": 0
+    },
+    "silver_support": {
+      "chas_subsidy": 0,
+      "silver_support": 5,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 0,
+      "none": 0
+    },
+    "pioneer_merdeka": {
+      "chas_subsidy": 0,
+      "silver_support": 0,
+      "pioneer_merdeka": 4,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 0,
+      "none": 0
+    },
+    "appointment_prep": {
+      "chas_subsidy": 0,
+      "silver_support": 0,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 2,
+      "wayfinding": 0,
+      "human_handoff": 0,
+      "none": 0
+    },
+    "wayfinding": {
+      "chas_subsidy": 0,
+      "silver_support": 0,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 0,
+      "none": 0
+    },
+    "human_handoff": {
+      "chas_subsidy": 0,
+      "silver_support": 0,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 1,
+      "none": 0
+    },
+    "none": {
+      "chas_subsidy": 1,
+      "silver_support": 0,
+      "pioneer_merdeka": 0,
+      "appointment_prep": 0,
+      "wayfinding": 0,
+      "human_handoff": 3,
+      "none": 0
+    }
+  },
+  "medianMs": 1937
+}
