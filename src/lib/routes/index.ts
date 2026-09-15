@@ -1,4 +1,6 @@
-import type { Hearing } from '../kb/hearing';
+import { NothingHeard, type Hearing } from '../kb/hearing';
+
+export { NothingHeard } from '../kb/hearing';
 import { GeminiHearer } from '../providers/gemini-hear';
 import { OpenAiWsRoute } from './openai-ws';
 import { RouteUnavailable, type HearingRoute, type UnavailableReason } from './types';
@@ -68,6 +70,7 @@ export async function hearVia(chain: readonly HearingRoute[], audio: ArrayBuffer
 		try {
 			return { hearing: await route.hear(audio, mimeType), route: route.id, skipped };
 		} catch (err) {
+			if (err instanceof RouteUnavailable && err.reason === 'nothing-heard') throw new NothingHeard(err.message);
 			skipped.push({ route: route.id, reason: err instanceof RouteUnavailable ? err.reason : 'vendor-error' });
 			console.warn(`route ${route.id} skipped:`, err instanceof Error ? err.message.slice(0, 200) : err);
 		}

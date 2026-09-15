@@ -52,7 +52,8 @@ describe('OpenAiWsRoute', () => {
 		const ws = fakeSocket(() => [{ type: 'response.in_progress' }, completed(JSON.stringify(hearing))]);
 		const route = new OpenAiWsRoute({ apiKey: 'sk', fetchImpl: tx.impl, connect: ws.connect });
 
-		expect(await route.hear(new Uint8Array([1, 2]).buffer, 'audio/webm;codecs=opus')).toEqual(hearing);
+		// What they said is the transcript itself, not the model's retelling of it.
+		expect(await route.hear(new Uint8Array([1, 2]).buffer, 'audio/webm;codecs=opus')).toEqual({ ...hearing, said: 'I forgot my Singpass password' });
 
 		expect(tx.calls[0]!.url).toBe('https://api.openai.com/v1/audio/transcriptions');
 		expect(tx.calls[0]!.form.get('model')).toBe('gpt-transcribe');
@@ -93,6 +94,12 @@ describe('OpenAiWsRoute', () => {
 
 		const junk = new OpenAiWsRoute({ apiKey: 'sk', fetchImpl: tx.impl, connect: fakeSocket(() => [completed('{"nope":1}')]).connect });
 		await expect(junk.hear(new ArrayBuffer(1))).rejects.toThrow();
+	});
+
+	it('treats a reply with no meaning as nothing heard, not as a broken vendor', async () => {
+		const tx = fakeFetch(200, { text: 'mm' });
+		const route = new OpenAiWsRoute({ apiKey: 'sk', fetchImpl: tx.impl, connect: fakeSocket(() => [completed(JSON.stringify({ ...hearing, meaning_en: '' }))]).connect });
+		await expect(route.hear(new ArrayBuffer(1))).rejects.toMatchObject({ reason: 'nothing-heard' });
 	});
 
 	it('treats silence as nothing heard rather than searching for an empty sentence', async () => {

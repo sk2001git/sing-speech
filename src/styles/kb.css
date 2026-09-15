@@ -349,6 +349,20 @@
 		font-size: 1.125rem;
 	}
 
+	.k-said {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.875rem 1.25rem;
+		border-radius: var(--radius-card);
+		background: var(--subtle);
+	}
+	.k-said p {
+		margin: 0;
+		font-size: 1.25rem;
+		line-height: 1.4;
+	}
+
 	.k-closest {
 		display: flex;
 		align-items: center;

@@ -10,9 +10,19 @@ import type { EntryLanguage } from './entry';
  */
 export const HEARD_LANGUAGES = ['en', 'zh', 'other'] as const;
 
+/** The route heard no words. Not a vendor failure: the next vendor would hear silence too. */
+export class NothingHeard extends Error {
+	constructor(message = 'nothing heard') {
+		super(message);
+		this.name = 'NothingHeard';
+	}
+}
+
 export const Hearing = z
 	.object({
 		greeting: z.boolean(),
+		/** What they said, as close to word for word as the route can give. Shown back to them. */
+		said: z.string().max(1000).optional(),
 		meaning_en: z.string().max(240),
 		short: z.string().min(1).max(40),
 		sentence: z.string().min(1).max(240),
@@ -38,13 +48,14 @@ export const HEARING_SCHEMA = {
 	type: 'object',
 	properties: {
 		greeting: { type: 'boolean' },
+		said: { type: 'string' },
 		meaning_en: { type: 'string' },
 		short: { type: 'string' },
 		sentence: { type: 'string' },
 		language: { type: 'string', enum: [...HEARD_LANGUAGES] },
 		confidence: { type: 'number' },
 	},
-	required: ['greeting', 'meaning_en', 'short', 'sentence', 'language', 'confidence'],
+	required: ['greeting', 'said', 'meaning_en', 'short', 'sentence', 'language', 'confidence'],
 } as const;
 
 /**
@@ -61,6 +72,7 @@ export function hearingPrompt(source: 'audio' | 'transcript' = 'audio'): string 
 ${intake}
 
 - greeting: true only when they are just greeting you or making small talk with no question, such as "hello", "good morning" or "你好". A greeting followed by a question is not a greeting.
+- said: what they said, word for word as best you can, in the language they spoke. Empty if there were no words.
 - meaning_en: one plain English sentence saying what they want to know, written as a search query, whatever language they spoke. Keep any scheme name, place, card or number they said. Empty only for a greeting.
 - short: at most five words saying what they asked, in the language they spoke, for a one-line heading. For a greeting, the greeting itself.
 - sentence: one short sentence saying back what they want to know, in the language they spoke, addressed to them. The meaning, not their exact words. Never add anything they did not say.

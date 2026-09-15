@@ -44,6 +44,10 @@ describe('Home', () => {
 		expect(html).not.toMatch(/helpline|1800-/i);
 	});
 
+	it('says plainly when it heard nothing', () => {
+		expect(render({ phase: 'home', view: 'grid', greeting: false, notice: 'nothing' })).toContain("I didn't hear you. Tap and try again.");
+	});
+
 	it('greets back after a greeting', () => {
 		expect(render({ phase: 'home', view: 'grid', greeting: true })).toContain('Hello! What do you need?');
 	});
@@ -75,6 +79,14 @@ describe('Results', () => {
 		expect(render(results(result({ cards: [guide] }), guide.id))).toContain('Start guide');
 		const call = byId('sg.moh.pioneer-card-replacement');
 		expect(render(results(result({ cards: [call] }), call.id))).toContain('href="tel:18006506060"');
+	});
+
+	it('shows what they said, word for word, open above the cards', () => {
+		const said = 'my doctor give me one letter, go emergency cheaper or not';
+		const html = render(results(result({ heard: { ...result().heard, said } })));
+		expect(html).toContain('You said');
+		expect(html).toContain(said);
+		expect(html.indexOf(said)).toBeLessThan(html.indexOf('data-card='));
 	});
 
 	it('labels weak matches as the closest, never as a sure match', () => {

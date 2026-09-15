@@ -39,6 +39,14 @@ describe('speaking', () => {
 		expect(next(denied, { type: 'PRESS' }).phase).toBe('arming');
 	});
 
+	it('goes home saying nothing was heard, from the microphone or from the server', () => {
+		const listening = run([{ type: 'PRESS' }, { type: 'GRANTED' }]);
+		expect(next(listening, { type: 'SILENCE' })).toMatchObject({ phase: 'home', greeting: false, notice: 'nothing' });
+		const searching = next(listening, { type: 'STOP' });
+		expect(next(searching, { type: 'SILENCE' })).toMatchObject({ phase: 'home', notice: 'nothing' });
+		expect(next(next(searching, { type: 'SILENCE' }), { type: 'PRESS' }).phase).toBe('arming');
+	});
+
 	it('shows the offline screen when the search fails', () => {
 		expect(run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }, { type: 'FAIL' }]).phase).toBe('offline');
 	});

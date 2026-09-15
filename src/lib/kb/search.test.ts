@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import example from '../../../docs/knowledge-base/examples/sg.moh.gpfirst-emergency-referral.json';
 import { parseEntry, type Entry } from './entry';
 import { needsTranslation } from './grounding';
-import type { Hearing } from './hearing';
+import { NothingHeard, type Hearing } from './hearing';
 import { MemoryTranslations, runSearch, type Corpus, type SearchDeps } from './search';
 
 const T = { strong: 0.6, weak: 0.45, floor: 0.3 };
@@ -77,6 +77,20 @@ describe('runSearch, speech', () => {
 			result: { fit: 'strong', nextOffset: 6, query: 'what health help can I get', heard: { short: 'Health help' } },
 		});
 		expect(embed.mock.calls[0]![0]).toMatch(/Query:what health help can I get$/);
+	});
+
+	it('reports silence when the route heard nothing, without searching', async () => {
+		const embed = vi.fn(async () => [1, 0]);
+		const hear = async () => {
+			throw new NothingHeard();
+		};
+		expect(await runSearch(speech(), deps({ hear, embed }))).toEqual({ kind: 'silence', language: 'en' });
+		expect(embed).not.toHaveBeenCalled();
+	});
+
+	it('carries what they said into the heard row', async () => {
+		const r = await runSearch(speech(), deps({ hear: async () => heard({ said: 'what health help can I get ah' }) }));
+		expect(r.kind === 'results' && r.result.heard.said).toBe('what health help can I get ah');
 	});
 
 	it('says nothing is close when even the best card is below the weak line', async () => {

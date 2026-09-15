@@ -4,7 +4,7 @@ import { nearest, queryText, type StoredVector } from './embed';
 import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
 import { needsTranslation } from './grounding';
-import { replyLanguage, type Hearing } from './hearing';
+import { NothingHeard, replyLanguage, type Hearing } from './hearing';
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
@@ -26,6 +26,7 @@ export type SearchRequest = z.infer<typeof SearchRequest>;
 
 export type SearchResponse =
 	| { kind: 'greeting'; language: EntryLanguage }
+	| { kind: 'silence'; language: EntryLanguage }
 	| { kind: 'nothing'; heard: Heard; language: EntryLanguage }
 	/** `englishIds`: cards shown in English although the reader's language is not English. */
 	| { kind: 'results'; result: SearchResult; englishIds: string[] };
@@ -84,10 +85,16 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 
 	if (req.kind === 'speech') {
 		if (!deps.hear) throw new Error('no hearing provider configured');
-		const h = await deps.hear(decodeBase64(req.audioBase64), req.mimeType);
+		let h: Hearing;
+		try {
+			h = await deps.hear(decodeBase64(req.audioBase64), req.mimeType);
+		} catch (err) {
+			if (err instanceof NothingHeard) return { kind: 'silence', language: req.reply === 'zh-Hans' ? 'zh-Hans' : 'en' };
+			throw err;
+		}
 		language = replyLanguage(req.reply, h.language);
 		if (h.greeting) return { kind: 'greeting', language };
-		heard = { short: h.short, sentence: h.sentence };
+		heard = { short: h.short, sentence: h.sentence, ...(h.said?.trim() ? { said: h.said.trim() } : {}) };
 		query = h.meaning_en;
 	} else {
 		language = req.reply === 'zh-Hans' ? 'zh-Hans' : 'en';

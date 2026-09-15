@@ -39,6 +39,8 @@ const WORDS = {
 		finding: 'Finding answers',
 		orTopic: 'Or pick a topic',
 		youAsked: 'You asked',
+		youSaid: 'You said',
+		nothingHeard: "I didn't hear you. Tap and try again.",
 		readAloud: 'Read aloud',
 		answers: (n: number) => `${n} ${n === 1 ? 'answer' : 'answers'}`,
 		best: 'Best match',
@@ -92,6 +94,8 @@ const WORDS = {
 		finding: '正在找答案',
 		orTopic: '或选一个主题',
 		youAsked: '您问',
+		youSaid: '您说',
+		nothingHeard: '我没听到。请点一下再说。',
 		readAloud: '朗读',
 		answers: (n: number) => `${n} 个答案`,
 		best: '最符合',
@@ -207,6 +211,7 @@ function Body(p: BodyProps) {
 		case 'notfound':
 			return (
 				<>
+					{s.heard.said && <Said w={p.w} said={s.heard.said} />}
 					<HeardRow w={p.w} short={s.heard.short} />
 					<h1 className="k-h1">{p.w.notIn}</h1>
 					<p className="k-lead">{p.w.tryTopic}</p>
@@ -255,6 +260,7 @@ function Talk(p: BodyProps) {
 		<>
 			<Chip tone={live ? 'live' : waiting ? 'busy' : 'ready'} text={live ? p.w.listening : waiting ? p.w.busy : p.w.ready} />
 			<h1 className="k-h1">{heading}</h1>
+			{s.phase === 'home' && s.notice === 'nothing' && <p className="k-notice">{p.w.nothingHeard}</p>}
 			<section className="k-orb-zone">
 				<button
 					className="k-orb"
@@ -297,6 +303,16 @@ function Topics(p: BodyProps) {
 	);
 }
 
+/** Their own words, always open, so they can see Suara heard them before reading answers. */
+function Said({ w, said }: { w: Words; said: string }) {
+	return (
+		<div className="k-said">
+			<span className="k-heard-label">{w.youSaid}</span>
+			<p>&ldquo;{said}&rdquo;</p>
+		</div>
+	);
+}
+
 function HeardRow({ w, short, sentence, onSay, lang }: { w: Words; short: string; sentence?: string; onSay?: BodyProps['onSay']; lang?: EntryLanguage }) {
 	if (!sentence) {
 		return (
@@ -333,6 +349,7 @@ function Results(p: BodyProps & { state: ResultsState }) {
 	const english = new Set(p.englishIds);
 	return (
 		<>
+			{result.heard.said && <Said w={p.w} said={result.heard.said} />}
 			<HeardRow w={p.w} short={result.heard.short} sentence={result.heard.sentence} onSay={p.onSay} lang={result.language} />
 			{result.fit === 'weak' && (
 				<p className="k-closest">

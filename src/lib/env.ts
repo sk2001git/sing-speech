@@ -10,6 +10,8 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_ROUTE?: string;
 	/** Text model on the OpenAI route. Default gpt-5.6-luna. */
 	SUARA_OPENAI_HEAR_MODEL?: string;
+	/** OpenAI voice for the openai-ws route. Default marin. */
+	SUARA_OPENAI_VOICE?: string;
 	SUARA_OPENAI_MODEL?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */
 	SUARA_MODE?: string;

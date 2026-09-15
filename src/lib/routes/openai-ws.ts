@@ -105,7 +105,10 @@ export class OpenAiWsRoute implements HearingRoute {
 			console.warn(`${ID}: websocket unavailable, using HTTP:`, err instanceof Error ? err.message : err);
 			text = await this.overHttp(key, request);
 		}
-		return Hearing.parse(JSON.parse(text));
+		const reply = JSON.parse(text) as { greeting?: boolean; meaning_en?: string };
+		if (!reply.greeting && !reply.meaning_en?.trim()) throw new RouteUnavailable(ID, 'nothing-heard', 'no request in the transcript');
+		// What they said is the transcript itself, not the model's retelling of it.
+		return Hearing.parse({ ...reply, said: transcript.trim().slice(0, 1000) });
 	}
 
 	private async transcribe(key: string, audio: ArrayBuffer, mimeType?: string): Promise<string> {

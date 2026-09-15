@@ -23,6 +23,11 @@ describe('Hearing', () => {
 		expect(Hearing.safeParse({ ...request, meaning_en: '' }).success).toBe(false);
 	});
 
+	it('keeps what they said, word for word, when the route has it', () => {
+		const r = Hearing.safeParse({ ...request, said: 'my doctor give me one letter, go emergency cheaper or not' });
+		expect(r.success && r.data.said).toBe('my doctor give me one letter, go emergency cheaper or not');
+	});
+
 	it('rejects a "You asked" line too long for one row', () => {
 		expect(Hearing.safeParse({ ...request, short: 'a'.repeat(41) }).success).toBe(false);
 	});
@@ -60,6 +65,6 @@ describe('hearingPrompt', () => {
 	});
 
 	it('requires every field in the response schema', () => {
-		expect([...HEARING_SCHEMA.required].sort()).toEqual(['confidence', 'greeting', 'language', 'meaning_en', 'sentence', 'short']);
+		expect([...HEARING_SCHEMA.required].sort()).toEqual(['confidence', 'greeting', 'language', 'meaning_en', 'said', 'sentence', 'short']);
 	});
 });

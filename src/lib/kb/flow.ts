@@ -17,6 +17,8 @@ export interface Heard {
 	short: string;
 	/** What Suara understood, as a sentence, shown when the row is opened. */
 	sentence: string;
+	/** What they said, word for word, when the route has it. Shown open. */
+	said?: string;
 }
 
 export interface SearchResult {
@@ -32,7 +34,7 @@ export interface SearchResult {
 type Results = { view: View; phase: 'results'; result: SearchResult; openId: string | null };
 
 export type FlowState =
-	| { view: View; phase: 'home'; greeting: boolean }
+	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
 	| { view: View; phase: 'listening' }
 	| { view: View; phase: 'searching'; topic: Area | null }
@@ -52,6 +54,8 @@ export type FlowEvent =
 	| { type: 'FAIL' }
 	| { type: 'RESULTS'; result: SearchResult }
 	| { type: 'GREETING' }
+	/** No words: the silence gate gave up before speech, or the route heard none. */
+	| { type: 'SILENCE' }
 	| { type: 'NOTHING'; heard: Heard }
 	| { type: 'TOPIC'; area: Area }
 	| { type: 'OPEN'; id: string }
@@ -92,6 +96,8 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			return state.phase === 'searching' ? { view, phase: 'results', result: event.result, openId: null } : state;
 		case 'GREETING':
 			return state.phase === 'searching' ? { view, phase: 'home', greeting: true } : state;
+		case 'SILENCE':
+			return state.phase === 'listening' || state.phase === 'searching' ? { view, phase: 'home', greeting: false, notice: 'nothing' } : state;
 		case 'NOTHING':
 			return state.phase === 'searching' ? { view, phase: 'notfound', heard: event.heard } : state;
 		case 'TOPIC':

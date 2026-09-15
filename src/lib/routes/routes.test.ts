@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import type { Hearing } from '../kb/hearing';
+import { describe, expect, it, vi } from 'vitest';
+import { NothingHeard, type Hearing } from '../kb/hearing';
 import { buildRoutes, DEFAULT_ROUTE, hearVia, resolveRoute, RouteUnavailable, type HearingRoute } from './index';
 
 const heard: Hearing = { greeting: false, meaning_en: 'q', short: 's', sentence: 's', language: 'en', confidence: 0.9 };
@@ -53,6 +53,18 @@ describe('hearVia', () => {
 		);
 		expect(r.route).toBe('gemini');
 		expect(r.skipped).toEqual([{ route: 'openai-ws', reason: 'missing-key' }]);
+	});
+
+	it('stops at a route that heard nothing, instead of asking the next vendor to hear silence', async () => {
+		const second = vi.fn(async () => heard);
+		const chain = [
+			route('openai-ws', async () => {
+				throw new RouteUnavailable('openai-ws', 'nothing-heard', 'empty transcript');
+			}),
+			route('gemini', second),
+		];
+		await expect(hearVia(chain, new ArrayBuffer(1))).rejects.toBeInstanceOf(NothingHeard);
+		expect(second).not.toHaveBeenCalled();
 	});
 
 	it('fails when every route fails', async () => {
