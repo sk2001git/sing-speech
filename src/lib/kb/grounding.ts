@@ -4,7 +4,7 @@ import type { Entry, EntryLanguage } from './entry';
  * Grounding checks that need no network. Each returns the record stored in
  * `verification.checks`, so what decided an entry's status is kept with the entry.
  */
-export type CheckType = 'refs-resolve' | 'quotes-found' | 'translation-matches-original';
+export type CheckType = 'refs-resolve' | 'quotes-found' | 'lengths' | 'translation-matches-original';
 
 export interface Check {
 	type: CheckType;

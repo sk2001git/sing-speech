@@ -168,7 +168,7 @@ function turnPreamble(ctx: TurnContext): string {
  * as m4a, so it is relabelled rather than rejected. Anything unrecognised falls back to
  * webm, which is what every non-Safari browser here produces.
  */
-function geminiMime(recorded: string | undefined): string {
+export function geminiMime(recorded: string | undefined): string {
 	if (!recorded) return 'audio/webm';
 	const base = recorded.split(';')[0]!.trim().toLowerCase();
 	if (base === 'audio/mp4') return 'audio/m4a';
@@ -180,7 +180,7 @@ function geminiMime(recorded: string | undefined): string {
 	return accepted.includes(base) ? base : 'audio/webm';
 }
 
-function toBase64(buf: ArrayBuffer): string {
+export function toBase64(buf: ArrayBuffer): string {
 	const bytes = new Uint8Array(buf);
 	let binary = '';
 	for (let i = 0; i < bytes.length; i += 1) {

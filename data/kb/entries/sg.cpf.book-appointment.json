@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.1.0",
+  "id": "sg.cpf.book-appointment",
+  "kind": "answer",
+  "language": "en",
+  "translation_of": null,
+  "title": { "short": "CPF appointment", "full": "Making an appointment with CPF" },
+  "summary": {
+    "text": "Book a phone appointment at a time that suits you, or book a visit to a CPF Service Centre for help in person.",
+    "quote_refs": ["q1", "q2"]
+  },
+  "details": [
+    {
+      "heading": "Employers and self-employed",
+      "body": "Use CPF digital services, the hotline, Write to us or a phone appointment. In-person appointments are not available for these matters.",
+      "quote_refs": ["q3"]
+    }
+  ],
+  "topic": { "area": "cpf-and-support", "tags": ["appointment", "service-centre"] },
+  "search": {
+    "example_phrasings": [
+      "I want to go to the CPF office to ask something",
+      "how to make an appointment with CPF",
+      "can CPF officer call me at a fixed time"
+    ],
+    "keywords": ["appointment", "Service Centre", "phone appointment", "CPF office"]
+  },
+  "sources": [
+    {
+      "id": "src1",
+      "publisher": "CPF",
+      "url": "https://ask.gov.sg/cpf/questions/cm0f52l2f02rdpz7altj8zoya",
+      "page_title": "How do I make an appointment with CPF?",
+      "source_modified_at": null,
+      "retrieved_at": "2026-09-14T16:30:00Z"
+    }
+  ],
+  "quotes": [
+    { "id": "q1", "source": "src1", "text": "You can book a phone appointment to speak with a Customer Service Executive at your preferred time." },
+    { "id": "q2", "source": "src1", "text": "For matters that require in-person assistance, you can make an appointment to visit any of our Service Centres." },
+    { "id": "q3", "source": "src1", "text": "For employer or self-employed matters, assistance is available through our digital services, hotline, Write to us or phone appointment. In-person appointments are not available for these matters." }
+  ],
+  "provenance": {
+    "collected": { "method": "manual", "model": null, "at": "2026-09-14T16:30:00Z" },
+    "structured": { "method": "model", "model": "claude-opus-5", "prompt_version": null, "at": "2026-09-14T17:00:00Z" }
+  },
+  "verification": { "status": "draft", "checks": [], "next_check_due": null },
+  "lifecycle": { "version": 1, "created_at": "2026-09-14T17:00:00Z", "updated_at": "2026-09-14T17:00:00Z", "supersedes_version": null }
+}

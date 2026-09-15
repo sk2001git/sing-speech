@@ -1,0 +1,10 @@
+Why am I unable to log in to CPF Mobile through the Singpass QR code?
+
+The Singpass app is required in order to log in to CPF Mobile using the Singpass QR code. Singpass app is compatible with the following mobile browsers:
+Safari versions: 12.1 and above
+Chrome versions: 78 above
+You may encounter login errors if you have set other browsers as your mobile device’s default browser. To ensure a seamless login experience, please set one of the browsers above as your mobile device’s default browser. Alternatively, you may log in without the Singpass app by selecting ‘Password login’ on the Singpass login page and logging in using your Singpass ID and password. If you continue to face issues pertaining to Singpass login, please contact the Singpass Helpdesk directly for further assistance.
+If you are experiencing other login issues, please refer to our FAQ on troubleshooting for more information.
+This information is sourced from CPF.
+Topics:
+General Information & Useful TipsElectronic services

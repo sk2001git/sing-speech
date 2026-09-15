@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.1.0",
+  "id": "sg.moh.masks-in-healthcare",
+  "kind": "answer",
+  "language": "en",
+  "translation_of": null,
+  "title": { "short": "Wearing a mask", "full": "When to wear a mask at clinics and hospitals" },
+  "summary": {
+    "text": "Still required in hospital wards, emergency departments and residential care. Optional at clinics, but encouraged for seniors.",
+    "quote_refs": ["q2", "q3"]
+  },
+  "details": [
+    {
+      "heading": "Mask required",
+      "body": "Hospital inpatient wards, emergency departments and residential care facilities.",
+      "quote_refs": ["q2"]
+    },
+    {
+      "heading": "Mask optional",
+      "body": "Polyclinics, GP clinics, specialist outpatient clinics, dialysis centres, TCM clinics and dental clinics. Seniors are strongly encouraged to wear one.",
+      "quote_refs": ["q1", "q3"]
+    }
+  ],
+  "topic": { "area": "health", "tags": ["masks", "hospital-visit"] },
+  "search": {
+    "example_phrasings": [
+      "visit my wife in hospital, need to wear a mask or not",
+      "polyclinic must wear mask?",
+      "is mask still compulsory at A&E"
+    ],
+    "keywords": ["mask", "hospital ward", "emergency department", "polyclinic", "visitors"]
+  },
+  "sources": [
+    {
+      "id": "src1",
+      "publisher": "MOH",
+      "url": "https://ask.gov.sg/moh/questions/clhq0irrx00eqjz08c355z7eo",
+      "page_title": "When should I wear a mask?",
+      "source_modified_at": null,
+      "retrieved_at": "2026-09-14T16:30:00Z"
+    }
+  ],
+  "quotes": [
+    { "id": "q1", "source": "src1", "text": "Mask-wearing will no longer be compulsory for patients, visitors and staff in outpatient settings, including polyclinics, General Practitioner clinics, specialist outpatient clinics, dialysis centres, Traditional Chinese Medicine clinics and dental clinics." },
+    { "id": "q2", "source": "src1", "text": "To protect medically vulnerable persons and seniors, mask-wearing will continue to be required for higher-risk healthcare settings, including inpatient wards, emergency departments and residential care facilities*." },
+    { "id": "q3", "source": "src1", "text": "However, mask-wearing in these settings is still strongly encouraged for medically vulnerable persons, seniors and persons with acute respiratory infection (ARI)." }
+  ],
+  "provenance": {
+    "collected": { "method": "manual", "model": null, "at": "2026-09-14T16:30:00Z" },
+    "structured": { "method": "model", "model": "claude-opus-5", "prompt_version": null, "at": "2026-09-14T17:00:00Z" }
+  },
+  "verification": { "status": "draft", "checks": [], "next_check_due": null },
+  "lifecycle": { "version": 1, "created_at": "2026-09-14T17:00:00Z", "updated_at": "2026-09-14T17:00:00Z", "supersedes_version": null }
+}

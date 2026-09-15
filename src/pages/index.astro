@@ -1,28 +1,29 @@
 ---
+import Suara from '../components/kb/Suara.tsx';
 import Voice from '../components/Voice.tsx';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { runtimeEnv } from '../lib/env';
 import { resolveMode } from '../lib/mode';
+import { resolveRoute, ROUTE_LABEL } from '../lib/routes';
 
 /**
  * client:load, because talking is the only thing this page does. Deferring hydration
- * would mean the microphone button is dead for the first moment it is on screen, and a
- * button that does nothing when pressed is how this audience concludes the thing is
- * broken and stops.
+ * would mean the microphone button is dead for the first moment it is on screen.
  */
 export const prerender = false;
 
 const env = await runtimeEnv();
 
-// `?mode=gemini` or `?mode=openai` overrides SUARA_MODE, for review. No on-screen toggle:
-// it would be one more control competing with the microphone.
-const mode = resolveMode(Astro.url.searchParams.get('mode'), env.SUARA_MODE);
+// The knowledge base is the product. `?legacy=1` keeps the six-intent readback app
+// reachable for comparison until build step 11 removes it.
+const legacy = Astro.url.searchParams.get('legacy') === '1';
 
-// Unverified sample flows show on the dev server, or on a deploy that opts in. Never by
-// default in production.
+// `?route=gemini` or `?route=openai-ws` overrides SUARA_ROUTE for review.
+const route = resolveRoute(Astro.url.searchParams.get('route'), env.SUARA_ROUTE);
+const mode = resolveMode(Astro.url.searchParams.get('mode'), env.SUARA_MODE);
 const demo = import.meta.env.DEV || env.SUARA_DEMO === 'true';
 ---
 
 <BaseLayout title="Suara">
-	<Voice client:load mode={mode} demo={demo} />
+	{legacy ? <Voice client:load mode={mode} demo={demo} /> : <Suara client:load route={route} routeLabel={ROUTE_LABEL[route]} />}
 </BaseLayout>

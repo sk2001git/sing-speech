@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.1.0",
+  "id": "sg.cpf.cpf-mobile-qr-login",
+  "kind": "answer",
+  "language": "en",
+  "translation_of": null,
+  "title": { "short": "CPF app login", "full": "Cannot log in to CPF Mobile with the Singpass QR code" },
+  "summary": {
+    "text": "You need the Singpass app. Set Safari or Chrome as your default browser, or choose Password login instead.",
+    "quote_refs": ["q1", "q4", "q5"]
+  },
+  "details": [
+    {
+      "heading": "Browsers that work",
+      "body": "Safari 12.1 and above, or Chrome 78 and above, set as your phone's default browser.",
+      "quote_refs": ["q2", "q3", "q4"]
+    },
+    {
+      "heading": "No Singpass app?",
+      "body": "Choose ‘Password login’ on the Singpass login page, and log in with your Singpass ID and password.",
+      "quote_refs": ["q5"]
+    },
+    {
+      "heading": "Still cannot log in",
+      "body": "Contact the Singpass Helpdesk for help with Singpass login.",
+      "quote_refs": ["q6"]
+    }
+  ],
+  "topic": { "area": "digital-services", "tags": ["cpf-mobile", "singpass", "login"] },
+  "search": {
+    "example_phrasings": [
+      "CPF app scan QR code cannot log in",
+      "cannot log in to CPF mobile",
+      "singpass QR code not working for CPF"
+    ],
+    "keywords": ["CPF Mobile", "Singpass app", "QR code", "log in", "browser"]
+  },
+  "sources": [
+    {
+      "id": "src1",
+      "publisher": "CPF",
+      "url": "https://ask.gov.sg/cpf/questions/cm0f52l2m02urpz7ahpjrxlfq",
+      "page_title": "Why am I unable to log in to CPF Mobile through the Singpass QR code?",
+      "source_modified_at": null,
+      "retrieved_at": "2026-09-14T16:30:00Z"
+    }
+  ],
+  "quotes": [
+    { "id": "q1", "source": "src1", "text": "The Singpass app is required in order to log in to CPF Mobile using the Singpass QR code." },
+    { "id": "q2", "source": "src1", "text": "Safari versions: 12.1 and above" },
+    { "id": "q3", "source": "src1", "text": "Chrome versions: 78 above" },
+    { "id": "q4", "source": "src1", "text": "To ensure a seamless login experience, please set one of the browsers above as your mobile device’s default browser." },
+    { "id": "q5", "source": "src1", "text": "Alternatively, you may log in without the Singpass app by selecting ‘Password login’ on the Singpass login page and logging in using your Singpass ID and password." },
+    { "id": "q6", "source": "src1", "text": "If you continue to face issues pertaining to Singpass login, please contact the Singpass Helpdesk directly for further assistance." }
+  ],
+  "provenance": {
+    "collected": { "method": "manual", "model": null, "at": "2026-09-14T16:30:00Z" },
+    "structured": { "method": "model", "model": "claude-opus-5", "prompt_version": null, "at": "2026-09-14T17:00:00Z" }
+  },
+  "verification": { "status": "draft", "checks": [], "next_check_due": null },
+  "lifecycle": { "version": 1, "created_at": "2026-09-14T17:00:00Z", "updated_at": "2026-09-14T17:00:00Z", "supersedes_version": null }
+}

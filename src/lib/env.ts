@@ -4,6 +4,12 @@ export interface RuntimeEnv extends ProviderEnv {
 	AI?: WorkersAiBinding;
 	/** Secret. Only the realtime session route reads it; it never reaches the browser. */
 	OPENAI_API_KEY?: string;
+	/** Secret. Search embeddings and translation (vault dec-suara-0013, dec-suara-0015). */
+	OPENROUTER_API_KEY?: string;
+	/** Vendor route that hears a request: `openai-ws` (default) or `gemini`. `?route=` overrides it. */
+	SUARA_ROUTE?: string;
+	/** Text model on the OpenAI route. Default gpt-5.6-luna. */
+	SUARA_OPENAI_HEAR_MODEL?: string;
 	SUARA_OPENAI_MODEL?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */
 	SUARA_MODE?: string;

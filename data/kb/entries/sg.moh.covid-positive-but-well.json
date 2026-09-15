@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.1.0",
+  "id": "sg.moh.covid-positive-but-well",
+  "kind": "answer",
+  "language": "en",
+  "translation_of": null,
+  "title": { "short": "COVID but well", "full": "Tested positive for COVID-19 but feeling well" },
+  "summary": {
+    "text": "You do not have to isolate by law, but stay away from work, school and public places until your symptoms are gone.",
+    "quote_refs": ["q1", "q2"]
+  },
+  "details": [
+    {
+      "heading": "If you must go out",
+      "body": "Keep social contact low, wear a mask, and avoid crowded places and meeting seniors or people with weak immunity.",
+      "quote_refs": ["q2"]
+    },
+    {
+      "heading": "Good hygiene",
+      "body": "Wash your hands often, and cover your mouth and nose when you cough or sneeze.",
+      "quote_refs": ["q3"]
+    }
+  ],
+  "topic": { "area": "health", "tags": ["covid-19", "testing"] },
+  "search": {
+    "example_phrasings": [
+      "I tested positive for covid but I feel fine",
+      "covid positive must stay home or not",
+      "ART test two lines but no symptoms"
+    ],
+    "keywords": ["COVID-19", "tested positive", "isolate", "ART", "mask"]
+  },
+  "sources": [
+    {
+      "id": "src1",
+      "publisher": "MOH",
+      "url": "https://ask.gov.sg/moh/questions/clhq0irs200hhjz08m94hwx8j",
+      "page_title": "I am well but I had tested positive for COVID-19. What should I do?",
+      "source_modified_at": null,
+      "retrieved_at": "2026-09-14T16:30:00Z"
+    }
+  ],
+  "quotes": [
+    { "id": "q1", "source": "src1", "text": "While there are no legal requirements for COVID-19-positive individuals to isolate, you are strongly encouraged to exercise personal and social responsibility to reduce transmission risks." },
+    { "id": "q2", "source": "src1", "text": "Stay away from work, school, or public places until their symptoms have fully resolved. If there is a need to go out while symptomatic, they should minimise social interactions, wear a mask, avoid crowded places and meeting medically vulnerable persons such as seniors or immunocompromised patients." },
+    { "id": "q3", "source": "src1", "text": "Practise good hygiene, such as frequent handwashing and covering their mouth and nose when coughing or sneezing." }
+  ],
+  "provenance": {
+    "collected": { "method": "manual", "model": null, "at": "2026-09-14T16:30:00Z" },
+    "structured": { "method": "model", "model": "claude-opus-5", "prompt_version": null, "at": "2026-09-14T17:00:00Z" }
+  },
+  "verification": { "status": "draft", "checks": [], "next_check_due": null },
+  "lifecycle": { "version": 1, "created_at": "2026-09-14T17:00:00Z", "updated_at": "2026-09-14T17:00:00Z", "supersedes_version": null },
+  "related": ["sg.moh.unwell-aged-60"]
+}

@@ -1,0 +1,15 @@
+What is the maximum amount of top-ups I can receive?
+
+The maximum amount of top-ups you can receive depends on your age and your CPF savings. You can easily check your top-up limit in the “Top-ups” section of your Retirement Dashboard.
+If you are below 55, you can refer to the “Maximum amount you can top up using cash” to reach the Current Full Retirement Sum.
+If you are 55 or above, you can refer to the “Maximum amount you can top up using cash” to reach the Current Enhanced Retirement Sum.
+Here is a breakdown of how the maximum top-up amount is calculated:
+Age GroupCalculation Method
+Below age 55Current Full Retirement Sum – Special Account (SA) savings – Amount withdrawn from SA for investments1
+Age 55 and aboveCurrent Enhanced Retirement Sum – Retirement Account (RA) savings2 - RA savings used for CPF LIFE premiums
+1Net SA savings withdrawn under CPF Investment Scheme for investments that have not been completely disposed of.
+2 Excludes, generally, interest earned and includes retirement withdrawals.
+You can refer to these examples on how the maximum top-up amount is computed.
+This information is sourced from CPF.
+Topics:
+Growing Your SavingsRetirement Sum Topping-Up Scheme
