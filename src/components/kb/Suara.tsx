@@ -4,7 +4,9 @@ import type { EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, initial, next, type View } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
 import type { SearchResponse } from '../../lib/kb/search';
+import { connectLive, LiveUnavailable, type LiveLink } from '../../lib/live-client';
 import { micFailure } from '../../lib/mic';
+import { commentaryFor } from '../../lib/routes/live';
 import { blobToBase64, pickMimeType } from '../../lib/record';
 import { createSilenceGate, rms } from '../../lib/silence';
 import KbScreen from './KbScreen';
@@ -116,6 +118,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const [englishIds, setEnglishIds] = useState<string[]>([]);
 	const [loadingMore, setLoadingMore] = useState(false);
 	const recording = useRef<Recording | null>(null);
+	const live = useRef<LiveLink | null>(null);
+	const isLive = route === 'openai-live';
 	const last = useRef<LastQuery | null>(null);
 	const say = (text: string, language: EntryLanguage) => void routeSay(text, language, route);
 	/** The latest finish function, so the silence timer never calls a stale closure. */
@@ -141,6 +145,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		() => () => {
 			recording.current?.stopWatching();
 			recording.current?.stream.getTracks().forEach((t) => t.stop());
+			live.current?.close();
 			silence();
 		},
 		[],
@@ -173,6 +178,57 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	}
 	finishRef.current = (how) => void finish(how);
 
+	/**
+	 * GPT-Live: one continuous session. It decides when a turn ended and speaks the answer
+	 * we hand back, so there is no silence gate and no reply from the phone's voice.
+	 */
+	async function openLive(): Promise<void> {
+		dispatch({ type: 'PRESS' });
+		try {
+			live.current = await connectLive({
+				onTranscript: () => {},
+				onRequest: async ({ said, answer }) => {
+					// GPT-Live can delegate on a fragment it half heard. Searching those words
+					// wastes a turn and shows cards for nothing.
+					if (said.trim().length < 12) {
+						answer('Sorry, could you say that again?');
+						return;
+					}
+					dispatch({ type: 'LIVE_ASK' });
+					try {
+						const heard = { short: said.slice(0, 40), sentence: said, said };
+						const reply = await post({ kind: 'text', query: said, heard });
+						if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
+						show(reply, { spoken: true });
+						answer(
+							reply.kind === 'results'
+								? commentaryFor(reply.result, reply.result.language)
+								: reply.kind === 'greeting'
+									? 'Hello. Ask me about health costs, CPF or your Singpass.'
+									: 'That is not in Suara yet. Ask again in another way.',
+						);
+					} catch {
+						dispatch({ type: 'FAIL' });
+						answer('Sorry, I could not reach the answers just now.');
+					}
+				},
+				onClosed: () => {
+					live.current = null;
+					dispatch({ type: 'HOME' });
+				},
+				onError: () => dispatch({ type: 'FAIL' }),
+			});
+			dispatch({ type: 'GRANTED' });
+		} catch (err) {
+			live.current = null;
+			dispatch(
+				err instanceof LiveUnavailable
+					? { type: 'FAIL' }
+					: { type: 'DENIED', reason: micFailure(err, window.isSecureContext) },
+			);
+		}
+	}
+
 	async function post(body: Record<string, unknown>): Promise<SearchResponse> {
 		const res = await fetch('/api/search', {
 			method: 'POST',
@@ -183,20 +239,24 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		return (await res.json()) as SearchResponse;
 	}
 
-	function show(reply: SearchResponse): void {
+	/** `spoken` means the route is already saying it aloud, so the phone stays quiet. */
+	function show(reply: SearchResponse, opts: { spoken?: boolean } = {}): void {
+		const tell = (text: string, language: EntryLanguage) => {
+			if (!opts.spoken) say(text, language);
+		};
 		if (reply.kind === 'silence') {
 			dispatch({ type: 'SILENCE' });
-			say(reply.language === 'zh-Hans' ? '我没听到。请点一下再说。' : "I didn't hear you. Tap and try again.", reply.language);
+			tell(reply.language === 'zh-Hans' ? '我没听到。请点一下再说。' : "I didn't hear you. Tap and try again.", reply.language);
 			return;
 		}
 		if (reply.kind === 'greeting') {
 			dispatch({ type: 'GREETING' });
-			say(reply.language === 'zh-Hans' ? '您好！您需要什么帮助？' : 'Hello! What do you need?', reply.language);
+			tell(reply.language === 'zh-Hans' ? '您好！您需要什么帮助？' : 'Hello! What do you need?', reply.language);
 			return;
 		}
 		if (reply.kind === 'nothing') {
 			dispatch({ type: 'NOTHING', heard: reply.heard });
-			say(reply.language === 'zh-Hans' ? 'Suara 还没有这个答案。' : 'That is not in Suara yet.', reply.language);
+			tell(reply.language === 'zh-Hans' ? 'Suara 还没有这个答案。' : 'That is not in Suara yet.', reply.language);
 			return;
 		}
 		setEnglishIds(reply.englishIds);
@@ -208,10 +268,23 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			reply.result.fit === 'weak'
 				? zh ? '最接近的答案是' : 'The closest I have is'
 				: zh ? '最符合的是' : 'Best match:';
-		say(`${lead} ${top.title.full}. ${top.summary.text}`, top.language);
+		tell(`${lead} ${top.title.full}. ${top.summary.text}`, top.language);
 	}
 
 	async function onSpeak(): Promise<void> {
+		if (isLive) {
+			// One tap opens the session and keeps it open; the next tap ends it.
+			if (live.current) {
+				live.current.close();
+				live.current = null;
+				dispatch({ type: 'HOME' });
+				return;
+			}
+			silence();
+			await openLive();
+			return;
+		}
+
 		if (state.phase === 'listening') {
 			await finish('tap');
 			return;

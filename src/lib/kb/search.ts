@@ -15,7 +15,8 @@ export const SearchRequest = z.discriminatedUnion('kind', [
 	z.object({
 		kind: z.literal('text'),
 		query: z.string().min(1).max(240),
-		heard: z.object({ short: z.string().max(40), sentence: z.string().max(240) }).optional(),
+		/** `said` carries their own words when the caller already has them, as a live session does. */
+		heard: z.object({ short: z.string().max(40), sentence: z.string().max(240), said: z.string().max(1000).optional() }).optional(),
 		offset: Offset,
 		reply: Reply,
 	}),

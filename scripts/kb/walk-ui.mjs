@@ -110,6 +110,16 @@ try {
 	const live = await waitFor(`document.querySelector('.k-orb[data-live="true"]')`, 10000);
 	check('tap opens the microphone', live);
 	if (live) await shot('listening');
+	if (process.env.WALK_MODE === 'live') {
+		// GPT-Live: one tap opens a continuous session; it decides when the question ended.
+		const t0 = Date.now();
+		const answered = await waitFor(`document.querySelector('[data-card]') || /Not in Suara/.test(document.body.innerText) || document.querySelector('.k-notice')`, 90000);
+		const live = await js(`({ cards: document.querySelectorAll('[data-card]').length, said: document.querySelector('.k-said p')?.textContent ?? '', notice: document.querySelector('.k-notice')?.textContent ?? '', foot: document.querySelector('.k-foot')?.textContent ?? '' })`);
+		check('live session answers without a second tap', answered && !live.notice, `${Date.now() - t0} ms ${JSON.stringify(live)}`);
+		await shot('live-result');
+		check('no page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
+		throw new Error('__done__');
+	}
 	if (process.env.WALK_AUTO_STOP === 'silence') {
 		// A clip of pure silence: the gate must give up by itself and say so.
 		check('silence ends the turn by itself', await waitFor(`/didn't hear you/.test(document.body.innerText)`, 15000));

@@ -8,14 +8,22 @@ import { RouteUnavailable, type HearingRoute, type UnavailableReason } from './t
 export { OpenAiWsRoute } from './openai-ws';
 export { RouteUnavailable, type HearingRoute, type UnavailableReason } from './types';
 
-/** Registry order is failover order after the chosen route (vault dec-suara-0016). */
-export const ROUTE_IDS = ['openai-ws', 'gemini'] as const;
+/**
+ * Every route a page can be opened on. `openai-live` is a continuous voice session held by
+ * the browser (see `live-client.ts`), so it never joins the recording chain below.
+ */
+export const ROUTE_IDS = ['openai-ws', 'gemini', 'openai-live'] as const;
 export type RouteId = (typeof ROUTE_IDS)[number];
 export const DEFAULT_ROUTE: RouteId = 'openai-ws';
+
+/** Routes that hear a finished recording. Registry order is failover order (dec-suara-0016). */
+export const HEARING_ROUTE_IDS = ['openai-ws', 'gemini'] as const;
+export type HearingRouteId = (typeof HEARING_ROUTE_IDS)[number];
 
 export const ROUTE_LABEL: Record<RouteId, string> = {
 	'openai-ws': 'OpenAI · gpt-5.6-luna over WebSocket',
 	gemini: 'Google · gemini-3.5-flash-lite',
+	'openai-live': 'OpenAI · gpt-live-1, continuous',
 };
 
 const isRoute = (v: unknown): v is RouteId => typeof v === 'string' && (ROUTE_IDS as readonly string[]).includes(v);
@@ -34,7 +42,7 @@ export interface RouteEnv {
 	SUARA_MODEL?: string;
 }
 
-function build(id: RouteId, env: RouteEnv): HearingRoute {
+function build(id: HearingRouteId, env: RouteEnv): HearingRoute {
 	switch (id) {
 		case 'openai-ws':
 			return new OpenAiWsRoute({ apiKey: env.OPENAI_API_KEY, model: env.SUARA_OPENAI_HEAR_MODEL });
@@ -53,9 +61,13 @@ function build(id: RouteId, env: RouteEnv): HearingRoute {
 	}
 }
 
-/** The chosen route first, then every other route as failover. */
+/**
+ * The chosen route first, then every other route as failover. A live session that falls
+ * back to a recording starts at the OpenAI recording route.
+ */
 export function buildRoutes(primary: RouteId, env: RouteEnv): HearingRoute[] {
-	return [primary, ...ROUTE_IDS.filter((id) => id !== primary)].map((id) => build(id, env));
+	const first: HearingRouteId = primary === 'openai-live' ? 'openai-ws' : primary;
+	return [first, ...HEARING_ROUTE_IDS.filter((id) => id !== first)].map((id) => build(id, env));
 }
 
 export interface Heard {

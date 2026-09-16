@@ -1,0 +1,182 @@
+{
+  "5f3c251165bdab1abdadd04ed2601708": {
+    "text": "Making an appointment with CPF. Book a phone appointment at a time that suits you, or book a visit to a CPF Service Centre for help in person.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 186624
+  },
+  "f65dfffd568f7caa0e50d2e816d674fe": {
+    "text": "Telling CPF about your new address. Change your address through ICA e-Services with Singpass. CPF Board will be told within one day.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 176256
+  },
+  "17219d4f43e24cbdd4d08ad8b35fff4e": {
+    "text": "Cannot log in to CPF Mobile with the Singpass QR code. You need the Singpass app. Set Safari or Chrome as your default browser, or choose Password login instead.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 188928
+  },
+  "672dbd8a29556a59bd84ef77d92738c7": {
+    "text": "How the Matched MediSave Scheme works. No need to apply. If eligible, cash top-ups to your MediSave by 31 December get a matching grant early the next year.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 186624
+  },
+  "71a5b854ada7d2737107195acd721a8f": {
+    "text": "Checking your Silver Support eligibility. If you are eligible, CPF sends you a letter in December. To check your status, log in to CPF e-services.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 165120
+  },
+  "4b256651edf6ef98a91930e65f9e0ddb": {
+    "text": "Silver Support: no need to apply. No need to apply. CPF Board checks every year, and eligible seniors receive Silver Support every quarter.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 183168
+  },
+  "00213e40c72f5482a120aaaa5173ccfd": {
+    "text": "Changing or resetting your Singpass password. On the Singpass website, select Log in, then Reset password under Services, and follow the instructions.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 163200
+  },
+  "4f4eb004821ff3317e418859c7fff315": {
+    "text": "Go to the Singpass website. Visit the Singpass website.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 67200
+  },
+  "e7824fe638621b56c6817d32461e6dcc": {
+    "text": "Select Log in. Select 'Log in'.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 62592
+  },
+  "c72066a1fdd79d26ba90be1ba3cb1ed2": {
+    "text": "Select Reset password. Select ‘Reset password’. It is under the ‘Services’ tab.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 96768
+  },
+  "f43db98ea5813a7ed3a3bb58c79f2dee": {
+    "text": "Follow the instructions. Follow the instructions on the website to change or reset your password. For more help, contact the Singpass Helpdesk.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 140928
+  },
+  "800db1aace24e2da6e9f457c3d858ab0": {
+    "text": "Updating your mobile number or email in Singpass. Log in to the Singpass website, then Menu and Update profile. A one-time password goes to your new number or email.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 191232
+  },
+  "0ae8253085807f6c4bf212b6680959db": {
+    "text": "Have your new phone or email ready. A one-time password (OTP) will be sent to your new mobile number or email address to check it.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 144000
+  },
+  "276f372a5b2e515507906bbed32a9124": {
+    "text": "Log in to Singpass. Log in to the Singpass website.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 71424
+  },
+  "59289e48d24f860dc9a679a775a7621e": {
+    "text": "Go to Update profile. Select ‘Menu’, then ‘Update profile’. It is under the ‘My Account’ tab.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 130560
+  },
+  "b342ef3f832cc262722b5c841f723610": {
+    "text": "Follow the instructions. Follow the instructions on the website to update your mobile number or email address.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 107520
+  },
+  "adf39599e8870c3d0c55ee61f9090055": {
+    "text": "The most your CPF can receive in top-ups. It depends on your age and your CPF savings. Check your limit in the Top-ups section of your Retirement Dashboard.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 171264
+  },
+  "b5a0ee0deb11b9d2cd503483de7c10b6": {
+    "text": "Viewing your CPF Yearly Statement of Account. Log in with Singpass to my cpf digital services to view, print or download your statements from the past 10 years.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 200064
+  },
+  "d84fa96229cac9d8be3cc0176011501f": {
+    "text": "Tested positive for COVID-19 but feeling well. You do not have to isolate by law, but stay away from work, school and public places until your symptoms are gone.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 199296
+  },
+  "5476388cd4f59970ab98096f99ae0a34": {
+    "text": "GPFirst: paying less at the emergency department. Bring your doctor's original GPFirst form to a partner hospital's A&E the same day.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 144000
+  },
+  "2622b713b40ec0887a7fbda169290f56": {
+    "text": "Get the form from your doctor. Only participating GP clinics near the partner hospitals give a GPFirst referral form.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 142464
+  },
+  "6b84c73db30cdbcafc40b11decde18a7": {
+    "text": "Check date, time, stamp. The form must show the referral date, the referral time and the clinic's stamp.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 128256
+  },
+  "d190a0dc63ef49784b5f4705db4a4dd2": {
+    "text": "Go to A&E the same day. Go the same day. If the form was given between 10pm and midnight, you can go until 2am.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 162432
+  },
+  "ac2bc000afe84fa1bd631a7e43a54220": {
+    "text": "Show the form and your NRIC. At registration, show the original, fully completed form together with your NRIC.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 137088
+  },
+  "aa6b2f0c83ff1b81e572cdd1ae42106c": {
+    "text": "Extra tests cost extra. Special tests or non-standard medicines at A&E are charged separately.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 127488
+  },
+  "9200d24c3230671cad2c56c8dd5bca2d": {
+    "text": "When to wear a mask at clinics and hospitals. Still required in hospital wards, emergency departments and residential care. Optional at clinics, but encouraged for seniors.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 199296
+  },
+  "4906e5259e8e1ec9b67371a879623432": {
+    "text": "MediShield Life and CareShield Life: the difference. MediShield Life helps pay large hospital bills. CareShield Life gives cash payouts if you become severely disabled.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 203520
+  },
+  "42bd42d9a03a4940a4eb738357f3420c": {
+    "text": "Replacing a lost Merdeka Generation card. Lost your Merdeka Generation card, or your welcome folder is damaged? Call 1800-650-6060.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 200832
+  },
+  "9289a4fbc4611126075a1af994d7bf8a": {
+    "text": "Replacing a lost Pioneer Generation card. Lost your Pioneer Generation card, or your welcome folder is damaged? Call 1800-650-6060.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 173568
+  },
+  "888ef948ab4cb32240164a165fb01470": {
+    "text": "Aged 60 and above and feeling unwell. If you get respiratory infection symptoms, or they are severe, long-lasting or getting worse, see your doctor.",
+    "voice": "marin",
+    "model": "gpt-4o-mini-tts",
+    "bytes": 178560
+  }
+}

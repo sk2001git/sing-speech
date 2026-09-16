@@ -91,6 +91,14 @@ describe('results', () => {
 		expect(next(searching, { type: 'NOTHING', heard: result().heard })).toMatchObject({ phase: 'notfound' });
 	});
 
+	it('takes a follow-up question during a live session, from wherever they are', () => {
+		const results = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }, { type: 'RESULTS', result: result() }]);
+		expect(next(results, { type: 'LIVE_ASK' }).phase).toBe('searching');
+		expect(next(initial(), { type: 'LIVE_ASK' }).phase).toBe('searching');
+		const steps = run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }], results);
+		expect(next(steps, { type: 'LIVE_ASK' }).phase).toBe('searching');
+	});
+
 	it('searches a topic without the microphone', () => {
 		expect(next(initial(), { type: 'TOPIC', area: 'health' })).toMatchObject({ phase: 'searching', topic: 'health' });
 	});
