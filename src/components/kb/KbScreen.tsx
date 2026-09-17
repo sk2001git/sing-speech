@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import Waveform from './Waveform';
+import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
@@ -23,6 +25,8 @@ export interface KbScreenProps {
 	onLanguage: (setting: ReplySetting) => void;
 	/** Which vendor route heard the request, shown small at the foot. */
 	routeLabel?: string;
+	/** Microphone loudness, 0 to 1, for the live waveform. */
+	level?: number;
 }
 
 const WORDS = {
@@ -80,6 +84,12 @@ const WORDS = {
 		tryAgain: 'Try again',
 		home: 'Home',
 		language: 'Language',
+		call: 'Call',
+		placeKind: { 'chas-clinic': 'CHAS clinics', eldercare: 'Eldercare services', pharmacy: 'Pharmacies' } as Record<string, string>,
+		placesNear: (kind: string, area: string) => `${kind} near ${area}`,
+		placesFound: (n: number) => `${n} ${n === 1 ? 'place' : 'places'}`,
+		fromDataset: (name: string, agency: string) => `From ${name}, ${agency}, data.gov.sg`,
+		checkedOn: (date: string) => `checked ${date}`,
 	},
 	'zh-Hans': {
 		ready: '准备好了',
@@ -135,6 +145,12 @@ const WORDS = {
 		tryAgain: '再试一次',
 		home: '首页',
 		language: '语言',
+		call: '拨打',
+		placeKind: { 'chas-clinic': 'CHAS 诊所', eldercare: '乐龄服务', pharmacy: '药房' } as Record<string, string>,
+		placesNear: (kind: string, area: string) => `${area}附近的${kind}`,
+		placesFound: (n: number) => `${n} 个地点`,
+		fromDataset: (name: string, agency: string) => `来自 ${name}，${agency}，data.gov.sg`,
+		checkedOn: (date: string) => `查询于 ${date}`,
 	},
 };
 
@@ -194,6 +210,8 @@ function Body(p: BodyProps) {
 			return <Talk {...p} />;
 		case 'results':
 			return <Results {...p} state={s} />;
+		case 'places':
+			return <Places {...p} state={s} />;
 		case 'confirm':
 			return <Confirm {...p} state={s} />;
 		case 'steps':
@@ -272,11 +290,7 @@ function Talk(p: BodyProps) {
 				>
 					{live ? <StopIcon /> : waiting ? <DotsIcon /> : <MicIcon />}
 				</button>
-				<div className="k-wave" data-on={live} aria-hidden="true">
-					{[0, 1, 2, 3, 4].map((i) => (
-						<i key={i} />
-					))}
-				</div>
+				<Waveform active={live} level={p.level ?? 0} />
 				<p className="k-orb-label" aria-live="polite">
 					{live ? p.w.tapDone : waiting ? p.w.busy : p.w.tapSpeak}
 				</p>
@@ -464,6 +478,51 @@ function CardAction(p: BodyProps & { entry: Entry }) {
 	}
 	return null;
 }
+
+/**
+ * Addresses from open data. Deliberately unlike an answer card: no quotes, no steps, and
+ * the dataset named underneath with the date it was read, because this is a published row
+ * rather than a sentence from an official page.
+ */
+function Places(p: BodyProps & { state: Extract<FlowState, { phase: 'places' }> }) {
+	const { heard, places, what, area, source } = p.state.result;
+	const checked = new Date(source.fetchedAt).toLocaleDateString(p.lang === 'zh-Hans' ? 'zh-SG' : 'en-SG', {
+		day: 'numeric',
+		month: 'short',
+		year: 'numeric',
+	});
+	return (
+		<>
+			{heard.said && <Said w={p.w} said={heard.said} />}
+			<h1 className="k-h1">{p.w.placesNear(p.w.placeKind[what] ?? what, titleWords(area))}</h1>
+			<p className="k-count">{p.w.placesFound(places.length)}</p>
+			<div className="k-places">
+				{places.map((place) => (
+					<article className="k-place" data-place={place.id} key={place.id}>
+						<p className="k-place-name">{displayName(place)}</p>
+						<p className="k-place-address">{addressLine(place)}</p>
+						{place.tags && place.tags.length > 0 && (
+							<p className="k-place-tags">{place.tags.join(' · ')}</p>
+						)}
+						{place.phone && (
+							<a className="k-btn k-btn-quiet k-btn-mid" href={`tel:${place.phone}`}>
+								<PhoneIcon />
+								{p.w.call} {place.phone}
+							</a>
+						)}
+					</article>
+				))}
+			</div>
+			<a className="k-source k-source-row" href={source.url} target="_blank" rel="noopener noreferrer">
+				{p.w.fromDataset(source.name, source.agency)} · {p.w.checkedOn(checked)}
+			</a>
+			<AskButton {...p} label={p.w.askAgain} />
+		</>
+	);
+}
+
+/** "bedok north" as a person would see it on a card. */
+const titleWords = (text: string) => text.replace(/\b[a-z]/g, (c) => c.toUpperCase());
 
 function BackRow(p: BodyProps) {
 	return (

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { EMBEDDING, loadCorpus } from '../../lib/kb/corpus';
+import { EMBEDDING, loadCorpus, loadPlaces } from '../../lib/kb/corpus';
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
 import { DEFAULT_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
 import { runtimeEnv } from '../../lib/env';
@@ -38,6 +38,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
 		const deps: SearchDeps = {
 			corpus: loadCorpus(),
+			places: loadPlaces(),
 			embed: async (text) => (await or.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
 			hear: async (audio, mime) => {
 				const heard = await hearVia(chain, audio, mime);

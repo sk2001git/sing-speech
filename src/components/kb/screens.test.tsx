@@ -128,6 +128,45 @@ describe('Guided steps', () => {
 	});
 });
 
+describe('Places', () => {
+	const placesState: FlowState = {
+		phase: 'places',
+		view: 'grid',
+		result: {
+			heard: { short: 'Clinic in Bedok', sentence: 'You want a CHAS clinic in Bedok.', said: 'got clinic near bedok or not' },
+			places: [
+				{ id: 'chas:1', kind: 'chas-clinic', name: 'BALKIS FAMILY CLINIC', phone: '96153314', block: '631', street: 'BEDOK RESERVOIR RD', unit: '01-968', postal: '470631', tags: ['CHAS'] },
+				{ id: 'chas:2', kind: 'chas-clinic', name: 'Bedok Day Clinic', street: 'BEDOK SOUTH AVENUE 2', postal: '460456' },
+			],
+			what: 'chas-clinic',
+			area: 'bedok',
+			source: { datasetId: 'd_548', kind: 'chas-clinic', name: 'CHAS Clinics', agency: 'Ministry of Health', lastUpdatedAt: '2024-06-06', url: 'https://data.gov.sg/datasets/d_548/view', licence: 'Singapore Open Data Licence', fetchedAt: '2026-09-17T00:00:00Z' },
+			language: 'en',
+		},
+	};
+
+	it('lists each place with a readable address, not the shouting in the file', () => {
+		const html = render(placesState);
+		expect(html.match(/data-place=/g)).toHaveLength(2);
+		expect(html).toContain('Balkis Family Clinic');
+		expect(html).toContain('Blk 631 Bedok Reservoir Rd, #01-968, Singapore 470631');
+	});
+
+	it('offers a call for a place with a number, and nothing pretend for one without', () => {
+		const html = render(placesState);
+		expect(html.match(/href="tel:/g)).toHaveLength(1);
+		expect(html).toContain('href="tel:96153314"');
+	});
+
+	it('names the dataset, the agency and when it was read, because this is not a quoted answer', () => {
+		const html = render(placesState);
+		expect(html).toContain('CHAS Clinics');
+		expect(html).toContain('Ministry of Health');
+		expect(html).toContain('data.gov.sg');
+		expect(html).toMatch(/checked/i);
+	});
+});
+
 describe('Not in Suara', () => {
 	it('says so plainly and offers topics and asking again, never a person', () => {
 		const html = render({ phase: 'notfound', view: 'grid', heard: { short: 'Renew my passport', sentence: 'x' } });

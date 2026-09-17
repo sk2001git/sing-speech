@@ -99,6 +99,32 @@ describe('runSearch, speech', () => {
 	});
 });
 
+describe('runSearch, places', () => {
+	const chas = { id: 'chas:1', kind: 'chas-clinic' as const, name: 'Bedok Family Clinic', street: 'BEDOK NORTH STREET 1', postal: '460123', phone: '61234567' };
+	const withPlaces = (over: Partial<SearchDeps> = {}) =>
+		deps({ places: { places: [chas], sources: [{ datasetId: 'd_548', name: 'CHAS Clinics', agency: 'Ministry of Health', lastUpdatedAt: '2024-06-06', licence: 'Singapore Open Data Licence', url: 'https://data.gov.sg', fetchedAt: AT, kind: 'chas-clinic' }] }, ...over });
+
+	it('answers a "where is" question from the open data, not the knowledge base', async () => {
+		const embed = vi.fn(async () => [1, 0]);
+		const r = await runSearch(speech(), withPlaces({ hear: async () => heard({ meaning_en: 'Where is the nearest CHAS clinic in Bedok?' }), embed }));
+		expect(r.kind).toBe('places');
+		if (r.kind !== 'places') return;
+		expect(r.places.map((p) => p.name)).toEqual(['Bedok Family Clinic']);
+		expect(r.source.name).toBe('CHAS Clinics');
+		expect(embed).not.toHaveBeenCalled();
+	});
+
+	it('falls back to the knowledge base when the area matches nothing', async () => {
+		const r = await runSearch(speech(), withPlaces({ hear: async () => heard({ meaning_en: 'Where is the nearest clinic in Atlantis?' }) }));
+		expect(r.kind).toBe('results');
+	});
+
+	it('leaves questions that are not about a place alone', async () => {
+		const r = await runSearch(speech(), withPlaces({ hear: async () => heard({ meaning_en: 'What is CHAS and who can use it?' }) }));
+		expect(r.kind).toBe('results');
+	});
+});
+
 describe('runSearch, text and topic', () => {
 	it('loads the next page from the English meaning', async () => {
 		const r = await runSearch({ kind: 'text', query: 'what health help can I get', offset: 6, reply: 'en' }, deps());

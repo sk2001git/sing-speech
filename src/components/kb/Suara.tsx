@@ -117,6 +117,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const [setting, setSetting] = useState<ReplySetting>('en');
 	const [englishIds, setEnglishIds] = useState<string[]>([]);
 	const [loadingMore, setLoadingMore] = useState(false);
+	/** Loudness for the waveform: only while the microphone is open, ten times a second. */
+	const [level, setLevel] = useState(0);
 	const recording = useRef<Recording | null>(null);
 	const live = useRef<LiveLink | null>(null);
 	const isLive = route === 'openai-live';
@@ -249,6 +251,15 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			tell(reply.language === 'zh-Hans' ? '我没听到。请点一下再说。' : "I didn't hear you. Tap and try again.", reply.language);
 			return;
 		}
+		if (reply.kind === 'places') {
+			dispatch({ type: 'PLACES', result: reply });
+			const first = reply.places[0];
+			if (first) {
+				const zh = reply.language === 'zh-Hans';
+				tell(zh ? `最近的是${first.name}。` : `The nearest one is ${first.name}.`, reply.language);
+			}
+			return;
+		}
 		if (reply.kind === 'greeting') {
 			dispatch({ type: 'GREETING' });
 			tell(reply.language === 'zh-Hans' ? '您好！您需要什么帮助？' : 'Hello! What do you need?', reply.language);
@@ -301,8 +312,9 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			rec.ondataavailable = (e) => chunks.push(e.data);
 			const gate = createSilenceGate();
 			let ended = false;
-			const stopWatching = watchLevel(stream, (level, now) => {
-				const verdict = gate.push(level, now);
+			const stopWatching = watchLevel(stream, (loudness, now) => {
+				setLevel(loudness);
+				const verdict = gate.push(loudness, now);
 				if (verdict !== 'listen' && !ended) {
 					ended = true;
 					finishRef.current(verdict);
@@ -363,6 +375,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onSay={say}
 			onLanguage={onLanguage}
 			routeLabel={routeLabel}
+			level={level}
 		/>
 	);
 }

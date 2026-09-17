@@ -5,6 +5,7 @@ import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
 import { needsTranslation } from './grounding';
 import { NothingHeard, replyLanguage, type Hearing } from './hearing';
+import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/places';
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
@@ -28,6 +29,8 @@ export type SearchRequest = z.infer<typeof SearchRequest>;
 export type SearchResponse =
 	| { kind: 'greeting'; language: EntryLanguage }
 	| { kind: 'silence'; language: EntryLanguage }
+	/** Addresses from open data, which are rows in a published dataset rather than quoted answers. */
+	| { kind: 'places'; heard: Heard; places: Place[]; what: PlaceKind; area: string; source: PlaceSource; language: EntryLanguage }
 	| { kind: 'nothing'; heard: Heard; language: EntryLanguage }
 	/** `englishIds`: cards shown in English although the reader's language is not English. */
 	| { kind: 'results'; result: SearchResult; englishIds: string[] };
@@ -61,8 +64,27 @@ export class MemoryTranslations implements TranslationCache {
 	}
 }
 
+/** One dataset behind the place cards, named on screen with the date it was read. */
+export interface PlaceSource {
+	datasetId: string;
+	kind: string;
+	name: string;
+	agency: string;
+	lastUpdatedAt: string;
+	url: string;
+	licence: string;
+	fetchedAt: string;
+}
+
+export interface PlaceIndex {
+	places: Place[];
+	sources: PlaceSource[];
+}
+
 export interface SearchDeps {
 	corpus: Corpus;
+	/** Open-data addresses. Absent means "where is…" questions fall through to the entries. */
+	places?: PlaceIndex;
 	/** Embed one query text, already carrying its instruction. */
 	embed: (text: string) => Promise<number[]>;
 	hear?: (audio: ArrayBuffer, mimeType?: string) => Promise<Hearing>;
@@ -104,12 +126,26 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 		offset = req.offset;
 	}
 
+	// "Where is a clinic in Bedok" is answered from the dataset, not from quoted pages. An
+	// area that matches nothing falls through, so a question we misread still gets answers.
+	const nearby = deps.places ? placesFor(query, deps.places) : null;
+	if (nearby) return { kind: 'places', heard, language, ...nearby };
+
 	const vector = await deps.embed(queryText(query));
 	const ranked = rank(bestPerEntry(nearest(vector, deps.corpus.vectors)), deps.thresholds, offset);
 	if (ranked.fit === 'none') return { kind: 'nothing', heard, language };
 
 	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
 	return results(cards, { heard, fit: ranked.fit, nextOffset: ranked.nextOffset, query, language }, deps);
+}
+
+function placesFor(query: string, index: PlaceIndex): { places: Place[]; what: PlaceKind; area: string; source: PlaceSource } | null {
+	const intent = placeIntent(query);
+	if (!intent) return null;
+	const found = findPlaces(index.places, intent);
+	const source = index.sources.find((s) => s.kind === intent.kind);
+	if (found.length === 0 || !source) return null;
+	return { places: found, what: intent.kind, area: intent.area, source };
 }
 
 async function topic(req: Extract<SearchRequest, { kind: 'topic' }>, deps: SearchDeps): Promise<SearchResponse> {

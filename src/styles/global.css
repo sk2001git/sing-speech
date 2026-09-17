@@ -2,6 +2,31 @@
 @import './kb.css';
 
 /*
+ * Self-hosted, so there is no third-party request and no tracking. `swap` shows the
+ * system face immediately and swaps when the file lands: text is never invisible on a
+ * slow connection, which is the cost this audience would otherwise pay.
+ */
+@font-face {
+	font-family: 'Atkinson Hyperlegible Next';
+	src: url('/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2');
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
+}
+
+/* Kept for the side-by-side comparison in scripts/kb/preview.tsx. */
+@font-face {
+	font-family: 'Inter Variable';
+	src: url('/fonts/inter-latin.woff2') format('woff2');
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/*
  * Suara, in the Clarion direction the owner chose on 2026-09-13: a quiet near-white
  * ground, white cards on hairline borders, one black primary action, colour only for
  * state. It replaces the earlier "no borders, structure by size alone" rule — the owner
@@ -38,9 +63,17 @@
 	--sample-bg: #fff6de;
 	--sample-line: #f0d9a0;
 
+	/*
+	 * One self-hosted face, chosen for this audience rather than for fashion: Atkinson
+	 * Hyperlegible Next was drawn for low-vision readers — I, l and 1 differ, 0 and O
+	 * differ, b/d/p/q are not mirrors, and c/e/s/a keep open apertures at small sizes.
+	 * 34 KB, Latin only, swap: Chinese falls through to the device's own face, since a
+	 * Chinese webfont is megabytes.
+	 */
 	--font-sans:
-		-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto,
-		'Helvetica Neue', Arial, sans-serif;
+		'Atkinson Hyperlegible Next', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui,
+		'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei',
+		'Noto Sans SC', sans-serif;
 
 	--radius-card: 1.25rem;
 	--radius-btn: 1rem;

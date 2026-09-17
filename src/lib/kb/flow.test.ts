@@ -86,6 +86,21 @@ describe('results', () => {
 		expect(s.phase === 'results' && s.result.nextOffset).toBeNull();
 	});
 
+	it('shows addresses when the answer is a list of places, and still takes a new question', () => {
+		const places = {
+			heard: { short: 'Clinic in Bedok', sentence: 'You want a CHAS clinic in Bedok.' },
+			places: [{ id: 'chas:1', kind: 'chas-clinic' as const, name: 'Bedok Family Clinic' }],
+			what: 'chas-clinic' as const,
+			area: 'bedok',
+			source: { datasetId: 'd_548', kind: 'chas-clinic', name: 'CHAS Clinics', agency: 'Ministry of Health', lastUpdatedAt: '2024-06-06', url: 'https://data.gov.sg', licence: 'Singapore Open Data Licence', fetchedAt: '2026-09-17' },
+			language: 'en' as const,
+		};
+		const s = next(searching, { type: 'PLACES', result: places });
+		expect(s).toMatchObject({ phase: 'places' });
+		expect(next(s, { type: 'PRESS' }).phase).toBe('arming');
+		expect(next(s, { type: 'TOPIC', area: 'health' }).phase).toBe('searching');
+	});
+
 	it('greets back on a greeting, and says so when nothing is close', () => {
 		expect(next(searching, { type: 'GREETING' })).toMatchObject({ phase: 'home', greeting: true });
 		expect(next(searching, { type: 'NOTHING', heard: result().heard })).toMatchObject({ phase: 'notfound' });

@@ -8,7 +8,19 @@ import type { Corpus } from './search';
  * schema must fail here, not in front of a reader. D1 and Vectorize replace this file in
  * build step 6.
  */
+import places from '../../../data/kb/places.json';
+import type { PlaceIndex } from './search';
+
 export const EMBEDDING = index.embedding as { model: string; dimensions: number };
+
+/**
+ * Addresses from data.gov.sg, built by `scripts/kb/build-places.ts`. Not validated against
+ * the entry schema: these are dataset rows, not quoted answers, and they carry their own
+ * source line instead.
+ */
+export function loadPlaces(): PlaceIndex {
+	return places as unknown as PlaceIndex;
+}
 
 let cached: Corpus | undefined;
 

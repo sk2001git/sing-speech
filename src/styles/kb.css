@@ -132,18 +132,26 @@
 		animation: pulse 1.2s ease-in-out infinite;
 	}
 
+	/*
+	 * Type, after the owner's "not the right font, details or feel" (2026-09-16). The
+	 * reference is Airbnb: few sizes, wide space, one dominant line per screen, weight
+	 * doing the work rather than colour. Headings tighten as they grow; body text stays
+	 * loose enough to read at arm's length.
+	 */
 	.k-h1 {
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: clamp(1.875rem, 6vw, 2.125rem);
 		font-weight: 700;
-		line-height: 1.15;
-		letter-spacing: -0.025em;
+		line-height: 1.12;
+		letter-spacing: -0.03em;
+		text-wrap: balance;
 	}
 
 	.k-lead {
-		margin: -0.375rem 0 0;
+		margin: -0.125rem 0 0;
 		color: var(--muted);
 		font-size: 1.25rem;
+		line-height: 1.45;
 	}
 
 	.k-label {
@@ -223,6 +231,13 @@
 	}
 	.k-dots circle:nth-child(3) {
 		animation-delay: 300ms;
+	}
+
+	/* The live waveform canvas: full width of the orb zone, invisible when closed. */
+	.k-wave-canvas {
+		width: min(18rem, 100%);
+		margin-top: 0.75rem;
+		color: var(--live);
 	}
 
 	.k-wave {
@@ -347,6 +362,48 @@
 		margin: 0;
 		color: var(--muted);
 		font-size: 1.125rem;
+	}
+
+	/* Places: plainer than an answer card, because this is a dataset row. */
+	.k-places {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.k-place {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		padding: 1rem 1.125rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		box-shadow: var(--shadow-card);
+	}
+
+	.k-place-name {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	.k-place-address {
+		margin: 0;
+		font-size: 1.125rem;
+		line-height: 1.4;
+		color: var(--muted);
+	}
+
+	.k-place-tags {
+		margin: 0;
+		font-size: 1rem;
+		color: var(--muted);
+	}
+
+	.k-place .k-btn {
+		margin-top: 0.375rem;
 	}
 
 	.k-said {

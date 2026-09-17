@@ -1,4 +1,5 @@
 import type { Entry, EntryLanguage } from './entry';
+import type { Place, PlaceKind } from '../places/places';
 
 /**
  * The knowledge-base screens as one value, following the approved UX flows
@@ -33,12 +34,32 @@ export interface SearchResult {
 
 type Results = { view: View; phase: 'results'; result: SearchResult; openId: string | null };
 
+/** Addresses from open data: a different kind of answer, so a different screen. */
+export interface PlacesResult {
+	heard: Heard;
+	places: Place[];
+	what: PlaceKind;
+	area: string;
+	source: {
+		datasetId: string;
+		kind: string;
+		name: string;
+		agency: string;
+		lastUpdatedAt: string;
+		url: string;
+		licence: string;
+		fetchedAt: string;
+	};
+	language: EntryLanguage;
+}
+
 export type FlowState =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
 	| { view: View; phase: 'listening' }
 	| { view: View; phase: 'searching'; topic: Area | null }
 	| Results
+	| { view: View; phase: 'places'; result: PlacesResult }
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
 	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
 	| { view: View; phase: 'done'; entry: Entry; back: Results }
@@ -59,6 +80,7 @@ export type FlowEvent =
 	/** A live session asked us a question: it can come while they are anywhere. */
 	| { type: 'LIVE_ASK' }
 	| { type: 'NOTHING'; heard: Heard }
+	| { type: 'PLACES'; result: PlacesResult }
 	| { type: 'TOPIC'; area: Area }
 	| { type: 'OPEN'; id: string }
 	| { type: 'VIEW'; view: View }
@@ -74,8 +96,8 @@ export function initial(view: View = 'grid'): FlowState {
 	return { view, phase: 'home', greeting: false };
 }
 
-const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'notfound', 'done', 'denied', 'offline', 'steps']);
-const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'notfound', 'done', 'offline']);
+const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'denied', 'offline', 'steps']);
+const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'offline']);
 
 export function canSpeak(state: FlowState): boolean {
 	return CAN_SPEAK.has(state.phase);
@@ -102,6 +124,8 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			return { view, phase: 'searching', topic: null };
 		case 'SILENCE':
 			return state.phase === 'listening' || state.phase === 'searching' ? { view, phase: 'home', greeting: false, notice: 'nothing' } : state;
+		case 'PLACES':
+			return state.phase === 'searching' ? { view, phase: 'places', result: event.result } : state;
 		case 'NOTHING':
 			return state.phase === 'searching' ? { view, phase: 'notfound', heard: event.heard } : state;
 		case 'TOPIC':
