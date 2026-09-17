@@ -136,6 +136,19 @@ try {
 		await sleep(4500);
 		await click('.k-orb');
 	}
+	if (process.env.WALK_EXPECT === 'places') {
+		// A "where is…" question is answered from open data, on its own card.
+		const shown = await waitFor(`document.querySelector('[data-place]')`, 60000);
+		const places = await js(
+			`({ count: document.querySelectorAll('[data-place]').length, said: document.querySelector('.k-said p')?.textContent ?? '', heading: document.querySelector('.k-h1')?.textContent ?? '', first: document.querySelector('.k-place-name')?.textContent ?? '', address: document.querySelector('.k-place-address')?.textContent ?? '', source: document.querySelector('a.k-source')?.textContent ?? '', call: document.querySelectorAll('a[href^="tel:"]').length })`,
+		);
+		check('a spoken "where is" question is answered with addresses', shown && places.count > 0, JSON.stringify(places));
+		check('the card names the dataset, the agency and when it was read', /data\.gov\.sg/.test(places.source) && /checked/i.test(places.source), places.source);
+		check('at least one place can be called', places.call > 0, `${places.call} numbers`);
+		await shot('places');
+		check('no page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
+		throw new Error('__done__');
+	}
 	check('searching after the recording ends', await waitFor(`document.querySelector('.k-dots') || document.querySelector('[data-card]') || document.querySelector('.k-notice')`, 5000));
 	const answered = await waitFor(`document.querySelector('[data-card]') || /Not in Suara|还没有/.test(document.body.innerText) || document.querySelector('.k-notice')`, 60000);
 	const speech = await js(`({ cards: document.querySelectorAll('[data-card]').length, said: document.querySelector('.k-said p')?.textContent ?? '', heard: document.querySelector('.k-heard-text')?.textContent ?? '', best: document.querySelectorAll('.k-badge').length, weak: !!document.querySelector('.k-closest'), notice: document.querySelector('.k-notice')?.textContent ?? '' })`);
