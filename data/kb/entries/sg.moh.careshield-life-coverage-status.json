@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.careshield-life-coverage-status",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Coverage status",
+		"full": "CareShield Life coverage status"
+	},
+	"summary": {
+		"text": "It changes to “Active” only after successful premium deduction, about two months after approval. You can still make claims while waiting.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why it says Waiting for Cover",
+			"body": "Your status will show “Active” only after your premium is successfully deducted. This usually takes about two months from your approved date.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "You can still make claims",
+			"body": "You remain eligible to make claims while your status says “Waiting for Cover”.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why does my CareShield Life status say Waiting for Cover?",
+			"My application was approved. Why is my cover not active yet?",
+			"When will my CareShield Life coverage become Active?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuog0026hipnsgdanf1z",
+			"page_title": "I have applied for CareShield Life and my application has been approved. Why is the coverage status reflected as ‘Waiting for Cover’ on My Policy e-Service?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:15.873Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Coverage status will be reflected as 'Active' only after successful premium deduction (about two months from your approved date)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "However, please be assured that you will still be eligible for claims while your coverage status is 'Waiting for Cover'."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:15.873Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:15.873Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:15.873Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuuog0026hipnsgdanf1z as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:15.873Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:15.873Z",
+		"updated_at": "2026-09-18T14:59:15.873Z"
+	}
+}

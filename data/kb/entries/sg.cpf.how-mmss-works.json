@@ -1,0 +1,131 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.how-mmss-works",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Matched MediSave",
+		"full": "How MMSS works"
+	},
+	"summary": {
+		"text": "Eligibility is checked yearly. Eligible members get matching grants for cash top-ups made by 31 December.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Eligibility and notification",
+			"body": "CPF checks your eligibility every year. If you are eligible, CPF will notify you at the beginning of the year. You can also check your eligibility through the Healthcare dashboard.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Cash top-ups",
+			"body": "Cash top-ups to your MediSave Account can come from you, loved ones, employers or community members.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "When the grant comes",
+			"body": "If you are eligible and receive cash top-ups by 31 December, you get a matching grant at the beginning of the following year.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Start date",
+			"body": "The scheme starts in January 2026. Top-ups made before 2026 do not qualify for this matching grant.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"matched-medisave-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How does the Matched MediSave Scheme work?",
+			"How do I get the MediSave matching grant?",
+			"When will my MediSave top-up be matched?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm7b5q0m400jlyb4ux7hpp87j",
+			"page_title": "How does the Matched MediSave Scheme work?",
+			"source_modified_at": "2025-02-19",
+			"retrieved_at": "2026-09-18T14:58:17.462Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Members’ eligibility for the Matched MediSave Scheme (MMSS) will be automatically assessed annually. No application by members is needed."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Each year, if you are eligible, we will notify you at the beginning of the year. You can also check your eligibility via the Healthcare dashboard."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Cash top-ups to MA can be made by yourself, loved ones, employers or members of the community."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are eligible and have received cash top-ups to your MediSave Account (MA) by 31 December of the year, you will receive a matching grant at the beginning of the following year."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "MMSS is implemented from January 2026. Cash top-ups made before 2026 is not eligible for matching grants under this scheme."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:17.462Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:17.462Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:17.462Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm7b5q0m400jlyb4ux7hpp87j as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:17.462Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:17.462Z",
+		"updated_at": "2026-09-18T14:58:17.462Z"
+	}
+}

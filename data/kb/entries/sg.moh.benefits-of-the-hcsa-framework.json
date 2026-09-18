@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.benefits-of-the-hcsa-framework",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "New framework",
+		"full": "Benefits of the HCSA framework"
+	},
+	"summary": {
+		"text": "The HCSA uses service-based licensing, unlike the PHMCA. It is similar to healthcare systems in the UK and Malaysia.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "How the frameworks differ",
+			"body": "The PHMCA was premises-based. The HCSA uses a service-based licensing structure.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Benefit of the new framework",
+			"body": "Licensees can provide a range of services and take on new licences in a modular fashion.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Similar overseas systems",
+			"body": "The UK and Malaysia use similar healthcare systems.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"health-regulation",
+			"healthcare-services-act"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the benefits of the new HCSA framework compared with the PHMCA, and which countries use something similar?",
+			"How is the HCSA licensing framework better than the old PHMCA framework?",
+			"Does any other country use a licensing framework like the HCSA?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clu6lx3ra006q314r0pxjoj5f",
+			"page_title": "What are the benefits of the new framework under the HCSA as compared to the previous framework under the PHMCA? Are there any overseas countries that utilise a similar licensing framework?",
+			"source_modified_at": "2024-03-25",
+			"retrieved_at": "2026-09-18T14:59:33.687Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The PHMCA was premises-based whereas the HCSA adopts a service-based licensing structure. This is similar to the healthcare systems in the United Kingdom (UK) and Malaysia."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The PHMCA was premises-based whereas the HCSA adopts a service-based licensing structure."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "This allows licensees the flexibility to provide a range of services and take on new licences in a modular fashion."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "This is similar to the healthcare systems in the United Kingdom (UK) and Malaysia."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:33.687Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:33.687Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:33.687Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clu6lx3ra006q314r0pxjoj5f as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:33.687Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:33.687Z",
+		"updated_at": "2026-09-18T14:59:33.687Z"
+	}
+}

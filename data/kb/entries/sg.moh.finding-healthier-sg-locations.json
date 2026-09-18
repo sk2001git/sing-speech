@@ -1,0 +1,105 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.finding-healthier-sg-locations",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Finding",
+		"full": "Finding Healthier SG locations"
+	},
+	"summary": {
+		"text": "Use the Healthier SG search to find an enrolment station or check whether a clinic participates.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open the search",
+			"text": "Open https://gowhere.gov.sg/healthiersg to check for the nearest Healthier SG Enrolment Station or participating clinics.",
+			"confirm_label": "I opened the search",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Enter your search",
+			"text": "Enter your postal code to find a nearby station, or enter the name of your GP or polyclinic to check if it is participating.",
+			"confirm_label": "I entered my search",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"enrolment"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Where is the Healthier SG Enrolment Station nearest to me?",
+			"How do I check if my GP or polyclinic participates?",
+			"How can I find a Healthier SG Enrolment Station?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cllq7kgci0000l10g2wdw04s3",
+			"page_title": "Where is the Healthier SG Enrolment Station nearest to me? How can I check if my GP / polyclinic is participating in Healthier SG?",
+			"source_modified_at": "2024-05-03",
+			"retrieved_at": "2026-09-18T15:01:51.958Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may check for your nearest Healthier SG Enrolment Station and the list of participating clinics at https://gowhere.gov.sg/healthiersg ."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Simply enter your postal code or name of clinic to search."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:51.958Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:51.958Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:51.958Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cllq7kgci0000l10g2wdw04s3 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:51.958Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:51.958Z",
+		"updated_at": "2026-09-18T15:01:51.958Z"
+	}
+}

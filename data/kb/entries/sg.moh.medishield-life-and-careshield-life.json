@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.medishield-life-and-careshield-life",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediShield Life",
+		"full": "MediShield Life and CareShield Life"
+	},
+	"summary": {
+		"text": "MediShield Life helps with large hospital bills and costly treatments, while CareShield Life provides cash payouts for long-term care.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "MediShield Life purpose",
+			"body": "MediShield Life helps to pay for large hospital bills and selected costly outpatient treatments such as dialysis and chemotherapy for cancer.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "CareShield Life purpose",
+			"body": "CareShield Life provides cash payouts to help severely disabled individuals with their long-term care costs.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"others"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the difference between MediShield Life and CareShield Life?",
+			"How does MediShield Life differ from CareShield Life?",
+			"What do MediShield Life and CareShield Life do?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vt8vxl00nk9apod3lrhofs",
+			"page_title": "What is the difference between MediShield Life and CareShield Life?",
+			"retrieved_at": "2026-09-18T14:48:04.280Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "MediShield Life helps to pay for large hospital bills and selected costly outpatient treatments such as dialysis and chemotherapy for cancer. Whereas CareShield Life provides cash payouts to help severely disabled individuals with their long-term care costs."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "MediShield Life helps to pay for large hospital bills and selected costly outpatient treatments such as dialysis and chemotherapy for cancer."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "CareShield Life provides cash payouts to help severely disabled individuals with their long-term care costs."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:48:04.280Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:48:04.280Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:48:04.280Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vt8vxl00nk9apod3lrhofs as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:48:04.280Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:48:04.280Z",
+		"updated_at": "2026-09-18T14:48:04.280Z"
+	}
+}

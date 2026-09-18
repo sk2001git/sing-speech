@@ -1,0 +1,151 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.how-the-matched-medisave-scheme-works",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "How the Matched",
+		"full": "How the Matched MediSave Scheme works"
+	},
+	"summary": {
+		"text": "You are assessed automatically each year. If you are eligible, make cash top-ups to your MediSave Account to get a matching grant.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Scheme start date",
+			"body": "MMSS is implemented from January 2026. Cash top-ups made before 2026 is not eligible for matching grants under this scheme.",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"heading": "Tax relief rules",
+			"body": "Individual givers will not receive tax relief for cash top-ups that attract the MMSS matching grant.",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check eligibility",
+			"text": "Wait for the notification at the beginning of the year, or check your eligibility via the Healthcare dashboard.",
+			"confirm_label": "I checked my eligibility",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Make top-ups",
+			"text": "Make cash top-ups to your MediSave Account by 31 December of the year. Top-ups can be made by yourself, loved ones, employers or members of the community.",
+			"confirm_label": "I made the top-ups",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Receive grant",
+			"text": "If you are eligible and have received cash top-ups to your MediSave Account by 31 December, you will receive a matching grant at the beginning of the following year.",
+			"confirm_label": "I understand",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"matched-medisave-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How does the Matched MediSave Scheme work?",
+			"How do I get the Matched MediSave grant?",
+			"Tell me about the Matched MediSave Scheme"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm7b5q0m400jlyb4ux7hpp87j",
+			"page_title": "How does the Matched MediSave Scheme work?",
+			"source_modified_at": "2025-02-19",
+			"retrieved_at": "2026-09-18T14:56:19.441Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Members’ eligibility for the Matched MediSave Scheme (MMSS) will be automatically assessed annually. No application by members is needed."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Each year, if you are eligible, we will notify you at the beginning of the year. You can also check your eligibility via the Healthcare dashboard."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Cash top-ups to MA can be made by yourself, loved ones, employers or members of the community."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are eligible and have received cash top-ups to your MediSave Account (MA) by 31 December of the year, you will receive a matching grant at the beginning of the following year."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "MMSS is implemented from January 2026. Cash top-ups made before 2026 is not eligible for matching grants under this scheme."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "Individual givers will not receive tax relief for cash top-ups that attract the MMSS matching grant."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:19.441Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:19.441Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:19.441Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm7b5q0m400jlyb4ux7hpp87j as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:19.441Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:19.441Z",
+		"updated_at": "2026-09-18T14:56:19.441Z"
+	}
+}

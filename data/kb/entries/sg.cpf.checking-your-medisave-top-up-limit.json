@@ -1,0 +1,139 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.checking-your-medisave-top-up-limit",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Checking your",
+		"full": "Checking your MediSave top-up limit"
+	},
+	"summary": {
+		"text": "Use the online MediSave top-up form and log in with Singpass to see your limit.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open the form",
+			"text": "Go to the Top up MediSave Account form.",
+			"confirm_label": "I have the form",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Log in",
+			"text": "Log in with your Singpass.",
+			"confirm_label": "I have logged in",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Choose yourself",
+			"text": "Under “Recipient details”, select “I wish to make a top-up to Myself”.",
+			"confirm_label": "I chose myself",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "See your limit",
+			"text": "Your top-up limit will then be displayed.",
+			"confirm_label": "I can see my limit",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"top-up-your-medisave-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I check my voluntary top-up limit to my MediSave Account?",
+			"Where can I see my MediSave top-up limit?",
+			"How much can I top up to my MediSave Account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kxl00gxpz7anmlrgmoh",
+			"page_title": "How do I check my voluntary top-up limit to my MediSave Account?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:58:34.757Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "When you make a MediSave top-up online, you will be shown the amount of MediSave top-up you can receive before you reach the top-up limit."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Go to the Top up MediSave Account form"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Log in with your Singpass"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Select “I wish to make a top-up to Myself” under “Recipient details”"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Your top-up limit will then be displayed."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:34.757Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:34.757Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:34.757Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kxl00gxpz7anmlrgmoh as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:34.757Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:34.757Z",
+		"updated_at": "2026-09-18T14:58:34.757Z"
+	}
+}

@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-long-subsidy-eligibility-lasts",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "One year",
+		"full": "How long subsidy eligibility lasts"
+	},
+	"summary": {
+		"text": "Your MediShield Life Premium Subsidy eligibility is generally valid for one year. It may be updated if your household information changes.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Validity period",
+			"body": "In general, your subsidy eligibility is valid for one year.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "When it may change",
+			"body": "Your eligibility may be updated when your household information changes, such as when there is a new-born in your household.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the validity period for my subsidy eligibility for MediShield Life Premium Subsidies?",
+			"What is the validity period for my subsidy eligibility?",
+			"How long does my MediShield Life Premium Subsidy eligibility last?",
+			"When does my subsidy eligibility expire?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqe6ce00l3r5bfwzc4guiy",
+			"page_title": "What is the validity period for my subsidy eligibility for MediShield Life Premium Subsidies?",
+			"source_modified_at": "2024-11-21",
+			"retrieved_at": "2026-09-18T14:58:13.286Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "In general, your subsidy eligibility will be valid for one year. Your subsidy eligibility may be updated when there are changes to your household information,"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "In general, your subsidy eligibility will be valid for one year."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Your subsidy eligibility may be updated when there are changes to your household information, such as a new-born in your household"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:13.286Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:13.286Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:13.286Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vqe6ce00l3r5bfwzc4guiy as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:13.286Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:13.286Z",
+		"updated_at": "2026-09-18T14:58:13.286Z"
+	}
+}

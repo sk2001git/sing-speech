@@ -76,6 +76,32 @@ describe('writerFor', () => {
 		expect(calls[0]!.body.model).toBe('gpt-5.6-luna');
 	});
 
+	it('hands over to the other vendor when the first cannot be paid', async () => {
+		const calls: string[] = [];
+		const impl = (async (url: string) => {
+			calls.push(url);
+			if (url.includes('openrouter')) {
+				return new Response(JSON.stringify({ error: { message: 'add credits' } }), { status: 402 });
+			}
+			return new Response(JSON.stringify({ output_text: '{"kind":"answer"}' }), { status: 200 });
+		}) as unknown as typeof fetch;
+		const write = writerFor({ openaiKey: 'a', openrouterKey: 'b', fetchImpl: impl })!;
+		expect(await write('p')).toBe('{"kind":"answer"}');
+		expect(calls[0]).toContain('openrouter');
+		expect(calls[1]).toContain('api.openai.com');
+	});
+
+	it('does not hand over a failure the other vendor would repeat', async () => {
+		const calls: string[] = [];
+		const impl = (async (url: string) => {
+			calls.push(url);
+			return new Response(JSON.stringify({ error: { message: 'no such model' } }), { status: 400 });
+		}) as unknown as typeof fetch;
+		const write = writerFor({ openaiKey: 'a', openrouterKey: 'b', fetchImpl: impl })!;
+		await expect(write('p')).rejects.toThrow(/400/);
+		expect(calls).toHaveLength(1);
+	});
+
 	it('returns nothing when the deployment has no key, so a miss stays a miss', () => {
 		expect(writerFor({})).toBeUndefined();
 	});

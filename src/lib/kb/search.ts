@@ -142,7 +142,19 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	const nearby = deps.places ? placesFor(query, deps.places) : null;
 	if (nearby) return { kind: 'places', heard, language, ...nearby };
 
-	const vector = await deps.embed(queryText(query));
+	/*
+	 * Tier A needs the embedding vendor; Tier B does not. When embedding fails — no credit,
+	 * rate limit, vendor down — falling through to the word search keeps Suara answering
+	 * from the crawl instead of showing an error to somebody who asked a plain question.
+	 */
+	let vector: number[] | null = null;
+	try {
+		vector = await deps.embed(queryText(query));
+	} catch (err) {
+		console.error('embedding failed, falling back to the word search:', err instanceof Error ? err.message.slice(0, 120) : err);
+	}
+	if (!vector) return (await onDemand(query, heard, language, deps)) ?? { kind: 'nothing', heard, language };
+
 	const ranked = rank(bestPerEntry(nearest(vector, deps.corpus.vectors)), deps.thresholds, offset);
 	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
 

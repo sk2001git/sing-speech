@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.maximum-savings-in-medisave-account",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave limit",
+		"full": "Maximum savings in MediSave Account"
+	},
+	"summary": {
+		"text": "Yes, you can save up to the prevailing Basic Healthcare Sum in your MediSave Account if you have not turned age 65.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Basic Healthcare Sum from 2026",
+			"body": "From 1 January 2026, the BHS is $79,000 for all CPF members aged 65 years and below.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Fixed amount after age 65",
+			"body": "Your applicable BHS will be fixed at $79,000 for the rest of your life if you are aged 65 years old in 2026.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"basic-healthcare-sum"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Is there a maximum amount that I can save in my MediSave Account?",
+			"What is the most I can save in MediSave?",
+			"Is there a limit for my MediSave Account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o",
+			"page_title": "Is there a maximum amount that I can save in my MediSave Account?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:56:20.327Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can save up to the prevailing Basic Healthcare Sum (BHS) in your MediSave Account (MA) if you have not turned age 65. It is the maximum amount you can hold in your MA."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "From 1 January 2026, the BHS is $79,000 for all CPF members aged 65 years and below."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "For example, if you are aged 65 years old in 2026, your applicable BHS will be fixed at $79,000 for the rest of your life."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:20.327Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:20.327Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:20.327Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:20.327Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:20.327Z",
+		"updated_at": "2026-09-18T14:56:20.327Z"
+	}
+}

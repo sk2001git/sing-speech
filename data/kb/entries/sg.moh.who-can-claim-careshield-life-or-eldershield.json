@@ -1,0 +1,103 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-can-claim-careshield-life-or-eldershield",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Who can claim",
+		"full": "Who can claim CareShield Life or ElderShield"
+	},
+	"summary": {
+		"text": "You can claim if you are covered and cannot perform at least three of six daily activities.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who is eligible",
+			"body": "You must be covered by CareShield Life or ElderShield. You can claim if you are unable to perform at least three of the six daily activities.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "The six daily activities",
+			"body": "They are washing, dressing, feeding, toileting, mobility and transferring.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"eldershield",
+			"eldershield-claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Who is eligible for CareShield Life/ElderShield claims?",
+			"Who is eligible for CareShield Life or ElderShield claims?",
+			"When can I claim CareShield Life or ElderShield?",
+			"What do I need to be unable to do to make a claim?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup300dyhipnwaslpc9c",
+			"page_title": "Who is eligible for CareShield Life/ElderShield claims?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:25.286Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you are covered by CareShield Life/ElderShield, you will be eligible to claim in the event of severe disability. This means that you must be unable to perform at least three out of the six Activities of Daily Living (ADLs)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The six ADLs are: • Washing – the ability to wash in the bath or shower (including getting into and out of the bath or shower) or do a sponge/bed bath. • Dressing – the ability to put on, take off, secure and unfasten all garments and, as appropriate, any braces, artificial limbs or other surgical or medical appliances. • Feeding – the ability to feed oneself food after it has been prepared and made available. • Toileting – the ability to use the toilet or manage bowel and bladder function through the use of protective undergarments such as diapers or surgical appliances if appropriate. • Mobility – the ability to move indoors from room to room on level surfaces. • Transferring – the ability to move from a bed to an upright chair or wheelchair, and vice versa."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:25.286Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:25.286Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:25.286Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuup300dyhipnwaslpc9c as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:25.286Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:25.286Z",
+		"updated_at": "2026-09-18T14:59:25.286Z"
+	}
+}

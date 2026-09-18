@@ -1,0 +1,169 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.fixing-face-verification",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Face check",
+		"full": "Fixing Face Verification"
+	},
+	"summary": {
+		"text": "Improve the scan by uncovering your face, keeping still, and using suitable lighting and camera quality.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Uncover your face",
+			"text": "Make sure your face is not covered during the scan.",
+			"confirm_label": "My face is uncovered",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Keep still",
+			"text": "Do not move while scanning is in progress.",
+			"confirm_label": "I kept still",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Check the room",
+			"text": "Use an environment that is not too dark.",
+			"confirm_label": "The room is not dark",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Check the background",
+			"text": "Make sure there is no strong lighting in the background.",
+			"confirm_label": "No strong light behind",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"position": 5,
+			"name": "Use a better camera",
+			"text": "Use a camera with a minimum resolution of two megapixels. If you are using a laptop, try again using a mobile phone which has a better camera.",
+			"confirm_label": "I used a better camera",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"position": 6,
+			"name": "Contact Singpass",
+			"text": "If you still need help, contact the Singpass Helpdesk directly.",
+			"confirm_label": "I contacted Singpass",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services",
+			"fighting-scams",
+			"protecting-your-cpf-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why is Singpass Face Verification failing for me?",
+			"Why does Singpass face checking fail?",
+			"How can I get face verification to work?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucpz005npnhlmror0f1a",
+			"page_title": "Why is Singpass Face Verification failing for me?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-18T14:59:51.148Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "There may be several possible reasons for this."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your face is not covered"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You keep still while scanning is in progress"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Your environment is not too dark"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "There is no strong lighting in the background"
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "You use a minimum resolution of two megapixels for the camera."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "If you require assistance with Singpass Face Verification, please contact the Singpass Helpdesk directly."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:51.148Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:51.148Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:51.148Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmkynucpz005npnhlmror0f1a as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:51.148Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:51.148Z",
+		"updated_at": "2026-09-18T14:59:51.148Z"
+	}
+}

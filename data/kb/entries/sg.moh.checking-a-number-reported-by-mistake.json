@@ -1,0 +1,135 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.checking-a-number-reported-by-mistake",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Checking a",
+		"full": "Checking a number reported by mistake"
+	},
+	"summary": {
+		"text": "Check the number in ScamShield. If it is wrongly marked as scam, call 1799 to request an unblock.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "One report is not enough",
+			"body": "A single report does not automatically mark a phone number as a scam. If the number is legitimate, it will not be incorrectly marked based on one report.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the number",
+			"text": "Use the Check for Scams feature in the ScamShield app to check whether the number is marked as scam.",
+			"confirm_label": "I checked the number",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check the result",
+			"text": "A number is blocked only when the result is red and says, \"Beware, this looks like a scam.\"",
+			"confirm_label": "I checked the result",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Request an unblock",
+			"text": "If you believe the number was wrongly marked as scam, call the ScamShield Helpline at 1799 and request an unblock.",
+			"confirm_label": "I called 1799",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"blocking-of-phone-numbers",
+			"contact-us",
+			"call-blocking"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What should I do if I accidentally reported a number as scam?",
+			"I reported a safe number by mistake",
+			"How do I undo a scam report?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmc34ckp6008p14lk9t8nt9rs",
+			"page_title": "What should I do if I accidentally reported a number as scam?",
+			"source_modified_at": "2025-08-04",
+			"retrieved_at": "2026-09-18T15:02:53.364Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you've accidentally reported a number as \"scam\", you may use the Check for Scams feature to check if the phone number is marked as scam in the ScamShield database."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "A phone number is only blocked if the check outcome appears red with the message \"Beware, this looks like a scam.\""
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you believe a phone number has been wrongly marked as scam, please reach out to the ScamShield Helpline at 1799 to request an unblock."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please be assured that a single report alone does not automatically mark a phone number as a scam."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:02:53.364Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:02:53.364Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:02:53.364Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cmc34ckp6008p14lk9t8nt9rs as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:02:53.364Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:02:53.364Z",
+		"updated_at": "2026-09-18T15:02:53.364Z"
+	}
+}

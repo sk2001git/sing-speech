@@ -1,0 +1,130 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-subsidised-soc-care",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Get SOC referral",
+		"full": "Getting subsidised SOC care"
+	},
+	"summary": {
+		"text": "Get a referral from a CHAS clinic or polyclinic. CHAS clinic referrals require a PG, MG or CHAS card.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Using a CHAS clinic",
+			"body": "You will need to be a PG, MG or CHAS cardholder to obtain a subsidised SOC referral from a CHAS clinic.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Using a polyclinic",
+			"body": "A polyclinic can also provide a referral for subsidised care at public SOCs.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose where to go",
+			"text": "Go to either a CHAS clinic or a polyclinic to get the referral.",
+			"confirm_label": "I chose a clinic",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check your card",
+			"text": "If you use a CHAS clinic, make sure you are a PG, MG or CHAS cardholder.",
+			"confirm_label": "I checked my card",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Ask for the referral",
+			"text": "Ask the CHAS clinic or polyclinic for a referral for subsidised care at public SOCs.",
+			"confirm_label": "I asked for a referral",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I get a referral for subsidised care at public SOCs?",
+			"Where can I get a subsidised SOC referral?",
+			"Can a CHAS clinic or polyclinic refer me for subsidised care?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmojvefa700cl4d013249tu8g",
+			"page_title": "How can I get a referral for subsidised care at public SOCs?",
+			"source_modified_at": "2026-04-29",
+			"retrieved_at": "2026-09-18T14:58:59.189Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "A referral for subsidised care at public SOCs can be obtained from either CHAS clinics or polyclinics."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Do note that you will need to be a PG/MG/CHAS cardholder to obtain subsidised SOC referrals from CHAS clinics."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:59.189Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:59.189Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:59.189Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cmojvefa700cl4d013249tu8g as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:59.189Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:59.189Z",
+		"updated_at": "2026-09-18T14:58:59.189Z"
+	}
+}

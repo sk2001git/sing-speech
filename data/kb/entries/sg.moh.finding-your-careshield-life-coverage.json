@@ -1,0 +1,91 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.finding-your-careshield-life-coverage",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Check coverage",
+		"full": "Finding your CareShield Life coverage"
+	},
+	"summary": {
+		"text": "Log in to My Policy using Singpass to find out if you are covered under CareShield Life.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Log in to My Policy",
+			"text": "Log in to My Policy using your Singpass. You can then find out if you are covered under CareShield Life.",
+			"confirm_label": "I checked my coverage",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I find out if I am covered under CareShield Life?",
+			"Am I covered under CareShield Life?",
+			"How do I check my CareShield Life coverage?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuoj003mhipnuybzyfeg",
+			"page_title": "How can I find out if I am covered under CareShield Life?",
+			"source_modified_at": "2025-08-27",
+			"retrieved_at": "2026-09-18T14:59:02.881Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can log in to My Policy using your Singpass to find out if you are covered under CareShield Life."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:02.881Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:02.881Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:02.881Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuuoj003mhipnuybzyfeg as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:02.881Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:02.881Z",
+		"updated_at": "2026-09-18T14:59:02.881Z"
+	}
+}

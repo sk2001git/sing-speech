@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.maximum-medisave-account-savings",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave limit",
+		"full": "Maximum MediSave Account savings"
+	},
+	"summary": {
+		"text": "You can save up to the Basic Healthcare Sum in your MediSave Account before age 65.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "The maximum amount",
+			"body": "The maximum amount you can hold in your MediSave Account is the prevailing Basic Healthcare Sum, if you have not turned age 65.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "The 2026 amount",
+			"body": "From 1 January 2026, the Basic Healthcare Sum is $79,000 for CPF members aged 65 and below.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "After age 65",
+			"body": "Your applicable Basic Healthcare Sum is adjusted yearly until you turn 65. If you are 65 in 2026, it stays fixed at $79,000 for life.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"basic-healthcare-sum"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Is there a maximum amount that I can save in my MediSave Account?",
+			"How much can I keep in MediSave?",
+			"What is the MediSave savings limit?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o",
+			"page_title": "Is there a maximum amount that I can save in my MediSave Account?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T15:01:25.197Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can save up to the prevailing Basic Healthcare Sum (BHS) in your MediSave Account (MA) if you have not turned age 65."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "It is the maximum amount you can hold in your MA."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "From 1 January 2026, the BHS is $79,000 for all CPF members aged 65 years and below."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The BHS applicable to you will be adjusted yearly to keep pace with rising healthcare consumption until you turn age 65."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:25.197Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:25.197Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:25.197Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:25.197Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:25.197Z",
+		"updated_at": "2026-09-18T15:01:25.197Z"
+	}
+}

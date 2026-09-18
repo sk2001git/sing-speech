@@ -1,0 +1,130 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.deactivating-the-cpf-safety-switch",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Deactivating the",
+		"full": "Deactivating the CPF Safety Switch"
+	},
+	"summary": {
+		"text": "You can deactivate it by phone or at a CPF Service Centre. Processing takes around three to five working days after identity verification.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "By phone",
+			"body": "Call 1800-227-1188. From overseas, call +65-6227-1188. Choose your language, then select option ‘8’ during operating hours.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "At a service centre",
+			"body": "Make an appointment to visit any CPF Service Centre during operating hours.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Processing time",
+			"body": "Your request takes around three to five working days after your identity is successfully verified.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose one way",
+			"text": "Choose one way to request deactivation: call the CPF hotline, or make an appointment to visit any CPF Service Centre during operating hours.",
+			"confirm_label": "I chose a way",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"cpf-safety-switch"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I deactivate the CPF Safety Switch?",
+			"How can I turn off the CPF Safety Switch?",
+			"I want to deactivate my CPF Safety Switch"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxlj005icsd0km2y91sn",
+			"page_title": "How do I deactivate the CPF Safety Switch?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-18T15:00:01.891Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may request to deactivate the CPF Safety Switch through one of the following methods:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Call the CPF hotline at 1800-227-1188 (+65-6227-1188 if calling from overseas) and select option ‘8’ after choosing your language during operating hours"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Make an appointment to visit any of the CPF Service Centres during operating hours"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Note that your deactivation request will take around three to five working days to process, after we successfully verify your identity."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:00:01.891Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:00:01.891Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:00:01.891Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cml5szxlj005icsd0km2y91sn as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:00:01.891Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:00:01.891Z",
+		"updated_at": "2026-09-18T15:00:01.891Z"
+	}
+}

@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.what-happens-to-unused-medisave",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Unused MediSave",
+		"full": "What happens to unused MediSave"
+	},
+	"summary": {
+		"text": "Unused MediSave stays in your MediSave Account and grows with interest.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Your unused savings",
+			"body": "Any unused MediSave savings remain in your MediSave Account and grow with interest.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What happens to my MediSave if I do not use it?",
+			"Does unused MediSave stay in my account?",
+			"Will my MediSave grow if I do not use it?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0001m3pz7ax9w2kvfh",
+			"page_title": "What happens to my MediSave if I do not use it?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:58:40.467Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Any unused MediSave savings will remain in your MediSave Account and grow with interest."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:40.467Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:40.467Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:40.467Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52l0001m3pz7ax9w2kvfh as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:40.467Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:40.467Z",
+		"updated_at": "2026-09-18T14:58:40.467Z"
+	}
+}

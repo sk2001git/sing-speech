@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.careshield-life-payout-amount",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Monthly payout",
+		"full": "CareShield Life payout amount"
+	},
+	"summary": {
+		"text": "The payout is $649 a month in 2024. It increases yearly until age 67 or a successful claim, whichever comes first.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Payout in 2024",
+			"body": "A successful claimant can receive $649 each month for the entire time they have severe disability and remain insured under CareShield Life.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Payout at age 67 or later",
+			"body": "If someone joined CareShield Life at age 30 in 2020 and makes a successful claim at age 67 or later, the payout can be $1,200 a month.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Older insured members",
+			"body": "For people born in 1954 or earlier who joined at age 67 or later, the payout is fixed at $612 a month when a claim is successful.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"careshield-life-benefits"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the monthly payout amount for CareShield Life?",
+			"How much does CareShield Life pay each month?",
+			"How much can I get monthly from CareShield Life?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuok0042hipna3w0u1e2",
+			"page_title": "What is the monthly payout amount for CareShield Life?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:16.556Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Monthly payout is $649 in 2024, and increases annually until age 67 or when a successful claim is made, whichever is earlier."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "A successful CareShield Life claimant can receive monthly payouts for the entire duration of severe disability (i.e. for as long as he/she develops severe disability) and continues to be insured under CareShield Life."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "However, if a 30-year-old individual joined CareShield Life in 2020, and develops severe disability at age 67 or later, he/she can potentially receive $1,200 per month upon making a successful claim, for the entire duration of severe disability."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "For an insured (born in 1954 and earlier) who joined the scheme at age 67 or after, his/her monthly payout will be fixed at $612/month when a successful claim is made."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:16.556Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:16.556Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:16.556Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuuok0042hipna3w0u1e2 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:16.556Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:16.556Z",
+		"updated_at": "2026-09-18T14:59:16.556Z"
+	}
+}

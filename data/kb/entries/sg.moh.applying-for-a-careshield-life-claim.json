@@ -1,0 +1,92 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.applying-for-a-careshield-life-claim",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CareShield claim",
+		"full": "Applying for a CareShield Life claim"
+	},
+	"summary": {
+		"text": "If you are covered under CareShield Life, submit your claim application through the AIC eFASS Application Portal using Singpass.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Submit your application",
+			"text": "If you are covered under CareShield Life and wish to claim, submit your application via the Agency for Integrated Care (AIC) eFASS Application Portal using your Singpass.",
+			"confirm_label": "I submitted it",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do we/I apply to claim for CareShield Life?",
+			"How can I claim CareShield Life?",
+			"Where do I submit my CareShield Life claim?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuou009ehipngv3x6zko",
+			"page_title": "How do we/I apply to claim for CareShield Life?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:08.460Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you are covered under CareShield Life and wish to claim from CareShield Life, you should submit your application via the Agency for Integrated Care (AIC) eServices for Financing Schemes (eFASS) Application Portal using your Singpass."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:08.460Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:08.460Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:08.460Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuuou009ehipngv3x6zko as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:08.460Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:08.460Z",
+		"updated_at": "2026-09-18T14:59:08.460Z"
+	}
+}

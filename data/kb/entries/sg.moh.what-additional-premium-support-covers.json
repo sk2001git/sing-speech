@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.what-additional-premium-support-covers",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "What Additional",
+		"full": "What Additional Premium Support covers"
+	},
+	"summary": {
+		"text": "APS helps people who still cannot afford premiums after subsidies and MediSave, with limited family support.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What APS provides",
+			"body": "APS gives financial help to people who cannot afford their premiums after premium subsidies and MediSave use, and who have limited family support. This may include low-income single elderly people without family support and low-income families with multiple dependants.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "How eligibility is decided",
+			"body": "Eligibility is based on the financial means of the applicant and their immediate family members. The criteria are not the only factor considered. Flexibility may be used when someone does not fully meet the criteria but needs help because of their financial circumstances.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "How people apply",
+			"body": "The Government will invite eligible individuals to apply and help them with the process if they cannot do so themselves.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"additional-premium-support"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is Additional Premium Support and what are the eligibility criteria for Additional Premium Support?",
+			"Who can get Additional Premium Support?",
+			"Can I get help paying my insurance premiums?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqhfp200dx12kzlv1ur3go",
+			"page_title": "What is Additional Premium Support and what are the eligibility criteria for Additional Premium Support?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-18T15:01:18.760Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Additional Premium Support (APS) provides financial assistance to members who are unable to afford their premiums even after premium subsidies and MediSave use, and have limited family support."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Additional Premium Support (APS) provides financial assistance to members who are unable to afford their premiums even after premium subsidies and MediSave use, and have limited family support. This may include low-income single elderly without family support and low-income families with multiple dependants."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Eligibility for APS is based on, but not limited to the applicants’ and his immediate family members’ financial means. Flexibility will be exercised for individuals who may not completely meet the criteria but need help because of their financial circumstances."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The Government will invite these individuals to apply for APS and help them with the process if they are unable to do so themselves."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:18.760Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:18.760Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:18.760Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vqhfp200dx12kzlv1ur3go as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:18.760Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:18.760Z",
+		"updated_at": "2026-09-18T15:01:18.760Z"
+	}
+}

@@ -101,11 +101,43 @@ export function openrouterWriter(key: string, model = DEFAULT_OPENROUTER_MODEL, 
 	};
 }
 
-/** The writer this deployment can use, or nothing — in which case a miss stays a miss. */
+/**
+ * Vendor failures that the other vendor can absorb: no credit, a bad key, a rate limit.
+ * A wrong model name or a malformed request would fail the same way twice, so it is not
+ * retried elsewhere.
+ */
+const HAND_OVER = /\b(401|402|429|5\d\d)\b/;
+
+/** Try the chosen writer; hand over to the other vendor if it cannot be paid. */
+function chain(first: Writer, second: Writer): Writer {
+	return async (prompt) => {
+		try {
+			return await first(prompt);
+		} catch (err) {
+			const message = err instanceof Error ? err.message : String(err);
+			if (!HAND_OVER.test(message)) throw err;
+			console.error('writer handing over to the other vendor:', message.slice(0, 120));
+			return await second(prompt);
+		}
+	};
+}
+
+/**
+ * The writer this deployment can use, or nothing — in which case a miss stays a miss.
+ *
+ * Both keys present means both are used: the chosen model first, the other vendor when the
+ * first cannot be paid. An OpenRouter balance of -$0.09 took the whole product down with it
+ * on 2026-09-18, which is a bad way to learn that one account is a single point of failure.
+ */
 export function writerFor(opts: WriterOptions): Writer | undefined {
 	const openai = opts.model?.startsWith('gpt-');
-	if (openai && opts.openaiKey) return openaiWriter(opts.openaiKey, opts.model, opts.fetchImpl);
-	if (opts.openrouterKey) return openrouterWriter(opts.openrouterKey, openai ? undefined : opts.model, opts.fetchImpl);
-	if (opts.openaiKey) return openaiWriter(opts.openaiKey, openai ? opts.model : undefined, opts.fetchImpl);
-	return undefined;
+	const viaOpenai = opts.openaiKey ? openaiWriter(opts.openaiKey, openai ? opts.model : undefined, opts.fetchImpl) : undefined;
+	const viaOpenrouter = opts.openrouterKey
+		? openrouterWriter(opts.openrouterKey, openai ? undefined : opts.model, opts.fetchImpl)
+		: undefined;
+
+	const chosen = openai ? viaOpenai ?? viaOpenrouter : viaOpenrouter ?? viaOpenai;
+	const other = chosen === viaOpenai ? viaOpenrouter : viaOpenai;
+	if (!chosen) return undefined;
+	return other ? chain(chosen, other) : chosen;
 }

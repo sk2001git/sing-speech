@@ -1,0 +1,105 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.setting-up-singpass-face-verification",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "SFV setup",
+		"full": "Setting up Singpass Face Verification"
+	},
+	"summary": {
+		"text": "You do not need to set up SFV. It starts automatically for potentially suspicious or higher-risk logins and transactions.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "No setup is needed",
+			"body": "Singpass Face Verification does not require any setup. It will start automatically for potentially suspicious or higher-risk logins and transactions.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "More information",
+			"body": "Contact the Singpass Helpdesk directly for more information about Singpass Face Verification.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services",
+			"fighting-scams",
+			"protecting-your-cpf-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I set up Singpass Face Verification (SFV)?",
+			"How do I set up Singpass Face Verification?",
+			"Do I need to set up SFV?",
+			"How does Singpass Face Verification start?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucpy005hpnhl7kodjoz2",
+			"page_title": "How do I set up Singpass Face Verification (SFV)?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-18T15:03:16.165Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Singpass Face Verification (SFV) does not require any setup. It will automatically be triggered for potentially suspicious or higher-risk logins and transactions."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Please contact the Singpass Helpdesk directly for more information on Singpass Face Verification."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:03:16.165Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:03:16.165Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:03:16.165Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmkynucpy005hpnhl7kodjoz2 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:03:16.165Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:03:16.165Z",
+		"updated_at": "2026-09-18T15:03:16.165Z"
+	}
+}

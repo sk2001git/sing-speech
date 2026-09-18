@@ -1,0 +1,132 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.updating-your-address-for-medishield-life",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Updating your",
+		"full": "Updating your address for MediShield Life"
+	},
+	"summary": {
+		"text": "Update your residential address through ICA using Singpass. The change will be shared with participating government organisations.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Where letters are sent",
+			"body": "MediShield Life notification letters are sent to the last known address on your Singapore identity card.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If you have no identity card",
+			"body": "Write to the provided contact to ask about updating your address.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open ICA's service",
+			"text": "Access ICA's change of address e-Service using your Singpass.",
+			"confirm_label": "I opened the service",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Update your address",
+			"text": "Enter and submit your new residential address in the service.",
+			"confirm_label": "I updated my address",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"others"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I inform if there is a change in my address?",
+			"How do I update my address for MediShield Life?",
+			"Where can I change my residential address?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vssljg001fq750ah9e2f6w",
+			"page_title": "How can I inform if there is a change in my address?",
+			"source_modified_at": "2025-04-21",
+			"retrieved_at": "2026-09-18T14:58:00.687Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Any updates will automatically be transmitted to all participating government organisations via the One-Stop Change of Address Reporting Service (OSCARS)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may update your residential address by accessing the Immigration & Checkpoints Authority of Singapore’s (ICA) change of address e-Service (https://go.gov.sg/ic-address) using your Singpass."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "All notification letters relating to MediShield Life will be sent to the last known address on your Singapore identity card (IC), which is the official address as registered with the Singapore Government."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you do not hold an identity card but wish to update your address, please write to us (medishieldlife.sg/writetous) and we will further advise you on your request."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:00.687Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:00.687Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:00.687Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vssljg001fq750ah9e2f6w as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:00.687Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:00.687Z",
+		"updated_at": "2026-09-18T14:58:00.687Z"
+	}
+}

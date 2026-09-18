@@ -1,0 +1,6 @@
+What should I do if I fall prey to a malware/phishing scam?
+In the unfortunate event that you fall prey to a scam, we recommend taking the following actions immediately:
+Alert your bank to freeze the affected bank account.
+Reset your Singpass password if you think your Singpass has been compromised. For further assistance, please contact the official Singpass helpdesk at 6335 3533.
+If you are 55 and above, activate the CPF Withdrawal Lock under Account settings to disable online CPF withdrawals instantly.
+File a police report and provide all details.

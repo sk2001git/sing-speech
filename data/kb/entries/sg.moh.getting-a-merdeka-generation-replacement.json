@@ -1,0 +1,93 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-a-merdeka-generation-replacement",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Replace MG card",
+		"full": "Getting a Merdeka Generation replacement"
+	},
+	"summary": {
+		"text": "Call 1800-650-6060 for help replacing your Merdeka Generation card or welcome folder.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Call for help",
+			"text": "Call 1800-650-6060 for assistance with your lost Merdeka Generation card or damaged welcome folder.",
+			"confirm_label": "I called them",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"merdeka-generation"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I lost my Merdeka Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"I lost my Merdeka Generation card",
+			"How do I replace my MG card?",
+			"My Merdeka welcome folder is damaged",
+			"I need a replacement MG card"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2ov0h54003f46yzs7we3xu0",
+			"page_title": "I lost my Merdeka Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"retrieved_at": "2026-09-18T15:01:48.178Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Please call 1800-650-6060 for assistance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:48.178Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:48.178Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:48.178Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2ov0h54003f46yzs7we3xu0 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:48.178Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:48.178Z",
+		"updated_at": "2026-09-18T15:01:48.178Z"
+	}
+}

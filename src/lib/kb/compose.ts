@@ -81,13 +81,13 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		`- Every quote field must be copied verbatim from the answer above, as one unbroken run of its text. A line that is not on the page is rejected and the person is told Suara does not know.`,
 		'- You may choose, order and shorten. You may not add a fact, a number, a name or a condition that is not above.',
 		`- "kind":"process" when the answer is something to do, with steps in order; "answer" when it is something to know, with details.`,
-		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their voice: "I have the form".',
+		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their own words: "I have the form", "I called them". Never "Done", "Next", "OK" or "Continue".',
 		`- Answer the question that was asked. Leave out what is on the page but does not bear on it.`,
 		`- Write in ${reply}, short sentences, no jargon, no "please note", nothing about websites the person cannot use.`,
-		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= ${LIMITS.summary}, step text <= ${LIMITS.step}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
+		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
 		'- short is the one line on the card: two or three words, no punctuation.',
-		'- full is a heading that names the thing, not a sentence and never ending in a full stop: "What ElderFund is for", "Paying a bill with MediSave".',
-		'- At least 3 phrasings: other ways a person might ask this out loud, including the way this person did.',
+		'- full is a heading that names the thing, not a sentence and never ending in a full stop: "What ElderFund is for", "Paying a bill with MediSave". It says more than short does, so the two are never the same words.',
+		'- Exactly three or four phrasings: short, different ways a person might ask this out loud, including the way this person did. Fewer than three and the card is rejected.',
 		'- At most 6 steps and at most 4 details.',
 	];
 	if (problems?.length) {
@@ -134,6 +134,9 @@ export function shorten(text: string, limit: number): string {
 	}
 	return out || [...squash(text)].slice(0, limit).join('');
 }
+
+/** Words a kiosk uses. A person says what they did. */
+const LAZY_CONFIRM = new Set(['done', 'next', 'ok', 'okay', 'continue', 'confirm', 'yes', 'proceed', 'finish', 'finished']);
 
 const scamWords = /scam|phish|impersonat|fraud/i;
 
@@ -211,6 +214,23 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 			{ where: `details.${i}.body`, value: d.body ?? '', limit: LIMITS.body },
 		]),
 	];
+	/*
+	 * A confirmation button is the one place a person speaks in this product: tapping "I have
+	 * the form" is a different act from tapping "Done", and the difference is whether the
+	 * screen sounds like a person or a kiosk.
+	 */
+	for (const [i, step] of steps.entries()) {
+		if (LAZY_CONFIRM.has(squash(step.confirm_label ?? '').toLowerCase())) {
+			errors.push(`steps.${i}.confirm_label must be the person's own words, not "${step.confirm_label}"`);
+		}
+	}
+
+	// The label is what fits on the card; the heading is what the card is about. Identical
+	// ones waste the only line that can say more.
+	if (squash(draft.short ?? '').toLowerCase() === squash(draft.full ?? '').toLowerCase()) {
+		errors.push('full must say more than short does');
+	}
+
 	// A heading that is a sentence reads as an answer and crowds the card; the model writes
 	// one whenever it is not told otherwise.
 	if ((draft.full ?? '').trim().endsWith('.')) errors.push('full is a heading, not a sentence: drop the full stop');

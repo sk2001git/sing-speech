@@ -1,0 +1,146 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-help-with-premium-payments",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Getting help",
+		"full": "Getting help with premium payments"
+	},
+	"summary": {
+		"text": "Pay MediShield Life premiums from MediSave. If that is not enough, get help from family or call the MediShield Life hotline.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Additional Premium Support",
+			"body": "Additional Premium Support is available if you still have difficulty paying after Government subsidies and MediSave use, and have limited family support. The Government will invite eligible people to apply and help them if needed. You do not need to apply ahead of time.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Coverage continues",
+			"body": "No one will lose MediShield Life coverage because they cannot pay their premiums.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Use MediSave",
+			"text": "Pay your MediShield Life premium from your MediSave account.",
+			"confirm_label": "I used MediSave",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Find more money",
+			"text": "If your MediSave is not enough, top up your account with cash or ask a family member with enough MediSave to help.",
+			"confirm_label": "I found payment help",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Call for support",
+			"text": "If you still cannot pay, call the MediShield Life hotline for support.",
+			"confirm_label": "I called the hotline",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"medishield-life-2024-review"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Where can I get help if I cannot afford my premiums?",
+			"What can I do if I cannot pay my MediShield Life premium?",
+			"Who can help me pay my premiums?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm28jxtls002p9apor833zbas",
+			"page_title": "Where can I get help if I cannot afford my premiums?",
+			"source_modified_at": "2024-11-21",
+			"retrieved_at": "2026-09-18T14:58:04.352Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "MediShield Life premiums are fully payable by MediSave."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If there are insufficient monies in the MediSave account, policyholders can top up their account with cash or their family members with sufficient MediSave balance can step in to support their premium payments."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "In such instances, individuals may call the MediShield Life hotline or visit the MediShield Life e-service website (https://medishieldlife.moh.gov.sg)."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Additional Premium Support (APS) is also available for those who face difficulty paying for premiums even after Government subsidies and MediSave use, and have limited family support. The Government will invite individuals with insufficient MediSave balances to apply for APS and help them with the process if they are unable to do so themselves. There is no need for individuals to apply for APS ahead of time."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "No one will lose coverage from MediShield Life because of an inability to pay their premiums."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:04.352Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:04.352Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:04.352Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm28jxtls002p9apor833zbas as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:04.352Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:04.352Z",
+		"updated_at": "2026-09-18T14:58:04.352Z"
+	}
+}

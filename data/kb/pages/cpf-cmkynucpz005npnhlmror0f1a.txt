@@ -1,0 +1,8 @@
+Why is Singpass Face Verification failing for me?
+There may be several possible reasons for this. For ways to improve the success of Singpass Face Verification, you should ensure that:
+Your face is not covered
+You keep still while scanning is in progress
+Your environment is not too dark
+There is no strong lighting in the background
+You use a minimum resolution of two megapixels for the camera. If you are using a laptop, you may wish to try again using a mobile phone which has a better camera
+If you require assistance with Singpass Face Verification, please contact the Singpass Helpdesk directly.

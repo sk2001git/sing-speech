@@ -1,0 +1,152 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.help-with-healthcare-costs",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave help",
+		"full": "Help with healthcare costs"
+	},
+	"summary": {
+		"text": "If your MediSave is depleted, use family MediSave and apply for Government assistance schemes. MediFund and ComCare may also help.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why the $5,000 balance exists",
+			"body": "The minimum MediSave Account balance under MediSave Care is intended to help people keep some savings for healthcare bills.",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Spouse's MediSave",
+			"text": "For long-term care withdrawals, tap on your spouse's MediSave.",
+			"confirm_label": "I used spouse MediSave",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Family MediSave",
+			"text": "For other healthcare treatments, tap on your family members' MediSave.",
+			"confirm_label": "I used family MediSave",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Government assistance",
+			"text": "Apply for other forms of assistance, such as ElderFund or Home Caregiving Grant, to meet your long-term care costs.",
+			"confirm_label": "I applied for help",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Other support",
+			"text": "If you still cannot pay after Government subsidies and other support, consider MediFund and ComCare.",
+			"confirm_label": "I checked other support",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medisave-care"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What if I have insufficient MediSave balances for my healthcare and long-term care expenses?",
+			"What can I do if my MediSave runs out?",
+			"How can I pay for care without enough MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup600fghipnmsryemrl",
+			"page_title": "What if I have insufficient MediSave balances for my healthcare and long-term care expenses?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T15:01:47.751Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you have depleted your MediSave account, you may tap on your spouse's MediSave for long-term care withdrawals, and your family members' MediSave for your other healthcare treatments."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "you may tap on your spouse's MediSave for long-term care withdrawals"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "your family members' MediSave for your other healthcare treatments"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You may also apply for other forms of assistance such as means-tested Government assistance schemes (ElderFund, Home Caregiving Grant) to meet your long-term care costs needs."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "If you are still unable to pay for your care even after Government subsidies and other means of support, there are other forms of assistance such as MediFund and ComCare."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "The minimum MediSave Account balance of $5,000 under MediSave Care is carefully set to help individuals maintain some savings to pay for for their healthcare bills."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:47.751Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:47.751Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:47.751Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuup600fghipnmsryemrl as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:47.751Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:47.751Z",
+		"updated_at": "2026-09-18T15:01:47.751Z"
+	}
+}

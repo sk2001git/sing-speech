@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.checking-medisave-payable",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Check MediSave",
+		"full": "Checking MediSave payable"
+	},
+	"summary": {
+		"text": "Use the Self-employment dashboard with Singpass to check your MediSave payable. If you do not have Singpass, apply for it online.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Get Singpass",
+			"text": "If you do not have Singpass, apply for it online.",
+			"confirm_label": "I applied for Singpass",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check MediSave",
+			"text": "Log in to the Self-employment dashboard using your Singpass to check your MediSave payable.",
+			"confirm_label": "I checked my MediSave",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"self-employed-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I check whether I have any MediSave payable as a self-employed person?",
+			"How do I check my MediSave payable?",
+			"Where can I see what I need to pay into MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kw0003npz7a2bpygdlq",
+			"page_title": "How can I check whether I have any MediSave payable as a self-employed person?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:58:21.107Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can check your MediSave payable by logging in to the Self-employment dashboard using your Singpass."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can apply for your Singpass online if you do not have one."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:21.107Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:21.107Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:21.107Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kw0003npz7a2bpygdlq as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:21.107Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:21.107Z",
+		"updated_at": "2026-09-18T14:58:21.107Z"
+	}
+}

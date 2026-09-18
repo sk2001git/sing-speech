@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.medishield-life-subsidy-validity-period",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Subsidy validity",
+		"full": "MediShield Life subsidy validity period"
+	},
+	"summary": {
+		"text": "Your MediShield Life premium subsidy eligibility is generally valid for one year.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Validity Period",
+			"body": "In general, your subsidy eligibility will be valid for one year. Your subsidy eligibility may be updated when there are changes to your household information, such as a new-born in your household or when you apply for / renew your status under other healthcare subsidy schemes such as the Community Health Assist Scheme (CHAS).",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the validity period for my subsidy eligibility for MediShield Life Premium Subsidies?",
+			"How long are my MediShield Life subsidies valid for?",
+			"When does my MediShield Life premium subsidy expire?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqe6ce00l3r5bfwzc4guiy",
+			"page_title": "What is the validity period for my subsidy eligibility for MediShield Life Premium Subsidies?",
+			"source_modified_at": "2024-11-21",
+			"retrieved_at": "2026-09-18T14:56:17.927Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "In general, your subsidy eligibility will be valid for one year."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "In general, your subsidy eligibility will be valid for one year. Your subsidy eligibility may be updated when there are changes to your household information, such as a new-born in your household or when you apply for / renew your status under other healthcare subsidy schemes such as the Community Health Assist Scheme (CHAS)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:17.927Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:17.927Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:17.927Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vqe6ce00l3r5bfwzc4guiy as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:17.927Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:17.927Z",
+		"updated_at": "2026-09-18T14:56:17.927Z"
+	}
+}

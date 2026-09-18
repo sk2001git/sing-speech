@@ -43,6 +43,19 @@ describe('tokenise', () => {
 		expect(tokenise('MediSave — withdrawal LIMITS?')).toEqual(['medisave', 'withdrawal', 'limit']);
 	});
 
+	it('leaves a short name alone, because CHAS is not a plural of CHA', () => {
+		// "how do I apply for the CHAS card" retrieved lost-card replacement pages: the word
+		// the whole question turns on had been stemmed away.
+		expect(tokenise('how do I apply for the CHAS card')).toEqual(['apply', 'chas', 'card']);
+		// A four-letter acronym keeps its s, even a plural one: getting CHAS right matters more
+		// than matching SOC to SOCs, which nobody says out loud.
+		expect(tokenise('MediSave and CPF and HDB and SOCs')).toEqual(['medisave', 'cpf', 'hdb', 'socs']);
+	});
+
+	it('still reduces a real plural', () => {
+		expect(tokenise('nominations premiums claims')).toEqual(['nomination', 'premium', 'claim']);
+	});
+
 	it('treats a curly apostrophe like a straight one', () => {
 		expect(tokenise('member’s')).toEqual(tokenise("member's"));
 	});

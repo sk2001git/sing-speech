@@ -139,6 +139,48 @@ function objectsWithId(payload: string): string[] {
 	return out;
 }
 
+/**
+ * Rows that hold a long string on their own.
+ *
+ * React Server Components stream a long value as its own row — `64:T685,<p>…` where 685 is
+ * the byte length — and leave `"$64"` where the value belongs. A quarter of the crawl came
+ * back as `"$64"` before this was handled, including the CHAS application page, which is
+ * the single most asked-for answer in the corpus.
+ */
+function textRows(payload: string): Map<string, string> {
+	const rows = new Map<string, string>();
+	const encoder = new TextEncoder();
+	const decoder = new TextDecoder();
+
+	for (const m of payload.matchAll(/(?:^|\n)([0-9a-f]+):T([0-9a-f]+),/g)) {
+		const start = m.index + m[0].length;
+		const bytes = encoder.encode(payload.slice(start));
+		rows.set(m[1]!, decoder.decode(bytes.slice(0, parseInt(m[2]!, 16))));
+	}
+
+	// The shorter form: the row is simply a JSON string.
+	for (const m of payload.matchAll(/(?:^|\n)([0-9a-f]+):("(?:[^"\\]|\\.)*")/g)) {
+		if (rows.has(m[1]!)) continue;
+		try {
+			rows.set(m[1]!, JSON.parse(m[2]!) as string);
+		} catch {
+			// Not a string row, so not a value we can use.
+		}
+	}
+	return rows;
+}
+
+/** `$64` means "the value is in row 64". */
+const REFERENCE = /^\$([0-9a-f]+)$/;
+
+/**
+ * Flight marks a Date as `$D2024-10-28T04:32:57.990Z`. Left in place the prefix reaches the
+ * entry schema as `$D2024-10-` and every entry built from that page is rejected as an
+ * invalid date — which is how 46 of 141 entries failed their first build.
+ */
+export const readDate = (value: string | null | undefined): string | null =>
+	value ? value.replace(/^\$D/, '') : null;
+
 interface Embedded {
 	id: string;
 	title?: string;
@@ -158,15 +200,20 @@ const topicLine = (t: NonNullable<Embedded['topics']>[number]) =>
  * labels the whole priority ranking depends on.
  */
 export function parseQuestions(html: string): RawQuestion[] {
+	const payload = readPayload(html);
+	const rows = textRows(payload);
 	const best = new Map<string, { raw: string; question: RawQuestion }>();
-	for (const raw of objectsWithId(readPayload(html))) {
+	for (const raw of objectsWithId(payload)) {
 		let obj: Embedded;
 		try {
 			obj = JSON.parse(raw) as Embedded;
 		} catch {
 			continue;
 		}
-		const body = obj.answer?.body;
+		const referenced = REFERENCE.exec(obj.answer?.body ?? '');
+		// A reference whose row is not on the page leaves nothing to quote, so the question is
+		// left out rather than stored with a placeholder for an answer.
+		const body = referenced ? rows.get(referenced[1]!) : obj.answer?.body;
 		if (!obj.title || !body) continue;
 		const question: RawQuestion = {
 			id: obj.id,
@@ -175,7 +222,7 @@ export function parseQuestions(html: string): RawQuestion[] {
 			html: body,
 			topics: (obj.topics ?? []).map(topicLine).filter(Boolean),
 			useful: obj.answer?.numPositiveFeedback ?? 0,
-			updatedAt: obj.updatedAt ?? null,
+			updatedAt: readDate(obj.updatedAt),
 		};
 		const held = best.get(obj.id);
 		if (!held || raw.length > held.raw.length) best.set(obj.id, { raw, question });

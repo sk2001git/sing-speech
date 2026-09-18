@@ -1,0 +1,111 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.applying-for-additional-premium-support",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Apply for APS",
+		"full": "Applying for Additional Premium Support"
+	},
+	"summary": {
+		"text": "You do not need to apply ahead of time. You will be invited to apply if you have insufficient MediSave.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who APS is for",
+			"body": "Additional Premium Support provides financial assistance to members who are unable to afford their premiums after premium subsidies and MediSave use, and have limited family support.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Wait for letter",
+			"text": "Wait to receive an invitation letter in the mail. Details on the application process will be included in this letter.",
+			"confirm_label": "I have the letter",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"additional-premium-support"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I apply for Additional Premium Support to pay for my MediShield Life and/or CareShield Life Premiums?",
+			"How do I apply for Additional Premium Support?",
+			"Can I apply for APS for my premiums?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqixjm00bxa71bkq38cbhn",
+			"page_title": "How can I apply for Additional Premium Support to pay for my MediShield Life and/or CareShield Life Premiums?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-18T14:56:15.305Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You will be invited to apply for APS should you have insufficient MediSave, and details on the application process will be included in the invitation letter. There is no need for you to apply for APS ahead of time."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You will be invited to apply for APS should you have insufficient MediSave, and details on the application process will be included in the invitation letter."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Additional Premium Support (APS) provides financial assistance to members who are unable to afford their premiums after premium subsidies and MediSave use, and have limited family support."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:15.305Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:15.305Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:15.305Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vqixjm00bxa71bkq38cbhn as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:15.305Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:15.305Z",
+		"updated_at": "2026-09-18T14:56:15.305Z"
+	}
+}

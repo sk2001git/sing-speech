@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-can-assess-careshield-life-claims",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Who can assess",
+		"full": "Who can assess CareShield Life claims"
+	},
+	"summary": {
+		"text": "Not every registered professional can assess claims. Assessors must be MOH-accredited and trained.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Current assessors",
+			"body": "The assessor pool includes trained therapists and nurses, as well as other MOH-accredited assessors. They must complete training and accreditation before assessing severe disability.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Equivalent assessments",
+			"body": "The Government is looking into accepting assessments by qualified healthcare professionals caring for the patient. This may include doctors, occupational therapists, physiotherapists and registered nurses, so the patient would not need a separate assessment. This will be rolled out progressively.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"eldershield",
+			"eldershield-claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can any registered doctor, therapist or nurse assess CareShield claims?",
+			"Who is allowed to assess CareShield Life disability?",
+			"Can the assessor pool be expanded?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup400eahipnyirvnaqg",
+			"page_title": "Can the pool of assessors for CareShield Life/ElderShield be expanded to include any Singapore-registered doctor, therapist or nurse?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T15:02:31.836Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "A trained, accredited severe disability assessor will be able to assess whether the applicant meets the CareShield Life/ElderShield criteria of being unable to perform three or more of the six Activities of Daily Living (ADLs)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "We have expanded the list of accredited assessors to include therapists and nurses who have been trained."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The Government is also looking into recognising equivalent assessments that have been performed by a qualified healthcare professional (doctor, occupational therapists, physiotherapists, and registered nurses) providing care to the patient."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:02:31.836Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:02:31.836Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:02:31.836Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuup400eahipnyirvnaqg as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:02:31.836Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:02:31.836Z",
+		"updated_at": "2026-09-18T15:02:31.836Z"
+	}
+}

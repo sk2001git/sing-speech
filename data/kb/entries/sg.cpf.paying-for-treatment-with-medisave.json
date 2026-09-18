@@ -1,0 +1,139 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.paying-for-treatment-with-medisave",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Use MediSave",
+		"full": "Paying for treatment with MediSave"
+	},
+	"summary": {
+		"text": "Tell the clinic, check your available MediSave, and sign the authorisation form.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Tell the clinic",
+			"text": "Tell the clinic that you wish to use MediSave to pay for your outpatient treatment. Show your NRIC or passport.",
+			"confirm_label": "I told the clinic",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check your balance",
+			"text": "If the clinic asks how much MediSave is available, check your Healthcare dashboard under my cpf digital services with your Singpass. You do not need to do this if the clinic can check for you.",
+			"confirm_label": "I checked the amount",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Sign the form",
+			"text": "You and the patient, if applicable, must sign the Medical Claims Authorisation Form.",
+			"confirm_label": "I signed the form",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Bring payment details",
+			"text": "If your employer or insurer is also paying, bring your Letter of Guarantee or Employer Identity Pass, if your clinic has an existing arrangement with them.",
+			"confirm_label": "I brought the document",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I visited a clinic for an outpatient treatment that can be paid by my MediSave. How do I go about utilising my MediSave?",
+			"How do I use MediSave at the clinic?",
+			"Can I pay for my outpatient treatment with MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0401odpz7az8f8gzkh",
+			"page_title": "I visited a clinic for an outpatient treatment that can be paid by my MediSave. How do I go about utilising my MediSave?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:58:37.466Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To use your MediSave to pay for your outpatient medical treatment cost:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Inform the clinic that you wish to use MediSave to pay for your outpatient medical treatment. The staff will require your NRIC/Passport."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The clinic may require information on how much MediSave is available for payment of the outpatient treatment. You will be able to obtain this information by logging in to your Healthcare dashboard under my cpf digital services with your Singpass."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You and the patient (if applicable) must sign a Medical Claims Authorisation Form to allow the clinic to use your MediSave to pay for the outpatient medical treatment bill."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "If your employer or insurer is also paying for your outpatient treatment, please bring along your Letter of Guarantee or Employer Identity Pass"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:37.466Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:37.466Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:37.466Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52l0401odpz7az8f8gzkh as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:37.466Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:37.466Z",
+		"updated_at": "2026-09-18T14:58:37.466Z"
+	}
+}

@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.medisave-limits-for-hospital-stays",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave limits",
+		"full": "MediSave limits for hospital stays"
+	},
+	"summary": {
+		"text": "You can use MediSave up to $1,130 daily for the first two days and $400 daily after. Surgery limits depend on surgery complexity.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Daily hospital charges",
+			"body": "You can use up to $1,130 per day from MediSave for the first two days of inpatient stays, and $400 per day thereafter.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Surgery costs",
+			"body": "The amount you can use depends on the complexity of your surgery.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Hospital stay rule",
+			"body": "You are considered hospitalised if you have been admitted for at least eight hours. This requirement does not apply to day surgeries.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"If I am hospitalised, how much MediSave can I use to pay for my hospitalisation expenses?",
+			"How much MediSave can I use for my hospital stay?",
+			"What is the MediSave limit for hospitalisation?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0301nlpz7a1z3gbqzu",
+			"page_title": "If I am hospitalised, how much MediSave can I use to pay for my hospitalisation expenses?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:56:24.676Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "For daily hospital charges1, you can use up to $1,130 per day from MediSave for the first two days of inpatient stays, and $400 per day thereafter."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The amount of MediSave you can use depends on the complexity of your surgery, as listed in the Table of Surgical Procedures."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "It is useful to note that you are considered hospitalised if you have been admitted for at least eight hours. This requirement does not apply to day surgeries."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:24.676Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:24.676Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:24.676Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52l0301nlpz7a1z3gbqzu as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:24.676Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:24.676Z",
+		"updated_at": "2026-09-18T14:56:24.676Z"
+	}
+}

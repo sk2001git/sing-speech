@@ -40,11 +40,18 @@ const STOP = new Set([
 	'your',
 ]);
 
-/** `nominations` and `nomination` are the same word to a person asking. */
+/**
+ * `nominations` and `nomination` are the same word to a person asking.
+ *
+ * Nothing of four letters or fewer is touched. Singapore's public services are named in
+ * acronyms — CHAS, SOCs, AIC, LOG — and stemming CHAS to "cha" sent "how do I apply for the
+ * CHAS card" to the lost-card replacement pages, because the one word the question turned
+ * on had been filed away.
+ */
 const stem = (word: string) => {
-	if (word.length > 4 && word.endsWith('ies')) return `${word.slice(0, -3)}y`;
-	if (word.length > 4 && (word.endsWith('ses') || word.endsWith('xes') || word.endsWith('hes'))) return word.slice(0, -2);
-	if (word.length > 3 && word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);
+	if (word.length > 5 && word.endsWith('ies')) return `${word.slice(0, -3)}y`;
+	if (word.length > 5 && (word.endsWith('ses') || word.endsWith('xes') || word.endsWith('hes'))) return word.slice(0, -2);
+	if (word.length > 4 && word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);
 	return word;
 };
 

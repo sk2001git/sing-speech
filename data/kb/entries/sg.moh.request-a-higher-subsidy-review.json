@@ -1,0 +1,118 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.request-a-higher-subsidy-review",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Request a higher",
+		"full": "Request a higher subsidy review"
+	},
+	"summary": {
+		"text": "Submit a request to reassess your household and/or means information through the MediShield Life e-Service.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "After you submit",
+			"body": "MOH will contact you if more information is needed.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Another way to ask",
+			"body": "You may call the hotline instead.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Submit a reassessment request",
+			"text": "Submit your request through the MediShield Life e-Service.",
+			"confirm_label": "I submitted my request",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I have my means test reassessed?",
+			"I was sent to MediShield Life for a higher subsidy",
+			"Can I ask for a review of my subsidy result?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vq4uf500i08ocvra1l063u",
+			"page_title": "I am applying for subsidy from another healthcare scheme, but was directed to approach MediShield Life. What can I do to have my means-test result reassessed so that I can be eligible for higher subsidy?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-18T15:01:15.799Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To reassess your household and/or means information for MediShield Life Premium Subsidies and/or other selected healthcare schemes, please submit your request via the MediShield Life e-Service (https://medishieldlife.moh.gov.sg/)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "We will contact you if we require further clarification on your request."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Alternatively, you may wish to call the hotline at 1800-222-3399."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:15.799Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:15.799Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:15.799Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vq4uf500i08ocvra1l063u as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:15.799Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:15.799Z",
+		"updated_at": "2026-09-18T15:01:15.799Z"
+	}
+}

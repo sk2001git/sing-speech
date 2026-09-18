@@ -145,6 +145,22 @@ describe('draftToEntry', () => {
 		expect(made.errors.join(' ')).toContain('heading, not a sentence');
 	});
 
+	it('refuses "Done" as a confirmation, because it is the person’s own words that reassure', () => {
+		for (const label of ['Done', 'Next', 'OK', 'Continue']) {
+			const lazy = { ...draft, steps: [{ ...draft.steps[0]!, confirm_label: label }] };
+			const made = draftToEntry(lazy, { asked: ASKED, doc, language: 'en' }, NOW);
+			expect(made.ok, label).toBe(false);
+		}
+	});
+
+	it('refuses a heading that only repeats the label', () => {
+		const same = { ...draft, short: 'Who pays first', full: 'Who pays first' };
+		const made = draftToEntry(same, { asked: ASKED, doc, language: 'en' }, NOW);
+		expect(made.ok).toBe(false);
+		if (made.ok) return;
+		expect(made.errors.join(' ')).toMatch(/full/);
+	});
+
 	it('is an answer, not a process, when there are no steps', () => {
 		const flat: Draft = {
 			...draft,

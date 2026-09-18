@@ -1,0 +1,153 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-to-spot-a-scam-call",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Spot scam calls",
+		"full": "How to spot a scam call"
+	},
+	"summary": {
+		"text": "Check the caller, the phone number, and the message. Do not give personal or financial information over the phone.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Calls from MOH",
+			"body": "MOH is aware of calls falsely informing recipients that the caller is from MOH and requesting personal or financial information over the phone. Do not respond to such calls.",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check for a plus sign",
+			"text": "If a local call has a “+” prefix, do not answer it. This is likely to be a spoofed call.",
+			"confirm_label": "I checked the number",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Listen to the message",
+			"text": "If the caller sends a recorded message, do not treat it as an official call.",
+			"confirm_label": "I heard the message",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Protect your information",
+			"text": "Do not give personal or financial information over the phone, even if the caller says they are from MOH.",
+			"confirm_label": "I gave no information",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Verify the caller",
+			"text": "To check a call from MOH, call MOH General Line 6325 9220. Verify the authenticity of the MOH number and the caller’s full name.",
+			"confirm_label": "I called MOH",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"covid-19",
+			"general-advisory"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How to spot a scam call?",
+			"How can I tell if a call is a scam?",
+			"How do I know whether a caller is really from MOH?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clhq0irrz00g2jz08rzhixg4a",
+			"page_title": "How to spot a scam call?",
+			"source_modified_at": "2025-12-08",
+			"retrieved_at": "2026-09-18T14:59:42.567Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Always be sure of the authenticity of instructions before offering any personal or financial information."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Official local calls will usually not have a “+” prefix - this is likely to be a spoofed call which you should not answer."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Official callers will never send you a recorded message."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Official callers will never request your personal or financial information over the phone."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "To verify the authenticity of calls from MOH, call MOH General Line 6325 9220 to verify the authenticity of the MOH number and full name of the caller."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "MOH is aware of calls falsely informing recipients that the caller is from MOH, requesting your personal or financial information over the phone. We urge recipients not to respond to such calls."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:42.567Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:42.567Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:42.567Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clhq0irrz00g2jz08rzhixg4a as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:42.567Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:42.567Z",
+		"updated_at": "2026-09-18T14:59:42.567Z"
+	}
+}

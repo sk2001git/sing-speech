@@ -1,0 +1,92 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.why-cpf-requires-another-update",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Why update again",
+		"full": "Why CPF requires another update"
+	},
+	"summary": {
+		"text": "The one-time update is required even after an earlier PayNow withdrawal to strengthen security against scams.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why it is needed",
+			"body": "CPF requires this one-time update even if you used PayNow before. It is an added safeguard to strengthen security against scams.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"retirement-income",
+			"retirement-withdrawals",
+			"fighting-scams",
+			"updating-your-account-details"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why do I need to update my bank account again?",
+			"I have used PayNow before. Why update it now?",
+			"Why is another CPF bank account update needed?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq1006lpnhldpqg9zs3",
+			"page_title": "Why do I need to update my registered bank account with CPF Board to my PayNow NRIC-linked bank account to make PayNow withdrawals if I have already withdrawn via PayNow previously?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-18T14:59:54.747Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "This update is required even if you have withdrawn via PayNow previously, as a one-time exercise to strengthen security against scams."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:54.747Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:54.747Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:54.747Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmkynucq1006lpnhldpqg9zs3 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:54.747Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:54.747Z",
+		"updated_at": "2026-09-18T14:59:54.747Z"
+	}
+}

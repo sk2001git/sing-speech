@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-counts-as-your-household",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Who counts as",
+		"full": "Who counts as your household"
+	},
+	"summary": {
+		"text": "Your household includes related family members who live at the same residence. Some people living there are not included.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who is included",
+			"body": "Family members related by blood, marriage or legal adoption are included if they live at the same residence. Examples include your spouse, parents, children, grandparents, grandchildren, siblings, uncles, aunts, cousins and in-laws.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Who is not included",
+			"body": "Domestic helpers, unrelated landlords or tenants, fiancé or fiancée, future in-laws, godparents and friends are not included, even if they live at the same address. Family members who do not live at your address are also not included for means-testing.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"information-used-for-means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Who should be considered as a member of my household? What is the definition of a household?",
+			"Who counts as part of my household?",
+			"Which people living with me are included in my household?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vq8wzo00l29apovxqi1for",
+			"page_title": "Who should be considered as a member of my household? What is the definition of a household?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-18T14:57:55.215Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Only family members related by blood, marriage and/or legal adoption, (e.g. spouse, parents, children, grandparents, grandchildren, siblings, uncles, aunts, cousins and in-laws) and who live at the same residence are considered members of your household."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Domestic helpers, unrelated landlord/tenants, fiancé/fiancee, future in-laws, godparents and friends living at the same address are not considered members of your household. Family members not living at your address are not considered members of your household for the purposes of means-testing."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:57:55.215Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:57:55.215Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:57:55.215Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vq8wzo00l29apovxqi1for as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:57:55.215Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:57:55.215Z",
+		"updated_at": "2026-09-18T14:57:55.215Z"
+	}
+}

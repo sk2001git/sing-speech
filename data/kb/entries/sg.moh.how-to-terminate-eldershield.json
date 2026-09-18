@@ -1,0 +1,135 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-to-terminate-eldershield",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "How to terminate",
+		"full": "How to terminate ElderShield"
+	},
+	"summary": {
+		"text": "Use the Termination of ElderShield e-Service. Ending it means losing all existing benefits.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What you will lose",
+			"body": "You will lose all existing benefits if you terminate your policy.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If you later join CareShield Life",
+			"body": "You may have to go for a medical assessment if you wish to join CareShield Life.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Consider keeping your policy",
+			"body": "MOH encourages you to consider keeping your ElderShield policy for basic long-term care protection.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Terminate your policy",
+			"text": "Use the Termination of ElderShield e-Service to end your ElderShield policy.",
+			"confirm_label": "I used the e-Service",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"eldershield",
+			"eldershield-coverage"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I terminate my ElderShield policy?",
+			"How can I end my ElderShield cover?",
+			"I want to stop my ElderShield policy"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup100cihipn943wfjdg",
+			"page_title": "How do I terminate my ElderShield policy?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:23.110Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can terminate your ElderShield via the Termination of ElderShield e-Service if you do not wish to continue to be covered under the scheme."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can terminate your ElderShield via the Termination of ElderShield e-Service"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "However, you will lose all existing benefits"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "you may have to go for a medical assessment if you wish to join CareShield Life"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "We encourage you to consider keeping your ElderShield policy to ensure you continue to have basic protection for long-term care."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:23.110Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:23.110Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:23.110Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuup100cihipn943wfjdg as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:23.110Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:23.110Z",
+		"updated_at": "2026-09-18T14:59:23.110Z"
+	}
+}

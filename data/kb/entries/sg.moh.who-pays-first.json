@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-pays-first",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Who pays first",
+		"full": "Who pays first"
+	},
+	"summary": {
+		"text": "Your employer pays first. Then MediShield Life pays the remaining amount, subject to your claim limits, deductible, and co-insurance.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Remaining payment order",
+			"body": "After MediShield Life, MediSave pays next, followed by cash.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Employer pays",
+			"text": "Let your employer, private insurance, or other third-party payer pay first.",
+			"confirm_label": "Done",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "MediShield Life pays",
+			"text": "Then MediShield Life or your Integrated Shield Plan pays for the portion of the bill that is not covered.",
+			"confirm_label": "Done",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"claims-under-medishield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I am covered by Employer Medical Benefits. Can I claim from MediShield Life as well? Who pays first?",
+			"Who pays first between employer medical benefits and MediShield Life",
+			"Can I claim MediShield Life if I have employer insurance"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vpnfru00d012kzj38nxu0h",
+			"page_title": "I am covered by Employer Medical Benefits. Can I claim from MediShield Life as well? Who pays first?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-18T14:48:04.295Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Employer, private insurance, other third party pays first"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Followed by MediShield Life (MSHL)/Integrated Shield Plan (IP)"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Then MediSave"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:48:04.295Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:48:04.295Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:48:04.295Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2vpnfru00d012kzj38nxu0h as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:48:04.295Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:48:04.295Z",
+		"updated_at": "2026-09-18T14:48:04.295Z"
+	}
+}

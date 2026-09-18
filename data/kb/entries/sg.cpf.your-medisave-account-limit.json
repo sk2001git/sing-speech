@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.your-medisave-account-limit",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave limit",
+		"full": "Your MediSave Account limit"
+	},
+	"summary": {
+		"text": "Before age 65, you can save up to the Basic Healthcare Sum, or BHS, in your MediSave Account. From 1 January 2026, it is $79,000.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "The 2026 limit",
+			"body": "From 1 January 2026, the BHS is $79,000 for CPF members aged 65 and below.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "After age 65",
+			"body": "Your BHS is adjusted yearly until you turn 65. When you turn 65, your applicable BHS is fixed for life.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"basic-healthcare-sum"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Is there a maximum amount that I can save in my MediSave Account?",
+			"What is the most I can keep in MediSave?",
+			"How much can I save in my MediSave Account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o",
+			"page_title": "Is there a maximum amount that I can save in my MediSave Account?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T14:58:18.255Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can save up to the prevailing Basic Healthcare Sum (BHS) in your MediSave Account (MA) if you have not turned age 65."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "From 1 January 2026, the BHS is $79,000 for all CPF members aged 65 years and below."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The BHS applicable to you will be adjusted yearly to keep pace with rising healthcare consumption until you turn age 65."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:18.255Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:18.255Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:18.255Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kzy01l1pz7aw5sgje7o as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:18.255Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:18.255Z",
+		"updated_at": "2026-09-18T14:58:18.255Z"
+	}
+}

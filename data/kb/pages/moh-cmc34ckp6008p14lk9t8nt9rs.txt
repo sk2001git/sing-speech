@@ -1,0 +1,11 @@
+What should I do if I accidentally reported a number as scam?
+Please note that the ScamShield app only blocks phone numbers that have been marked as scam in the ScamShield database. These numbers are marked by the authorities based on reports from the community about suspicious or scam-related activity.
+Please be assured that a single report alone does not automatically mark a phone number as a scam. Our system uses multiple data points and verification processes to determine if a number is suspicious.
+If this is a legitimate phone number, you don't need to worry. The phone number won't be incorrectly marked as a scam based on a single report.
+If you've accidentally reported a number as "scam", you may use the Check for Scams feature to check if the phone number is marked as scam in the ScamShield database.
+A phone number is only blocked if the check outcome appears red with the message "Beware, this looks like a scam."
+Only phone numbers from government and healthcare institutions that have been whitelisted will be marked as "Safe".
+If you get an outcome saying “Be careful, we're not sure about this one”, the number has not been marked as "Scam" or blocked.
+If you believe a phone number has been wrongly marked as scam, please reach out to the ScamShield Helpline at 1799 to request an unblock.
+In addition, please submit a new scam report on the ScamShield app for the suspicious phone number you have come across.
+Hope this helps!

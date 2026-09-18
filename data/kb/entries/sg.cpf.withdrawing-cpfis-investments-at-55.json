@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.withdrawing-cpfis-investments-at-55",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPFIS at 55",
+		"full": "Withdrawing CPFIS investments at 55"
+	},
+	"summary": {
+		"text": "You can withdraw CPFIS investments if you have set aside the Full Retirement Sum in your Retirement Account.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "If you have the FRS",
+			"body": "Apply through the Investment dashboard. Your agent bank and product providers will convert the investments to cash investments in your personal accounts. Your Investment Account will then be closed, and any balance will be paid to you in cash.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If you do not have the FRS",
+			"body": "You cannot withdraw your CPFIS investments. You can still sell the investments. The sale proceeds will be returned to your CPF Ordinary Account, or to your Retirement Account up to the FRS if you used your Special Account.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"cpf-investment-schemes"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I withdraw my CPF Investment Scheme (CPFIS) investments when I reach 55 years old?",
+			"Can I withdraw CPFIS investments at 55?",
+			"Can I take out my CPFIS investments when I turn 55?",
+			"What happens to my CPFIS investments at 55?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kxw00ldpz7a57msiaxu",
+			"page_title": "Can I withdraw my CPF Investment Scheme (CPFIS) investments when I reach 55 years old?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-18T15:03:29.987Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you have set aside the Full Retirement Sum (FRS) in your Retirement Account, you can apply to withdraw your CPFIS by closing your CPF Investment Account with your agent bank and ceasing your participation under the CPFIS."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To apply, please submit your application through the Investment dashboard."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you have not set aside the FRS in your Retirement Account, you would not be able to withdraw your CPFIS investments."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:03:29.987Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:03:29.987Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:03:29.987Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kxw00ldpz7a57msiaxu as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:03:29.987Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:03:29.987Z",
+		"updated_at": "2026-09-18T15:03:29.987Z"
+	}
+}

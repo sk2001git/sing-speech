@@ -1,0 +1,104 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.why-another-paynow-update",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Why update",
+		"full": "Why another PayNow update"
+	},
+	"summary": {
+		"text": "You must update once more because CPF added this step to strengthen protection against scams.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Extra security step",
+			"body": "CPF requires this one-time update even if you used PayNow before. It is an added safeguard against scams.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "What happens after updating",
+			"body": "Your PayNow NRIC-linked bank account will receive your CPF withdrawals and monthly payouts after it is activated with CPF Board.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"retirement-income",
+			"retirement-withdrawals",
+			"fighting-scams",
+			"updating-your-account-details"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why do I need to update my bank account again?",
+			"Why is another PayNow update needed?",
+			"Why must I update it if I used PayNow before?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq1006lpnhldpqg9zs3",
+			"page_title": "Why do I need to update my registered bank account with CPF Board to my PayNow NRIC-linked bank account to make PayNow withdrawals if I have already withdrawn via PayNow previously?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-18T15:03:02.006Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "This update is required even if you have withdrawn via PayNow previously, as a one-time exercise to strengthen security against scams."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Once your PayNow NRIC-linked bank account has been activated with CPF Board, it will be used to receive your CPF withdrawals and monthly payouts."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:03:02.006Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:03:02.006Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:03:02.006Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmkynucq1006lpnhldpqg9zs3 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:03:02.006Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:03:02.006Z",
+		"updated_at": "2026-09-18T15:03:02.006Z"
+	}
+}

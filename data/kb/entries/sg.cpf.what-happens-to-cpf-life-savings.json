@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.what-happens-to-cpf-life-savings",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF LIFE savings",
+		"full": "What happens to CPF LIFE savings"
+	},
+	"summary": {
+		"text": "Your remaining CPF LIFE premium balance and CPF account balances are paid to your beneficiaries, except under the CPF LIFE Income Plan.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What beneficiaries receive",
+			"body": "When you pass away, your beneficiaries receive your remaining CPF LIFE premium balance and any money left in your CPF accounts.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "How the balance is worked out",
+			"body": "The remaining premium balance is the Retirement Account savings used for your CPF LIFE premium, minus the CPF LIFE payouts you received during your lifetime.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Income Plan exception",
+			"body": "This refund does not apply to members under the CPF LIFE Income Plan. Their beneficiaries will not receive any unused CPF LIFE premium balance after the member passes away.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"monthly-payouts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What happens to my savings used for CPF LIFE when I pass away? Will it go to my beneficiaries?",
+			"Will my CPF LIFE money go to my family when I die?",
+			"Do my beneficiaries get my unused CPF LIFE savings?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmce0nr8j007ivx8qj4h64mpt",
+			"page_title": "What happens to my savings used for CPF LIFE when I pass away? Will it go to my beneficiaries?",
+			"source_modified_at": "2025-06-26",
+			"retrieved_at": "2026-09-18T15:00:26.814Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Upon your passing, your CPF LIFE premium balance and any remaining balances in your CPF accounts will be paid to your beneficiaries."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The remaining CPF LIFE premium balance refers to the amount of Retirement Account (RA) savings deducted for the CPF LIFE premium when you joined CPF LIFE minus the total amount of CPF LIFE payouts you received during your lifetime."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "*Not applicable to members under the CPF LIFE Income Plan, which does not have a refund feature. As such, beneficiaries will not receive any unused CPF LIFE premium balance upon the member's passing."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:00:26.814Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:00:26.814Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:00:26.814Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmce0nr8j007ivx8qj4h64mpt as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:00:26.814Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:00:26.814Z",
+		"updated_at": "2026-09-18T15:00:26.814Z"
+	}
+}

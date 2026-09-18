@@ -1,0 +1,118 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.where-to-get-subsidised-referrals",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Where to get",
+		"full": "Where to get subsidised referrals"
+	},
+	"summary": {
+		"text": "Citizens can go to polyclinics, and some cardholders can also go to CHAS clinics. Permanent Residents can go to polyclinics.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Singapore Citizens",
+			"body": "You can get subsidised referrals at polyclinics. If you hold a CHAS, Merdeka Generation, or Pioneer Generation card, you can also get them at CHAS clinics.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Permanent Residents",
+			"body": "You can get subsidised referrals at polyclinics.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Healthier SG enrolment",
+			"body": "You do not need to enrol in Healthier SG to get subsidised referrals.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"referral"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Where can I access subsidised referrals to public specialist outpatient clinics (SOCs)?",
+			"Where can I get a subsidised specialist referral?",
+			"Can I get a subsidised referral at a polyclinic?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmkajx0en00444v8brgluyx36",
+			"page_title": "Where can I access subsidised referrals to public specialist outpatient clinics (SOCs)?",
+			"source_modified_at": "2026-01-12",
+			"retrieved_at": "2026-09-18T15:02:03.577Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Singapore Citizens: You can get subsidised referrals at polyclinics. If you hold a CHAS, Merdeka Generation (MG), or Pioneer Generation (PG) card, you can also get subsidised referrals at CHAS clinics. Permanent Residents: You can get subsidised referrals at polyclinics."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Singapore Citizens: You can get subsidised referrals at polyclinics. If you hold a CHAS, Merdeka Generation (MG), or Pioneer Generation (PG) card, you can also get subsidised referrals at CHAS clinics."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Permanent Residents: You can get subsidised referrals at polyclinics."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Enrolment in Healthier SG is not required for subsidised referrals."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:02:03.577Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:02:03.577Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:02:03.577Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cmkajx0en00444v8brgluyx36 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:02:03.577Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:02:03.577Z",
+		"updated_at": "2026-09-18T15:02:03.577Z"
+	}
+}

@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.getting-the-full-matching-grant",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Full grant",
+		"full": "Getting the full matching grant"
+	},
+	"summary": {
+		"text": "Yes. You will receive the full $2,000 matching grant if you are eligible for the year and received at least $2,000 in cash top-ups.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When you receive $2,000",
+			"body": "You will receive the full matching grant if you are eligible for the Matched Retirement Savings Scheme for the year and the total cash top-ups you received was at least $2,000.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"matched-retirement-savings-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Will I still get the full $2,000 if my savings go above the Basic Retirement Sum after topping up?",
+			"Do I get the full matching grant when my retirement savings exceed the Basic Retirement Sum?",
+			"Will exceeding the current Basic Retirement Sum affect my $2,000 matching grant?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm5d54txq006f13bzkc33zj5u",
+			"page_title": "Will I still receive the full matching grant of $2,000 if my retirement savings exceed the current Basic Retirement Sum after topping up?",
+			"source_modified_at": "2025-01-01",
+			"retrieved_at": "2026-09-18T15:00:23.123Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, you will receive the full matching grant of $2,000 as long as you are eligible for the Matched Retirement Savings Scheme for the year, and the total amount of cash top-ups you received was at least $2,000."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:00:23.123Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:00:23.123Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:00:23.123Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm5d54txq006f13bzkc33zj5u as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:00:23.123Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:00:23.123Z",
+		"updated_at": "2026-09-18T15:00:23.123Z"
+	}
+}

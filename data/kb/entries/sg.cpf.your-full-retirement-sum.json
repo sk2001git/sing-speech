@@ -1,0 +1,118 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.your-full-retirement-sum",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "FRS amount",
+		"full": "Your Full Retirement Sum"
+	},
+	"summary": {
+		"text": "Your FRS depends on the year you turn 55 and remains the same for life.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "FRS for 2015 to 2021",
+			"body": "If you turned 55 in 2015 or 2016, your FRS was $161,000. In 2017, it was $166,000. In 2018, $171,000. In 2019, $176,000. In 2020, $181,000. In 2021, $186,000.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "FRS for 2022 to 2027",
+			"body": "If you turned 55 in 2022, your FRS was $192,000. In 2023, $198,800. In 2024, $205,800. In 2025, $213,000. In 2026, $220,400. In 2027, $228,200.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Before July 1960",
+			"body": "If your date of birth is before 1 July 1960, you can view the past FRS.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How much is my Full Retirement Sum?",
+			"What is my FRS amount?",
+			"How much do I need for my FRS?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmd3qhs2n00n836wpasdplque",
+			"page_title": "How much is my Full Retirement Sum?",
+			"source_modified_at": "2025-07-14",
+			"retrieved_at": "2026-09-18T15:03:22.731Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can refer to the table below for your Full Retirement Sum (FRS) amount, which depends on the year you turn 55 and will remain the same for life."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "1 July 2015 to 2016$161,000 19622017$166,000 19632018$171,000 19642019$176,000 19652020$181,000 19662021$186,000"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "19672022$192,000 19682023$198,800 19692024$205,800 19702025$213,000 19712026$220,400 19722027$228,200"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If your date of birth is before 1 July 1960, you can view the past FRS (PDF, 49KB)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:03:22.731Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:03:22.731Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:03:22.731Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmd3qhs2n00n836wpasdplque as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:03:22.731Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:03:22.731Z",
+		"updated_at": "2026-09-18T15:03:22.731Z"
+	}
+}

@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.careshield-life-and-eldershield",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "One plan only",
+		"full": "CareShield Life and ElderShield"
+	},
+	"summary": {
+		"text": "You cannot be covered by both CareShield Life and ElderShield. You can upgrade to CareShield Life for higher and lifetime payouts.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "If you upgrade",
+			"body": "Your ElderShield coverage will end when you join CareShield Life. Your ElderShield Supplement plan will not be affected if you already have one.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "More coverage",
+			"body": "You can also buy Supplement plans from private insurers.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I join both CareShield Life and ElderShield to get double the protection?",
+			"Can I have both plans at the same time?",
+			"Will I get double protection with both plans?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuoe0016hipnpjk5wpif",
+			"page_title": "Can I join both CareShield Life and ElderShield to get double the protection?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-18T14:59:19.106Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You will not be able to be on both CareShield Life and ElderShield."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your ElderShield coverage will be terminated upon joining CareShield Life."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "For more coverage, you can also purchase Supplement plans from private insurers."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:19.106Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:19.106Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:19.106Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuuoe0016hipnpjk5wpif as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:19.106Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:19.106Z",
+		"updated_at": "2026-09-18T14:59:19.106Z"
+	}
+}

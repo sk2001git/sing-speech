@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.appealing-for-the-merdeka-generation-package",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Merdeka appeal",
+		"full": "Appealing for the Merdeka Generation Package"
+	},
+	"summary": {
+		"text": "You can appeal if you meet the age and citizenship conditions and have a good claim. Contact MOH by email, phone or mail.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Age condition",
+			"body": "The Appeals Panel will not consider appeals if you miss the age condition. This means you must not have been born after 31 December 1959.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check your eligibility",
+			"text": "Check that you were aged 60 or above in 2019, became a Singapore citizen after 31 December 1996, and have a good claim to be counted among the Merdeka Generation.",
+			"confirm_label": "I checked my eligibility",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Send your appeal",
+			"text": "Send your appeal by email, phone or mail. Use contactus@merdeka.gov.sg, call 1800 2222 888, or mail it to Robinson Road P.O. Box 3060 Singapore 905060.",
+			"confirm_label": "I sent my appeal",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"merdeka-generation"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I would like to appeal for the Merdeka Generation Package. Can I do so, and how?",
+			"Can I appeal for Merdeka Generation?",
+			"How do I appeal for the Merdeka Package?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2ov1gbz00esr5bf2tyxhekf",
+			"page_title": "I would like to appeal for the Merdeka Generation Package. Can I do so, and how?",
+			"source_modified_at": "2024-10-25",
+			"retrieved_at": "2026-09-18T15:01:58.686Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Citizens aged 60 years and above in 2019 (i.e. born on or earlier than 1959) who became Singapore citizens after 31 December 1996, but have good claims to be counted among the MG, can appeal for the MGP."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can send your appeals to contactus@merdeka.gov.sg or call 1800 2222 888. You can also mail to Robinson Road P.O. Box 3060 Singapore 905060."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Similar to the Pioneer Generation Package, the Appeals Panel will not consider appeals from those who miss out on the age criterion (i.e. born after 31 December 1959 in this case)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:58.686Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:58.686Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:58.686Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2ov1gbz00esr5bf2tyxhekf as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:58.686Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:58.686Z",
+		"updated_at": "2026-09-18T15:01:58.686Z"
+	}
+}

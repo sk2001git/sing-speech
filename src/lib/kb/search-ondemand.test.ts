@@ -157,6 +157,34 @@ describe('a question Tier A cannot answer', () => {
 		expect(write).not.toHaveBeenCalled();
 	});
 
+	it('is answered from the crawl when the embedding vendor is out of credit', async () => {
+		// Tier A cannot be searched without a vector. The crawl is held locally, so a question
+		// still gets an answer instead of an error.
+		const r = await runSearch(
+			ask('can I use my CPF to pay my father hospital bill'),
+			deps({
+				embed: async () => {
+					throw new Error('openrouter 402: add credits');
+				},
+			}),
+		);
+		expect(r.kind).toBe('results');
+		if (r.kind !== 'results') return;
+		expect(r.result.cards[0]!.title.full).toBe('Paying a family member\u2019s bill with MediSave');
+	});
+
+	it('says it does not know when neither tier can answer', async () => {
+		const r = await runSearch(
+			ask('when is the next bus to Tampines'),
+			deps({
+				embed: async () => {
+					throw new Error('openrouter 402: add credits');
+				},
+			}),
+		);
+		expect(r.kind).toBe('nothing');
+	});
+
 	it('never reaches Tier B when Tier A already has something near enough', async () => {
 		const write = vi.fn(async () => JSON.stringify(draft));
 		// Query vector now points at the held entry.

@@ -1,0 +1,3 @@
+How do I set up Singpass Face Verification (SFV)?
+Singpass Face Verification (SFV) does not require any setup. It will automatically be triggered for potentially suspicious or higher-risk logins and transactions.
+Please contact the Singpass Helpdesk directly for more information on Singpass Face Verification.

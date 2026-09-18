@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-help-for-premiums",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Getting help for",
+		"full": "Getting help for premiums"
+	},
+	"summary": {
+		"text": "If you cannot afford your premiums, you can use MediSave, top up with cash, or ask family to help. Additional support is also available.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Using MediSave and cash",
+			"body": "MediShield Life premiums are fully payable by MediSave. If there are insufficient monies in the MediSave account, policyholders can top up their account with cash or their family members with sufficient MediSave balance can step in to support their premium payments.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Additional Premium Support",
+			"body": "Additional Premium Support (APS) is available for those who face difficulty paying for premiums even after Government subsidies and MediSave use, and have limited family support.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Coverage guarantee",
+			"body": "No one will lose coverage from MediShield Life because of an inability to pay their premiums.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"medishield-life-2024-review"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Where can I get help if I cannot afford my premiums?",
+			"What if I cannot pay my premiums?",
+			"How do I get help with premium payments?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm28jxtls002p9apor833zbas",
+			"page_title": "Where can I get help if I cannot afford my premiums?",
+			"source_modified_at": "2024-11-21",
+			"retrieved_at": "2026-09-18T14:56:15.195Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "MediShield Life premiums are fully payable by MediSave. If there are insufficient monies in the MediSave account, policyholders can top up their account with cash or their family members with sufficient MediSave balance can step in to support their premium payments."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Additional Premium Support (APS) is also available for those who face difficulty paying for premiums even after Government subsidies and MediSave use, and have limited family support."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "No one will lose coverage from MediShield Life because of an inability to pay their premiums."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:56:15.195Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:56:15.195Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:56:15.195Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm28jxtls002p9apor833zbas as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:56:15.195Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:56:15.195Z",
+		"updated_at": "2026-09-18T14:56:15.195Z"
+	}
+}

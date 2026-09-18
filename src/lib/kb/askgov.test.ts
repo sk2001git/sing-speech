@@ -99,6 +99,13 @@ describe('parseQuestions', () => {
 		expect(found[0]!.text).toBe('The full list of CHAS GPs can be found here.');
 	});
 
+	it('reads a date the framework marked as a date', () => {
+		// "$D2024-10-28T04:32:57.990Z" reached the entry schema as "$D2024-10-" and every entry
+		// built from that page was rejected.
+		const dated = chunk(unwell.replace('"updatedAt":"2026-08-19T07:23:21.189Z"', '"updatedAt":"$D2026-08-19T07:23:21.189Z"'));
+		expect(parseQuestions(dated)[0]!.updatedAt).toBe('2026-08-19T07:23:21.189Z');
+	});
+
 	it('ignores an object that has no answer', () => {
 		const agency = chunk('{"id":"clhou1j1a0004ky0887ejmat5","title":"Ministry of Health","code":"moh"}');
 		expect(parseQuestions(agency)).toEqual([]);
@@ -124,5 +131,37 @@ describe('questionUrls', () => {
 
 	it('returns each url once', () => {
 		expect(questionUrls(sitemap + sitemap)).toHaveLength(2);
+	});
+});
+
+describe('answers that are a reference to another row', () => {
+	/**
+	 * A quarter of the crawl came back as "$64": React Server Components stream a long string
+	 * as its own row and leave a reference in its place. The CHAS application page - the most
+	 * asked-for page in the corpus - was one of them.
+	 */
+	const referenced = [
+		chunk('{"id":"clpjhtek000b510fdiofqshig","body":"","title":"How can I apply? (CHAS)","answer":{"id":"a1","body":"$64","numPositiveFeedback":219},"topics":[]}'),
+		// 2e is the byte length of the text, which is how the framework writes these rows.
+		chunk('\n64:T2e,<p>You can apply for CHAS using this link.</p>'),
+	].join('');
+
+	it('follows the reference to the row that holds the text', () => {
+		const found = parseQuestions(referenced);
+		expect(found).toHaveLength(1);
+		expect(found[0]!.text).toBe('You can apply for CHAS using this link.');
+	});
+
+	it('leaves a question out when its row is not on the page', () => {
+		const dangling = chunk('{"id":"clpjhtek000b510fdiofqshig","title":"How can I apply? (CHAS)","answer":{"id":"a1","body":"$99"},"topics":[]}');
+		expect(parseQuestions(dangling)).toEqual([]);
+	});
+
+	it('reads a row given as a plain string', () => {
+		const plain = [
+			chunk('{"id":"cm8qljjgm00mx6vqhm53h5lk0","title":"Where do I apply?","answer":{"id":"a2","body":"$7"},"topics":[]}'),
+			chunk('\n7:"<p>At any Community Centre.</p>"'),
+		].join('');
+		expect(parseQuestions(plain)[0]!.text).toBe('At any Community Centre.');
 	});
 });

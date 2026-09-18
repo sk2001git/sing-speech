@@ -1,0 +1,137 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-medisave-for-family",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Family MediSave",
+		"full": "Using MediSave for family"
+	},
+	"summary": {
+		"text": "You may use your MediSave for an approved dependant’s hospitalisation expenses, subject to withdrawal limits.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who counts as a dependant",
+			"body": "Approved dependants are your spouse, children, parents, grandparents and siblings. They can be of any nationality, except grandparents and siblings, who must be Singapore Citizens or Permanent Residents.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Withdrawal limits apply",
+			"body": "The amount your dependant can use is subject to the MediSave withdrawal limits for each hospitalisation episode. Any remaining expenses must be paid in cash.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the hospital costs",
+			"text": "Speak to the staff at the hospital’s Business Office about the hospitalisation expenses and MediSave withdrawal limits.",
+			"confirm_label": "I spoke to the staff",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Sign the authorisation form",
+			"text": "Approach the hospital where your family member is receiving treatment and sign the Medical Claims Authorisation Form, or MCAF.",
+			"confirm_label": "I signed the form",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use my MediSave to pay for my family member’s hospitalisation expenses?",
+			"Can my family member use my MediSave for hospital bills?",
+			"Can I pay my relative’s hospital stay with MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm4bzmza9001q2777o23p1817",
+			"page_title": "Can I use my MediSave to pay for my family member’s hospitalisation expenses?",
+			"source_modified_at": "2024-12-06",
+			"retrieved_at": "2026-09-18T14:58:26.521Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If your approved dependants do not have sufficient MediSave for their hospitalisation expenses, you may consider using your MediSave to pay for them."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "For more information, please speak to the staff at the hospital's Business Office."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Should you wish to use your MediSave for your approved dependants’ hospitalisation expenses, you may approach the hospital where they are receiving treatment at to sign the Medical Claims Authorisation Form (MCAF)."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Approved dependants refer to a member’s spouse, children, parents, grandparents and siblings. They can be of any nationality except for grandparents and siblings who must be Singapore Citizens or Permanent Residents."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "It is important to note that while your approved dependants can tap on your MediSave, the amount they can use is still subject to the MediSave withdrawal limits, which is applied on a per hospitalisation episode basis. If they still have outstanding hospitalisation expenses after using up to the MediSave withdrawal limit, they would have to pay the remainder in cash."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:58:26.521Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:58:26.521Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:58:26.521Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cm4bzmza9001q2777o23p1817 as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:58:26.521Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:58:26.521Z",
+		"updated_at": "2026-09-18T14:58:26.521Z"
+	}
+}

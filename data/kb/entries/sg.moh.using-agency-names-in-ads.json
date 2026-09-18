@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.using-agency-names-in-ads",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Agency names",
+		"full": "Using agency names in ads"
+	},
+	"summary": {
+		"text": "HCSA does not control these names. The relevant agency controls its programme, and ads must be factual and not misleading.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who controls the names",
+			"body": "HCSA does not govern the use of MOH’s related agencies’ names in advertising. The agencies whose programmes are mentioned control their use. Licensees must follow the rules for those programmes.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "What the advertisement must do",
+			"body": "The advertisement should be factual and must not mislead the general public. It must also meet the Healthcare Services (Advertisement) Regulations.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"health-regulation",
+			"healthcare-services-act"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can a healthcare provider use MOH or HSA programme names in an advertisement?",
+			"Are there rules against using names of MOH-related agencies in ads?",
+			"Can licensees advertise services as part of MOH’s Healthier SG or an HSA programme?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clu6lx3qu003a314r0qxn976v",
+			"page_title": "Are there provisions to prevent a licensee from using names of MOH's related agencies in their advertisement? For example, can licensees use terms like “MOH’s Healthier SG” or \"HSA's XXXX Program\" when advertising their healthcare services?",
+			"source_modified_at": "2024-03-25",
+			"retrieved_at": "2026-09-18T14:59:02.779Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "HCSA does not govern the use of names of MOH’s related agencies in advertising."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "However, this will be controlled by the agencies whose programs the services purport to be a part of. Licensees will need to comply with the rules stipulated for the respective programs."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "In general, licensees should ensure that their advertisements are factual and not deemed to be misleading to the general public and comply with all the requirements under Healthcare Services (Advertisement) Regulations."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:02.779Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:02.779Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:02.779Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/clu6lx3qu003a314r0qxn976v as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:02.779Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:02.779Z",
+		"updated_at": "2026-09-18T14:59:02.779Z"
+	}
+}

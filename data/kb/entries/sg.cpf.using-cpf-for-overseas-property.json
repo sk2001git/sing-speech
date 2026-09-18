@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-cpf-for-overseas-property",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Using CPF for",
+		"full": "Using CPF for overseas property"
+	},
+	"summary": {
+		"text": "No. CPF savings can only be used to buy properties in Singapore.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Buying in another country",
+			"body": "You cannot use your CPF savings to fund a property purchase in another country.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"home-ownership",
+			"housing-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use my CPF savings to buy properties overseas?",
+			"Can CPF pay for a home in another country?",
+			"Can I use CPF to buy property overseas?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmhjrwiz6003zokqm9mex6ymt",
+			"page_title": "Can I use my CPF savings to buy properties overseas?",
+			"source_modified_at": "2025-11-03",
+			"retrieved_at": "2026-09-18T14:59:30.833Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "CPF savings can only be used to buy properties in Singapore."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you are looking to buy a property in another country, you will not be able to use your CPF savings to fund the purchase."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T14:59:30.833Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T14:59:30.833Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T14:59:30.833Z",
+				"note": "checked against https://ask.gov.sg/cpf/questions/cmhjrwiz6003zokqm9mex6ymt as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T14:59:30.833Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T14:59:30.833Z",
+		"updated_at": "2026-09-18T14:59:30.833Z"
+	}
+}

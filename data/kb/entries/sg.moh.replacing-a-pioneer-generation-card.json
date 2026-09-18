@@ -1,0 +1,92 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.replacing-a-pioneer-generation-card",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Replace card",
+		"full": "Replacing a Pioneer Generation card"
+	},
+	"summary": {
+		"text": "Call 1800-650-6060 for help with a lost card or damaged folder.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Call for assistance",
+			"text": "Call 1800-650-6060 for assistance with your lost card or damaged welcome folder.",
+			"confirm_label": "I called for help",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"pioneer-generation"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I lost my Pioneer Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"I lost my Pioneer Generation card",
+			"My welcome folder is damaged",
+			"How do I replace my Pioneer Generation card?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2ouig9z0034a71bnmmqhuyx",
+			"page_title": "I lost my Pioneer Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"retrieved_at": "2026-09-18T15:01:48.494Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Please call 1800-650-6060 for assistance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-18T15:01:48.494Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-18T15:01:48.494Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-18T15:01:48.494Z",
+				"note": "checked against https://ask.gov.sg/moh/questions/cm2ouig9z0034a71bnmmqhuyx as crawled"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-18T15:01:48.494Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-18T15:01:48.494Z",
+		"updated_at": "2026-09-18T15:01:48.494Z"
+	}
+}
