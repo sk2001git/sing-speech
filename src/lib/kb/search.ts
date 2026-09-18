@@ -184,8 +184,14 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
  * grounding checks is not shown at all; `nothing` is the honest answer and the PRD promises
  * it.
  */
-/** How many retrieved pages are offered to the writer before a question is refused. */
-const CANDIDATES = 2;
+/**
+ * How many retrieved pages the writer sees at once.
+ *
+ * One page per attempt meant refusing questions the agencies answer across two neighbouring
+ * pages — "what is ElderFund for" against pages on who administers it and who is eligible.
+ * Three is enough to cover a subject without burying the question in text.
+ */
+const PAGES_OFFERED = 3;
 
 async function onDemand(
 	query: string,
@@ -195,7 +201,7 @@ async function onDemand(
 	existing: Entry[] = [],
 ): Promise<SearchResponse | null> {
 	if (!deps.raw || !deps.write) return null;
-	const hits = searchRaw(deps.raw, query, CANDIDATES);
+	const hits = searchRaw(deps.raw, query, PAGES_OFFERED);
 	if (hits.length === 0) return null;
 
 	/*
@@ -204,15 +210,9 @@ async function onDemand(
 	 * refuse the page it is handed — so being refused is a reason to offer the next one,
 	 * not to give up. Two at most: the person is waiting, and a third is rarely nearer.
 	 */
-	let entry: Entry | undefined;
-	for (const hit of hits.slice(0, CANDIDATES)) {
-		const made = await compose({ asked: query, doc: hit.doc, language: 'en' }, deps.write, deps.now());
-		if (made.ok) {
-			entry = made.entry;
-			break;
-		}
-	}
-	if (!entry) return null;
+	const made = await compose({ asked: query, docs: hits.map((h) => h.doc), language: 'en' }, deps.write, deps.now());
+	if (!made.ok) return null;
+	const entry = made.entry;
 
 	deps.corpus.entries.set(entry.id, entry);
 	try {

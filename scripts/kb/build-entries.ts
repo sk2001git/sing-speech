@@ -82,7 +82,7 @@ const reasons = new Map<string, number>();
 async function structure(doc: RawDoc & { priority: string }) {
 	// The page's own question is how the agency phrased it, which is the fairest starting
 	// point for a card written without a person in front of us.
-	const req: ComposeRequest = { asked: doc.title, doc, language: 'en' };
+	const req: ComposeRequest = { asked: doc.title, docs: [doc], language: 'en' };
 	const made = await compose(req, writer!, new Date().toISOString());
 	if (!made.ok) {
 		const first = made.errors[0] ?? 'unknown';

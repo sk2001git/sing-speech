@@ -18,8 +18,15 @@ import type { RawDoc } from './raw-store';
 export interface ComposeRequest {
 	/** What the person said, in their words. */
 	asked: string;
-	/** The official page Tier B retrieved. */
-	doc: RawDoc;
+	/**
+	 * The official pages Tier B retrieved, best first.
+	 *
+	 * More than one on purpose: the agencies split a subject across neighbouring questions —
+	 * who administers ElderFund, who is eligible, what it pays — and a card answering what a
+	 * person asked often needs a line from two of them. Every quote is still checked against
+	 * the page it came from, and only pages actually quoted appear on the card.
+	 */
+	docs: RawDoc[];
 	language: EntryLanguage;
 }
 
@@ -56,20 +63,25 @@ export const PROMPT_VERSION = 'compose-1';
 const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600 } as const;
 
 export function composePrompt(req: ComposeRequest, problems?: string[]): string {
-	const { asked, doc, language } = req;
+	const { asked, docs, language } = req;
 	const reply = language === 'zh-Hans' ? 'Simplified Chinese' : 'plain English';
+	const pages = docs.flatMap((doc, i) => [
+		`Page ${i + 1}, published by ${doc.agency.toUpperCase()} at ${doc.url}. Its question and its answer may both be quoted:`,
+		`Question: ${doc.title}`,
+		'Answer:',
+		doc.text,
+		'',
+	]);
 	const lines = [
 		'You are writing one card for Suara, which reads official Singapore government answers aloud to older people.',
 		'',
 		`The person said: "${asked}"`,
 		'',
-		`The official page, published by ${doc.agency.toUpperCase()} at ${doc.url}. Both lines below may be quoted:`,
-		`Question: ${doc.title}`,
-		'Answer:',
-		doc.text,
+		`Official pages held on this subject, nearest first. Use whichever of them bear on the question, and ignore the rest:`,
 		'',
-		'If that answer does not actually answer what the person asked, reply {"kind":"none"} and nothing else.',
-		'That is the right reply surprisingly often: the page is the closest thing held, which is not the same as an answer.',
+		...pages,
+		'If none of them answers what the person asked, reply {"kind":"none"} and nothing else.',
+		'That is the right reply surprisingly often: these are the nearest pages held, which is not the same as an answer.',
 		'',
 		'Otherwise write the card as JSON, and nothing else. Shape:',
 		'{"kind":"process"|"answer","short":"","full":"","summary":"","summary_quote":"",',
@@ -78,7 +90,7 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		' "phrasings":["","",""]}',
 		'',
 		'Rules, all of them binding:',
-		`- Every quote field must be copied verbatim from the answer above, as one unbroken run of its text. A line that is not on the page is rejected and the person is told Suara does not know.`,
+		`- Every quote field must be copied verbatim from one of the pages above, as one unbroken run of its text. A line that is on none of them is rejected and the person is told Suara does not know.`,
 		'- You may choose, order and shorten. You may not add a fact, a number, a name or a condition that is not above.',
 		`- "kind":"process" when the answer is something to do, with steps in order; "answer" when it is something to know, with details.`,
 		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their own words: "I have the form", "I called them". Never "Done", "Next", "OK" or "Continue".',
@@ -173,7 +185,9 @@ interface Limited {
 export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Composed {
 	let draft = input;
 	const errors: string[] = [];
-	const { doc } = req;
+	const docs = req.docs.filter(Boolean);
+	const primary = docs[0];
+	if (!primary) return { ok: false, errors: ['no page to write from'] };
 
 	// The model's own refusal, which is a finding rather than a failure: no card is shown and
 	// the person is told Suara does not know.
@@ -241,13 +255,14 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 	}
 
 	/*
-	 * Quotes: each must be on the page, and each distinct quote is stored once.
+	 * Quotes: each must be on one of the pages, and each distinct quote is stored once.
 	 *
-	 * The page is its published question and its answer. Some answers are a single line —
+	 * A page is its published question and its answer. Some answers are a single line —
 	 * "Please call 1800-650-6060 for assistance." — and the only statement of what the page
 	 * is about sits in the question above it, which a card has to be able to quote.
 	 */
-	const page = squash(`${doc.title}\n${doc.text}`);
+	const pageText = docs.map((d) => squash(`${d.title}\n${d.text}`));
+	const sourceId = new Map<number, string>();
 	const quoteId = new Map<string, string>();
 	const quotes: Entry['quotes'] = [];
 	const refFor = (raw: string | undefined, where: string): string[] => {
@@ -256,15 +271,22 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 			errors.push(`${where} cites no quote`);
 			return [];
 		}
-		if (!page.includes(text)) {
+		const found = pageText.findIndex((page) => page.includes(text));
+		if (found < 0) {
 			errors.push(`${where} quotes text that is not on the page: "${text.slice(0, 80)}"`);
 			return [];
 		}
 		const held = quoteId.get(text);
 		if (held) return [held];
+		// Only pages actually quoted become sources, numbered in the order they are first used.
+		let source = sourceId.get(found);
+		if (!source) {
+			source = `src${sourceId.size + 1}`;
+			sourceId.set(found, source);
+		}
 		const id = `q${quotes.length + 1}`;
 		quoteId.set(text, id);
-		quotes.push({ id, source: 'src1', text });
+		quotes.push({ id, source, text });
 		return [id];
 	};
 
@@ -281,9 +303,15 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 
 	if (errors.length > 0) return { ok: false, errors };
 
-	const id = `sg.${doc.agency}.${slug(draft.full)}`;
+	const cited = [...sourceId.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+	const id = `sg.${docs[cited[0]?.[0] ?? 0]!.agency}.${slug(draft.full)}`;
 	const checks: Entry['verification']['checks'] = [
-		{ type: 'quotes-found', passed: true, at: now, note: `checked against ${doc.url} as crawled` },
+		{
+			type: 'quotes-found',
+			passed: true,
+			at: now,
+			note: `checked against ${cited.length} crawled page(s): ${cited.map(([i]) => docs[i]!.url).join(' ')}`.slice(0, 300),
+		},
 		{ type: 'refs-resolve', passed: true, at: now },
 	];
 
@@ -309,18 +337,19 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 					})),
 				}
 			: {}),
-		topic: { area: areaFor(doc, draft.full), ...(tagsFor(doc).length ? { tags: tagsFor(doc) } : {}) },
+		topic: { area: areaFor(primary, draft.full), ...(tagsFor(primary).length ? { tags: tagsFor(primary) } : {}) },
 		search: { example_phrasings: phrasings },
-		sources: [
-			{
-				id: 'src1',
-				publisher: doc.agency.toUpperCase(),
-				url: doc.url,
-				page_title: doc.title.slice(0, 300),
-				...(doc.updatedAt ? { source_modified_at: doc.updatedAt.slice(0, 10) } : {}),
+		sources: cited.map(([i, sid]) => {
+			const d = docs[i]!;
+			return {
+				id: sid,
+				publisher: d.agency.toUpperCase(),
+				url: d.url,
+				page_title: d.title.slice(0, 300),
+				...(d.updatedAt && /^\d{4}-\d{2}-\d{2}/.test(d.updatedAt) ? { source_modified_at: d.updatedAt.slice(0, 10) } : {}),
 				retrieved_at: now,
-			},
-		],
+			};
+		}),
 		quotes,
 		provenance: {
 			collected: { method: 'sitemap-crawl', at: now },

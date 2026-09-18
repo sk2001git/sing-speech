@@ -47,7 +47,7 @@ const draft: Draft = {
 };
 
 describe('composePrompt', () => {
-	const prompt = composePrompt({ asked: ASKED, doc, language: 'en' });
+	const prompt = composePrompt({ asked: ASKED, docs: [doc], language: 'en' });
 
 	it('gives the model the person’s own words and the official answer, and nothing else to draw on', () => {
 		expect(prompt).toContain(ASKED);
@@ -67,7 +67,7 @@ describe('composePrompt', () => {
 
 describe('draftToEntry', () => {
 	it('produces an entry the schema accepts', () => {
-		const made = draftToEntry(draft, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(true);
 		if (!made.ok) return;
 		expect(parseEntry(made.entry).ok).toBe(true);
@@ -77,14 +77,14 @@ describe('draftToEntry', () => {
 	});
 
 	it('every line it shows resolves to a quote that is on the page', () => {
-		const made = draftToEntry(draft, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(checkRefsResolve(made.entry, NOW).passed).toBe(true);
 		expect(checkQuotesFound(made.entry, { src1: doc.text }, NOW).passed).toBe(true);
 	});
 
 	it('names the page, the agency and when it was read', () => {
-		const made = draftToEntry(draft, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(made.entry.sources[0]).toMatchObject({ id: 'src1', publisher: 'CPF', url: doc.url, page_title: doc.title });
 		expect(made.entry.provenance.collected.method).toBe('sitemap-crawl');
@@ -96,7 +96,7 @@ describe('draftToEntry', () => {
 			...draft,
 			steps: [{ ...draft.steps[0]!, quote: 'You may use your MediSave for your parents up to $500 a year.' }, draft.steps[1]!],
 		};
-		const made = draftToEntry(invented, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(invented, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(false);
 		if (made.ok) return;
 		expect(made.errors.join(' ')).toContain('not on the page');
@@ -104,17 +104,17 @@ describe('draftToEntry', () => {
 
 	it('forgives a quote that differs only in spacing', () => {
 		const respaced = { ...draft, summary_quote: draft.summary_quote.replace(/ /g, '  ') };
-		expect(draftToEntry(respaced, { asked: ASKED, doc, language: 'en' }, NOW).ok).toBe(true);
+		expect(draftToEntry(respaced, { asked: ASKED, docs: [doc], language: 'en' }, NOW).ok).toBe(true);
 	});
 
 	it('uses one quote once, however many lines cite it', () => {
-		const made = draftToEntry(draft, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(made.entry.quotes).toHaveLength(2);
 	});
 
 	it('keeps the person’s own words as a phrasing, so the next person finds it', () => {
-		const made = draftToEntry(draft, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(made.entry.search.example_phrasings).toContain(ASKED);
 	});
@@ -123,7 +123,7 @@ describe('draftToEntry', () => {
 		// Every model tested overshot the 16-character label sometimes. A label is not a claim,
 		// so it is repaired here rather than sent back for another attempt.
 		const wordy = { ...draft, short: 'Using MediSave for a family member' };
-		const made = draftToEntry(wordy, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(wordy, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(made.entry.title.short).toBe('Paying a family');
 		expect(made.entry.title.full).toBe('Paying a family member’s bill with MediSave');
@@ -131,7 +131,7 @@ describe('draftToEntry', () => {
 
 	it('refuses a summary too long for the card, because that carries meaning', () => {
 		const wordy = { ...draft, summary: 'You may use your MediSave for your parents, '.repeat(5) };
-		const made = draftToEntry(wordy, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(wordy, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(false);
 		if (made.ok) return;
 		expect(made.errors.join(' ')).toMatch(/summary is \d+ characters/);
@@ -139,7 +139,7 @@ describe('draftToEntry', () => {
 
 	it('refuses a heading written as a sentence', () => {
 		const sentence = { ...draft, full: 'You can pay a family member bill.' };
-		const made = draftToEntry(sentence, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(sentence, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(false);
 		if (made.ok) return;
 		expect(made.errors.join(' ')).toContain('heading, not a sentence');
@@ -148,14 +148,14 @@ describe('draftToEntry', () => {
 	it('refuses "Done" as a confirmation, because it is the person’s own words that reassure', () => {
 		for (const label of ['Done', 'Next', 'OK', 'Continue']) {
 			const lazy = { ...draft, steps: [{ ...draft.steps[0]!, confirm_label: label }] };
-			const made = draftToEntry(lazy, { asked: ASKED, doc, language: 'en' }, NOW);
+			const made = draftToEntry(lazy, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 			expect(made.ok, label).toBe(false);
 		}
 	});
 
 	it('refuses a heading that only repeats the label', () => {
 		const same = { ...draft, short: 'Who pays first', full: 'Who pays first' };
-		const made = draftToEntry(same, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(same, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(false);
 		if (made.ok) return;
 		expect(made.errors.join(' ')).toMatch(/full/);
@@ -168,7 +168,7 @@ describe('draftToEntry', () => {
 			steps: [],
 			details: [{ heading: 'Who counts', body: 'Your spouse, children, parents and grandparents.', quote: draft.summary_quote }],
 		};
-		const made = draftToEntry(flat, { asked: ASKED, doc, language: 'en' }, NOW);
+		const made = draftToEntry(flat, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
 		expect(made.entry.kind).toBe('answer');
 		expect(made.entry.steps).toBeUndefined();
@@ -176,8 +176,53 @@ describe('draftToEntry', () => {
 	});
 });
 
+describe('a card written from more than one page', () => {
+	const second: RawDoc = {
+		...doc,
+		id: 'cm0f52l0001mbpz7a9k6vyr1w',
+		url: 'https://ask.gov.sg/cpf/questions/cm0f52l0001mbpz7a9k6vyr1w',
+		title: 'What happens if my MediSave does not cover the whole bill?',
+		text: 'Any amount above your withdrawal limit is paid in cash at the hospital.',
+		agency: 'moh',
+	};
+
+	it('cites each quote to the page it came from', () => {
+		const spread = {
+			...draft,
+			details: [{ heading: 'If it is not enough', body: 'The rest is paid in cash.', quote: 'Any amount above your withdrawal limit is paid in cash at the hospital.' }],
+		};
+		const made = draftToEntry(spread, { asked: ASKED, docs: [doc, second], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		expect(made.entry.sources.map((s) => s.url)).toEqual([doc.url, second.url]);
+		const sourceOf = (starts: string) => made.entry.quotes.find((q) => q.text.startsWith(starts))?.source;
+		expect(sourceOf('You may use your MediSave')).toBe('src1');
+		expect(sourceOf('Any amount above your withdrawal limit')).toBe('src2');
+	});
+
+	it('names only the pages it actually quoted', () => {
+		// The third page was offered and not used; a source line claiming it would be false.
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc, second], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		expect(made.entry.sources).toHaveLength(1);
+		expect(made.entry.sources[0]!.url).toBe(doc.url);
+	});
+
+	it('gives the writer every page it may draw on', () => {
+		const prompt = composePrompt({ asked: ASKED, docs: [doc, second], language: 'en' });
+		expect(prompt).toContain('Page 1');
+		expect(prompt).toContain('Page 2');
+		expect(prompt).toContain(second.text);
+	});
+
+	it('refuses a quote that is on none of them', () => {
+		const invented = { ...draft, summary_quote: 'MediSave pays the whole bill.' };
+		const made = draftToEntry(invented, { asked: ASKED, docs: [doc, second], language: 'en' }, NOW);
+		expect(made.ok).toBe(false);
+	});
+});
+
 describe('compose', () => {
-	const request = { asked: ASKED, doc, language: 'en' as const };
+	const request = { asked: ASKED, docs: [doc], language: 'en' as const };
 
 	it('asks the writer once and returns the entry', async () => {
 		const asked: string[] = [];

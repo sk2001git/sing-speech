@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import WebSocket from 'ws';
 
-const [chrome, wav, outDir, base = 'http://127.0.0.1:4321/'] = process.argv.slice(2);
+const [chrome, wav, outDir, base = 'http://localhost:4321/'] = process.argv.slice(2);
 if (!chrome || !wav || !outDir) throw new Error('usage: walk-ui.mjs <chrome> <clip.wav> <out dir> [base url]');
 fs.mkdirSync(outDir, { recursive: true });
 const PORT = 9333;

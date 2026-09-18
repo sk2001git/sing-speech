@@ -40,9 +40,9 @@ const byWords = (words: string) => {
 
 /** Three real pages, three real ways of asking about them. */
 const cases: ComposeRequest[] = [
-	{ asked: 'what is ElderFund for', doc: byWords('ElderFund'), language: 'en' },
-	{ asked: 'how do I claim CareShield Life for my mother', doc: byWords('claim for CareShield Life'), language: 'en' },
-	{ asked: 'my father cannot afford his CareShield premium, can I pay it', doc: byWords('help my family members pay for their CareShield Life premiums'), language: 'en' },
+	{ asked: 'what is ElderFund for', docs: [byWords('ElderFund')], language: 'en' },
+	{ asked: 'how do I claim CareShield Life for my mother', docs: [byWords('claim for CareShield Life')], language: 'en' },
+	{ asked: 'my father cannot afford his CareShield premium, can I pay it', docs: [byWords('help my family members pay for their CareShield Life premiums')], language: 'en' },
 ];
 
 const candidates = [
@@ -68,7 +68,7 @@ for (const candidate of candidates) {
 				times.push(Date.now() - started);
 				const drafted = readDraft(reply);
 				if (!drafted) {
-					notes.push(`${req.doc.id}: reply was not a card`);
+					notes.push(`${req.docs[0]!.id}: reply was not a card`);
 					continue;
 				}
 				const made = draftToEntry(drafted, req, now);
@@ -76,11 +76,11 @@ for (const candidate of candidates) {
 					valid += 1;
 					if (run === 0) notes.push(`"${made.entry.title.full}" / ${made.entry.steps?.length ?? 0} steps / ${made.entry.summary.text}`);
 				} else {
-					notes.push(`${req.doc.id}: ${made.errors.slice(0, 2).join('; ')}`);
+					notes.push(`${req.docs[0]!.id}: ${made.errors.slice(0, 2).join('; ')}`);
 				}
 			} catch (err) {
 				times.push(Date.now() - started);
-				notes.push(`${req.doc.id}: ${(err as Error).message.slice(0, 120)}`);
+				notes.push(`${req.docs[0]!.id}: ${(err as Error).message.slice(0, 120)}`);
 			}
 		}
 	}

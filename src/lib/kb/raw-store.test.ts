@@ -121,6 +121,30 @@ describe('searchRaw', () => {
 		expect(searchRaw(strays, 'can the TCM clinic advertise acupuncture for my knee pain')[0]!.doc.id).toBe('acupuncture');
 	});
 
+	it('still finds the page when the question arrives as a whole spoken sentence', () => {
+		// What the hearing model passes on, not what a person types. The words that carry the
+		// question are outnumbered by ordinary ones.
+		const spoken = 'You want to know whether you can use your MediSave to pay your father hospital bill';
+		expect(searchRaw(index, spoken)[0]!.doc.id).toBe('medisave-family');
+	});
+
+	it('meets the person’s words with the agency’s', () => {
+		// "take out" is what a person says; "withdraw" is what CPF writes.
+		const both = buildRawIndex([
+			doc('withdrawal-55', 'When can I withdraw my CPF savings?', 'You may make a withdrawal from age 55.'),
+			doc('top-up-limit', 'What is the maximum amount of top-ups I can receive?', 'The limit depends on your retirement sum.'),
+		]);
+		expect(searchRaw(both, 'how much CPF can I take out at 55')[0]!.doc.id).toBe('withdrawal-55');
+	});
+
+	it('still prefers the page that uses the person’s own word', () => {
+		const both = buildRawIndex([
+			doc('withdraw', 'When can I withdraw my CPF savings?', 'You may withdraw from age 55.'),
+			doc('take-out', 'When can I take out my CPF savings?', 'You may take out savings from age 55.'),
+		]);
+		expect(searchRaw(both, 'when can I take out my CPF savings')[0]!.doc.id).toBe('take-out');
+	});
+
 	it('matches a plural against the singular the agency wrote', () => {
 		expect(searchRaw(index, 'medisave withdrawal limit')[0]!.doc.id).toBe('medisave-limits');
 		expect(searchRaw(index, 'cpf nominations')[0]!.doc.id).toBe('cpf-nomination');

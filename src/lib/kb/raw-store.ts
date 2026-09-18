@@ -66,6 +66,42 @@ export function tokenise(text: string): string[] {
 }
 
 /**
+ * What a person says, and what the agency wrote.
+ *
+ * Query side only: the document keeps the agency's own words, so a quote stays a quote.
+ * Each group is treated as one requirement — a page matching any member counts as matching
+ * the word that was said.
+ */
+const SAID_MEANS: string[][] = [
+	['take', 'takeout', 'withdraw', 'withdrawal'],
+	['out', 'withdraw', 'withdrawal'],
+	['money', 'saving', 'fund', 'payout'],
+	['pay', 'payment', 'paying'],
+	['bill', 'charge', 'fee', 'cost', 'expense'],
+	['expensive', 'cost', 'charge', 'fee', 'subsidy', 'subsidies'],
+	['doctor', 'gp', 'practitioner', 'clinic', 'physician'],
+	['old', 'senior', 'elderly', 'age'],
+	['home', 'nursing', 'residential'],
+	['sick', 'ill', 'illness', 'medical', 'condition'],
+	['help', 'assistance', 'support', 'subsidy'],
+	['card', 'chas', 'membership'],
+	['scam', 'phishing', 'fraud', 'impersonation'],
+	['claim', 'application', 'apply'],
+	['cover', 'coverage', 'covered', 'insurance'],
+	// People say where they are, not the category the agency files it under.
+	['malaysia', 'overseas', 'abroad'],
+	['johor', 'overseas', 'abroad'],
+	['australia', 'overseas', 'abroad'],
+	['oversea', 'overseas', 'abroad'],
+];
+
+/** The words a term may be met by, itself first. */
+function meanings(term: string): string[] {
+	const group = SAID_MEANS.find((g) => g.includes(term));
+	return group ? [term, ...group.filter((w) => w !== term)] : [term];
+}
+
+/**
  * A document is the question, its topic labels and its answer. The question is worth more
  * than the answer — someone asking "medisave for my father" wants the page titled that,
  * not a page whose answer mentions MediSave in passing — so the title counts three times
@@ -123,7 +159,12 @@ const B = 0.75;
  * Measured need: "which brand of vitamin should I buy for my knee" retrieved a page about
  * whether a TCM clinic may advertise acupuncture for knee pain — one word in common out of
  * four. BM25 alone is happy with that, and a model handed that page writes a confident card
- * about nothing. Two of five words, and a question we hold no answer to is refused instead.
+ * about nothing.
+ *
+ * Counted by rarity, not by word. A spoken question reaches this as the hearing model's
+ * whole sentence — "You want to know whether you can use MediSave to pay your father's
+ * hospital bill" — where the common words outnumber the ones that carry the question, and
+ * an unweighted count sank the right page below the floor.
  */
 const MIN_COVERAGE = 0.4;
 
@@ -138,22 +179,39 @@ const MIN_COVERAGE = 0.4;
 export function searchRaw(index: RawIndex, query: string, limit = 6, minCoverage = MIN_COVERAGE): RawHit[] {
 	const terms = tokenise(query);
 	if (terms.length === 0 || index.docs.length === 0) return [];
-	const wanted = new Set(terms);
 	const n = index.docs.length;
+	const idf = (term: string) => {
+		const df = index.df.get(term) ?? 1;
+		return Math.log(1 + (n - df + 0.5) / (df + 0.5));
+	};
+
+	// One requirement per distinct word said, each carrying the words it may be met by.
+	const groups = [...new Set(terms)].map((term) => {
+		const words = meanings(term);
+		return { words, weight: idf(term) };
+	});
+	const wantedWeight = groups.reduce((sum, g) => sum + g.weight, 0);
+
 	const hits: RawHit[] = [];
 	for (const { doc, terms: docTerms, length } of index.docs) {
 		let score = 0;
-		let matched = 0;
-		for (const term of wanted) {
-			const tf = docTerms.get(term);
-			if (!tf) continue;
-			matched += 1;
-			const df = index.df.get(term) ?? 1;
-			const idf = Math.log(1 + (n - df + 0.5) / (df + 0.5));
-			const norm = tf + K1 * (1 - B + (B * length) / (index.averageLength || 1));
-			score += idf * ((tf * (K1 + 1)) / norm);
+		let matchedWeight = 0;
+		for (const group of groups) {
+			let best = 0;
+			for (const word of group.words) {
+				const tf = docTerms.get(word);
+				if (!tf) continue;
+				const norm = tf + K1 * (1 - B + (B * length) / (index.averageLength || 1));
+				// The word said is worth its own rarity; a stand-in is worth a little less, so a
+				// page using the person's own words still wins.
+				const weight = word === group.words[0] ? idf(word) : idf(word) * 0.7;
+				best = Math.max(best, weight * ((tf * (K1 + 1)) / norm));
+			}
+			if (best === 0) continue;
+			matchedWeight += group.weight;
+			score += best;
 		}
-		if (score <= 0 || matched / wanted.size < minCoverage) continue;
+		if (score <= 0 || matchedWeight / (wantedWeight || 1) < minCoverage) continue;
 		hits.push({ doc, score: score + Math.log1p(doc.useful) / 1000 });
 	}
 	return hits.sort((a, b) => b.score - a.score).slice(0, limit);
