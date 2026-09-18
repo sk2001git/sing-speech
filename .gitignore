@@ -8,3 +8,7 @@ dist/
 .dev.vars
 .dev.vars.*
 .playwright-mcp/
+
+# The crawl itself: 4,231 pages, 16 MB, rebuilt by scripts/kb/crawl-askgov.ts and
+# reduced to data/kb/raw-index.json, which is what the Worker carries.
+data/kb/raw/

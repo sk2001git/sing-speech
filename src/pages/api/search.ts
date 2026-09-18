@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
-import { EMBEDDING, loadCorpus, loadPlaces } from '../../lib/kb/corpus';
+import { EMBEDDING, loadCorpus, loadPlaces, loadRaw } from '../../lib/kb/corpus';
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
 import { DEFAULT_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
 import { runtimeEnv } from '../../lib/env';
 import { OpenRouter } from '../../lib/providers/openrouter';
 import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
+import { writerFor } from '../../lib/routes/write';
 
 export const prerender = false;
 
@@ -35,6 +36,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const chain = buildRoutes(resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE), env);
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
+		const writer = writerFor({
+			...(env.OPENAI_API_KEY ? { openaiKey: env.OPENAI_API_KEY } : {}),
+			...(env.SUARA_WRITE_MODEL ? { model: env.SUARA_WRITE_MODEL } : {}),
+			openrouterKey: env.OPENROUTER_API_KEY,
+		});
 
 		const deps: SearchDeps = {
 			corpus: loadCorpus(),
@@ -47,6 +53,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			},
 			translate: (entry, language) => translateEntry(entry, language, DEFAULT_TRANSLATORS, or.chatJson, new Date().toISOString()),
 			cache: translations,
+			// Tier B: a question no entry answers is looked up in the crawl and written into a
+			// card by the route's own model, then kept. Grounding decides whether it is shown.
+			raw: loadRaw(),
+			...(writer ? { write: writer } : {}),
 			thresholds: THRESHOLDS,
 			translateBudgetMs: 4000,
 			now: () => new Date().toISOString(),

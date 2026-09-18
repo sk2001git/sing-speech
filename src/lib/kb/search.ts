@@ -1,12 +1,14 @@
 import { z } from 'zod';
 import { AREA_LABEL, AREAS } from './areas';
-import { nearest, queryText, type StoredVector } from './embed';
+import { compose, type Writer } from './compose';
+import { documentTexts, nearest, queryText, type StoredVector } from './embed';
 import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
 import { needsTranslation } from './grounding';
 import { NothingHeard, replyLanguage, type Hearing } from './hearing';
 import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/places';
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
+import { searchRaw, type RawIndex } from './raw-store';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
 const Offset = z.number().int().min(0).max(1000).default(0);
@@ -96,6 +98,15 @@ export interface SearchDeps {
 	now: () => string;
 	/** Keeps a translation running after the response, where the runtime allows it. */
 	waitUntil?: (work: Promise<unknown>) => void;
+	/**
+	 * Tier B: every crawled official answer, searched by words when no entry is near enough.
+	 * Absent means a miss stays a miss.
+	 */
+	raw?: RawIndex;
+	/** Writes a card from a retrieved page. Absent means the crawl is never drawn on. */
+	write?: Writer;
+	/** Keeps what was composed beyond this isolate, where a store is configured. */
+	remember?: (entry: Entry) => void;
 }
 
 export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<SearchResponse> {
@@ -133,10 +144,75 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 
 	const vector = await deps.embed(queryText(query));
 	const ranked = rank(bestPerEntry(nearest(vector, deps.corpus.vectors)), deps.thresholds, offset);
+	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
+
+	/*
+	 * A weak fit is the most dangerous answer in the product: the nearest entry is about
+	 * something else, and it looks as official as a right one. "Can I use MediSave for my
+	 * father's bill" matched a card about the Matched MediSave Scheme at 0.6-something,
+	 * which is how a corpus of 17 entries answers everything badly. So anything short of a
+	 * strong fit also asks Tier B, and a composed card that passes its grounding checks
+	 * goes first, with the weak entries kept behind it.
+	 */
+	if (ranked.fit !== 'strong' && offset === 0) {
+		const composed = await onDemand(query, heard, language, deps, cards);
+		if (composed) return composed;
+	}
 	if (ranked.fit === 'none') return { kind: 'nothing', heard, language };
 
-	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
 	return results(cards, { heard, fit: ranked.fit, nextOffset: ranked.nextOffset, query, language }, deps);
+}
+
+/**
+ * Nothing in the entries is near enough. Look through the whole crawl, and if an official
+ * page answers this, have the route's model write the card from that page — then keep it.
+ *
+ * "Search first, then store": the first person to ask waits for one model call, everybody
+ * after them is served from Tier A like any other card. A composed card that fails its
+ * grounding checks is not shown at all; `nothing` is the honest answer and the PRD promises
+ * it.
+ */
+/** How many retrieved pages are offered to the writer before a question is refused. */
+const CANDIDATES = 2;
+
+async function onDemand(
+	query: string,
+	heard: Heard,
+	language: EntryLanguage,
+	deps: SearchDeps,
+	existing: Entry[] = [],
+): Promise<SearchResponse | null> {
+	if (!deps.raw || !deps.write) return null;
+	const hits = searchRaw(deps.raw, query, CANDIDATES);
+	if (hits.length === 0) return null;
+
+	/*
+	 * Each retrieved page in turn, until one produces a card. BM25's first choice is
+	 * sometimes a page that merely shares words with the question, and the model can only
+	 * refuse the page it is handed — so being refused is a reason to offer the next one,
+	 * not to give up. Two at most: the person is waiting, and a third is rarely nearer.
+	 */
+	let entry: Entry | undefined;
+	for (const hit of hits.slice(0, CANDIDATES)) {
+		const made = await compose({ asked: query, doc: hit.doc, language: 'en' }, deps.write, deps.now());
+		if (made.ok) {
+			entry = made.entry;
+			break;
+		}
+	}
+	if (!entry) return null;
+
+	deps.corpus.entries.set(entry.id, entry);
+	try {
+		// One embedding, of the card itself: enough for the next person's query to find it.
+		deps.corpus.vectors.push({ entryId: entry.id, vector: await deps.embed(documentTexts(entry)[0]!) });
+	} catch {
+		// The card still shows. It will simply be composed again for the next person.
+	}
+	deps.remember?.(entry);
+
+	const behind = existing.filter((e) => e.id !== entry.id).slice(0, PAGE_SIZE - 1);
+	return results([entry, ...behind], { heard, fit: 'weak', nextOffset: null, query, language }, deps);
 }
 
 function placesFor(query: string, index: PlaceIndex): { places: Place[]; what: PlaceKind; area: string; source: PlaceSource } | null {

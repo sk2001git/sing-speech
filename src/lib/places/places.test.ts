@@ -180,3 +180,23 @@ describe('findPlaces', () => {
 		expect(findPlaces(places, { area: '' })).toEqual([]);
 	});
 });
+
+describe('placeIntent, questions that are not about where', () => {
+	it('leaves an eligibility question to the knowledge base', () => {
+		// "am I eligible for CHAS subsidy" was answered with six clinic addresses: the word
+		// CHAS names a kind of place, and everything left over was taken for an area.
+		expect(placeIntent('am I eligible for CHAS subsidy')).toBeNull();
+		expect(placeIntent('how do I apply for the CHAS card')).toBeNull();
+		expect(placeIntent('how much does a polyclinic visit cost')).toBeNull();
+	});
+
+	it('still answers a question that asks where', () => {
+		expect(placeIntent('got clinic near Bedok that take CHAS or not')).toEqual({ kind: 'chas-clinic', area: 'bedok' });
+		expect(placeIntent('where is the nearest pharmacy in Toa Payoh')).toEqual({ kind: 'pharmacy', area: 'toa payoh' });
+	});
+
+	it('takes the area from where the person pointed, not from the whole sentence', () => {
+		// The heading read "CHAS clinics near Whether Bedok Accepts" before this.
+		expect(placeIntent('is there a clinic near Bedok that accepts CHAS')).toEqual({ kind: 'chas-clinic', area: 'bedok' });
+	});
+});

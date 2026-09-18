@@ -9,6 +9,8 @@ import type { Corpus } from './search';
  * build step 6.
  */
 import places from '../../../data/kb/places.json';
+import rawIndex from '../../../data/kb/raw-index.json';
+import { buildRawIndex, type RawDoc, type RawIndex } from './raw-store';
 import type { PlaceIndex } from './search';
 
 export const EMBEDDING = index.embedding as { model: string; dimensions: number };
@@ -36,3 +38,20 @@ export function loadCorpus(): Corpus {
 	cached = { entries, vectors };
 	return cached;
 }
+
+let rawCached: RawIndex | undefined;
+
+/**
+ * Tier B: every crawled official answer, searched by words when no entry is near enough
+ * (`raw-store.ts`, built by `scripts/kb/build-raw.ts`).
+ *
+ * The word index is built on first use rather than at module load, because most requests
+ * are answered from the entries and never look at it.
+ */
+export function loadRaw(): RawIndex {
+	rawCached ??= buildRawIndex(rawIndex.questions as RawDoc[]);
+	return rawCached;
+}
+
+export const RAW_BUILT = rawIndex.built as string;
+export const RAW_COUNT = rawIndex.count as number;

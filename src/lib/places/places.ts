@@ -140,6 +140,10 @@ const NOT_AN_AREA = new Set(
 	('where is the nearest near me my closest find any there a an and or of at in to for i need want looking' +
 		' show tell know get go can please help me house home hdb block street road avenue singapore sg' +
 		' open now today tomorrow which what who how does do is are ' +
+		// Words that end an area rather than belong to one: "clinic near Bedok that take CHAS"
+		// gave the area "bedok that take", and the card's heading said so.
+		' that take takes taking accept accepts accepting have has got need want can cheap' +
+		' cheaper still also but please thanks ' +
 		'chas clinic clinics gp doctor polyclinic dentist dental pharmacy pharmacies chemist medicine shop drugstore' +
 		' eldercare elder care day daycare senior centre center active ageing nursing respite')
 		.split(/\s+/)
@@ -153,19 +157,42 @@ export interface PlaceIntent {
 }
 
 /**
- * Is this a "where is…" question, and about what? Returns null unless the request names
- * both a kind of place and somewhere to look — "where is the nearest clinic" alone cannot
- * be answered honestly without a location, and guessing one would be worse than asking.
+ * Words that point somewhere. One of them has to be present, or the question is not about
+ * where anything is: "am I eligible for CHAS subsidy" named a kind of place and was
+ * answered with six clinic addresses, which is a wrong answer that looks like a right one.
+ */
+const POINTS_SOMEWHERE = /\b(where|near|nearest|nearby|around|closest|beside|next to|in|at)\b/;
+
+/** Everything from the pointing word onwards is where they are pointing. */
+const AFTER_POINTING = /\b(?:near|nearest|nearby|around|closest|beside|next to|in|at)\b(.*)$/;
+
+/**
+ * Is this a "where is…" question, and about what? Returns null unless the request names a
+ * kind of place, says it is looking for one, and says where to look — "where is the nearest
+ * clinic" alone cannot be answered honestly without a location, and guessing one would be
+ * worse than asking.
  */
 export function placeIntent(meaning: string): PlaceIntent | null {
 	const text = normalise(meaning);
 	const kind = KIND_WORDS.find(([, re]) => re.test(text))?.[0];
-	if (!kind) return null;
-	const area = text
-		.split(' ')
-		.filter((word) => word.length > 1 && !NOT_AN_AREA.has(word))
-		.join(' ')
-		.trim();
+	if (!kind || !POINTS_SOMEWHERE.test(text)) return null;
+
+	/*
+	 * Take the area from after the pointing word, not from whatever is left when the question
+	 * words are removed: "is there a clinic near Bedok that accepts CHAS" produced the area
+	 * "whether bedok accepts", and the card's heading said so.
+	 */
+	const pointed = AFTER_POINTING.exec(text)?.[1] ?? text;
+	const words: string[] = [];
+	for (const word of pointed.split(' ')) {
+		if (word.length <= 1 || NOT_AN_AREA.has(word)) {
+			// A stop word after the area ends it; before it, it is simply skipped.
+			if (words.length > 0) break;
+			continue;
+		}
+		words.push(word);
+	}
+	const area = words.join(' ').trim();
 	return area ? { kind, area } : null;
 }
 

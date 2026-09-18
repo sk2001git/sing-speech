@@ -17,6 +17,12 @@ export interface RuntimeEnv extends ProviderEnv {
 	/** GPT-Live model. Default gpt-live-1. */
 	SUARA_LIVE_MODEL?: string;
 	SUARA_OPENAI_MODEL?: string;
+	/**
+	 * Model that writes an on-demand card from a crawled page. Default gpt-5.6-luna.
+	 * Its own setting on purpose: `SUARA_OPENAI_MODEL` carries the realtime voice model,
+	 * which has no text endpoint and returns 404 if asked to write.
+	 */
+	SUARA_WRITE_MODEL?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */
 	SUARA_MODE?: string;
 	/** `true` shows unverified sample flows outside the dev server. */
