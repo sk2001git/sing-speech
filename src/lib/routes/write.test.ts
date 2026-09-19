@@ -49,11 +49,11 @@ describe('writerFor', () => {
 		return { calls, impl };
 	};
 
-	it('uses the measured default writer when no model is named', async () => {
+	it('runs on the OpenAI route when no model is named', async () => {
 		const { calls, impl } = seen();
 		await writerFor({ openaiKey: 'a', openrouterKey: 'b', fetchImpl: impl })!('p');
-		expect(calls[0]!.url).toContain('openrouter');
-		expect(calls[0]!.body.model).toBe('google/gemini-3.5-flash-lite');
+		expect(calls[0]!.url).toContain('api.openai.com');
+		expect(calls[0]!.body.model).toBe('gpt-5.6-luna');
 	});
 
 	it('sends a gpt- model to OpenAI, which is the one knob for switching vendor', async () => {
@@ -63,7 +63,7 @@ describe('writerFor', () => {
 		expect(calls[0]!.body.model).toBe('gpt-5.6-luna');
 	});
 
-	it('sends any other model name to OpenRouter', async () => {
+	it('sends a name that is not an OpenAI model to OpenRouter, which is how a route is switched', async () => {
 		const { calls, impl } = seen();
 		await writerFor({ openrouterKey: 'b', model: 'google/gemini-3.8-flash', fetchImpl: impl })!('p');
 		expect(calls[0]!.body.model).toBe('google/gemini-3.8-flash');
@@ -77,18 +77,20 @@ describe('writerFor', () => {
 	});
 
 	it('hands over to the other vendor when the first cannot be paid', async () => {
+		// One account down should not take the product down. Nothing routes to the stand-in by
+		// choice; it exists because an empty OpenRouter balance 502d every search once.
 		const calls: string[] = [];
 		const impl = (async (url: string) => {
 			calls.push(url);
-			if (url.includes('openrouter')) {
-				return new Response(JSON.stringify({ error: { message: 'add credits' } }), { status: 402 });
+			if (url.includes('api.openai.com')) {
+				return new Response(JSON.stringify({ error: { message: 'insufficient_quota' } }), { status: 429 });
 			}
-			return new Response(JSON.stringify({ output_text: '{"kind":"answer"}' }), { status: 200 });
+			return new Response(JSON.stringify({ choices: [{ message: { content: '{"kind":"answer"}' } }] }), { status: 200 });
 		}) as unknown as typeof fetch;
 		const write = writerFor({ openaiKey: 'a', openrouterKey: 'b', fetchImpl: impl })!;
 		expect(await write('p')).toBe('{"kind":"answer"}');
-		expect(calls[0]).toContain('openrouter');
-		expect(calls[1]).toContain('api.openai.com');
+		expect(calls[0]).toContain('api.openai.com');
+		expect(calls[1]).toContain('openrouter');
 	});
 
 	it('does not hand over a failure the other vendor would repeat', async () => {

@@ -99,6 +99,13 @@ try {
 	await send('Runtime.enable');
 	await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
 	await send('Page.navigate', { url: base });
+	/*
+	 * Start from a clean slate. The profile directory survives between runs, so the language
+	 * pill left on 中文 by the previous walk made this one read a Chinese screen and fail
+	 * every check that looks for an English label.
+	 */
+	await send('Runtime.evaluate', { expression: 'localStorage.clear(); sessionStorage.clear();', awaitPromise: false });
+	await send('Page.reload', { ignoreCache: false });
 	const hydrated = await waitFor(`document.querySelector('.k-orb') && !document.querySelector('astro-island[ssr]')`, 30000);
 	check('home loads and hydrates', hydrated);
 	check('home shows six topics', (await js(`document.querySelectorAll('[data-topic]').length`)) === 6);
@@ -165,10 +172,18 @@ try {
 	check('cards start closed', (await js(`document.querySelectorAll('.k-card-body').length`)) === 0);
 	await shot('topic-grid');
 
-	check('Show 6 more is offered', await js(`[...document.querySelectorAll('button')].some(b => /Show 6 more/.test(b.textContent))`));
+	// Waited for, not sampled: with 46 cards in this topic the button arrives a frame after
+	// the first six do, and sampling immediately made this fail at random.
+	check(
+		'Show 6 more is offered',
+		await waitFor(`[...document.querySelectorAll('button')].some(b => /Show 6 more/.test(b.textContent))`, 20000),
+	);
 	await js(`[...document.querySelectorAll('button')].find(b => /Show 6 more/.test(b.textContent))?.click()`);
-	const more = await waitFor(`document.querySelectorAll('[data-card]').length > 6`, 20000);
-	check('Show 6 more adds the remaining cards and removes the button', more && !(await js(`[...document.querySelectorAll('button')].some(b => /Show 6 more/.test(b.textContent))`)), `${await js(`document.querySelectorAll('[data-card]').length`)} cards`);
+	const more = await waitFor(`document.querySelectorAll('[data-card]').length === 12`, 20000);
+	// The button stays while there is more to show. It used to disappear here because the
+	// whole topic was under twelve entries; this topic now holds 46.
+	const stillOffered = await js(`[...document.querySelectorAll('button')].some(b => /Show 6 more/.test(b.textContent))`);
+	check('Show 6 more adds the next six and keeps offering', more && stillOffered, `${await js(`document.querySelectorAll('[data-card]').length`)} cards`);
 
 	await click('[data-card] .k-card-head');
 	check('tapping a card opens it in place', await waitFor(`document.querySelector('.k-card[data-open="true"] .k-summary')`, 3000));
@@ -208,11 +223,18 @@ try {
 	check('last confirmation finishes the guide', await waitFor(`/That is every step/.test(document.body.innerText)`, 3000));
 	await shot('done');
 
-	// A topic with no entries yet.
+	// Scams used to be empty; the crawl filled it, so the check moved to a topic that is
+	// genuinely empty and the old one became a check that it is not.
 	await click('.k-brand');
 	await waitFor(`document.querySelector('[data-topic="scams"]')`);
 	await click('[data-topic="scams"]');
-	check('empty topic says Not in Suara yet', await waitFor(`/Not in Suara yet/.test(document.body.innerText)`, 20000));
+	check('scam questions are answered now', await waitFor(`document.querySelectorAll('[data-card]').length > 0`, 20000));
+	await shot('scams');
+
+	await click('.k-brand');
+	await waitFor(`document.querySelector('[data-topic="transport"]')`);
+	await click('[data-topic="transport"]');
+	check('a topic with nothing in it says Not in Suara yet', await waitFor(`/Not in Suara yet/.test(document.body.innerText)`, 20000));
 	await shot('not-in-suara');
 
 	// Chinese.

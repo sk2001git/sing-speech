@@ -3,18 +3,25 @@ import { EMBEDDING, loadCorpus, loadPlaces, loadRaw } from '../../lib/kb/corpus'
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
 import { DEFAULT_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
 import { runtimeEnv } from '../../lib/env';
-import { OpenRouter } from '../../lib/providers/openrouter';
+import { OpenAi } from '../../lib/providers/openai';
 import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
 import { writerFor } from '../../lib/routes/write';
 
 export const prerender = false;
 
 /**
- * Qwen3-Embedding-8B lines, set on 24 held-out requests against the seed corpus: right
- * answers scored 0.774-0.995, questions Suara cannot answer 0.370-0.654. Recalibrate on
- * the eval set.
+ * Lines for text-embedding-3-large at 768 dimensions, measured against the served index by
+ * `scripts/kb/calibrate-thresholds.ts` on 2026-09-19, using questions the index has never
+ * seen — 29 real ones in a person's own words, 12 nobody official can answer:
+ *
+ *   real questions        p05 0.828   median 0.886
+ *   unanswerable ones     median 0.667   worst 0.761
+ *   floor 0.80            keeps 29 of 29, turns away 12 of 12
+ *
+ * Everything between the floor and `strong` also asks Tier B, so a middling fit is a reason
+ * to look harder rather than a reason to show the nearest thing.
  */
-const THRESHOLDS = { strong: 0.75, weak: 0.6, floor: 0.45 };
+const THRESHOLDS = { strong: 0.86, weak: 0.82, floor: 0.8 };
 
 /** Lives as long as the isolate. D1 replaces it in build step 6. */
 const translations = new MemoryTranslations();
@@ -31,27 +38,29 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
 	try {
 		const env = await runtimeEnv();
-		if (!env.OPENROUTER_API_KEY) throw new Error('OPENROUTER_API_KEY is not set');
-		const or = new OpenRouter({ apiKey: env.OPENROUTER_API_KEY });
+		if (!env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
+		const openai = new OpenAi({ apiKey: env.OPENAI_API_KEY });
 		const chain = buildRoutes(resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE), env);
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
 		const writer = writerFor({
-			...(env.OPENAI_API_KEY ? { openaiKey: env.OPENAI_API_KEY } : {}),
+			openaiKey: env.OPENAI_API_KEY,
 			...(env.SUARA_WRITE_MODEL ? { model: env.SUARA_WRITE_MODEL } : {}),
-			openrouterKey: env.OPENROUTER_API_KEY,
+			// Kept as a stand-in only: if the OpenAI account cannot be paid, a card is still
+			// better than an error. Nothing routes here by choice any more.
+			...(env.OPENROUTER_API_KEY ? { openrouterKey: env.OPENROUTER_API_KEY } : {}),
 		});
 
 		const deps: SearchDeps = {
 			corpus: loadCorpus(),
 			places: loadPlaces(),
-			embed: async (text) => (await or.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
+			embed: async (text) => (await openai.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
 			hear: async (audio, mime) => {
 				const heard = await hearVia(chain, audio, mime);
 				served = heard.route;
 				return heard.hearing;
 			},
-			translate: (entry, language) => translateEntry(entry, language, DEFAULT_TRANSLATORS, or.chatJson, new Date().toISOString()),
+			translate: (entry, language) => translateEntry(entry, language, DEFAULT_TRANSLATORS, openai.chatJson, new Date().toISOString()),
 			cache: translations,
 			// Tier B: a question no entry answers is looked up in the crawl and written into a
 			// card by the route's own model, then kept. Grounding decides whether it is shown.

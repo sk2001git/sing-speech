@@ -29,6 +29,14 @@ const BASE = at('base', 'http://localhost:4321');
 const verbose = args.includes('--verbose');
 const ROOT = path.resolve(import.meta.dirname, '../..');
 
+/**
+ * Entries already in the served index. Every entry is model-structured, so provenance
+ * cannot tell a pre-built card from one written while the person waited — only this can.
+ */
+const prebuilt = new Set(
+	(JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kb/index.json'), 'utf8')).entries ?? []).map((e) => e.id),
+);
+
 /** The crawl, to check quotes against the page they claim to come from. */
 const pageByUrl = new Map(
 	// Question plus answer: a page's published question is part of the page and may be quoted.
@@ -139,7 +147,7 @@ const rows = [];
 for (const q of QUESTIONS) {
 	const { ms, body, kind } = await askOnce(q.ask);
 	const card = kind === 'results' ? body.result.cards[0] : undefined;
-	const composed = card?.provenance?.structured?.method === 'model';
+	const composed = Boolean(card) && !prebuilt.has(card.id);
 	const problems = card ? ungrounded(card) : [];
 	const absent = card ? missing(card, q.must) : [];
 	const wanted = q.expect ?? 'results';

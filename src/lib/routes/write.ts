@@ -130,7 +130,9 @@ function chain(first: Writer, second: Writer): Writer {
  * on 2026-09-18, which is a bad way to learn that one account is a single point of failure.
  */
 export function writerFor(opts: WriterOptions): Writer | undefined {
-	const openai = opts.model?.startsWith('gpt-');
+	// Everything runs on the OpenAI route unless a model name says otherwise, which is what
+	// "by routes" means here: one vendor, one bill, one thing to top up.
+	const openai = (opts.model ?? DEFAULT_OPENAI_MODEL).startsWith('gpt-');
 	const viaOpenai = opts.openaiKey ? openaiWriter(opts.openaiKey, openai ? opts.model : undefined, opts.fetchImpl) : undefined;
 	const viaOpenrouter = opts.openrouterKey
 		? openrouterWriter(opts.openrouterKey, openai ? undefined : opts.model, opts.fetchImpl)

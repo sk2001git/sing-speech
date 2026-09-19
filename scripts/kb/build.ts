@@ -15,15 +15,29 @@ import path from 'node:path';
 import { documentTexts } from '../../src/lib/kb/embed';
 import { parseEntry, type Entry } from '../../src/lib/kb/entry';
 import { checkQuotesFound, checkRefsResolve, type Check } from '../../src/lib/kb/grounding';
-import { OpenRouter } from '../../src/lib/providers/openrouter';
+import { OpenAi } from '../../src/lib/providers/openai';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const ENTRIES = path.join(ROOT, 'data/kb/entries');
 const PAGES = path.join(ROOT, 'data/kb/pages');
 const INDEX = path.join(ROOT, 'data/kb/index.json');
-const MODEL = 'qwen/qwen3-embedding-8b';
+/**
+ * text-embedding-3-large, shortened to 768 dimensions.
+ *
+ * Measured on this corpus (scripts/kb/bench-embed.ts, 141 entries, 450 phrasings):
+ *
+ *   large @ 768   right entry in the first six 95.6%   gap to out-of-scope 0.109
+ *   large @ 1536  96.0%                                0.107
+ *   small @ 1536  84.0%                                0.064
+ *   small @ 768   83.8%                                0.056
+ *
+ * 768 over 1536 because the second half buys nothing here and doubles what the Worker
+ * carries; large over small because twelve points of recall is the difference between
+ * finding the right card and writing a new one (vault dec-suara-0022).
+ */
+const MODEL = 'text-embedding-3-large';
 const DIMENSIONS = 768;
-const BATCH = 48;
+const BATCH = 96;
 
 function envKey(name: string): string | undefined {
 	if (process.env[name]) return process.env[name];
@@ -40,7 +54,11 @@ function snapshotFor(url: string): string | undefined {
 	return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : undefined;
 }
 
-const round = (v: number[]) => v.map((x) => Math.round(x * 1e6) / 1e6);
+/**
+ * Four decimals. The vectors are the bulk of the served index, and six decimals of a
+ * cosine nobody compares to that precision cost half a megabyte of the Worker's budget.
+ */
+const round = (v: number[]) => v.map((x) => Math.round(x * 1e4) / 1e4);
 
 async function main() {
 	const embed = !process.argv.includes('--no-embed');
@@ -86,15 +104,15 @@ async function main() {
 	console.log(`\n${grounded.length} grounded, ${failed} not served.`);
 	if (!embed) return;
 
-	const key = envKey('OPENROUTER_API_KEY');
-	if (!key) throw new Error('OPENROUTER_API_KEY is not set (environment or suara/.env)');
-	const or = new OpenRouter({ apiKey: key, title: 'Suara index build' });
+	const key = envKey('OPENAI_API_KEY');
+	if (!key) throw new Error('OPENAI_API_KEY is not set (environment or suara/.env)');
+	const openai = new OpenAi({ apiKey: key });
 
 	const jobs = grounded.flatMap((e) => documentTexts(e).map((text) => ({ entryId: e.id, text })));
 	const vectors: { entryId: string; vector: number[] }[] = [];
 	for (let i = 0; i < jobs.length; i += BATCH) {
 		const batch = jobs.slice(i, i + BATCH);
-		const out = await or.embed(MODEL, batch.map((j) => j.text), DIMENSIONS);
+		const out = await openai.embed(MODEL, batch.map((j) => j.text), DIMENSIONS);
 		out.forEach((v, k) => vectors.push({ entryId: batch[k]!.entryId, vector: round(v) }));
 	}
 

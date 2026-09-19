@@ -18,13 +18,21 @@ export interface Translator {
 }
 
 /** DeepSeek first (obs-0031); free models that answered in the probe after it (obs-0030). */
+/**
+ * One vendor, cheapest first (OpenAI list prices, read 2026-09-19).
+ *
+ *   gpt-5.6-luna   $0.20 / $1.20 per M tokens
+ *   gpt-5.4-nano   $0.20 / $1.25
+ *   gpt-5.4-mini   $0.75 / $4.50
+ *
+ * The rotation stays because a translation that fails validation is retried elsewhere, not
+ * shown. It no longer crosses vendors: the owner's direction of 2026-09-19 was one route,
+ * OpenAI, cheapest luna (vault dec-suara-0022).
+ */
 export const DEFAULT_TRANSLATORS: Translator[] = [
-	{ model: 'deepseek/deepseek-v4.1-flash', structured: true },
-	{ model: 'nex-agi/nex-n2.5-pro:free', structured: false },
-	{ model: 'nvidia/nemotron-3-ultra-550b-a55b:free', structured: false },
-	{ model: 'google/gemma-4-31b-it:free', structured: false },
-	{ model: 'google/gemma-4-26b-a4b-it:free', structured: false },
-	{ model: 'poolside/laguna-s-2.1:free', structured: false },
+	{ model: 'gpt-5.6-luna', structured: true },
+	{ model: 'gpt-5.4-nano', structured: true },
+	{ model: 'gpt-5.4-mini', structured: true },
 ];
 
 export type ChatJson = (req: {
@@ -65,14 +73,24 @@ export function displayText(e: Entry): DisplayText {
 	};
 }
 
+/**
+ * "There is no action here" arrives as `null` from a strict schema and as an absent key
+ * from a plain-JSON model. Both mean the same thing, and rejecting the first threw away
+ * every translation OpenAI produced.
+ */
+const optionalLabel = z
+	.string()
+	.nullish()
+	.transform((v) => v ?? undefined);
+
 const Reply = z.object({
 	title: z.object({ short: z.string(), full: z.string() }),
 	summary: z.string(),
 	details: z.array(z.object({ heading: z.string(), body: z.string() })).default([]),
 	steps: z
-		.array(z.object({ name: z.string(), text: z.string(), confirm_label: z.string(), action_label: z.string().optional() }))
+		.array(z.object({ name: z.string(), text: z.string(), confirm_label: z.string(), action_label: optionalLabel }))
 		.default([]),
-	action_label: z.string().optional(),
+	action_label: optionalLabel,
 	example_phrasings: z.array(z.string()),
 });
 
@@ -138,11 +156,22 @@ export function applyTranslation(original: Entry, reply: unknown, language: Entr
 
 const str = (max?: number) => (max ? { type: 'string', minLength: 1, maxLength: max } : { type: 'string', minLength: 1 });
 
+/**
+ * Optional, the way a strict schema has to say it.
+ *
+ * OpenAI rejects a schema whose `required` omits any property — "'required' is required to
+ * be supplied and to be an array including every key in properties" — so an optional field
+ * is listed as required and allowed to be null. Leaving `action_label` merely absent from
+ * `required` made every translation fail with a 400 and showed the Chinese reader six
+ * English cards.
+ */
+const orNull = (schema: Record<string, unknown>) => ({ ...schema, type: [schema.type, 'null'] });
+
 function replySchema(): Record<string, unknown> {
 	return {
 		type: 'object',
 		additionalProperties: false,
-		required: ['title', 'summary', 'details', 'steps', 'example_phrasings'],
+		required: ['title', 'summary', 'details', 'steps', 'action_label', 'example_phrasings'],
 		properties: {
 			title: { type: 'object', additionalProperties: false, required: ['short', 'full'], properties: { short: str(16), full: str(60) } },
 			summary: str(140),
@@ -155,11 +184,11 @@ function replySchema(): Record<string, unknown> {
 				items: {
 					type: 'object',
 					additionalProperties: false,
-					required: ['name', 'text', 'confirm_label'],
-					properties: { name: str(40), text: str(300), confirm_label: str(24), action_label: str(24) },
+					required: ['name', 'text', 'confirm_label', 'action_label'],
+					properties: { name: str(40), text: str(300), confirm_label: str(24), action_label: orNull(str(24)) },
 				},
 			},
-			action_label: str(24),
+			action_label: orNull(str(24)),
 			example_phrasings: { type: 'array', items: str(120) },
 		},
 	};

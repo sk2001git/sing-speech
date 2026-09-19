@@ -30,6 +30,27 @@ function chineseText(e: Entry) {
 	};
 }
 
+describe('a reply from a strict schema', () => {
+	it('reads null as "no action here", which is how a strict schema says optional', () => {
+		// OpenAI's json_schema mode requires every property in `required`, so an optional one
+		// comes back as null. Rejecting that threw away every translation it produced.
+		// An entry with no actions at all: null is then the truth, not a dropped label. Where
+		// the original does have an action, a null is still rejected — that check is what
+		// stops a translation quietly losing the button a person has to press.
+		const e = original();
+		delete e.action;
+		for (const step of e.steps ?? []) delete step.action;
+		const reply = chineseText(e);
+		const withNulls = {
+			...reply,
+			action_label: null,
+			steps: reply.steps.map((s) => ({ ...s, action_label: null })),
+		};
+		const applied = applyTranslation(e, withNulls, 'zh-Hans', 'gpt-5.6-luna', AT);
+		expect(applied.ok, applied.ok ? '' : applied.reason).toBe(true);
+	});
+});
+
 describe('displayText', () => {
 	it('sends only what a person reads — never quotes, sources or ids', () => {
 		const text = JSON.stringify(displayText(original()));
