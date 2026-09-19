@@ -108,10 +108,10 @@ describe('results', () => {
 
 	it('takes a follow-up question during a live session, from wherever they are', () => {
 		const results = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }, { type: 'RESULTS', result: result() }]);
-		expect(next(results, { type: 'LIVE_ASK' }).phase).toBe('searching');
-		expect(next(initial(), { type: 'LIVE_ASK' }).phase).toBe('searching');
+		expect(next(results, { type: 'ASKING' }).phase).toBe('searching');
+		expect(next(initial(), { type: 'ASKING' }).phase).toBe('searching');
 		const steps = run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }], results);
-		expect(next(steps, { type: 'LIVE_ASK' }).phase).toBe('searching');
+		expect(next(steps, { type: 'ASKING' }).phase).toBe('searching');
 	});
 
 	it('searches a topic without the microphone', () => {

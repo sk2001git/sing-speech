@@ -22,6 +22,8 @@ const ROOT = path.resolve(import.meta.dirname, '../..');
 const ENTRIES = path.join(ROOT, 'data/kb/entries');
 const PAGES = path.join(ROOT, 'data/kb/pages');
 const INDEX = path.join(ROOT, 'data/kb/index.json');
+/** What the Find box searches in the browser: small enough to fetch on first open. */
+const FIND = path.join(ROOT, 'public/kb/find.json');
 /**
  * text-embedding-3-large, shortened to 768 dimensions.
  *
@@ -130,6 +132,28 @@ async function main() {
 		`${JSON.stringify({ built_at: at, embedding: { model: MODEL, dimensions: DIMENSIONS }, entries: unique, vectors })}\n`,
 	);
 	console.log(`Wrote ${path.relative(ROOT, INDEX)}: ${unique.length} entries, ${vectors.length} vectors.`);
+
+	/*
+	 * The Find index: one line per card, no quotes, no sources, no vectors. It is fetched by
+	 * the browser the first time somebody opens Find, so it holds what is searched and
+	 * nothing else.
+	 */
+	fs.mkdirSync(path.dirname(FIND), { recursive: true });
+	fs.writeFileSync(
+		FIND,
+		`${JSON.stringify({
+			built_at: at,
+			cards: unique.map((e) => ({
+				id: e.id,
+				label: e.title.short,
+				heading: e.title.full,
+				tags: e.topic.tags ?? [],
+				asked: e.search.example_phrasings[0] ?? '',
+			})),
+		})}
+`,
+	);
+	console.log(`Wrote ${path.relative(ROOT, FIND)}: ${(fs.statSync(FIND).size / 1024).toFixed(0)} KB for the Find box.`);
 	if (failed > 0) process.exitCode = 1;
 }
 

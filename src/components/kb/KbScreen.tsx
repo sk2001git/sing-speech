@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Waveform from './Waveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
+import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
@@ -27,6 +28,11 @@ export interface KbScreenProps {
 	routeLabel?: string;
 	/** Microphone loudness, 0 to 1, for the live waveform. */
 	level?: number;
+	/** Find: typing a few letters instead of speaking. */
+	finding?: boolean;
+	onFind?: () => void;
+	onFindClose?: () => void;
+	onFound?: (id: string, label: string) => void;
 }
 
 const WORDS = {
@@ -84,6 +90,11 @@ const WORDS = {
 		tryAgain: 'Try again',
 		home: 'Home',
 		language: 'Language',
+		find: 'Find',
+		findPlaceholder: 'Type a few letters',
+		findNothing: 'Not in Suara yet.',
+		speakInstead: 'Say it instead',
+		close: 'Close',
 		call: 'Call',
 		placeKind: { 'chas-clinic': 'CHAS clinics', eldercare: 'Eldercare services', pharmacy: 'Pharmacies' } as Record<string, string>,
 		placesNear: (kind: string, area: string) => `${kind} near ${area}`,
@@ -145,6 +156,11 @@ const WORDS = {
 		tryAgain: '再试一次',
 		home: '首页',
 		language: '语言',
+		find: '查找',
+		findPlaceholder: '输入几个字母',
+		findNothing: 'Suara 还没有这个。',
+		speakInstead: '改用说的',
+		close: '关闭',
 		call: '拨打',
 		placeKind: { 'chas-clinic': 'CHAS 诊所', eldercare: '乐龄服务', pharmacy: '药房' } as Record<string, string>,
 		placesNear: (kind: string, area: string) => `${area}附近的${kind}`,
@@ -169,6 +185,15 @@ function uiLanguage(state: FlowState, setting: ReplySetting): EntryLanguage {
 
 const publisherOf = (e: Entry) => e.sources[0]?.publisher ?? '';
 
+function FindIcon() {
+	return (
+		<svg className="k-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+			<circle cx="11" cy="11" r="6.5" />
+			<path d="m16 16 4.5 4.5" />
+		</svg>
+	);
+}
+
 export default function KbScreen(props: KbScreenProps) {
 	const lang = uiLanguage(props.state, props.setting);
 	const w = WORDS[lang];
@@ -181,19 +206,36 @@ export default function KbScreen(props: KbScreenProps) {
 					</span>
 					<span className="k-brand-name">Suara</span>
 				</button>
-				<button
-					className="k-pill"
-					type="button"
-					onClick={() => props.onLanguage(NEXT_SETTING[props.setting])}
-					aria-label={`${w.language}: ${LANGUAGE_PILL[props.setting]}`}
-				>
-					{LANGUAGE_PILL[props.setting]}
-				</button>
+				<div className="k-bar-right">
+					{props.onFind && (
+						<button className="k-pill k-pill-icon" type="button" onClick={props.onFind} aria-label={w.find}>
+							<FindIcon />
+							<span className="k-pill-text">{w.find}</span>
+						</button>
+					)}
+					<button
+						className="k-pill"
+						type="button"
+						onClick={() => props.onLanguage(NEXT_SETTING[props.setting])}
+						aria-label={`${w.language}: ${LANGUAGE_PILL[props.setting]}`}
+					>
+						{LANGUAGE_PILL[props.setting]}
+					</button>
+				</div>
 			</header>
 			<main className="k-page">
 				<Body {...props} w={w} lang={lang} />
 				{props.routeLabel && <p className="k-foot">{props.routeLabel}</p>}
 			</main>
+			{props.onFound && props.onFindClose && (
+				<Palette
+					open={Boolean(props.finding)}
+					words={{ find: w.find, placeholder: w.findPlaceholder, nothing: w.findNothing, speakInstead: w.speakInstead, close: w.close }}
+					onClose={props.onFindClose}
+					onChoose={props.onFound}
+					onSpeak={props.onSpeak}
+				/>
+			)}
 		</div>
 	);
 }

@@ -119,6 +119,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const [loadingMore, setLoadingMore] = useState(false);
 	/** Loudness for the waveform: only while the microphone is open, ten times a second. */
 	const [level, setLevel] = useState(0);
+	const [finding, setFinding] = useState(false);
 	const recording = useRef<Recording | null>(null);
 	const live = useRef<LiveLink | null>(null);
 	const isLive = route === 'openai-live';
@@ -196,7 +197,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 						answer('Sorry, could you say that again?');
 						return;
 					}
-					dispatch({ type: 'LIVE_ASK' });
+					dispatch({ type: 'ASKING' });
 					try {
 						const heard = { short: said.slice(0, 40), sentence: said, said };
 						const reply = await post({ kind: 'text', query: said, heard });
@@ -328,6 +329,23 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 	}
 
+	/*
+	 * Choosing a found card asks for it in words, rather than jumping straight to one card:
+	 * the neighbours around it are usually why somebody was looking, and the screen then
+	 * behaves exactly as it does after a spoken question.
+	 */
+	async function onFound(_id: string, label: string): Promise<void> {
+		silence();
+		const heard = { short: label.slice(0, 40), sentence: label };
+		dispatch({ type: 'ASKING' });
+		try {
+			last.current = { kind: 'text', query: label, heard };
+			show(await post({ kind: 'text', query: label, heard, offset: 0 }));
+		} catch {
+			dispatch({ type: 'FAIL' });
+		}
+	}
+
 	async function onTopic(area: Area): Promise<void> {
 		silence();
 		dispatch({ type: 'TOPIC', area });
@@ -357,6 +375,18 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 	}
 
+	// Ctrl+K and Cmd+K, the shortcut anyone who types expects. It is never the only way in:
+	// the header carries a Find control at the same size as everything else.
+	useEffect(() => {
+		const onKey = (event: KeyboardEvent) => {
+			if (event.key.toLowerCase() !== 'k' || !(event.metaKey || event.ctrlKey)) return;
+			event.preventDefault();
+			setFinding((was) => !was);
+		};
+		window.addEventListener('keydown', onKey);
+		return () => window.removeEventListener('keydown', onKey);
+	}, []);
+
 	function onLanguage(next: ReplySetting): void {
 		setSetting(next);
 		store('suara.lang', next);
@@ -376,6 +406,10 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onLanguage={onLanguage}
 			routeLabel={routeLabel}
 			level={level}
+			finding={finding}
+			onFind={() => setFinding(true)}
+			onFindClose={() => setFinding(false)}
+			onFound={onFound}
 		/>
 	);
 }

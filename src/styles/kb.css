@@ -81,6 +81,151 @@
 		align-self: flex-start;
 	}
 
+	.k-bar-right {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	/*
+	 * Find sits next to the language pill, same height, same target. On a narrow phone the
+	 * word drops and the magnifier carries it, which keeps the primary user's screen from
+	 * filling with controls they will not use.
+	 */
+	.k-pill-icon {
+		padding: 0 0.875rem;
+	}
+
+	@media (max-width: 24rem) {
+		.k-pill-text {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	}
+
+	.k-find-wrap {
+		position: fixed;
+		inset: 0;
+		z-index: 40;
+		display: flex;
+		justify-content: center;
+		padding: 4.5rem 1rem 1rem;
+		background: color-mix(in srgb, var(--ink) 28%, transparent);
+		backdrop-filter: blur(3px);
+	}
+
+	.k-find {
+		display: flex;
+		flex-direction: column;
+		width: min(36rem, 100%);
+		max-height: min(32rem, 80vh);
+		overflow: hidden;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		box-shadow: var(--shadow-orb);
+	}
+
+	.k-find-box {
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid var(--line);
+		color: var(--muted);
+	}
+
+	.k-find-input {
+		flex: 1;
+		min-width: 0;
+		min-height: 3rem;
+		border: 0;
+		background: none;
+		color: var(--ink);
+		font: inherit;
+		font-size: 1.25rem;
+	}
+
+	.k-find-input:focus {
+		outline: none;
+	}
+
+	.k-find-input::-webkit-search-cancel-button {
+		appearance: none;
+	}
+
+	.k-find-close {
+		min-height: 2.75rem;
+		padding: 0 0.875rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--subtle);
+		color: var(--ink);
+		font: inherit;
+		font-size: 1rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.k-find-list {
+		margin: 0;
+		padding: 0.5rem;
+		overflow-y: auto;
+		list-style: none;
+	}
+
+	.k-find-hit {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+		width: 100%;
+		min-height: 3.75rem;
+		padding: 0.625rem 0.875rem;
+		border: 0;
+		border-radius: var(--radius-btn);
+		background: none;
+		color: var(--ink);
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.k-find-hit[data-on='true'] {
+		background: var(--subtle);
+	}
+
+	.k-find-label {
+		font-size: 1.125rem;
+		font-weight: 700;
+	}
+
+	/* The letters that matched, marked so a person can see why this is being offered. */
+	.k-find-label mark {
+		background: none;
+		color: inherit;
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+	}
+
+	.k-find-heading {
+		color: var(--muted);
+		font-size: 1rem;
+	}
+
+	.k-find-empty {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 1.25rem;
+		color: var(--muted);
+	}
+
 	.k-page {
 		display: flex;
 		flex-direction: column;

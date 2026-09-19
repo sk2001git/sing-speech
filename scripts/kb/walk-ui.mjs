@@ -223,6 +223,30 @@ try {
 	check('last confirmation finishes the guide', await waitFor(`/That is every step/.test(document.body.innerText)`, 3000));
 	await shot('done');
 
+	// Find: typing instead of speaking, for the helper with somebody waiting.
+	await click('.k-brand');
+	await waitFor(`document.querySelector('.k-pill-icon')`);
+	await click('.k-pill-icon');
+	check('Find opens from the header', await waitFor(`document.querySelector('.k-find-input')`, 5000));
+	// Typed through the native setter so React sees it, as a person's keystrokes would be seen.
+	await js(`(() => {
+		const box = document.querySelector('.k-find-input');
+		const set = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+		set.call(box, 'medsav');
+		box.dispatchEvent(new Event('input', { bubbles: true }));
+	})()`);
+	const found = await waitFor(`document.querySelectorAll('.k-find-hit').length > 0`, 5000);
+	check(
+		'a misspelt word still finds the card',
+		found,
+		await js(`[...document.querySelectorAll('.k-find-label')].map(el => el.textContent).join(' | ')`),
+	);
+	check('the letters that matched are marked', (await js(`document.querySelectorAll('.k-find-label mark').length`)) > 0);
+	await shot('find');
+	await click('.k-find-hit');
+	check('choosing a found card answers it', await waitFor(`document.querySelectorAll('[data-card]').length > 0`, 20000));
+	await shot('find-result');
+
 	// Scams used to be empty; the crawl filled it, so the check moved to a topic that is
 	// genuinely empty and the old one became a check that it is not.
 	await click('.k-brand');
@@ -239,9 +263,10 @@ try {
 
 	// Chinese.
 	await click('.k-brand');
-	await waitFor(`document.querySelector('.k-pill')`);
-	await click('.k-pill');
-	check('language pill switches to 中文', await waitFor(`document.querySelector('.k-pill').textContent === '中文'`, 3000));
+	const LANGUAGE_PILL = '.k-bar-right .k-pill:not(.k-pill-icon)';
+	await waitFor(`document.querySelector('${LANGUAGE_PILL}')`);
+	await click(LANGUAGE_PILL);
+	check('language pill switches to 中文', await waitFor(`document.querySelector('${LANGUAGE_PILL}').textContent === '中文'`, 3000));
 	await click('[data-topic="health"]');
 	await waitFor(`document.querySelectorAll('[data-card]').length > 0`, 30000);
 	await click('.k-brand');
@@ -251,8 +276,8 @@ try {
 	const zh = await js(`({ cards: document.querySelectorAll('[data-card]').length, english: document.querySelectorAll('[data-english]').length, titles: [...document.querySelectorAll('.k-card-title')].map(t => t.textContent) })`);
 	check('Chinese reader gets Chinese cards', zh.cards > 0 && zh.english < zh.cards, JSON.stringify(zh));
 	await shot('chinese');
-	await click('.k-pill');
-	await click('.k-pill');
+	await click(LANGUAGE_PILL);
+	await click(LANGUAGE_PILL);
 
 	check('no page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 	ws.close();

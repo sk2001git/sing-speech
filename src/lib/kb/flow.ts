@@ -78,7 +78,8 @@ export type FlowEvent =
 	/** No words: the silence gate gave up before speech, or the route heard none. */
 	| { type: 'SILENCE' }
 	/** A live session asked us a question: it can come while they are anywhere. */
-	| { type: 'LIVE_ASK' }
+	/** A question is on its way, however it was asked: spoken live, or found by typing. */
+	| { type: 'ASKING' }
 	| { type: 'NOTHING'; heard: Heard }
 	| { type: 'PLACES'; result: PlacesResult }
 	| { type: 'TOPIC'; area: Area }
@@ -120,7 +121,7 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			return state.phase === 'searching' ? { view, phase: 'results', result: event.result, openId: null } : state;
 		case 'GREETING':
 			return state.phase === 'searching' ? { view, phase: 'home', greeting: true } : state;
-		case 'LIVE_ASK':
+		case 'ASKING':
 			return { view, phase: 'searching', topic: null };
 		case 'SILENCE':
 			return state.phase === 'listening' || state.phase === 'searching' ? { view, phase: 'home', greeting: false, notice: 'nothing' } : state;
