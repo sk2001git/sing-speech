@@ -1,0 +1,126 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.elderfund-processing-and-payout-timing",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "ElderFund",
+		"full": "ElderFund processing and payout timing"
+	},
+	"summary": {
+		"text": "Processing: up to two months. Payout: next month after approval, backdated to the disability assessment.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Application processing",
+			"body": "Your completed application is generally processed within two months from the date it is received.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "When the payout arrives",
+			"body": "The payout goes to your nominated bank account in the month after your application is approved. It is backdated to when the disability assessment was done.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If there is no outcome",
+			"body": "If you have not received the application outcome after two months, contact AIC through the AIC website or hotline at 1800-650-6060.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"elderfund"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How long does it take for my ElderFund application to be processed, approved and for me to get the payout?",
+			"How long will my ElderFund application take?",
+			"When will I receive my ElderFund payout?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuupb00i8hipnw8c2k6cw",
+			"page_title": "How long does it take for my ElderFund application to be processed, approved and for me to get the payout?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:01:07.186Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Generally, your ElderFund application will be processed within two months from the date of receipt of the completed application. If the application outcome is not received after 2 months, you may reach out to the Agency for Integrated Care (AIC) through the AIC website or AIC hotline (1800-650-6060) to enquire about the status. The payout will be made to your nominated bank account in the following month from the application's approval date. Payouts will be backdated to when the disability assessment was performed."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Generally, your ElderFund application will be processed within two months from the date of receipt of the completed application."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The payout will be made to your nominated bank account in the following month from the application's approval date. Payouts will be backdated to when the disability assessment was performed."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If the application outcome is not received after 2 months, you may reach out to the Agency for Integrated Care (AIC) through the AIC website or AIC hotline (1800-650-6060) to enquire about the status."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:07.186Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:07.186Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:07.186Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuupb00i8hipnw8c2k6cw"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:07.186Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:07.186Z",
+		"updated_at": "2026-09-19T10:01:07.186Z"
+	},
+	"action": {
+		"type": "call",
+		"label": "Call 18006506060",
+		"value": "18006506060",
+		"quote_refs": [
+			"q1"
+		]
+	}
+}

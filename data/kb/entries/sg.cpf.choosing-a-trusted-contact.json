@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.choosing-a-trusted-contact",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Trusted contact",
+		"full": "Choosing a Trusted Contact"
+	},
+	"summary": {
+		"text": "Yes. You can choose someone who is not your next-of-kin. They must accept before becoming your Trusted Contact.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who you can choose",
+			"body": "You can appoint someone who is not your next-of-kin. Choose only someone you trust, as they will help monitor important CPF transactions and provide extra protection against scams.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Their acceptance",
+			"body": "Your appointee must accept the appointment before they become your Trusted Contact.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"trusted-contacts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I appoint someone who is not my next-of-kin to be my Trusted Contact?",
+			"Can I choose a friend as my Trusted Contact?",
+			"Does my Trusted Contact have to be family?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxlb002ccsd0vwrhg0gd",
+			"page_title": "Can I appoint someone who is not my next-of-kin to be my Trusted Contact?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:56.214Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can appoint a person who is not your next-of-kin to be your Trusted Contact."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can appoint a person who is not your next-of-kin to be your Trusted Contact. We highly recommend that you carefully review and only choose someone you trust, as they will help monitor important CPF transactions and provide an additional layer of security against potential scams."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Do note that your appointee will also need to accept the appointment before they become your Trusted Contact."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:56.214Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:56.214Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:56.214Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxlb002ccsd0vwrhg0gd"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:56.214Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:56.214Z",
+		"updated_at": "2026-09-19T10:01:56.214Z"
+	}
+}

@@ -95,6 +95,14 @@ async function structure(doc: RawDoc & { priority: string }) {
 	const entry = made.entry;
 	if (!refresh && held.has(`${entry.id}.json`)) return;
 
+	/*
+	 * A rerun that chooses a different heading must replace this page's card, not add a
+	 * second one: that is how one MediSave page ended up as four entries.
+	 */
+	for (const name of fs.readdirSync(ENTRIES).filter((f) => f.endsWith('.json') && f !== `${entry.id}.json`)) {
+		const held = JSON.parse(fs.readFileSync(path.join(ENTRIES, name), 'utf8')) as { sources?: { url?: string }[] };
+		if (held.sources?.[0]?.url === doc.url) fs.rmSync(path.join(ENTRIES, name));
+	}
 	fs.writeFileSync(path.join(ENTRIES, `${entry.id}.json`), `${JSON.stringify(entry, null, '\t')}\n`);
 	// The page as crawled, which is what build.ts checks every quote against.
 	fs.writeFileSync(path.join(PAGES, `${doc.agency}-${doc.id}.txt`), `${doc.title}\n${doc.text}\n`);

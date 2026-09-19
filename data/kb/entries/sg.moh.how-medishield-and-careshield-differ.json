@@ -1,0 +1,94 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-medishield-and-careshield-differ",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Two care plans",
+		"full": "How MediShield and CareShield differ"
+	},
+	"summary": {
+		"text": "MediShield Life helps pay large hospital bills and some costly outpatient care. CareShield Life gives cash for long-term care.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What each plan covers",
+			"body": "MediShield Life helps with large hospital bills and selected costly outpatient treatments. CareShield Life provides cash payouts for long-term care costs.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"others"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the difference between MediShield Life and CareShield Life?",
+			"How are MediShield Life and CareShield Life different?",
+			"What does each care plan help with?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vt8vxl00nk9apod3lrhofs",
+			"page_title": "What is the difference between MediShield Life and CareShield Life?",
+			"retrieved_at": "2026-09-19T09:58:54.846Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "MediShield Life helps to pay for large hospital bills and selected costly outpatient treatments such as dialysis and chemotherapy for cancer. Whereas CareShield Life provides cash payouts to help severely disabled individuals with their long-term care costs."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Both MediShield Life and CareShield Life are insurance plans, but they serve different purposes."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:58:54.846Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:58:54.846Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:58:54.846Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vt8vxl00nk9apod3lrhofs"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:58:54.846Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:58:54.846Z",
+		"updated_at": "2026-09-19T09:58:54.846Z"
+	}
+}

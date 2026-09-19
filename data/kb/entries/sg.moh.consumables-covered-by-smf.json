@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.consumables-covered-by-smf",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "SMF consumables",
+		"full": "Consumables covered by SMF"
+	},
+	"summary": {
+		"text": "SMF subsidies cover several home healthcare items, including diapers, catheters, milk feeds and wound dressings.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Covered items",
+			"body": "Adult diapers; catheters and catheter sets; milk feeds; nasal tubing; nasogastric tubes and pH indication test strips; thickeners; and wound dressings.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"aged-care"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What consumables are covered under SMF?",
+			"SMF consumables",
+			"What does SMF cover?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2sgshba009k12kzst7ahe0a",
+			"page_title": "What consumables are covered under SMF?",
+			"source_modified_at": "2024-10-28",
+			"retrieved_at": "2026-09-19T10:00:22.062Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can use SMF subsidies for the following types of consumables (also known as home healthcare items):"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Adult diapers Catheters and catheter set Milk feeds Nasal tubing Nasogastric tubes and pH indication test strips Thickeners Wound dressings"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:22.062Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:22.062Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:22.062Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2sgshba009k12kzst7ahe0a"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:22.062Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:22.062Z",
+		"updated_at": "2026-09-19T10:00:22.062Z"
+	}
+}

@@ -1,0 +1,132 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.choosing-a-cpf-life-plan",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF LIFE plans",
+		"full": "Choosing a CPF LIFE plan"
+	},
+	"summary": {
+		"text": "There are three plans: Escalating, Standard and Basic. Choose based on how willing you are to adjust your lifestyle as costs rise.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Escalating Plan",
+			"body": "Consider this plan if you are worried about rising living costs. Payouts start lower, then grow by 2% every year for life. This generally helps you maintain your retirement lifestyle.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Standard Plan",
+			"body": "This plan gives steady payouts that start higher than the Escalating Plan. The payouts do not grow with inflation, so you may need to lower your lifestyle as costs rise.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Basic Plan",
+			"body": "This plan starts with lower monthly payouts, which will be lower later on. Payouts will get lower when your combined CPF balances eventually fall below $60,000.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "What all three plans provide",
+			"body": "All three plans provide payouts for as long as you live. Your premiums earn risk-free CPF interest rates. Any remaining CPF LIFE premium balance goes to your beneficiaries, together with your remaining CPF savings, when you pass on.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"monthly-payouts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the CPF LIFE plans available and which is the right plan for me?",
+			"What CPF LIFE plans are available?",
+			"Which CPF LIFE plan is right for me?",
+			"Can you explain the CPF LIFE choices?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kyk00x1pz7aobsy42zx",
+			"page_title": "What are the CPF LIFE plans available and which is the right plan for me?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T10:02:34.647Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "There are three CPF LIFE plans to choose from – Escalating Plan, Standard Plan and Basic Plan."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you are worried about the rising costs of living, you can consider the Escalating Plan which provides monthly payouts that start lower initially but grow by 2% every year for life."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you are willing to live a more modest lifestyle and buy less as years pass, you may find the Standard Plan which provides steady payouts suitable for you."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you don’t mind starting with lower monthly payouts which will be lower later on, then the Basic Plan is good enough."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "In all three plans, you will enjoy payouts no matter how long you live, your premiums will enjoy risk-free CPF interest rates, and any remaining CPF LIFE premium balance will be given to your beneficiaries, together with your remaining CPF savings when you pass on."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:34.647Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:34.647Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:34.647Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kyk00x1pz7aobsy42zx"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:34.647Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:34.647Z",
+		"updated_at": "2026-09-19T10:02:34.647Z"
+	}
+}

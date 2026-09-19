@@ -1,0 +1,140 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.appealing-the-pioneer-generation-package",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Package appeal",
+		"full": "Appealing the Pioneer Generation Package"
+	},
+	"summary": {
+		"text": "Age appeals are not accepted. Citizenship-related appeals may be considered if you marginally missed the citizenship date.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What citizenship appeals consider",
+			"body": "The panel considers whether you became a Singapore citizen shortly after 1986. It also looks at whether you had been in Singapore since the early years of independence, contributed to society, and made clear efforts to sink roots in Singapore.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the reason",
+			"text": "If your appeal is about age and you were born after 31 Dec 1949, you cannot appeal. The Appeals Panel only considers citizenship-related appeals.",
+			"confirm_label": "I checked my reason",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Contact the panel",
+			"text": "If you marginally missed the citizenship date of 31 Dec 1986 and feel you meet the criteria, call 1800-2222-888 or email contactus@pioneers.gov.sg. Include your NRIC number.",
+			"confirm_label": "I contacted the panel",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Get consent if needed",
+			"text": "If you are appealing for a relative, get your relative's consent first.",
+			"confirm_label": "I have their consent",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"pioneer-generation"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I would like to appeal for the Pioneer Generation Package. can I do so, and how?",
+			"Can I appeal for the Pioneer Generation Package?",
+			"How do I appeal for the Pioneer Generation Package?",
+			"Can I make a Pioneer Generation appeal?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2ouziws003912kz37t29t1c",
+			"page_title": "I would like to appeal for the Pioneer Generation Package. can I do so, and how?",
+			"source_modified_at": "2024-10-25",
+			"retrieved_at": "2026-09-19T10:00:16.553Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you were born after 31 Dec 1949, please note that no appeals will be received."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you were born after 31 Dec 1949, please note that no appeals will be received. As explained in response to queries in Parliament and during the debate on the Pioneer Generation Fund Bill, the Appeals Panel recognised that the Government had already adopted a more inclusive approach by extending the Pioneer Generation Package to all those born in 1949 or earlier."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you marginally missed the citizenship date of 31 Dec 1986 and you feel that you meet the criteria, please contact us at 1800-2222-888 or contactus@pioneers.gov.sg with your NRIC number to file an appeal."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you would like to appeal on behalf of a relative, please obtain your relative's consent first."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "For citizenship-related appeals, the Panel considers whether the person had obtained Singapore citizenship shortly after 1986 – the year set as the citizenship cut-off date for eligibility of the Pioneer Generation Package."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:16.553Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:16.553Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:16.553Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2ouziws003912kz37t29t1c"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:16.553Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:16.553Z",
+		"updated_at": "2026-09-19T10:00:16.553Z"
+	}
+}

@@ -1,0 +1,115 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.understanding-cpf-retirement-sums",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Retirement sums",
+		"full": "Understanding CPF retirement sums"
+	},
+	"summary": {
+		"text": "BRS supports basic living needs. FRS is double BRS. ERS is double the current year’s FRS and the maximum top-up amount.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Basic Retirement Sum",
+			"body": "The BRS provides monthly payouts for basic living needs, excluding rental expenses.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Full Retirement Sum",
+			"body": "The FRS is double the BRS. It is the default amount to set aside in your Retirement Account when you turn 55.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Enhanced Retirement Sum",
+			"body": "The ERS is double the current year’s FRS. If you are 55 or older, it is the maximum amount you can top up to your Retirement Account. It increases yearly.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the retirement sums - Basic Retirement Sum (BRS), Full Retirement Sum (FRS) and Enhanced Retirement Sum (ERS)?",
+			"Retirement sums",
+			"What are the BRS, FRS and ERS?",
+			"How do the CPF retirement sums differ?",
+			"What do the CPF retirement sums mean?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmd3qhs2n00ne36wpcgzzjcs2",
+			"page_title": "What are the retirement sums - Basic Retirement Sum (BRS), Full Retirement Sum (FRS) and Enhanced Retirement Sum (ERS)?",
+			"source_modified_at": "2025-07-14",
+			"retrieved_at": "2026-09-19T10:02:20.080Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Basic Retirement Sum (BRS) provides you monthly payouts for basic living needs, excluding rental expenses2."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Full Retirement Sum (FRS) is double your BRS and is the default amount to set aside in your RA when you turn 55."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Enhanced Retirement Sum (ERS) is double the current year’s FRS and is the maximum amount you can top up to your RA if you are aged 55 and above. The ERS increases yearly, and topping up to the current year’s ERS allows you to get the highest CPF monthly payouts."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:20.080Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:20.080Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:20.080Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmd3qhs2n00ne36wpcgzzjcs2"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:20.080Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:20.080Z",
+		"updated_at": "2026-09-19T10:02:20.080Z"
+	}
+}

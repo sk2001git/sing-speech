@@ -1,0 +1,89 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.your-full-retirement-sum-by-year",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Your FRS amount",
+		"full": "Your Full Retirement Sum by year"
+	},
+	"summary": {
+		"text": "Your FRS depends on the year you turn 55 and stays the same for life.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "FRS amounts by year",
+			"body": "If you turned 55 in 2015 or 2016: $161,000. In 2017: $166,000. In 2018: $171,000. In 2019: $176,000. In 2020: $181,000. In 2021: $186,000. In 2022: $192,000. In 2023: $198,800. In 2024: $205,800. In 2025: $213,000. In 2026: $220,400. In 2027: $228,200.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How much is my Full Retirement Sum?",
+			"What is my FRS amount?",
+			"How much do I need for my FRS?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmd3qhs2n00n836wpasdplque",
+			"page_title": "How much is my Full Retirement Sum?",
+			"source_modified_at": "2025-07-14",
+			"retrieved_at": "2026-09-19T10:02:04.365Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can refer to the table below for your Full Retirement Sum (FRS) amount, which depends on the year you turn 55 and will remain the same for life."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:04.365Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:04.365Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:04.365Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmd3qhs2n00n836wpasdplque"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:04.365Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:04.365Z",
+		"updated_at": "2026-09-19T10:02:04.365Z"
+	}
+}

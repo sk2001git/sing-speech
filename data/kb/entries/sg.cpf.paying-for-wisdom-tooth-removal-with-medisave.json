@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.paying-for-wisdom-tooth-removal-with-medisave",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave",
+		"full": "Paying for wisdom tooth removal with MediSave"
+	},
+	"summary": {
+		"text": "Yes, if it is a surgical procedure at a participating private dental clinic under the MediSave Scheme.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Day surgery limit",
+			"body": "Up to $830 per day for daily hospital charges, including investigations, medicines and doctor's attendance fees.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Operation limit",
+			"body": "The fixed limit is from $240 to $5,290, depending on the type of operation performed.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use MediSave to pay for the removal of my wisdom tooth?",
+			"Can MediSave pay for wisdom tooth removal?",
+			"Is wisdom tooth removal covered by MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0201n9pz7a1ef50rye",
+			"page_title": "Can I use MediSave to pay for the removal of my wisdom tooth?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T09:59:48.271Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can use your MediSave savings to pay for the removal of your wisdom tooth incurred at a participating private dental clinic under the MediSave Scheme, provided that it is a surgical procedure."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Day surgeryUp to a maximum of $830 per day for daily hospital charges, including investigations, medicines and doctor's attendance fees."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "OperationA fixed limit for operations ranging from $240 to $5,290 depending on the type of operations performed."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:48.271Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:48.271Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:48.271Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0201n9pz7a1ef50rye"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:48.271Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:48.271Z",
+		"updated_at": "2026-09-19T09:59:48.271Z"
+	}
+}

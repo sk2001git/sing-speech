@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.reviewing-your-household-information",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Update household",
+		"full": "Reviewing your household information"
+	},
+	"summary": {
+		"text": "Review and update your household information whenever your household changes.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Review for changes",
+			"text": "Review your household information whenever there are changes to your household, such as a move or a new household member.",
+			"confirm_label": "I checked my information",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Submit the changes",
+			"text": "Submit the changes through the MediShield Life e-Service, or call 1800-222-3399.",
+			"confirm_label": "I submitted the changes",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"information-used-for-means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"When should I review and update my household information?",
+			"When do I need to update my household details?",
+			"When should I check my household information?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vq8hz100kx9apojxfjqhwj",
+			"page_title": "When should I review and update my household information?",
+			"source_modified_at": "2025-02-28",
+			"retrieved_at": "2026-09-19T09:59:09.871Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You should review and update your household information whenever there are changes to your household (e.g. when you/your household member(s) move house and updated the NRIC address, or when there are new additions to your household)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You should review and update your household information whenever there are changes to your household"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Please submit the changes via the MediShield Life e-Service (https://medishieldlife.moh.gov.sg) and click “Login to access the MediShield Life e-Service”. Alternatively, you can call 1800-222-3399."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:09.871Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:09.871Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:09.871Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vq8hz100kx9apojxfjqhwj"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:09.871Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:09.871Z",
+		"updated_at": "2026-09-19T09:59:09.871Z"
+	},
+	"action": {
+		"type": "call",
+		"label": "Call 18002223399",
+		"value": "18002223399",
+		"quote_refs": [
+			"q3"
+		]
+	}
+}

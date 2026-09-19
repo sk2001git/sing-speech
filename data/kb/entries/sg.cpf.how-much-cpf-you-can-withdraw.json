@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.how-much-cpf-you-can-withdraw",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF withdrawal",
+		"full": "How much CPF you can withdraw"
+	},
+	"summary": {
+		"text": "From age 55, you can withdraw any amount from your OA if you have set aside your FRS. Otherwise, you can withdraw $5,000.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "If you have set aside your FRS",
+			"body": "You can withdraw any amount from your Ordinary Account (OA).",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If you have not set aside your FRS",
+			"body": "You can withdraw $5,000 from your OA. When you withdraw, non-withdrawable OA savings may be transferred to your Retirement Account to help make up your FRS.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Check your amount",
+			"body": "You can check the CPF savings you can withdraw from age 55 by logging into your Retirement dashboard.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"retirement-withdrawals"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How much CPF savings can I withdraw from age 55 to 64?",
+			"How much can I take out of my CPF at 55?",
+			"Can I withdraw all my CPF savings at 55?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmd9gg46p00zw36wpnwpy7itj",
+			"page_title": "How much CPF savings can I withdraw from age 55 to 64?",
+			"source_modified_at": "2025-07-18",
+			"retrieved_at": "2026-09-19T10:02:14.982Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you have set aside your Full Retirement Sum (FRS), fully in cash or with a mixture of property and cash:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can withdraw any amount from your Ordinary Account (OA)"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you have not set aside your FRS: You can withdraw $5,000 from your OA"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You can check the CPF savings you can withdraw from age 55 by logging into your Retirement dashboard."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:14.982Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:14.982Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:14.982Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmd9gg46p00zw36wpnwpy7itj"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:14.982Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:14.982Z",
+		"updated_at": "2026-09-19T10:02:14.982Z"
+	}
+}

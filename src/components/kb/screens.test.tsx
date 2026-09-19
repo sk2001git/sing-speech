@@ -10,7 +10,24 @@ const entries = (index.entries as unknown[]).map((raw) => {
 	if (!r.ok) throw new Error(r.errors.join('\n'));
 	return r.entry;
 });
-const byId = (id: string) => entries.find((e) => e.id === id)!;
+/**
+ * Picked by shape, not by id. The index holds one card per official page and is rebuilt as
+ * the crawl grows, so a card that exists today may be replaced by a richer one for the same
+ * page tomorrow — these tests need an answer with details, a process with steps and a card
+ * that offers a phone call, not three particular entries.
+ */
+const pick = (wanted: (e: Entry) => boolean, what: string) => {
+	const found = entries.find(wanted);
+	if (!found) throw new Error(`no ${what} in data/kb/index.json for this test`);
+	return found;
+};
+const anAnswer = () => pick((e) => e.kind === 'answer' && (e.details?.length ?? 0) > 0, 'answer card with details');
+const aProcess = () => pick((e) => e.kind === 'process' && (e.steps?.length ?? 0) > 2, 'process card with three or more steps');
+/**
+ * An answer, not a process: a process card offers "Start guide" in that place, so the call
+ * only ever shows on an answer.
+ */
+const aPhoneCard = () => pick((e) => e.kind === 'answer' && e.action?.type === 'call', 'answer card offering a call');
 
 const result = (over: Partial<SearchResult> = {}): SearchResult => ({
 	heard: { short: 'A&E referral costs', sentence: 'Your doctor sent you to A&E, and you want to know if it costs less.' },
@@ -65,7 +82,7 @@ describe('Results', () => {
 	});
 
 	it('opens a card in place: summary, detail drop-downs, source link and its action', () => {
-		const e = byId('sg.moh.medishield-vs-careshield');
+		const e = anAnswer();
 		const html = render(results(result({ cards: [e] }), e.id));
 		expect(html).toContain(e.summary.text);
 		expect(html).toContain('<details');
@@ -75,10 +92,11 @@ describe('Results', () => {
 	});
 
 	it('gives a process card a Start guide button, and a phone answer a call link', () => {
-		const guide = byId('sg.moh.gpfirst-emergency-referral');
+		const guide = aProcess();
 		expect(render(results(result({ cards: [guide] }), guide.id))).toContain('Start guide');
-		const call = byId('sg.moh.pioneer-card-replacement');
-		expect(render(results(result({ cards: [call] }), call.id))).toContain('href="tel:18006506060"');
+		const call = aPhoneCard();
+		const number = call.action!.value!;
+		expect(render(results(result({ cards: [call] }), call.id))).toContain(`href="tel:${number}"`);
 	});
 
 	it('shows what they said, word for word, open above the cards', () => {
@@ -108,7 +126,7 @@ describe('Results', () => {
 });
 
 describe('Guided steps', () => {
-	const e: Entry = byId('sg.moh.gpfirst-emergency-referral');
+	const e: Entry = aProcess();
 	const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
 
 	it('asks before starting, with full-card yes and no', () => {
@@ -120,7 +138,7 @@ describe('Guided steps', () => {
 
 	it('shows one open step with its own confirm label, done steps above and later steps closed', () => {
 		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
-		expect(html).toContain('Step 2 of 5');
+		expect(html).toContain(`Step 2 of ${e.steps!.length}`);
 		expect(html).toContain(e.steps![1]!.confirm_label);
 		expect(html).toContain(e.steps![1]!.text);
 		expect(html).not.toContain(e.steps![2]!.text);

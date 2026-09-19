@@ -1,0 +1,91 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.grant-eligibility-for-mdws",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MDWs",
+		"full": "Grant eligibility for MDWs"
+	},
+	"summary": {
+		"text": "Yes, if the MDW is the main caregiver of a person with disability or an elderly person who is a Singapore Citizen or Permanent Resident.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When MDWs qualify",
+			"body": "An MDW can qualify when they are the main caregiver of a person with disability or an elderly person who is a Singapore Citizen or Permanent Resident.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"caregiver-support"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Are Migrant Domestic Workers (MDW) eligible for the grant?",
+			"Are Migrant Domestic Workers eligible for the grant?",
+			"Can an MDW get the grant?",
+			"Does a migrant domestic worker qualify?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2sgtojh007346yzesqtxxmy",
+			"page_title": "Are Migrant Domestic Workers (MDW) eligible for the grant?",
+			"source_modified_at": "2024-10-28",
+			"retrieved_at": "2026-09-19T10:00:26.858Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, as long as they are the main caregivers of persons with disability or elderly who are Singapore Citizens or Permanent Residents."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:26.858Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:26.858Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:26.858Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2sgtojh007346yzesqtxxmy"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:26.858Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:26.858Z",
+		"updated_at": "2026-09-19T10:00:26.858Z"
+	}
+}

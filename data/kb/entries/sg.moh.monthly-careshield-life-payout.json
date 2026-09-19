@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.monthly-careshield-life-payout",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CareShield Life",
+		"full": "Monthly CareShield Life payout"
+	},
+	"summary": {
+		"text": "The monthly payout is $649 in 2024. It rises yearly until age 67 or a successful claim, whichever comes first.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Current payout",
+			"body": "The monthly payout is $649 in 2024. It increases each year until age 67 or until a successful claim is made, whichever happens first.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "For some older members",
+			"body": "For an insured born in 1954 or earlier who joined CareShield Life at age 67 or after, the monthly payout is fixed at $612 when a successful claim is made.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"careshield-life-benefits"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the monthly payout amount for CareShield Life?",
+			"CareShield payout",
+			"How much does CareShield Life pay each month?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuok0042hipna3w0u1e2",
+			"page_title": "What is the monthly payout amount for CareShield Life?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:43.403Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Monthly payout is $649 in 2024, and increases annually until age 67 or when a successful claim is made, whichever is earlier."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "For an insured (born in 1954 and earlier) who joined the scheme at age 67 or after, his/her monthly payout will be fixed at $612/month when a successful claim is made."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:43.403Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:43.403Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:43.403Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuok0042hipna3w0u1e2"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:43.403Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:43.403Z",
+		"updated_at": "2026-09-19T10:00:43.403Z"
+	}
+}

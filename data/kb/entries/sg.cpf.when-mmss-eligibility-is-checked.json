@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.when-mmss-eligibility-is-checked",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MMSS eligibility",
+		"full": "When MMSS eligibility is checked"
+	},
+	"summary": {
+		"text": "Each year, eligibility is checked automatically. No application is needed. Eligible members are notified at the beginning of each year.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Automatic yearly assessment",
+			"body": "Your eligibility is checked automatically every year. You do not need to apply.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "When you will be notified",
+			"body": "If you are eligible, you will be notified at the beginning of each year by email or post.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Check your eligibility",
+			"body": "You can also check your eligibility using the Healthcare dashboard.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"matched-medisave-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"When will my eligibility for the Matched MediSave Scheme be assessed and do I need to apply?",
+			"Do I need to apply for MMSS?",
+			"When will CPF check if I qualify for MMSS?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm7b5q0m400jnyb4u4wzseum5",
+			"page_title": "When will my eligibility for the Matched MediSave Scheme be assessed and do I need to apply?",
+			"source_modified_at": "2025-02-19",
+			"retrieved_at": "2026-09-19T09:59:58.672Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Members’ eligibility for the Matched MediSave Scheme (MMSS) will be automatically assessed annually. You do not need to apply for the scheme."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You will be notified at the beginning of each year if you are eligible for the scheme for the year via email or post."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You can also check your eligibility for the MMSS via the Healthcare dashboard."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:58.672Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:58.672Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:58.672Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm7b5q0m400jnyb4u4wzseum5"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:58.672Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:58.672Z",
+		"updated_at": "2026-09-19T09:59:58.672Z"
+	}
+}

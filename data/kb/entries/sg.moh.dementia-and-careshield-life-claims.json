@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.dementia-and-careshield-life-claims",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Dementia claims",
+		"full": "Dementia and CareShield Life claims"
+	},
+	"summary": {
+		"text": "Dementia does not automatically qualify someone for CareShield Life claims. A severe disability assessment is still needed.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why an assessment is needed",
+			"body": "Dementia or other cognitive impairments can affect a person’s functional abilities to different extents. This is why an assessment is still required.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Does an individual with dementia automatically qualify for CareShield Life claims?",
+			"Can someone with dementia claim CareShield Life automatically?",
+			"Does dementia mean I can get CareShield Life payouts?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuot0090hipnruephrgl",
+			"page_title": "Does an individual with dementia automatically qualify for CareShield Life claims?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:58.893Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Applicants with dementia or other cognitive impairments will not automatically qualify for CareShield Life/ElderShield claims and will still need to undergo a severe disability assessment"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "as dementia/cognitive impairment could affect the applicant’s functional abilities to varying extents."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:58.893Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:58.893Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:58.893Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuot0090hipnruephrgl"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:58.893Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:58.893Z",
+		"updated_at": "2026-09-19T10:00:58.893Z"
+	}
+}

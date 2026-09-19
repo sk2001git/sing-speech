@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.advertising-government-healthcare-programmes",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "government",
+		"full": "Advertising government healthcare programmes"
+	},
+	"summary": {
+		"text": "Yes. Licensees may advertise these programmes when the healthcare service is part of a government-funded, initiated or endorsed programme.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What licensees may advertise",
+			"body": "A licensee may advertise government programmes when the advertisement gives factual information about, or related to, the healthcare services they provide. The service must be part of a programme funded, initiated or endorsed by the Government or the Health Promotion Board.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"health-regulation",
+			"healthcare-services-act"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can a licensee advertise government programmes such as CHAS schemes, health screenings and vaccinations?",
+			"Can healthcare providers advertise government health programmes?",
+			"Are licensees allowed to promote CHAS and vaccinations?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clu6lx3qu0038314rwwda4w2u",
+			"page_title": "Can a licensee advertise government programmes such as CHAS schemes, health screenings and vaccinations?",
+			"source_modified_at": "2024-03-25",
+			"retrieved_at": "2026-09-19T10:00:23.650Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Licensees are allowed to advertise government programmes if the substantive content comprises factual information about or relating to the healthcare services provided by a licensee, where the healthcare service is provided in relation to a programme that is funded (in whole or in part), initiated or endorsed by the Government or the Health Promotion Board."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:23.650Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:23.650Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:23.650Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clu6lx3qu0038314rwwda4w2u"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:23.650Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:23.650Z",
+		"updated_at": "2026-09-19T10:00:23.650Z"
+	}
+}

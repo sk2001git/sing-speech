@@ -1,0 +1,125 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-the-disability-schemes-differ",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "schemes differ",
+		"full": "How the disability schemes differ"
+	},
+	"summary": {
+		"text": "ElderFund has wider coverage. It helps lower-income citizens over 30 who cannot benefit from listed schemes and lack enough MediSave.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "ElderFund",
+			"body": "ElderFund is for lower-income Singapore Citizens above 30 who cannot benefit from CareShield Life, ElderShield and IDAPE, and do not have enough MediSave for basic long-term care.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "IDAPE",
+			"body": "IDAPE is for older people who could not join ElderShield because they were 70 or older, or had disabilities before applying. It pays $250 or $150 a month for up to 6 years, depending on household income.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "PioneerDAS",
+			"body": "PioneerDAS is part of the Pioneer Generation package. It pays $100 a month to Pioneers with moderate disability. There is no limit on how long it pays while they remain eligible.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Who the schemes cover",
+			"body": "IDAPE and PioneerDAS cover smaller groups of older Singaporeans. ElderFund covers a wider group.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"elderfund"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How is ElderFund different from IDAPE and PG-DAS?",
+			"What is the difference between ElderFund and the older disability schemes?",
+			"Who can get ElderFund instead of IDAPE or PioneerDAS?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuupa00hchipnt2f4unlo",
+			"page_title": "How is ElderFund different from Interim Disability Assistance Programme for the Elderly (IDAPE) and Pioneer Generation Disability Assistance Scheme (PG-DAS)?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:25.265Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "ElderFund provides wider coverage, and is targeted at assisting lower-income Singapore Citizens above the age of 30 who are unable to benefit from CareShield Life, ElderShield and IDAPE, and have insufficient MediSave balances to support their basic long-term care needs."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "IDAPE was introduced in 2002 to benefit seniors who were not eligible for ElderShield at the time because they were aged 70 and above (born on/or before 30 September 1932) or had pre-existing disabilities. It provides $250 per month or $150 per month, depending on applicant's per capita household income, for a maximum of 6 years."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "PioneerDAS is part of the Pioneer Generation package, and provides $100 per month for all Pioneers with moderate disability. There is no cap on the duration of payouts as long as they meet the eligibility criteria."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Interim Disability Assistance Programme for the Elderly (IDAPE) and Pioneer Disability Assistance Scheme (PioneerDAS) are disability assistance schemes restricted to smaller cohorts of older Singaporeans."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:25.265Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:25.265Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:25.265Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuupa00hchipnt2f4unlo"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:25.265Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:25.265Z",
+		"updated_at": "2026-09-19T10:00:25.265Z"
+	}
+}

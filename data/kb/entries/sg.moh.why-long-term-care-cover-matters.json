@@ -1,0 +1,132 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.why-long-term-care-cover-matters",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Why it matters",
+		"full": "Why long term care cover matters"
+	},
+	"summary": {
+		"text": "CareShield Life and ElderShield provide basic financial protection when long-term care needs and costs are uncertain.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "More people may need care",
+			"body": "As Singapore's population ages, more people may need long-term care. One in two Singaporeans who are healthy at age 65 is expected to develop severe disability by the end of their lives.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Care needs can last years",
+			"body": "The length of severe disability and the cost of care can vary. The expected median duration is around four years, but three in 10 people remain severely disabled for 10 years or more.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Families may not manage alone",
+			"body": "Shrinking family sizes make it harder to rely only on personal and family savings to pay for long-term care.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Insurance works with other support",
+			"body": "These insurance schemes complement Government subsidies, Government assistance schemes, community support, personal savings and family support.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"financing-my-long-term-care-needs"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why is CareShield Life/ElderShield necessary for Singaporeans' long-term care needs?",
+			"Why is CareShield Life or ElderShield needed?",
+			"How does long-term care insurance help?",
+			"Why do Singaporeans need cover for long-term care?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuoy00b8hipnbtuz42wn",
+			"page_title": "Why is CareShield Life/ElderShield necessary for Singaporeans' long-term care needs?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:55.418Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Long-term care insurance schemes like CareShield Life and ElderShield help Singaporeans to pool their risks together within their cohort so that each Singaporean within that cohort has basic financial protection against the uncertainty and variability of the cost of long-term care."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The need for long-term care will rise as Singapore's population ages. One in two Singaporeans who are healthy at age 65 is expected to develop severe disability by the end of their lives."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The expected median duration for which individuals with severe disability remain in disability is around four years, but three in 10 remain in severe disability for 10 years or more."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Variation in the duration of severe disability and the accompanying costs of long-term care, coupled with shrinking family sizes in Singapore, make it increasingly challenging to rely solely on personal and family savings to pay for one's long-term care needs."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "They complement other long-term care financing sources, such as Government subsidies, Government assistance schemes, community support, personal savings and family support."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:55.418Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:55.418Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:55.418Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuoy00b8hipnbtuz42wn"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:55.418Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:55.418Z",
+		"updated_at": "2026-09-19T10:00:55.418Z"
+	}
+}

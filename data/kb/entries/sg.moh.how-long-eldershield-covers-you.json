@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-long-eldershield-covers-you",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Lifetime cover",
+		"full": "How long ElderShield covers you"
+	},
+	"summary": {
+		"text": "ElderShield gives lifetime coverage. After all premiums are paid, cover lasts for the rest of your life.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Lifetime coverage",
+			"body": "Once you start paying premiums, you are covered under ElderShield. After you finish paying all premiums, you remain covered for the rest of your life.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"eldershield",
+			"eldershield-coverage"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How long will I be covered under ElderShield?",
+			"Does ElderShield cover me for life?",
+			"When does my ElderShield cover end?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup100cghipn8zh4ubln",
+			"page_title": "How long will I be covered under ElderShield?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:01:09.458Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "ElderShield provides lifetime coverage to its insureds."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Once an ElderShield insured starts paying premiums, he will be covered under ElderShield. An insured will be covered under ElderShield for the rest of his life when he finishes paying all the premiums under the Regular Premium Plan or a lump sum premium under the Single Premium Plan."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:09.458Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:09.458Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:09.458Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuup100cghipn8zh4ubln"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:09.458Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:09.458Z",
+		"updated_at": "2026-09-19T10:01:09.458Z"
+	}
+}

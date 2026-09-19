@@ -1,0 +1,118 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.your-maximum-top-up",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Top up limit",
+		"full": "Your maximum top up"
+	},
+	"summary": {
+		"text": "Your limit depends on your age and CPF savings. Check it in the Top-ups section of your Retirement Dashboard.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Check your top-up limit",
+			"body": "You can check your maximum amount in the “Top-ups” section of your Retirement Dashboard.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If you are below 55",
+			"body": "Your limit is the amount needed to reach the Current Full Retirement Sum, after your SA savings and certain SA withdrawals are counted.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If you are 55 or above",
+			"body": "Your limit is the amount needed to reach the Current Enhanced Retirement Sum, after your RA savings and CPF LIFE premium amounts are counted.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"retirement-sum-topping-up-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the maximum amount of top-ups I can receive?",
+			"How much can I top up?",
+			"What is my top-up limit?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kwg00a1pz7aa0mh102b",
+			"page_title": "What is the maximum amount of top-ups I can receive?",
+			"retrieved_at": "2026-09-19T10:02:00.119Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The maximum amount of top-ups you can receive depends on your age and your CPF savings."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can easily check your top-up limit in the “Top-ups” section of your Retirement Dashboard."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you are below 55, you can refer to the “Maximum amount you can top up using cash” to reach the Current Full Retirement Sum."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are 55 or above, you can refer to the “Maximum amount you can top up using cash” to reach the Current Enhanced Retirement Sum."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:00.119Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:00.119Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:00.119Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kwg00a1pz7aa0mh102b"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:00.119Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:00.119Z",
+		"updated_at": "2026-09-19T10:02:00.119Z"
+	}
+}

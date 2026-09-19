@@ -1,0 +1,89 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-can-use-the-healthier-sg-chronic-tier",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Chronic tier",
+		"full": "Who can use the Healthier SG Chronic Tier"
+	},
+	"summary": {
+		"text": "You need a CHAS, PG, or MG card and must be enrolled with a Healthier SG GP clinic.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who is eligible",
+			"body": "You do not need to be a CHAS cardholder specifically. You can qualify as a CHAS, Pioneer Generation, or Merdeka Generation cardholder, as long as you are enrolled with a Healthier SG GP clinic.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthier-sg-chronic-tier"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Do I need a CHAS card for the Chronic Tier?",
+			"Can PG or MG cardholders use the Chronic Tier?",
+			"What do I need for Healthier SG Chronic Tier?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clkrnuwri000cl40gmhomaw9o",
+			"page_title": "Do I need to be a Community Health Assist Scheme (CHAS) cardholder to enjoy the Healthier SG Chronic Tier under Healthier SG from 2024?",
+			"source_modified_at": "2025-06-16",
+			"retrieved_at": "2026-09-19T10:00:06.775Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You will need to be a CHAS/ Pioneer Generation (PG)/ Merdeka Generation (MG) cardholder and be enrolled with a Healthier SG GP clinic to be eligible for the Healthier SG Chronic Tier."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:06.775Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:06.775Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:06.775Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clkrnuwri000cl40gmhomaw9o"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:06.775Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:06.775Z",
+		"updated_at": "2026-09-19T10:00:06.775Z"
+	}
+}

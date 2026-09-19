@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.appealing-for-medishield-life-subsidies",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Premium appeal",
+		"full": "Appealing for MediShield Life subsidies"
+	},
+	"summary": {
+		"text": "Submit your request online or call the hotline. Supporting documents will be requested for assessment.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose a method",
+			"text": "Submit your request through the MediShield Life e-Service, or call the MediShield Life hotline at 1800-222-3399.",
+			"confirm_label": "I chose a method",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Provide documents",
+			"text": "Provide supporting documents when requested for assessment.",
+			"confirm_label": "I know about documents",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"premiums-and-subsidies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I appeal for MediShield Life Premium Subsidies?",
+			"How can I appeal my MediShield Life subsidy?",
+			"I want to appeal for a premium subsidy"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vq3nr3002166lwehlw0mex",
+			"page_title": "How do I appeal for MediShield Life Premium Subsidies?",
+			"source_modified_at": "2025-02-28",
+			"retrieved_at": "2026-09-19T09:59:24.714Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can submit your request through the MediShield Life e-Service (https://medishieldlife.moh.gov.sg/) or call our MediShield Life hotline at 1800-222-3399."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Do note that supporting documents will be requested for assessment."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:24.714Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:24.714Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:24.714Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vq3nr3002166lwehlw0mex"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:24.714Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:24.714Z",
+		"updated_at": "2026-09-19T09:59:24.714Z"
+	},
+	"action": {
+		"type": "call",
+		"label": "Call 18002223399",
+		"value": "18002223399",
+		"quote_refs": [
+			"q1"
+		]
+	}
+}

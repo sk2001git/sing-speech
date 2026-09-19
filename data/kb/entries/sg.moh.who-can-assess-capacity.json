@@ -1,0 +1,96 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-can-assess-capacity",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Capacity check",
+		"full": "Who can assess capacity"
+	},
+	"summary": {
+		"text": "A mental capacity assessment can be done by any doctor registered with the Singapore Medical Council.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Ask the assessor first",
+			"body": "An MOH-accredited severe disability assessor may be able to do the mental capacity assessment. Ask whether he or she can perform it before booking a disability assessment appointment.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can an MOH-accredited severe disability assessor certify the applicant’s mental capacity for CareShield Life claims?",
+			"Can an assessor check mental capacity?",
+			"Who can certify mental capacity?",
+			"Can an MOH-accredited assessor do this?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuow00a8hipnx7alcwri",
+			"page_title": "Can an MOH-accredited severe disability assessor certify the applicant’s mental capacity for CareShield Life claims?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:56.865Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "A mental capacity assessment can be completed by any doctor registered with the Singapore Medical Council."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you require a mental capacity assessment, you may wish to ask your assessor if he/she is able to perform a mental capacity assessment, before you proceed to make a disability assessment appointment."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:56.865Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:56.865Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:56.865Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuow00a8hipnx7alcwri"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:56.865Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:56.865Z",
+		"updated_at": "2026-09-19T10:00:56.865Z"
+	}
+}

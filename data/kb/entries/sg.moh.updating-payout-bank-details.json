@@ -1,0 +1,115 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.updating-payout-bank-details",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Bank details",
+		"full": "Updating payout bank details"
+	},
+	"summary": {
+		"text": "Log in to AIC’s eService portal with Singpass, then update your bank account details.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Changing details for someone else",
+			"body": "If you are changing the nominated bank account on behalf of a care recipient who lacks mental capacity, submit a Mental Incapacity Certification if you have not done so before.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Log in",
+			"text": "Log in to AIC’s eService portal with your Singpass.",
+			"confirm_label": "I logged in",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Update details",
+			"text": "Update your bank account details for your CareShield Life or ElderShield claim payouts.",
+			"confirm_label": "I updated the details",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"eldershield",
+			"eldershield-claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I update my bank account details for my CareShield Life/ElderShield payouts?",
+			"How can I change my payout bank account?",
+			"Where do I update my CareShield Life payout details?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup400echipn2ohsnd2i",
+			"page_title": "How do I update my bank account details for my CareShield Life/ElderShield payouts?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:01:04.857Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can log in to AIC’s eService portal (https://efinance.aic.sg) with your Singpass to update your bank account details for CareShield Life/ElderShield claim payouts."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you are changing the nominated bank account on behalf of a care recipient who lacks mental capacity, you will need to submit a Mental Incapacity Certification if you have not done so before."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:04.857Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:04.857Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:04.857Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuup400echipn2ohsnd2i"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:04.857Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:04.857Z",
+		"updated_at": "2026-09-19T10:01:04.857Z"
+	}
+}

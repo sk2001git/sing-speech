@@ -1,0 +1,132 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.how-cpf-life-basic-plan-works",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF LIFE basics",
+		"full": "How CPF LIFE Basic Plan works"
+	},
+	"summary": {
+		"text": "The Basic Plan gives lifelong payouts. They may fall as your CPF balances drop below $60,000.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "How payments work",
+			"body": "Your monthly payouts are paid for as long as you live. The Basic Plan pays from your Retirement Account savings until age 90. After that, payments come from your CPF LIFE premium.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Your CPF LIFE premium",
+			"body": "When you join CPF LIFE, about 10% to 20% of your Retirement Account savings becomes your CPF LIFE premium. The premium continues to earn CPF interest, which is included in your payouts.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Why payouts can fall",
+			"body": "Your Retirement Account savings continue to earn 4% interest. You may also earn extra interest on the first $60,000 of your CPF balances. As your balances fall below $60,000, that extra interest decreases, so your payouts can gradually become lower.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "After you pass away",
+			"body": "Your remaining CPF LIFE premium balance will be paid to your beneficiaries.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"monthly-payouts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How does the CPF LIFE Basic Plan work?",
+			"What happens with the CPF LIFE Basic Plan?",
+			"How are Basic Plan payouts paid?",
+			"Can Basic Plan payouts go down?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kyk00xdpz7a03oxfke6",
+			"page_title": "How does the CPF LIFE Basic Plan work?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T10:02:26.148Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The CPF LIFE Basic Plan provides payouts that will get lower when the CPF balances drop below $60,000."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "For the CPF LIFE Basic Plan, your CPF LIFE monthly payouts will first be paid from your RA savings until age 90. Thereafter, you will receive the monthly payout from your CPF LIFE premium."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "New CPF LIFE members: When you join CPF LIFE, about 10% to 20% of your Retirement Account (RA) savings will be used as your CPF LIFE premium."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "As your RA savings are gradually withdrawn to provide you with monthly payouts, the extra interest you earn will decrease when the total balances fall below $60,000."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Upon your passing, your remaining CPF LIFE premium balance will be paid to your beneficiaries."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:26.148Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:26.148Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:26.148Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kyk00xdpz7a03oxfke6"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:26.148Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:26.148Z",
+		"updated_at": "2026-09-19T10:02:26.148Z"
+	}
+}

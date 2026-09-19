@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compose, composePrompt, draftToEntry, type Draft } from './compose';
+import { compose, composePrompt, draftToEntry, shorten, type Draft } from './compose';
 import { parseEntry } from './entry';
 import { checkQuotesFound, checkRefsResolve } from './grounding';
 import type { RawDoc } from './raw-store';
@@ -119,13 +119,32 @@ describe('draftToEntry', () => {
 		expect(made.entry.search.example_phrasings).toContain(ASKED);
 	});
 
+	it('shortens to the words that name the thing, not the first words of the heading', () => {
+		// Labels read "Checking your", "Deactivating the", "Benefits of the" on the cards: the
+		// first words of a heading are usually the verb and the article, and the noun that
+		// tells a person what the card is about got cut off.
+		expect(shorten('Checking your MediSave top-up limit', 16)).toBe('MediSave top-up');
+		expect(shorten('Deactivating the CPF Safety Switch', 16)).toBe('CPF Safety');
+		expect(shorten('Appealing for Merdeka Generation Package', 16)).toBe('Merdeka');
+		expect(shorten('Who is in a household', 16)).toBe('household');
+		expect(shorten('Getting help for premiums', 16)).toBe('premiums');
+		expect(shorten('Options when MediSave is insufficient', 16)).toBe('MediSave');
+	});
+
+	it('never ends a label on a word that leads nowhere', () => {
+		for (const heading of ['Benefits of the new licensing framework', 'Options when MediSave runs out', 'Paying for a bill with CPF']) {
+			const label = shorten(heading, 16);
+			expect(label.split(' ').at(-1), heading).not.toMatch(/^(the|a|of|for|your|to|with|and|when|from|in|at|my)$/i);
+		}
+	});
+
 	it('shortens an overlong label from the heading instead of making the person wait', () => {
 		// Every model tested overshot the 16-character label sometimes. A label is not a claim,
 		// so it is repaired here rather than sent back for another attempt.
 		const wordy = { ...draft, short: 'Using MediSave for a family member' };
 		const made = draftToEntry(wordy, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
-		expect(made.entry.title.short).toBe('Paying a family');
+		expect(made.entry.title.short).toBe('MediSave');
 		expect(made.entry.title.full).toBe('Paying a family member’s bill with MediSave');
 	});
 
@@ -159,6 +178,35 @@ describe('draftToEntry', () => {
 		expect(made.ok).toBe(false);
 		if (made.ok) return;
 		expect(made.errors.join(' ')).toMatch(/full/);
+	});
+
+	it('offers the call when the page gives a number, because the phone is the way out', () => {
+		const byPhone: RawDoc = {
+			...doc,
+			title: 'I lost my Pioneer Generation card. How do I apply for a replacement?',
+			text: 'Please call 1800-650-6060 for assistance.',
+		};
+		const drafted: Draft = {
+			...draft,
+			kind: 'answer',
+			steps: [],
+			details: [],
+			short: 'Lost PG card',
+			full: 'Replacing a lost Pioneer Generation card',
+			summary: 'Call 1800 650 6060 and they will help you get a new card.',
+			summary_quote: 'Please call 1800-650-6060 for assistance.',
+		};
+		const made = draftToEntry(drafted, { asked: 'I lost my pioneer card', docs: [byPhone], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		expect(made.entry.action).toMatchObject({ type: 'call', value: '18006506060' });
+		// The button cites the same quote the line does, so it is as checked as the text.
+		expect(made.entry.action!.quote_refs).toEqual(['q1']);
+	});
+
+	it('offers no call when the page has no number to call', () => {
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		expect(made.entry.action).toBeUndefined();
 	});
 
 	it('is an answer, not a process, when there are no steps', () => {

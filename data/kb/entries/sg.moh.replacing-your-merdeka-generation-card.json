@@ -1,0 +1,99 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.replacing-your-merdeka-generation-card",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Card replacement",
+		"full": "Replacing your Merdeka Generation card"
+	},
+	"summary": {
+		"text": "Call 1800-650-6060 for help with a lost card or damaged welcome folder.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Call for assistance",
+			"text": "Call 1800-650-6060 for assistance with your lost card or damaged welcome folder.",
+			"confirm_label": "I called for help",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"merdeka-generation"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I lost my Merdeka Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"How do I replace my card?",
+			"My Merdeka Generation card is lost"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2ov0h54003f46yzs7we3xu0",
+			"page_title": "I lost my Merdeka Generation card/welcome folder is damaged. How do I apply for a replacement?",
+			"retrieved_at": "2026-09-19T10:00:02.689Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Please call 1800-650-6060 for assistance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:02.689Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:02.689Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:02.689Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2ov0h54003f46yzs7we3xu0"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:02.689Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:02.689Z",
+		"updated_at": "2026-09-19T10:00:02.689Z"
+	},
+	"action": {
+		"type": "call",
+		"label": "Call 18006506060",
+		"value": "18006506060",
+		"quote_refs": [
+			"q1"
+		]
+	}
+}

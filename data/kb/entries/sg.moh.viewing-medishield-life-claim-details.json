@@ -1,0 +1,167 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.viewing-medishield-life-claim-details",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Claim details",
+		"full": "Viewing MediShield Life claim details"
+	},
+	"summary": {
+		"text": "Use CPF’s Healthcare dashboard to view MediSave and MediShield Life claim details for the past 15 months.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Claims older than 15 months",
+			"body": "For claims before the past 15 months, submit a request to the Central Provident Fund Board through the CPF website.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Sign in",
+			"text": "Log in to your Healthcare dashboard under my cpf digital services with your Singpass.",
+			"confirm_label": "I signed in",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Open claims",
+			"text": "Go to “Latest healthcare payments and claims”.",
+			"confirm_label": "I opened the claims",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Show past claims",
+			"text": "Select “View past 15 months”.",
+			"confirm_label": "I chose 15 months",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Choose a period",
+			"text": "Select the hospitalisation period you want to view.",
+			"confirm_label": "I chose the period",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"position": 5,
+			"name": "Open the details",
+			"text": "Click the amount under MediSave Payment or MediShield Life/Integrated Shield Plan Payment to see the claim details.",
+			"confirm_label": "I saw the claim details",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"claims-under-medishield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I view details of my MediShield Life claims from the online MediSave and/or MediShield Life Claim Statements?",
+			"How do I view MediShield Life claim details?",
+			"Where can I see my MediSave and MediShield Life claims?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vplo9r00js9apo55u0zap6",
+			"page_title": "How do I view details of my MediShield Life claims from the online MediSave and/or MediShield Life Claim Statements?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T09:59:28.631Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can view the details of your MediSave withdrawals and MediShield Life claim details for past 15 months online at www.cpf.gov.sg under \"Latest healthcare payments and claims\"."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "(1) Login to your Healthcare dashboard under my cpf digital services with your Singpass"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "(2) Proceed to “Latest healthcare payments and claims”"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "(3) Click on “View past 15 months”"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "(4) Select the hospitalisation period"
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "(5) Click on the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment to view the claim details."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "If you would like to view the details of claims prior to the past 15 months, please submit a request to the Central Provident Fund Board via www.cpf.gov.sg/eSvc/Web/FeedbackSubscription/Index ."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:28.631Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:28.631Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:28.631Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vplo9r00js9apo55u0zap6"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:28.631Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:28.631Z",
+		"updated_at": "2026-09-19T09:59:28.631Z"
+	}
+}

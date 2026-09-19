@@ -1,0 +1,130 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-these-care-and-retirement-schemes-differ",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "schemes differ",
+		"full": "How these care and retirement schemes differ"
+	},
+	"summary": {
+		"text": "Some insure against disability or medical bills. Others give retirement income, healthcare subsidies, or cash help with caregiving.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Care and medical insurance",
+			"body": "CareShield Life and ElderShield are long-term care insurance for severe disability. CareShield Life pays monthly for as long as you cannot do three or more of six daily activities. ElderShield pays $300 monthly for up to 60 months, or $400 monthly for up to 72 months, depending on the plan. MediShield Life covers large medical bills for life.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Retirement and healthcare help",
+			"body": "CPF LIFE gives a monthly retirement payout for life. CHAS gives subsidies for medical and dental care at participating clinics. It can also give more subsidies at public-hospital specialist clinics after a referral from a participating clinic or polyclinic.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Caregiving assistance",
+			"body": "HCG gives families $200 each month when they care for a loved one with permanent moderate disability who lives in the community. PioneerDAS gives Pioneers $100 each month for life when they have permanent moderate disability.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Support for severe disability",
+			"body": "IDAPE gives needy older Singapore Citizens up to $250 each month if they have severe disability and could not join ElderShield. ElderFund gives lower-income Singapore Citizens aged 30 and above up to $250 each month if they have severe disability, cannot benefit from the other listed disability schemes, and lack enough savings.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Scheme differences",
+			"How are these schemes different?",
+			"What does each scheme cover?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuof001mhipn51i4jg7e",
+			"page_title": "What is the difference between CareShield Life, ElderShield, MediShield Life, CPF LIFE, ElderFund, Community Health Assist Scheme (CHAS), Home Caregiving Grant (HCG) , Pioneer Generation Disability Assistance Scheme (PioneerDAS) and Interim Disability Assistance Programme for the Elderly (IDAPE)?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T09:59:13.991Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "CareShield Life, ElderShield, MediShield Life, CPF LIFE, CHAS, HCG, PioneerDAS, ElderFund and IDAPE are schemes that help Singaporeans with different types of healthcare and retirement expenses."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "CareShield Life and ElderShield are long-term care insurance schemes that will provide Singapore Citizens and Permanent Residents with some financial protection should one develop severe disability (i.e. unable to perform at least three or more of the six Activities of Daily Living (ADLs)), especially in old age."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "CPF LIFE is the national longevity insurance annuity scheme, which insures Singapore Citizens and Permanent Residents against the risk of outliving their retirement savings."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Home Caregiving Grant (HCG) is a monthly cash grant of $200 to support families caring for loved ones with permanent moderate disability (i.e. always require some assistance with at least three Activities of Daily Living (ADLs)) who reside in the community."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "ElderFund is a discretionary government assistance scheme providing monthly cash assistance of up to $250 to lower-income Singapore Citizens, aged 30 and above, who have developed severe disability and are not able to benefit from CareShield Life, ElderShield and Interim Disability Assistance Programme for the Elderly (IDAPE), and have low MediSave balances and inadequate personal savings to meet their long-term care needs."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:13.991Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:13.991Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:13.991Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuof001mhipn51i4jg7e"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:13.991Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:13.991Z",
+		"updated_at": "2026-09-19T09:59:13.991Z"
+	}
+}

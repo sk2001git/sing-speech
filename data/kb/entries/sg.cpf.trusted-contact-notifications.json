@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.trusted-contact-notifications",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Trusted Contacts",
+		"full": "Trusted Contact notifications"
+	},
+	"summary": {
+		"text": "Only critical transactions or updates with higher scam risk are copied to Trusted Contacts.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What they are notified about",
+			"body": "Trusted Contacts are notified only about critical transactions or updates that may expose the account to higher scam risk. Examples include a withdrawal or a change to bank account information. Less critical notifications are not copied to them.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"trusted-contacts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can CPF Board notify Trusted Contacts about other types of transactions made by their appointers?",
+			"Trusted Contacts",
+			"What other transactions can Trusted Contacts hear about?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxli004ycsd06m4w68n0",
+			"page_title": "Can CPF Board notify Trusted Contacts about other types of transactions made by their appointers?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:53.972Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Only notifications for critical transactions or updates that may expose an account to higher scam risk (e.g. when a withdrawal is made, or when bank account information is changed) are copied to Trusted Contacts."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Only notifications for critical transactions or updates that may expose an account to higher scam risk (e.g. when a withdrawal is made, or when bank account information is changed) are copied to Trusted Contacts. This avoids overwhelming Trusted Contacts with less critical notifications regarding their appointer’s account."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:53.972Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:53.972Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:53.972Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxli004ycsd06m4w68n0"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:53.972Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:53.972Z",
+		"updated_at": "2026-09-19T10:01:53.972Z"
+	}
+}

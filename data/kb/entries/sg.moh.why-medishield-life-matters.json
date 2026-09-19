@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.why-medishield-life-matters",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediShield Life",
+		"full": "Why MediShield Life matters"
+	},
+	"summary": {
+		"text": "MediShield Life gives lifelong protection for large medical bills, unlike many other healthcare plans.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why you need it",
+			"body": "All Singapore Citizens and Permanent Residents must join MediShield Life. It protects you for life, even if you have very large medical bills or become very sick.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "How other plans differ",
+			"body": "Employer healthcare cover may end when you leave work or retire. Private insurance may end if you cannot pay the premiums. You may also be unable to re-apply, or may face exclusions for health conditions you already have.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Help with premiums",
+			"body": "The Government supports premiums for people who need help and cannot pay.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"universal-coverage-for-all"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I have my own healthcare coverage, why do I need MediShield Life?",
+			"How is MediShield Life different from other insurance?",
+			"Why do I need MediShield Life if I already have insurance?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqq4bb003a66lwthgsqrwq",
+			"page_title": "I have my own healthcare coverage, why do I need MediShield Life? How is MediShield Life different from other insurance schemes?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T09:59:13.645Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Under MediShield Life, Singapore Residents will receive lifelong protection for large medical bills."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "All Singapore Citizens and Permanent Residents are required to join MediShield Life."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Unlike MediShield Life, other healthcare coverage is not guaranteed for life."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The Government provides support for premiums for the needy who are unable to pay."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:13.645Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:13.645Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:13.645Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vqq4bb003a66lwthgsqrwq"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:13.645Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:13.645Z",
+		"updated_at": "2026-09-19T09:59:13.645Z"
+	}
+}

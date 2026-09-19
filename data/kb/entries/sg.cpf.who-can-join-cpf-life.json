@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.who-can-join-cpf-life",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Joining CPF LIFE",
+		"full": "Who can join CPF LIFE"
+	},
+	"summary": {
+		"text": "All CPF members can join from age 65, up to one month before age 80. Some members join automatically.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Age to join",
+			"body": "All CPF members can join CPF LIFE from age 65. The latest age to join is one month before age 80.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Automatic inclusion",
+			"body": "You are automatically included when you start CPF monthly payouts if you were born on or after 1 January 1958 and have at least $60,000 in CPF retirement savings then.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If you are not included",
+			"body": "You can still choose to join CPF LIFE. There is no minimum CPF savings required, but your payout depends on your Retirement Account balance when you join.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"monthly-payouts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Who can join CPF LIFE?",
+			"Can I join CPF LIFE?",
+			"When can someone join CPF LIFE?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmj3i1vf9005mgg80c54qh5at",
+			"page_title": "Who can join CPF LIFE?",
+			"source_modified_at": "2025-12-12",
+			"retrieved_at": "2026-09-19T10:02:20.940Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "All CPF members can join CPF LIFE anytime from age 65. The latest age to join CPF LIFE is one month before age 80."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You will be automatically included in CPF LIFE when you start your CPF monthly payouts if you were born on or after 1 January 1958 and have at least $60,000 in your CPF retirement savings when you start your monthly payouts."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "There is no minimum CPF savings required to join, but the amount of payout you get is dependent on your Retirement Account balances when you join CPF LIFE."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:20.940Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:20.940Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:20.940Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmj3i1vf9005mgg80c54qh5at"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:20.940Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:20.940Z",
+		"updated_at": "2026-09-19T10:02:20.940Z"
+	}
+}

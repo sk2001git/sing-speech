@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.checking-your-medishield-life-cover",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Check your cover",
+		"full": "Checking your MediShield Life cover"
+	},
+	"summary": {
+		"text": "Log in to the Healthcare dashboard and open “Coverage and premium details” to check your cover.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "MediShield Life",
+			"body": "You are covered if you are a Singaporean or Permanent Resident.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Integrated Shield Plan",
+			"body": "If you have an Integrated Shield Plan, your private insurer will notify the premium payer when the plan is up for annual renewal.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the dashboard",
+			"text": "Log in to the Healthcare dashboard and open “Coverage and premium details”.",
+			"confirm_label": "I checked my cover",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"universal-coverage-for-all"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I find out if I am covered under MediShield Life or an Integrated Shield Plan?",
+			"How can I check my health cover?",
+			"Am I covered by MediShield Life?",
+			"How do I find out if I have an Integrated Shield Plan?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vs5mns00e712kzm84kkq14",
+			"page_title": "How can I find out if I am covered under MediShield Life or an Integrated Shield Plan?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T09:59:23.425Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can log in to visit the Healthcare dashboard (cpf.gov.sg/healthcare) 'Coverage and premium details' to check the coverage and premium information for yourself and the dependant(s) you are paying premiums for."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You are covered under MediShield Life if you are a Singaporean or Permanent Resident."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you are covered under an Integrated Shield Plan (IP), your premium payer will be notified by your private insurer with details about your premiums and subsidies when your IP is up for annual renewal."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:23.425Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:23.425Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:23.425Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vs5mns00e712kzm84kkq14"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:23.425Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:23.425Z",
+		"updated_at": "2026-09-19T09:59:23.425Z"
+	}
+}

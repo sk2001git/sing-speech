@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.what-a-singapore-overseas-mission-does",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Overseas mission",
+		"full": "What a Singapore Overseas Mission does"
+	},
+	"summary": {
+		"text": "It can help CPF members overseas witness and certify forms and documents.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What it helps with",
+			"body": "A Singapore Overseas Mission in certain countries can help CPF members who live overseas witness and certify application forms and documents.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Visiting the mission",
+			"body": "You need to visit the Singapore Overseas Mission in person.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"account-services"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is a Singapore Overseas Mission?",
+			"What does an overseas mission do?",
+			"Where can I certify CPF documents overseas?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l1k02dfpz7a3kaqpoqr",
+			"page_title": "What is a Singapore Overseas Mission?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T10:01:19.539Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Singapore Overseas Missions located in certain countries can help CPF members residing overseas in witnessing and certification of application forms and documents."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You will need to visit the Singapore Overseas Mission in person."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:19.539Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:19.539Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:19.539Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l1k02dfpz7a3kaqpoqr"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:19.539Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:19.539Z",
+		"updated_at": "2026-09-19T10:01:19.539Z"
+	}
+}

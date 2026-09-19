@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-medisave-for-siblings-medical-expenses",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Using MediSave",
+		"full": "Using MediSave for siblings' medical expenses"
+	},
+	"summary": {
+		"text": "Yes. You may use your MediSave if your siblings are Singapore Citizens or Permanent Residents, and you provide proof.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check their status",
+			"text": "Confirm that your siblings are Singapore Citizens or Permanent Residents (SC/PR).",
+			"confirm_label": "I checked their status",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Provide proof",
+			"text": "Provide the medical institutions with proof that your siblings are SC/PR, such as their NRICs.",
+			"confirm_label": "I provided the proof",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use my MediSave for my siblings' medical expenses?",
+			"Can MediSave pay for my siblings' medical bills?",
+			"Can I pay for my brothers' or sisters' medical care with MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0001m9pz7a7f83bm1g",
+			"page_title": "Can I use my MediSave for my siblings' medical expenses?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T09:59:49.842Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may use your MediSave to pay for your siblings' medical expenses, as long as they are Singapore Citizens or Permanent Residents (SC/PR)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You would have to provide proof to the medical institutions that your siblings are SC/PR (e.g. NRICs)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:49.842Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:49.842Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:49.842Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0001m9pz7a7f83bm1g"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:49.842Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:49.842Z",
+		"updated_at": "2026-09-19T09:59:49.842Z"
+	}
+}

@@ -1,0 +1,2 @@
+Can CPF Board notify Trusted Contacts about other types of transactions made by their appointers?
+Only notifications for critical transactions or updates that may expose an account to higher scam risk (e.g. when a withdrawal is made, or when bank account information is changed) are copied to Trusted Contacts. This avoids overwhelming Trusted Contacts with less critical notifications regarding their appointer’s account.

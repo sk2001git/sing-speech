@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.same-day-appointment-requests",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Trusted Contacts",
+		"full": "Same day appointment requests"
+	},
+	"summary": {
+		"text": "Yes. You can submit up to two Trusted Contact appointment requests in one day.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Daily limit",
+			"body": "You can submit up to two Trusted Contact appointment requests within the same day.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"trusted-contacts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I submit more than one Trusted Contact appointment request within the same day?",
+			"Can I appoint two Trusted Contacts in one day?",
+			"How many Trusted Contact requests can I submit in a day?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxlb002gcsd0cq8rp2im",
+			"page_title": "Can I submit more than one Trusted Contact appointment request within the same day?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:58.097Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, you can submit up to two Trusted Contact appointment requests within the same day, which is the maximum number of Trusted Contacts you can appoint."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:58.097Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:58.097Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:58.097Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxlb002gcsd0cq8rp2im"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:58.097Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:58.097Z",
+		"updated_at": "2026-09-19T10:01:58.097Z"
+	}
+}

@@ -1,0 +1,167 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.protecting-yourself-from-phishing-scams",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Phishing safety",
+		"full": "Protecting yourself from phishing scams"
+	},
+	"summary": {
+		"text": "Protect your details, check the sender and links, and report suspicious messages.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Official CPF contact channels",
+			"body": "Calls from CPF Board will only be made from 6227 1188. SMSes will only be sent from \"gov.sg\" sender ID. Sender's email address will end with @cpf.gov.sg or @e.cpf.gov.sg. WhatsApp sender is \"CPF Board Text Us\" with the blue badge and phone number 6031 5753.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "If you are unsure",
+			"body": "Check with the ScamShield app or call the 24/7 ScamShield anti-scam helpline via 1799.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Keep details private",
+			"text": "Do not share your Singpass or bank log-in details with anyone.",
+			"confirm_label": "I kept details private",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check the sender",
+			"text": "Check whether the call, SMS, email or WhatsApp message comes through CPF Board's official channel.",
+			"confirm_label": "I checked the sender",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Check the link",
+			"text": "Examine links before opening them. Check that the link's domain ends with “.gov.sg”.",
+			"confirm_label": "I checked the link",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Report suspicious messages",
+			"text": "Report suspicious messages spoofing CPF Board. If unsure, check with the ScamShield app or call 1799.",
+			"confirm_label": "I reported the message",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"protection-against-scams",
+			"fighting-scams",
+			"protecting-your-cpf-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I avoid falling prey to phishing scams?",
+			"How can I stay safe from phishing messages?",
+			"How do I tell if a CPF message is a scam?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucpx0057pnhljog0tvcy",
+			"page_title": "How do I avoid falling prey to phishing scams?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T10:01:39.390Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Here are some tips on how to protect yourself against phishing scams pretending to come from CPF Board:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Do not share your Singpass or bank log-in details with anyone."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Check the source of the message."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Stay vigilant and examine the links embedded in the message."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Report any suspicious messages spoofing CPF Board via our CPF official hotline or Write to us."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "CPF Board will only contact you through these official channels:"
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "If unsure, check with the ScamShield app or call the 24/7 ScamShield anti-scam helpline via 1799."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:39.390Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:39.390Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:39.390Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucpx0057pnhljog0tvcy"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:39.390Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:39.390Z",
+		"updated_at": "2026-09-19T10:01:39.390Z"
+	}
+}

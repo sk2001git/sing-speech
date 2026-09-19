@@ -1,0 +1,97 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-gets-free-covid-vaccinations",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Free COVID shots",
+		"full": "Who gets free COVID vaccinations"
+	},
+	"summary": {
+		"text": "Fully subsidised COVID-19 vaccinations are available to listed residents and pass holders under the National Vaccination Programme.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Eligible residents and pass holders",
+			"body": "Singapore Citizens, Permanent Residents, and holders of the listed passes and IDs are eligible.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"covid-19",
+			"getting-vaccinated"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Who is eligible to receive fully-subsidised COVID-19 vaccinations under the National Vaccination Programme?",
+			"Free COVID shots",
+			"Who can get free COVID vaccinations",
+			"Who is eligible for fully-subsidised COVID-19 vaccinations?",
+			"Can I get a free COVID vaccination?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2lj3svp0013a71b41y8gp0w",
+			"page_title": "Who is eligible to receive fully-subsidised COVID-19 vaccinations under the National Vaccination Programme?",
+			"source_modified_at": "2025-10-22",
+			"retrieved_at": "2026-09-19T10:00:07.703Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The following groups of residents and pass holders are eligible to receive fully-subsidised COVID-19 vaccinations under the National Vaccination Programme:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "• Singapore Citizen • Permanent Resident • Employment Pass • S-Pass • Work Permit holders (including Confinement Nannies) • Student’s Pass • Dependant’s Pass • MFA-issued IDs • Long Term Visit Pass (and LTVP+) • Training Employment Pass • Training Work Permit • Work Holiday Pass • Special Pass • Short-Term Visit Pass with a validity period of at least 60 days"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:07.703Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:07.703Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:07.703Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2lj3svp0013a71b41y8gp0w"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:07.703Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:07.703Z",
+		"updated_at": "2026-09-19T10:00:07.703Z"
+	}
+}

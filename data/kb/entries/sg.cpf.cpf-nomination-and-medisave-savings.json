@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.cpf-nomination-and-medisave-savings",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave savings",
+		"full": "CPF Nomination and MediSave savings"
+	},
+	"summary": {
+		"text": "Yes. CPF Nomination covers all savings in your MediSave Account, including those in your Ordinary, Special and Retirement Accounts.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What CPF Nomination covers",
+			"body": "CPF Nomination covers all savings in your MediSave Account, including those in your Ordinary, Special and Retirement Accounts.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"account-services",
+			"cpf-nomination-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Are my MediSave Account savings covered under CPF Nomination?",
+			"Are my MediSave savings covered by CPF Nomination?",
+			"Does CPF Nomination include my MediSave Account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0v021fpz7a62sh7xhu",
+			"page_title": "Are my MediSave Account savings covered under CPF Nomination?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T10:00:00.318Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "CPF Nomination covers all savings in your MediSave Account, including those in your Ordinary, Special and Retirement Accounts."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:00.318Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:00.318Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:00.318Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0v021fpz7a62sh7xhu"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:00.318Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:00.318Z",
+		"updated_at": "2026-09-19T10:00:00.318Z"
+	}
+}

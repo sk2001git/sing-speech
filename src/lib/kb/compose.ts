@@ -135,20 +135,85 @@ function slug(text: string): string {
 	return out.join('-');
 }
 
-/** The first whole words of a heading that fit, so a label never ends mid-word. */
+/** Words that carry no weight at the start or end of a label. */
+const FILLER = /^(the|a|an|of|for|your|my|to|with|and|when|from|in|at|on|how|what|who|why|is|are|was|were|do|does|can|will|be)$/i;
+
+/**
+ * How much a word tells a person. A scheme's name is worth most — MediSave, CHAS, Healthier
+ * SG — and the first word of a heading is always capitalised, so that one earns nothing for
+ * it. Filler earns nothing at all.
+ */
+const informative = (word: string, isFirstInHeading: boolean) => {
+	if (FILLER.test(word)) return 0;
+	// A gerund is how a heading starts, not what it is about: "Getting help for premiums" is
+	// about premiums. Worth something, but never enough to win on its own.
+	if (/ing$/i.test(word) && word.length > 5) return 0.5;
+	let score = 1;
+	if (!isFirstInHeading && /^[A-Z]/.test(word)) score += 2;
+	if (word.length > 6) score += 1;
+	return score;
+};
+
+/**
+ * The part of a heading that says the most, within the limit.
+ *
+ * Every starting point is tried, because the words that name the thing are rarely the first
+ * ones: "Checking your MediSave top-up limit" is about MediSave top-ups, and "Who is in a
+ * household" is about a household. A label never ends on filler, and never ends mid-word.
+ */
 export function shorten(text: string, limit: number): string {
-	const words = squash(text).split(' ');
-	let out = '';
-	for (const word of words) {
-		const next = out ? `${out} ${word}` : word;
-		if ([...next].length > limit) break;
-		out = next;
+	const words = squash(text).split(' ').filter(Boolean);
+	if (words.length === 0) return '';
+
+	const fit = (from: number): string[] => {
+		const out: string[] = [];
+		for (const word of words.slice(from)) {
+			if ([...[...out, word].join(' ')].length > limit) break;
+			out.push(word);
+		}
+		while (out.length > 0 && FILLER.test(out[out.length - 1]!)) out.pop();
+		// And never begin on filler: "the CPF Safety" is a worse label than "CPF Safety".
+		while (out.length > 0 && FILLER.test(out[0]!)) out.shift();
+		return out;
+	};
+
+	let best: string[] = [];
+	let bestScore = -1;
+	for (let start = 0; start < words.length; start += 1) {
+		const candidate = fit(start);
+		if (candidate.length === 0) continue;
+		const score = candidate.reduce((sum, w, i) => sum + informative(w, start + i === 0), 0);
+		// Earliest wins a tie: the heading's own order is the author's.
+		if (score > bestScore) {
+			best = candidate;
+			bestScore = score;
+		}
 	}
-	return out || [...squash(text)].slice(0, limit).join('');
+	if (best.length > 0) return best.join(' ');
+	return [...squash(text)].slice(0, limit).join('').trim();
 }
 
 /** Words a kiosk uses. A person says what they did. */
 const LAZY_CONFIRM = new Set(['done', 'next', 'ok', 'okay', 'continue', 'confirm', 'yes', 'proceed', 'finish', 'finished']);
+
+/**
+ * A Singapore public-service number as the agencies write it: 1800 650 6060, 6222 1222,
+ * +65 6222 1222. Anything shorter is a year, a dollar amount or a form number.
+ */
+const PHONE = /(?:\+?65[\s-]?)?(?:1800[\s-]?\d{3}[\s-]?\d{4}|[63]\d{3}[\s-]?\d{4})/;
+
+/** The call a card can offer, taken from a quote already checked against the page. */
+export function callAction(quotes: Entry['quotes']): Entry['action'] | undefined {
+	for (const quote of quotes) {
+		const found = PHONE.exec(quote.text);
+		if (!found) continue;
+		const number = found[0].replace(/[^\d+]/g, '');
+		const label = `Call ${number}`;
+		if (label.length > 24) continue;
+		return { type: 'call', label, value: number, quote_refs: [quote.id] };
+	}
+	return undefined;
+}
 
 const scamWords = /scam|phish|impersonat|fraud/i;
 
@@ -337,6 +402,7 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 					})),
 				}
 			: {}),
+		...(callAction(quotes) ? { action: callAction(quotes)! } : {}),
 		topic: { area: areaFor(primary, draft.full), ...(tagsFor(primary).length ? { tags: tagsFor(primary) } : {}) },
 		search: { example_phrasings: phrasings },
 		sources: cited.map(([i, sid]) => {

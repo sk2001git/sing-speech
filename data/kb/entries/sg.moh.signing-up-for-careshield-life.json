@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.signing-up-for-careshield-life",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CareShield Life",
+		"full": "Signing up for CareShield Life"
+	},
+	"summary": {
+		"text": "Your family member must use their Singpass. You can guide them or go with them for help.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Use their Singpass",
+			"text": "Have your family member use their Singpass to sign up for CareShield Life.",
+			"confirm_label": "I have their Singpass",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Apply using the form",
+			"text": "Guide your family member to apply using the Application to join CareShield Life form.",
+			"confirm_label": "I have the form",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Get help if needed",
+			"text": "If you are facing difficulties, accompany your family member to a Community Club or Centre to sign up.",
+			"confirm_label": "I went with them",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthcare-financing",
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I sign up for CareShield Life on behalf of my parent/spouse/sibling?",
+			"Joining CareShield",
+			"Can I apply for CareShield Life for a family member?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmc15nru100fbgt0f8z77yk03",
+			"page_title": "Can I sign up for CareShield Life on behalf of my parent/spouse/sibling?",
+			"source_modified_at": "2025-06-17",
+			"retrieved_at": "2026-09-19T10:00:02.639Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your family member’s Singpass will be required to sign up for CareShield Life."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can guide your family member to use his/her Singpass to apply for CareShield Life via the Application to join CareShield Life form."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If they are facing difficulties, you can accompany them to the Community Clubs/Centres to sign up."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:02.639Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:02.639Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:02.639Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmc15nru100fbgt0f8z77yk03"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:02.639Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:02.639Z",
+		"updated_at": "2026-09-19T10:00:02.639Z"
+	}
+}

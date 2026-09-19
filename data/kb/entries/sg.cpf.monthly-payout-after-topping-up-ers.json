@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.monthly-payout-after-topping-up-ers",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF LIFE payout",
+		"full": "Monthly payout after topping up ERS"
+	},
+	"summary": {
+		"text": "The payout depends on your age when you set aside the ERS and when you start receiving payouts.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "If you are 55 in 2026",
+			"body": "The illustrative monthly payout is $3,200–$3,400 from age 65.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If you are 65 in 2026",
+			"body": "If you set aside your Full Retirement Sum at age 55 and top up to ERS in 2026, the illustrative monthly payout is $2,600–$2,800.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"retirement-sum-topping-up-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How much CPF monthly payout can I receive if I top up to the raised Enhanced Retirement Sum in 2026?",
+			"How much will I get each month from CPF LIFE?",
+			"What payout can I get after topping up to the ERS?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmjunbqdj00gu8sfx6wxhy8gh",
+			"page_title": "How much CPF monthly payout can I receive if I top up to the raised Enhanced Retirement Sum in 2026?",
+			"source_modified_at": "2025-12-31",
+			"retrieved_at": "2026-09-19T10:02:30.521Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your CPF monthly payout depends on several factors, including the age when you set aside the Enhanced Retirement Sum (ERS) and when you start receiving payouts."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Age 55 in 2026 and top up to ERS in 2026 $3,200 – $3,400 from age 65"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Age 65 in 2026, set aside your Full Retirement Sum at age 55 and top up to ERS in 2026 $2,600 – $2,800"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:30.521Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:30.521Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:30.521Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmjunbqdj00gu8sfx6wxhy8gh"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:30.521Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:30.521Z",
+		"updated_at": "2026-09-19T10:02:30.521Z"
+	}
+}

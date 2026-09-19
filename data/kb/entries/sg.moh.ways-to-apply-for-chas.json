@@ -1,0 +1,129 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.ways-to-apply-for-chas",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CHAS application",
+		"full": "Ways to apply for CHAS"
+	},
+	"summary": {
+		"text": "Apply online, or get a form, complete and sign it, then send it by mail.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Foreign identity documents",
+			"body": "If anyone in your household is not a Singapore Citizen, include copies of their foreign identification documents, such as a work permit or long term visit pass.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose how to apply",
+			"text": "Apply online using the link, or pick up a CHAS application form at a Community Centre or Club, Community Development Council, Public Hospital or Polyclinic. You can also download the form.",
+			"confirm_label": "I chose how to apply",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Complete the form",
+			"text": "If you use a form, complete and sign it.",
+			"confirm_label": "I signed the form",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Send the form",
+			"text": "Send the completed and signed form to Privy Box No. 920231, Singapore 929292.",
+			"confirm_label": "I sent the form",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"chas"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I apply? (CHAS)",
+			"How do I apply for CHAS?",
+			"Where can I get a CHAS application form?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhtek000b510fdiofqshig",
+			"page_title": "How can I apply? (CHAS)",
+			"source_modified_at": "2026-08-19",
+			"retrieved_at": "2026-09-19T10:00:11.497Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can apply for CHAS via the online application by using this link."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Please send the completed and signed application form to Privy Box No. 920231, Singapore 929292."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If anyone in your household is not a Singapore Citizen, please also include copies of their foreign identification documents (e.g. work permit/long term visit pass)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:11.497Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:11.497Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:11.497Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhtek000b510fdiofqshig"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:11.497Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:11.497Z",
+		"updated_at": "2026-09-19T10:00:11.497Z"
+	}
+}

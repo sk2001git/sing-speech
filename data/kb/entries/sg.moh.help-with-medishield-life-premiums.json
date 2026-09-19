@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.help-with-medishield-life-premiums",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Premium help",
+		"full": "Help with MediShield Life premiums"
+	},
+	"summary": {
+		"text": "The Government gives subsidies and MediSave top-ups. No Singapore Resident loses coverage because they cannot pay.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Premium subsidies and top-ups",
+			"body": "Singaporeans may receive premium subsidies and support. This includes help for lower- to middle-income groups, Pioneer Generation subsidies, Merdeka Generation subsidies, and MediSave top-ups.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Additional Premium Support",
+			"body": "If someone still cannot afford the premiums after subsidies and using MediSave, and has limited family support, they may be invited to apply. This support covers outstanding premiums and premiums for the next two policy years.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Support from 1 April 2025",
+			"body": "Several premium support measures will be enhanced from 1 April 2025 to cushion the impact of premium increases.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"premiums-and-subsidies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How does the Government help those who cannot afford their MediShield Life premiums?",
+			"Premium help",
+			"What if I cannot pay my MediShield Life premiums?",
+			"Can I get help with my MediShield Life premiums?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vpqegb0006q750hzf38r0k",
+			"page_title": "How does the Government help those who cannot afford their MediShield Life premiums?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T09:59:12.068Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "All Singapore Residents will remain covered under MediShield Life and no one will lose coverage due to an inability to pay premiums."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The Government provides Singaporeans with premium subsidies and support, such as Premium Subsidies for the lower- to middle-income, special Pioneer Generation subsidies, additional Merdeka Generation subsidies, and MediSave top-ups."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Policyholders who are unable to afford their premiums even after premium subsidies and MediSave use, and have limited family support, may be invited to apply for Additional Premium Support , which will cover all outstanding premiums and their premiums for the next two policy years."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "From 1 April 2025, enhancements will be made to several of these premium support measures to cushion the impact of premium increases."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:12.068Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:12.068Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:12.068Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vpqegb0006q750hzf38r0k"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:12.068Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:12.068Z",
+		"updated_at": "2026-09-19T09:59:12.068Z"
+	}
+}

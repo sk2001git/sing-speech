@@ -1,0 +1,3 @@
+Why am I prompted for Singpass Face Verification when performing transactions using my cpf digital services?
+This is an additional safeguard against unauthorised usage of your Singpass account on transactions that require Singpass.
+Please contact the Singpass Helpdesk directly for more information on Singpass Face Verification.

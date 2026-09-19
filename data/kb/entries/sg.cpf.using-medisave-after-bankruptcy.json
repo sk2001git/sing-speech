@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-medisave-after-bankruptcy",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave access",
+		"full": "Using MediSave after bankruptcy"
+	},
+	"summary": {
+		"text": "You may use MediSave for your own or approved dependants’ healthcare expenses even after declaring bankruptcy.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who can use it",
+			"body": "You may use MediSave for your own healthcare expenses, or for approved dependants. Approved dependants include your spouse, children, parents, grandparents and siblings.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"As a bankrupt, can I still use my MediSave?",
+			"Can I use MediSave after bankruptcy?",
+			"Does bankruptcy stop me using MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0401o5pz7ai48zi2u9",
+			"page_title": "As a bankrupt, can I still use my MediSave?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T10:00:01.668Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may use your MediSave to pay for your own or your approved dependants' healthcare expenses even if you have declared bankruptcy."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Approved dependants refer to your spouse, children, parents, grandparents and siblings."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:01.668Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:01.668Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:01.668Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0401o5pz7ai48zi2u9"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:01.668Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:01.668Z",
+		"updated_at": "2026-09-19T10:00:01.668Z"
+	}
+}

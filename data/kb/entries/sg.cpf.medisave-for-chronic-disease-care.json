@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.medisave-for-chronic-disease-care",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave use",
+		"full": "MediSave for chronic disease care"
+	},
+	"summary": {
+		"text": "Yes. You can use MediSave for outpatient treatment of chronic diseases on the covered list.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Covered chronic diseases",
+			"body": "MediSave can be used for outpatient treatment of chronic diseases listed under the Chronic Disease Management Programme.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "The list is reviewed",
+			"body": "The Ministry of Health regularly reviews which conditions are covered.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use my MediSave to pay for outpatient treatment of chronic diseases?",
+			"Can MediSave pay for chronic disease treatment?",
+			"Does MediSave cover outpatient care for chronic diseases?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0801pxpz7ar9tx62or",
+			"page_title": "Can I use my MediSave to pay for outpatient treatment of chronic diseases?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T09:59:50.859Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can use MediSave for outpatient treatments of the chronic diseases listed below."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The Ministry of Health (MOH) regularly reviews the list of conditions covered under the Chronic Disease Management Programme, to ensure that they continue to meet the needs of Singaporeans."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:50.859Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:50.859Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:50.859Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0801pxpz7ar9tx62or"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:50.859Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:50.859Z",
+		"updated_at": "2026-09-19T09:59:50.859Z"
+	}
+}

@@ -12,6 +12,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { onePerPage } from '../../src/lib/kb/dedupe';
 import { documentTexts } from '../../src/lib/kb/embed';
 import { parseEntry, type Entry } from '../../src/lib/kb/entry';
 import { checkQuotesFound, checkRefsResolve, type Check } from '../../src/lib/kb/grounding';
@@ -101,14 +102,22 @@ async function main() {
 		console.log(`${ok ? 'GROUNDED' : 'WITHDRAWN'} ${e.id}${ok ? '' : `\n  ${checks.filter((c) => !c.passed).map((c) => `${c.type}: ${c.note}`).join('\n  ')}`}`);
 	}
 
-	console.log(`\n${grounded.length} grounded, ${failed} not served.`);
+	/*
+	 * One card per official page. Rebuilding the entries produced a new id whenever the model
+	 * chose a different heading, so one page became four cards and a person asking about
+	 * MediSave top-ups saw the same answer four times in six results.
+	 */
+	const unique = onePerPage(grounded);
+	const duplicates = grounded.length - unique.length;
+
+	console.log(`\n${unique.length} grounded, ${failed} not served, ${duplicates} dropped as another card for the same page.`);
 	if (!embed) return;
 
 	const key = envKey('OPENAI_API_KEY');
 	if (!key) throw new Error('OPENAI_API_KEY is not set (environment or suara/.env)');
 	const openai = new OpenAi({ apiKey: key });
 
-	const jobs = grounded.flatMap((e) => documentTexts(e).map((text) => ({ entryId: e.id, text })));
+	const jobs = unique.flatMap((e) => documentTexts(e).map((text) => ({ entryId: e.id, text })));
 	const vectors: { entryId: string; vector: number[] }[] = [];
 	for (let i = 0; i < jobs.length; i += BATCH) {
 		const batch = jobs.slice(i, i + BATCH);
@@ -118,9 +127,9 @@ async function main() {
 
 	fs.writeFileSync(
 		INDEX,
-		`${JSON.stringify({ built_at: at, embedding: { model: MODEL, dimensions: DIMENSIONS }, entries: grounded, vectors })}\n`,
+		`${JSON.stringify({ built_at: at, embedding: { model: MODEL, dimensions: DIMENSIONS }, entries: unique, vectors })}\n`,
 	);
-	console.log(`Wrote ${path.relative(ROOT, INDEX)}: ${grounded.length} entries, ${vectors.length} vectors.`);
+	console.log(`Wrote ${path.relative(ROOT, INDEX)}: ${unique.length} entries, ${vectors.length} vectors.`);
 	if (failed > 0) process.exitCode = 1;
 }
 

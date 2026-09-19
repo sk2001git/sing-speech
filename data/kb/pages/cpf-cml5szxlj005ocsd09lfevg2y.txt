@@ -1,0 +1,2 @@
+Can anyone else, including Trusted Contacts, request to deactivate the CPF Safety Switch on behalf of a member?
+No. Deactivation can only be performed by the member, who must complete our authentication process.

@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.your-medisave-at-age-65",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "BHS at 65",
+		"full": "Your MediSave at age 65"
+	},
+	"summary": {
+		"text": "If your MediSave Account is below the cohort BHS at 65, you do not have to top it up.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "No top-up is required",
+			"body": "If your MediSave Account balance is below the cohort Basic Healthcare Sum at age 65, you do not have to top it up.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "You may top up",
+			"body": "If you want to build up your healthcare savings, you can choose to top up your MediSave Account with cash.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthcare-financing",
+			"basic-healthcare-sum"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What happens if I do not have the Basic Healthcare Sum when I turn age 65?",
+			"Do I have to top up my MediSave at 65?",
+			"What if my MediSave is below the Basic Healthcare Sum?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm0f52kzz01lnpz7a2nbqx0no",
+			"page_title": "What happens if I do not have the Basic Healthcare Sum when I turn age 65?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T09:59:55.508Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If your balance is less than the cohort BHS at age 65, you are not required to top up your MA."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "However, if you wish to build up your healthcare savings, you can choose to top up your MA with cash."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:55.508Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:55.508Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:55.508Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm0f52kzz01lnpz7a2nbqx0no"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:55.508Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:55.508Z",
+		"updated_at": "2026-09-19T09:59:55.508Z"
+	}
+}

@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.vaccination-when-you-are-unwell",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "When feeling ill",
+		"full": "Vaccination when you are unwell"
+	},
+	"summary": {
+		"text": "Postpone vaccination for moderate to severe illness. Mild symptoms may still be okay, but ask your doctor first.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Moderate or severe illness",
+			"body": "It is generally recommended to postpone vaccination if you have moderate to severe illness, such as a high fever or significant flu symptoms.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Mild symptoms",
+			"body": "If your symptoms are mild, you may still be able to take the vaccination. Ask your doctor or healthcare provider for advice tailored to your health condition before proceeding.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthier-sg-vaccination"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I take a vaccination if I am currently unwell, such as having the flu?",
+			"When feeling ill",
+			"Can I get vaccinated if I have the flu?",
+			"Should I postpone my vaccination if I am sick?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmomf5jxw001a4a01orhrq3tc",
+			"page_title": "Can I take a vaccination if I am currently unwell, such as having the flu?",
+			"source_modified_at": "2026-05-01",
+			"retrieved_at": "2026-09-19T10:00:26.903Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "It is generally recommended to postpone vaccinations if you are experiencing moderate to severe illness, such as a high fever or significant flu symptoms."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "However, if your symptoms are mild, you may still be able to take the vaccination."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:26.903Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:26.903Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:26.903Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmomf5jxw001a4a01orhrq3tc"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:26.903Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:26.903Z",
+		"updated_at": "2026-09-19T10:00:26.903Z"
+	}
+}

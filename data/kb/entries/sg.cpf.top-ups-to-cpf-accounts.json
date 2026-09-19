@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.top-ups-to-cpf-accounts",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Account top ups",
+		"full": "Top ups to CPF accounts"
+	},
+	"summary": {
+		"text": "No. You cannot voluntarily top up only your Ordinary Account. Other top-up choices are available.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Available top-up choices",
+			"body": "You can top up your Special or Retirement Account only, your MediSave Account only, or all 3 CPF accounts.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Special or Retirement Account",
+			"body": "This is under the Retirement Sum Topping Up Scheme. Tax relief is available.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "MediSave or all accounts",
+			"body": "You can top up your MediSave Account only, or all 3 CPF accounts.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"top-up-your-medisave-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I voluntarily top-up to my Ordinary Account only?",
+			"Can I top up only my Ordinary Account?",
+			"Can I add money to just my Ordinary Account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmdqlipac00crka3ymqcmb17s",
+			"page_title": "Can I voluntarily top-up to my Ordinary Account only?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T09:59:51.677Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Voluntary top-ups cannot be made solely to the Ordinary Account."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can make voluntary top-ups to your:"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Special / Retirement Account only under the Retirement Sum Topping Up Scheme (RSTU) (tax relief available)."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "MediSave Account only (tax relief available)"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:51.677Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:51.677Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:51.677Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmdqlipac00crka3ymqcmb17s"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:51.677Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:51.677Z",
+		"updated_at": "2026-09-19T09:59:51.677Z"
+	}
+}

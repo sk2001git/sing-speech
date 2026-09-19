@@ -1,0 +1,91 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.who-can-activate-the-cpf-safety-switch",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Safety Switch",
+		"full": "Who can activate the CPF Safety Switch"
+	},
+	"summary": {
+		"text": "No. Members must verify their identity before activating the CPF Safety Switch.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who can activate it",
+			"body": "Trusted Contacts and other people cannot activate the CPF Safety Switch for a member. The member must verify their identity first.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"cpf-safety-switch"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can anyone else, including Trusted Contacts, activate the CPF Safety Switch on behalf of a member?",
+			"Can someone else activate my CPF Safety Switch?",
+			"Can a Trusted Contact turn it on for me?",
+			"Can anyone else activate the CPF Safety Switch on behalf of a member?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxlj005ecsd0qon0crkp",
+			"page_title": "Can anyone else, including Trusted Contacts, activate the CPF Safety Switch on behalf of a member?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:52.094Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "No, the CPF Safety Switch requires members to verify their identity before activation."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:52.094Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:52.094Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:52.094Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxlj005ecsd0qon0crkp"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:52.094Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:52.094Z",
+		"updated_at": "2026-09-19T10:01:52.094Z"
+	}
+}

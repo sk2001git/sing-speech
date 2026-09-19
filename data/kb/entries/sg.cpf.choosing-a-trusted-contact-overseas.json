@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.choosing-a-trusted-contact-overseas",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Trusted contact",
+		"full": "Choosing a Trusted Contact overseas"
+	},
+	"summary": {
+		"text": "Yes. Your Trusted Contact may live outside Singapore if they meet the eligibility criteria.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Eligibility requirements",
+			"body": "Your Trusted Contact must be a CPF member aged 21 and above, a Singapore Citizen or Singapore Permanent Resident with a Singpass account, and have both a Singapore-registered mobile number and email address registered with CPF Board.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"trusted-contacts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I appoint a Trusted Contact who is not based in Singapore?",
+			"Can my Trusted Contact live overseas?",
+			"Can I choose someone who lives outside Singapore?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxlb002ecsd0ks5em5di",
+			"page_title": "Can I appoint a Trusted Contact who is not based in Singapore?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:54.664Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may appoint a person who is not based in Singapore as your Trusted Contact as long as they meet the eligibility criteria."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your Trusted Contact must: be a CPF member aged 21 and above; be a Singapore Citizen or Singapore Permanent Resident (with Singpass account); and have both a Singapore-registered mobile number and email address registered with CPF Board"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:54.664Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:54.664Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:54.664Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxlb002ecsd0ks5em5di"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:54.664Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:54.664Z",
+		"updated_at": "2026-09-19T10:01:54.664Z"
+	}
+}

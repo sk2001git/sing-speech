@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.how-your-payouts-are-sent",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Payout methods",
+		"full": "How your payouts are sent"
+	},
+	"summary": {
+		"text": "Your payouts come through PayNow-NRIC, GIRO or GovCash. Linking your NRIC to PayNow can help you receive them earlier.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Ways to receive payouts",
+			"body": "You will receive your payouts through your PayNow-NRIC linked account, GIRO or GovCash.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Receive payouts earlier",
+			"body": "You are encouraged to link your NRIC to PayNow to receive your payouts earlier.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"payout"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How will I receive my payouts?",
+			"How do my payouts reach me?",
+			"What are the ways I can receive my payouts?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm986e5em00io3lrky7wwjluf",
+			"page_title": "How will I receive my payouts?",
+			"source_modified_at": "2025-04-08",
+			"retrieved_at": "2026-09-19T10:02:07.190Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You will receive your payouts through your PayNow-NRIC linked account, GIRO or GovCash."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You are encouraged to link your NRIC to PayNow to receive your payouts earlier."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:07.190Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:07.190Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:07.190Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm986e5em00io3lrky7wwjluf"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:07.190Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:07.190Z",
+		"updated_at": "2026-09-19T10:02:07.190Z"
+	}
+}

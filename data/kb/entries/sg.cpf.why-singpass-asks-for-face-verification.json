@@ -1,0 +1,105 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.why-singpass-asks-for-face-verification",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Face check",
+		"full": "Why Singpass asks for face verification"
+	},
+	"summary": {
+		"text": "It is an extra safeguard against unauthorised use of your Singpass account for transactions that require Singpass.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why you are prompted",
+			"body": "Singpass Face Verification is an additional safeguard against unauthorised usage of your Singpass account on transactions that require Singpass.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Need more information",
+			"body": "Contact the Singpass Helpdesk directly for more information on Singpass Face Verification.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services",
+			"fighting-scams",
+			"protecting-your-cpf-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Why am I prompted for Singpass Face Verification when performing transactions using my cpf digital services?",
+			"Why am I prompted for Singpass Face Verification when performing transactions using my CPF digital services?",
+			"Why do I need face verification for CPF services?",
+			"Why is Singpass asking me to verify my face?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucpz005lpnhlu4lxxpq2",
+			"page_title": "Why am I prompted for Singpass Face Verification when performing transactions using my cpf digital services?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T10:01:49.159Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "This is an additional safeguard against unauthorised usage of your Singpass account on transactions that require Singpass."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Please contact the Singpass Helpdesk directly for more information on Singpass Face Verification."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:49.159Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:49.159Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:49.159Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucpz005lpnhlu4lxxpq2"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:49.159Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:49.159Z",
+		"updated_at": "2026-09-19T10:01:49.159Z"
+	}
+}

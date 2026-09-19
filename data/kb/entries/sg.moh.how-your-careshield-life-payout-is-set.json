@@ -1,0 +1,114 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-your-careshield-life-payout-is-set",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CareShield Life",
+		"full": "How your CareShield Life payout is set"
+	},
+	"summary": {
+		"text": "The starting payout is about $600 a month. Your care needs and arrangements affect your costs, not the payout amount.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Starting payout",
+			"body": "The starting CareShield Life payout is about $600 each month. It helps with basic long-term care costs and reduces what you pay yourself.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "What affects care costs",
+			"body": "Long-term care costs vary based on your care needs and arrangements. This includes staying at home, going to a care centre, or entering residential care. Savings, family support, government help and other support may also help pay these costs.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Extra insurance",
+			"body": "You can choose to buy supplements if you want more insurance coverage on top of CareShield Life.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"claims"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How are my monthly CareShield Life payouts determined?",
+			"How much will CareShield Life pay each month?",
+			"What decides my CareShield payout?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuox00b0hipn5wx5kmjz",
+			"page_title": "How are my monthly CareShield Life payouts determined?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:01:01.544Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The starting payout from CareShield Life of about $600/month will enable Singaporeans to afford their basic long-term care costs by easing their out-of-pocket expenses as the payouts complement their personal savings (including MediSave) and family support."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Long-term care costs vary depending on one’s care needs and arrangements, whether the individual stays at home, goes to a care centre, or enters residential care."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Those who wish to have additional insurance coverage can also opt to purchase supplements on top of CareShield Life."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:01.544Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:01.544Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:01.544Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuox00b0hipn5wx5kmjz"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:01.544Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:01.544Z",
+		"updated_at": "2026-09-19T10:01:01.544Z"
+	}
+}

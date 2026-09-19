@@ -1,0 +1,89 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.gpfirst-for-chas-patients",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "GPFirst and CHAS",
+		"full": "GPFirst for CHAS patients"
+	},
+	"summary": {
+		"text": "CHAS patients can use GPFirst if a participating clinic refers them to the emergency department with the original form.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When GPFirst applies",
+			"body": "The subsidy applies when a participating clinic refers you to the emergency department with the original GPFirst Referral Form. This includes CHAS patients.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"gpfirst"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Is GPFirst applicable to CHAS patients, even though they have already received subsidised care at GP clinics?",
+			"Can CHAS patients use GPFirst?",
+			"Does GPFirst cover people who already get CHAS subsidies?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2owmr8r0047a71bj93givtp",
+			"page_title": "Is GPFirst applicable to CHAS patients, even though they have already received subsidised care at GP clinics?",
+			"source_modified_at": "2024-10-25",
+			"retrieved_at": "2026-09-19T10:00:32.942Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The subsidy under GPFirst will apply to patients, as long as they are referred to the emergency department by participating clinics with the original GPFirst Referral Form. This includes patients under CHAS."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:32.942Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:32.942Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:32.942Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2owmr8r0047a71bj93givtp"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:32.942Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:32.942Z",
+		"updated_at": "2026-09-19T10:00:32.942Z"
+	}
+}

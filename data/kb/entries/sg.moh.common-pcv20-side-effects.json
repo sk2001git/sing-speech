@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.common-pcv20-side-effects",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Common PCV20",
+		"full": "Common PCV20 side effects"
+	},
+	"summary": {
+		"text": "PCV20 may cause soreness, headache, body aches, tiredness or fever. These usually settle within a few days.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Injection site reactions",
+			"body": "You may have pain, redness or swelling where the vaccine was given.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Other common effects",
+			"body": "You may also have a headache, body aches, fatigue or fever. Most side effects are mild or moderate and usually resolve within a few days.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthier-sg-vaccinations"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the common side effects for PCV20?",
+			"What side effects can PCV20 cause?",
+			"What might I feel after PCV20?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmfcdzhtx00c2sidofzbf43im",
+			"page_title": "What are the common side effects for PCV20?",
+			"source_modified_at": "2025-09-09",
+			"retrieved_at": "2026-09-19T10:00:34.001Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "However, similar to other vaccines, individuals may experience common side effects which include injection site reactions (e.g., pain, redness, swelling), headache, body aches, fatigue and fever."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "injection site reactions (e.g., pain, redness, swelling)"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "headache, body aches, fatigue and fever. While most side effects are mild or moderate and usually resolve within a few days"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:34.001Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:34.001Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:34.001Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmfcdzhtx00c2sidofzbf43im"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:34.001Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:34.001Z",
+		"updated_at": "2026-09-19T10:00:34.001Z"
+	}
+}

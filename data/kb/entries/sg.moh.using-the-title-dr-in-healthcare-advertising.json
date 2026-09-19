@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.using-the-title-dr-in-healthcare-advertising",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Using Dr in ads",
+		"full": "Using the title Dr in healthcare advertising"
+	},
+	"summary": {
+		"text": "Yes, but they must state their qualifications and say they do not hold a valid practising certificate.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What the advertisement must include",
+			"body": "They must state their qualifications and include a disclaimer saying they do not hold a valid practising certificate issued by the relevant local healthcare professional board.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Who this applies to",
+			"body": "This applies when these doctors or dentists are featured in advertisements for healthcare services.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"health-regulation",
+			"healthcare-services-act"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Using Dr in healthcare ads",
+			"Can an unregistered doctor use Dr?",
+			"Can overseas-trained doctors use Dr in ads?",
+			"Can retired dentists use Dr in advertising?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clu6lx3qt002m314rqwatoh03",
+			"page_title": "Can overseas-trained or retired doctors and dentists who are not registered in Singapore use the title “Dr” in healthcare service advertising?",
+			"source_modified_at": "2024-03-25",
+			"retrieved_at": "2026-09-19T10:01:18.540Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Overseas-trained or retired doctors/dentists who are not registered in Singapore and do not hold a valid practising certificate, must comply with the following when using the title “Dr” in their healthcare service advertising:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "state their qualifications, and"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "This advertising control would apply when any of these doctors/dentists are featured in advertisements of healthcare services"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:18.540Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:18.540Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:18.540Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clu6lx3qt002m314rqwatoh03"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:18.540Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:18.540Z",
+		"updated_at": "2026-09-19T10:01:18.540Z"
+	}
+}

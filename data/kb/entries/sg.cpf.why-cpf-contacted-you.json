@@ -1,0 +1,97 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.why-cpf-contacted-you",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF alerts",
+		"full": "Why CPF contacted you"
+	},
+	"summary": {
+		"text": "Yes. CPF says your Singpass contact details were shared so it can update you about CPF matters.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why you received it",
+			"body": "CPF says your Singpass contact information was shared so it can update you about your CPF matters. This is part of a whole-of-government effort to provide a seamless digital experience.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services",
+			"fighting-scams",
+			"stop-and-check-if-unsure"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I received an SMS or email about CPF notifications. Is it legitimate?",
+			"Why did CPF contact me through Singpass?",
+			"Are CPF notifications sent to my Singpass contact details?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq00067pnhlhrztpax1",
+			"page_title": "I received an SMS/email informing me that I will receive CPF notifications via my Singpass registered email address and/or mobile number. Is this legitimate?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T10:01:45.698Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your Singpass contact information was shared with us so that we can update you on your CPF matters in a timely and efficient manner."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your Singpass contact information was shared with us so that we can update you on your CPF matters in a timely and efficient manner. This is part of the whole of government effort to provide you with a seamless digital experience."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:45.698Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:45.698Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:45.698Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucq00067pnhlhrztpax1"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:45.698Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:45.698Z",
+		"updated_at": "2026-09-19T10:01:45.698Z"
+	}
+}

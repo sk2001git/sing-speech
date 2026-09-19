@@ -1,0 +1,89 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.who-administers-medisave-care",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediSave Care",
+		"full": "Who administers MediSave Care"
+	},
+	"summary": {
+		"text": "MediSave Care is jointly administered by AIC and CPFB.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who administers it",
+			"body": "MediSave Care is jointly administered by the Agency for Integrated Care and Central Provident Fund Board.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medisave-care"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Who administers MediSave Care?",
+			"Who runs MediSave Care?",
+			"Which organisations administer MediSave Care?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup700fuhipnhyd2l36p",
+			"page_title": "Who administers MediSave Care?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T09:59:59.701Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "MediSave Care is jointly administered by the Agency for Integrated Care (AIC) and Central Provident Fund Board (CPFB)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:59.701Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:59.701Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:59.701Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuup700fuhipnhyd2l36p"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:59.701Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:59.701Z",
+		"updated_at": "2026-09-19T09:59:59.701Z"
+	}
+}

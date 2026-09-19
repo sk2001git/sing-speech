@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.changing-a-trusted-contact",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Trusted Contact",
+		"full": "Changing a Trusted Contact"
+	},
+	"summary": {
+		"text": "No. The CPF member must do this personally. A Deputy or Donee may apply to remove contacts if the member loses mental capacity.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "If the member loses capacity",
+			"body": "A Deputy or Donee may apply to remove existing Trusted Contacts on the CPF member’s behalf.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"fighting-scams",
+			"trusted-contacts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I appoint a new Trusted Contact or remove existing Trusted Contact on someone’s behalf?",
+			"Trusted Contact",
+			"Can someone else change a CPF member’s Trusted Contact?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cml5szxla001wcsd02l7ppxjb",
+			"page_title": "Can I appoint a new Trusted Contact or remove existing Trusted Contact on someone’s behalf?",
+			"source_modified_at": "2026-02-02",
+			"retrieved_at": "2026-09-19T10:01:54.368Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "No, Trusted Contact appointments or removal of existing Trusted Contact appointments must be made by the CPF member personally."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "However, if the CPF member loses their mental capacity, their Deputy or Donee may apply to remove existing Trusted Contacts on their behalf."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:54.368Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:54.368Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:54.368Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxla001wcsd02l7ppxjb"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:54.368Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:54.368Z",
+		"updated_at": "2026-09-19T10:01:54.368Z"
+	}
+}

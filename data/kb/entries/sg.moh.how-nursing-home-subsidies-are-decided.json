@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-nursing-home-subsidies-are-decided",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Higher subsidies",
+		"full": "How nursing home subsidies are decided"
+	},
+	"summary": {
+		"text": "Higher fees do not mean higher subsidies. Subsidies are based on means-testing, with lower-income households receiving more if eligible.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What determines the subsidy",
+			"body": "The subsidy depends on means-testing, not on the nursing home's fees. Individuals from lower-income households who meet the eligibility criteria receive higher subsidies.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If more help is needed",
+			"body": "You may be able to use financial assistance schemes such as MediFund. Charitable donations may also provide further support after other financial assistance and resources are exhausted.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"financing-my-long-term-care-needs"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Are we eligible for higher subsidies if I/my family member am/is placed in a nursing home with higher fees?",
+			"Are higher-fee nursing homes given higher subsidies?",
+			"Will we get more help if the nursing home costs more?",
+			"Does a more expensive nursing home mean a higher subsidy?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuoy00bghipnd8iw8mue",
+			"page_title": "Are we eligible for higher subsidies if I/my family member am/is placed in a nursing home with higher fees?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:22.504Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The amount of subsidies each individual is eligible for is determined by means-testing and is not dependent on the fees charged by the nursing homes."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Individuals from lower income households who meet the eligibility criteria will receive higher subsidies under the means-testing framework."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you require additional assistance, you can tap on financial assistance schemes such as MediFund."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:22.504Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:22.504Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:22.504Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuoy00bghipnd8iw8mue"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:22.504Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:22.504Z",
+		"updated_at": "2026-09-19T10:00:22.504Z"
+	}
+}

@@ -1,0 +1,113 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.options-for-unpaid-care-costs",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Options",
+		"full": "Options for unpaid care costs"
+	},
+	"summary": {
+		"text": "If your MediSave is not enough, family savings and Government assistance may help.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Use family MediSave",
+			"body": "If your MediSave account is depleted, you may use your spouse's MediSave for long-term care withdrawals. You may use your family members' MediSave for other healthcare treatments.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Apply for assistance",
+			"body": "You may apply for means-tested Government assistance schemes, such as ElderFund and the Home Caregiving Grant, for long-term care costs.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Other help if needed",
+			"body": "If you still cannot pay after Government subsidies and other support, MediFund and ComCare may help.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medisave-care"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What if I have insufficient MediSave balances for my healthcare and long-term care expenses?",
+			"What can I do if my MediSave is not enough?",
+			"Can my family help pay for my care?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuup600fghipnmsryemrl",
+			"page_title": "What if I have insufficient MediSave balances for my healthcare and long-term care expenses?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T09:59:46.689Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you have depleted your MediSave account, you may tap on your spouse's MediSave for long-term care withdrawals, and your family members' MediSave for your other healthcare treatments."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may also apply for other forms of assistance such as means-tested Government assistance schemes (ElderFund, Home Caregiving Grant) to meet your long-term care costs needs."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you are still unable to pay for your care even after Government subsidies and other means of support, there are other forms of assistance such as MediFund and ComCare."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:46.689Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:46.689Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:46.689Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuup600fghipnmsryemrl"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:46.689Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:46.689Z",
+		"updated_at": "2026-09-19T09:59:46.689Z"
+	}
+}

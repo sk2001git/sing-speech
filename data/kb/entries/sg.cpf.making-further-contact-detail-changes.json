@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.making-further-contact-detail-changes",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Further changes",
+		"full": "Making further contact detail changes"
+	},
+	"summary": {
+		"text": "Yes. Submit another change in Account settings with your Singpass. Your latest request replaces the earlier one.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What happens next",
+			"body": "Your most recent request replaces the earlier request. The changes take effect after the 12-hour cooling period.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Submit the new change",
+			"text": "Use the Account settings page with your Singpass to submit further changes to your contact details.",
+			"confirm_label": "I submitted the changes",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"account-services",
+			"fighting-scams",
+			"updating-your-account-details"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I make further changes to my contact details while my current request is still in the 12-hour cooling period?",
+			"Further changes",
+			"Can I change my contact details again?",
+			"Can I make further changes while my request is cooling?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq1006npnhlex3lpgs7",
+			"page_title": "Can I make further changes to my contact details while my current request is still in the 12-hour cooling period?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-19T10:01:57.406Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, you can submit further changes to your contact details via the Account settings page with your Singpass."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Please note that your most recent request will supersede the previous submission and the changes will take effect after the 12-hour cooling period."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:57.406Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:57.406Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:57.406Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucq1006npnhlex3lpgs7"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:57.406Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:57.406Z",
+		"updated_at": "2026-09-19T10:01:57.406Z"
+	}
+}

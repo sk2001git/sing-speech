@@ -1,0 +1,131 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.what-each-scheme-is-for",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Three schemes",
+		"full": "What each scheme is for"
+	},
+	"summary": {
+		"text": "ElderFund supports lower-income citizens with severe disability. MediFund helps with medical bills. ComCare gives social assistance.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "ElderFund",
+			"body": "ElderFund is for lower-income Singapore Citizens who have developed severe disability. It is discretionary assistance.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "MediFund",
+			"body": "MediFund mainly helps patients who cannot cope with medical bills. This can include people with disability or severe disability.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "ComCare",
+			"body": "ComCare mainly provides social assistance to low-income individuals or families.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Other safety nets",
+			"body": "MediFund and ComCare can help when someone still cannot pay for care after Government subsidies and other support.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"elderfund"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How is ElderFund different from MediFund or ComCare?",
+			"Three schemes",
+			"What is the difference between ElderFund, MediFund and ComCare?",
+			"Which scheme helps with disability, medical bills or daily needs?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuupa00hmhipnf5xsb0ca",
+			"page_title": "How is ElderFund different from MediFund or ComCare?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:00:38.975Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "ElderFund is a discretionary assistance scheme, targeted at lower-income Singapore Citizens who have developed severely disability, while MediFund is mainly to help patients who are unable to cope with medical bills (including those who have developed disability or severe disability), and ComCare is mainly to provide social assistance to low-income individuals or families."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "ElderFund is a discretionary assistance scheme, targeted at lower-income Singapore Citizens who have developed severely disability"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "MediFund is mainly to help patients who are unable to cope with medical bills (including those who have developed disability or severe disability)"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "ComCare is mainly to provide social assistance to low-income individuals or families"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Government-funded safety nets such as MediFund and ComCare will provide assistance to Singaporeans who are unable to pay for their care even after Government subsidies and other means of support."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:38.975Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:38.975Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:38.975Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuupa00hmhipnf5xsb0ca"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:38.975Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:38.975Z",
+		"updated_at": "2026-09-19T10:00:38.975Z"
+	}
+}

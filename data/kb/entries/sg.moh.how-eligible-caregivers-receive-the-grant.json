@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-eligible-caregivers-receive-the-grant",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Caregiver grant",
+		"full": "How eligible caregivers receive the grant"
+	},
+	"summary": {
+		"text": "Eligible caregivers receive the grant as training fee subsidies.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "How the grant is given",
+			"body": "Eligible caregivers receive the grant as training fee subsidies.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies",
+			"caregiver-support"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do eligible caregivers receive the grant?",
+			"How is the caregiver grant given?",
+			"Are caregiver grants paid as training subsidies?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2sguo0v00hlr5bfl65coh3b",
+			"page_title": "How do eligible caregivers receive the grant?",
+			"source_modified_at": "2024-10-28",
+			"retrieved_at": "2026-09-19T10:00:30.386Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Eligible caregivers will receive the grant in the form of training fee subsidies."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:30.386Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:30.386Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:30.386Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2sguo0v00hlr5bfl65coh3b"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:30.386Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:30.386Z",
+		"updated_at": "2026-09-19T10:00:30.386Z"
+	}
+}

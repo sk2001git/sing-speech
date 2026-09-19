@@ -1,0 +1,110 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.finding-healthier-sg-stations-and-clinics",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Find a station",
+		"full": "Finding Healthier SG stations and clinics"
+	},
+	"summary": {
+		"text": "Use GoWhere to find your nearest enrolment station or check whether your GP or polyclinic participates.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open GoWhere",
+			"text": "Open https://gowhere.gov.sg/healthiersg to check for your nearest Healthier SG Enrolment Station and participating clinics.",
+			"confirm_label": "I opened GoWhere",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Enter a search",
+			"text": "Enter your postal code to find the nearest station, or enter your clinic's name to check if it participates.",
+			"confirm_label": "I entered my search",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"enrolment"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Where is the nearest Healthier SG Enrolment Station?",
+			"How do I check if my clinic takes part?",
+			"Can I find a participating GP or polyclinic near me?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cllq7kgci0000l10g2wdw04s3",
+			"page_title": "Where is the Healthier SG Enrolment Station nearest to me? How can I check if my GP / polyclinic is participating in Healthier SG?",
+			"source_modified_at": "2024-05-03",
+			"retrieved_at": "2026-09-19T10:00:07.362Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may check for your nearest Healthier SG Enrolment Station and the list of participating clinics at https://gowhere.gov.sg/healthiersg ."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may check for your nearest Healthier SG Enrolment Station and the list of participating clinics at https://gowhere.gov.sg/healthiersg"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Simply enter your postal code or name of clinic to search."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:07.362Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:07.362Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:07.362Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cllq7kgci0000l10g2wdw04s3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:07.362Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:07.362Z",
+		"updated_at": "2026-09-19T10:00:07.362Z"
+	}
+}

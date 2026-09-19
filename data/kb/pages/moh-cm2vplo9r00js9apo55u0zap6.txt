@@ -1,0 +1,9 @@
+How do I view details of my MediShield Life claims from the online MediSave and/or MediShield Life Claim Statements?
+You can view the details of your MediSave withdrawals and MediShield Life claim details for past 15 months online at www.cpf.gov.sg under "Latest healthcare payments and claims".
+Following are the steps to take:
+(1) Login to your Healthcare dashboard under my cpf digital services with your Singpass
+(2) Proceed to “Latest healthcare payments and claims”
+(3) Click on “View past 15 months”
+(4) Select the hospitalisation period
+(5) Click on the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment to view the claim details.
+If you would like to view the details of claims prior to the past 15 months, please submit a request to the Central Provident Fund Board via www.cpf.gov.sg/eSvc/Web/FeedbackSubscription/Index .

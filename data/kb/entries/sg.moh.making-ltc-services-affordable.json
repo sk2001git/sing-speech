@@ -1,0 +1,124 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.making-ltc-services-affordable",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "LTC services",
+		"full": "Making LTC services affordable"
+	},
+	"summary": {
+		"text": "SCs and PRs get subsidies. LTVP holders can seek financial assistance if they need it.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "For SCs and PRs",
+			"body": "Long-Term Care services may be free or kept affordable through Government subsidies.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "For LTVP holders",
+			"body": "LTVP holders are not eligible for subsidies. If you need help, contact your service provider or AIC about financial assistance.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Contact AIC",
+			"body": "For more information on accessing LTC services, contact AIC at enquiries@aic.sg or 1800-650-6060.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"ageing-well",
+			"ageing-in-the-community",
+			"care-services"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How are LTC services made affordable?",
+			"Do SCs and PRs get LTC subsidies?",
+			"Can LTVP holders get help with LTC costs?",
+			"How can I afford Long-Term Care services?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2sg855n005ya71bjx254tis",
+			"page_title": "How are Long-Term Care (LTC) services made affordable for Singapore Citizens (SCs), Permanent Residents (PRs) and Long-Term Visit Pass (LTVP) Holders?",
+			"source_modified_at": "2024-10-28",
+			"retrieved_at": "2026-09-19T10:01:00.271Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "LTC services (such as those offered at Active Ageing Centres and Senior Care Centres) are either provided free or kept affordable through Government subsidies for Singapore Citizens (SCs) and Permanent Residents (PRs)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "While LTVP holders are not eligible for subsidies, those in need may reach out to their service provider or the Agency for Integrated Care (AIC) for financial assistance."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "For more information on accessing LTC services, you may reach out to AIC at enquiries@aic.sg or 1800-650-6060."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:00.271Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:00.271Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:00.271Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2sg855n005ya71bjx254tis"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:00.271Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:00.271Z",
+		"updated_at": "2026-09-19T10:01:00.271Z"
+	},
+	"action": {
+		"type": "call",
+		"label": "Call 18006506060",
+		"value": "18006506060",
+		"quote_refs": [
+			"q3"
+		]
+	}
+}

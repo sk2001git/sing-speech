@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.maximum-medishield-life-premium-discounts",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "MediShield Life",
+		"full": "Maximum MediShield Life premium discounts"
+	},
+	"summary": {
+		"text": "You can redeem up to $540 in premium discounts per calendar year.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Maximum each year",
+			"body": "The maximum value of premium discounts that could be redeemed per calendar year is $540. This uses the higher rate of 150 Healthpoints to $2.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"medishield-life-premium-discount"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What is the maximum amount of premium discounts that could be redeemed?",
+			"How much premium discount can I redeem?",
+			"What is the yearly limit for premium discounts?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmfp20msn00brw0fvx7yze3gy",
+			"page_title": "What is the maximum amount of premium discounts that could be redeemed?",
+			"source_modified_at": "2025-09-18",
+			"retrieved_at": "2026-09-19T09:59:14.482Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "the maximum value of premium discounts that could be redeemed per calendar year is $540."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "As the MediShield Life premium discounts have a higher conversion rate of 150 Healthpoints to $2, the maximum value of premium discounts that could be redeemed per calendar year is $540."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:14.482Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:14.482Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:14.482Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmfp20msn00brw0fvx7yze3gy"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:14.482Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:14.482Z",
+		"updated_at": "2026-09-19T09:59:14.482Z"
+	}
+}

@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.using-employer-cover-with-medishield-life",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Claim order",
+		"full": "Using employer cover with MediShield Life"
+	},
+	"summary": {
+		"text": "Yes. Employer cover pays first. MediShield Life pays next for the part not covered, subject to its limits.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who pays first",
+			"body": "Your employer, private insurance, or another third party pays first. MediShield Life or an Integrated Shield Plan pays next.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "What MediShield Life pays",
+			"body": "MediShield Life pays the part of the bill not covered by your employer, private insurance, or other third-party payers. Claim limits, deductible and co-insurance apply.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"claims-under-medishield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I am covered by Employer Medical Benefits. Can I claim from MediShield Life as well? Who pays first?",
+			"Can I use MediShield Life if my employer covers me?",
+			"Does my employer or MediShield Life pay first?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vpnfru00d012kzj38nxu0h",
+			"page_title": "I am covered by Employer Medical Benefits. Can I claim from MediShield Life as well? Who pays first?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T09:58:54.860Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Employer, private insurance, other third party pays first"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "1. Employer, private insurance, other third party pays first"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "MSHL/IP will pay for the portion of the bill that is not covered by employer, private insurance and other third-party payers, subject to claim limits, deductible and co-insurance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:58:54.860Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:58:54.860Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:58:54.860Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vpnfru00d012kzj38nxu0h"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:58:54.860Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:58:54.860Z",
+		"updated_at": "2026-09-19T09:58:54.860Z"
+	}
+}

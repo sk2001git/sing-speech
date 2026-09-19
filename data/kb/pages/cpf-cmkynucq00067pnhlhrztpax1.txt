@@ -1,0 +1,3 @@
+I received an SMS/email informing me that I will receive CPF notifications via my Singpass registered email address and/or mobile number. Is this legitimate?
+Your Singpass contact information was shared with us so that we can update you on your CPF matters in a timely and efficient manner. This is part of the whole of government effort to provide you with a seamless digital experience.
+If you prefer us to contact you via a different email address or mobile number, you can update your mobile number and/or email address via the Account settings page with your Singpass. An SMS or email One-Time PIN (OTP) will be sent to your new mobile number or email address for verification before the changes can take effect.

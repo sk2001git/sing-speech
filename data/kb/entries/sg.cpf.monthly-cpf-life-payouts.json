@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.monthly-cpf-life-payouts",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF payouts",
+		"full": "Monthly CPF LIFE payouts"
+	},
+	"summary": {
+		"text": "Your monthly payout depends on your RA savings and the age you start. The maximum is $3,440 at 65 or $4,580 at 70.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Maximum CPF LIFE payout",
+			"body": "You can receive up to $3,440 each month for life from age 65. If you start at age 70, you can receive up to $4,580 each month.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Examples from age 65",
+			"body": "With $50,000 in your RA at age 55, the monthly payout from age 65 is $490. With $110,200, it is $950. With $220,400, it is $1,780.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If you are not on CPF LIFE",
+			"body": "You will receive at least $350 each month until your CPF savings run out.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"retirement-income",
+			"monthly-payouts"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How much CPF payouts can I get every month?",
+			"CPF payouts",
+			"How much can I get each month?",
+			"What will my monthly CPF payout be?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmgbhaivi01mboh8x1sciot1e",
+			"page_title": "How much CPF payouts can I get every month?",
+			"source_modified_at": "2025-10-03",
+			"retrieved_at": "2026-09-19T10:02:00.834Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your monthly payout amount depends on the amount of savings in your Retirement Account (RA) and your age at the point you start your payouts."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Under CPF LIFE, you can receive up to $3,440 per month for life starting from age 65. For each year that you defer, your payouts will increase by up to 7%. This means that you can receive up to $4,580 if you choose to start your payout at age 70."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "$50,000$82,400$490$670"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are not under CPF LIFE, you will receive monthly payouts of at least $350 until your CPF savings are depleted."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:02:00.834Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:02:00.834Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:02:00.834Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmgbhaivi01mboh8x1sciot1e"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:02:00.834Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:02:00.834Z",
+		"updated_at": "2026-09-19T10:02:00.834Z"
+	}
+}

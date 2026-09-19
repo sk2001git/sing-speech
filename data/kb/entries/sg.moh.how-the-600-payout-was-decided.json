@@ -1,0 +1,120 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.how-the-600-payout-was-decided",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Payout decision",
+		"full": "How the $600 payout was decided"
+	},
+	"summary": {
+		"text": "The payout considered basic long-term care costs, other funding sources, and keeping premiums affordable.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Costs and care settings",
+			"body": "The decision considered basic long-term care costs for a range of services and settings. Costs vary with a person’s care needs and arrangements.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Other ways to pay",
+			"body": "The review also considered Government subsidies and assistance schemes, community support, personal savings, family support, and safety nets such as MediFund or ComCare.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Balancing cover and premiums",
+			"body": "The payout was set while balancing the benefits provided with whether premiums would remain affordable.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life",
+			"careshield-life-benefits"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How was the starting payout of $600 per month for CareShield Life decided?",
+			"How was the starting payout of $600 per month decided?",
+			"Why is the CareShield Life payout $600?",
+			"What was the $600 monthly payout based on?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuok0046hipn4w6i47h1",
+			"page_title": "How was the starting payout of $600 per month for CareShield Life decided?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-19T10:01:12.368Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "In deciding the enhanced payouts, the ElderShield Review Committee took into account the basic long-term care costs for a range of services and settings, other sources of long-term care funding, such as Government subsidies and assistance schemes, community support, personal savings, family support and Government-funded safety nets e.g. MediFund or ComCare; as well as the need to balance benefits and premium affordability."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Long-term care costs vary depending on one’s care needs and arrangements."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "other sources of long-term care funding, such as Government subsidies and assistance schemes, community support, personal savings, family support and Government-funded safety nets e.g. MediFund or ComCare"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "as well as the need to balance benefits and premium affordability."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:01:12.368Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:01:12.368Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:01:12.368Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuok0046hipn4w6i47h1"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:01:12.368Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:01:12.368Z",
+		"updated_at": "2026-09-19T10:01:12.368Z"
+	}
+}

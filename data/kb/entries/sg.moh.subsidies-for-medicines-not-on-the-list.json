@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.subsidies-for-medicines-not-on-the-list",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "medicines not",
+		"full": "Subsidies for medicines not on the list"
+	},
+	"summary": {
+		"text": "Yes. CHAS, MG and PG cardholders can receive dollar-based subsidies, subject to their annual cap.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who can receive subsidies",
+			"body": "CHAS, MG and PG cardholders can receive dollar-based subsidies of between $28 and $135 per visit. An eligible annual cap applies, based on the cardholder’s status.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Where to get the benefits",
+			"body": "Healthier SG benefits and subsidies are available at the enrolled Healthier SG clinic.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthier-sg-chronic-tier"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I get subsidies for chronic medicines not on the list?",
+			"Are medicines outside the Healthier SG list subsidised?",
+			"Do I get help paying for chronic medicines not on the list?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clrsvu3c400501codsw3gcex9",
+			"page_title": "Under the Healthier SG Chronic Tier, can I receive subsidies for chronic medications that are not found on the Healthier SG Medication List?",
+			"source_modified_at": "2024-05-03",
+			"retrieved_at": "2026-09-19T10:00:19.041Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, CHAS, Merdeka Generation (MG) and Pioneer Generation (PG) cardholders can still receive dollar-based subsidies between $28 and $135 per visit, subjected to their eligible annual cap (based on their CHAS/MG/PG card status)."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Healthier SG benefits and subsidies are available/accessible at your enrolled Healthier SG clinic."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T10:00:19.041Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T10:00:19.041Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T10:00:19.041Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clrsvu3c400501codsw3gcex9"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T10:00:19.041Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T10:00:19.041Z",
+		"updated_at": "2026-09-19T10:00:19.041Z"
+	}
+}

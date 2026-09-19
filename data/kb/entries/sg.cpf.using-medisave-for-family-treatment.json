@@ -1,0 +1,138 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-medisave-for-family-treatment",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Family MediSave",
+		"full": "Using MediSave for family treatment"
+	},
+	"summary": {
+		"text": "Yes. You may use your MediSave for an approved dependant’s outpatient treatment if they do not have enough MediSave.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "MediSave withdrawal limits",
+			"body": "The amount your family member can use is subject to the MediSave withdrawal limits. The limit applies to each patient, regardless of how many people pay.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "If there is still a bill",
+			"body": "Any expenses left after the MediSave withdrawal limit must be paid in cash.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the family member",
+			"text": "Make sure the person is your spouse, child, parent, grandparent or sibling. Grandparents and siblings must be Singapore Citizens or Permanent Residents.",
+			"confirm_label": "I checked the person",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Sign the form",
+			"text": "Go to the Medical Institution where your family member is receiving treatment and sign the Medical Claims Authorisation Form. The hospital will submit the claim, and payment will go directly to the Medical Institution.",
+			"confirm_label": "I signed the form",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use my MediSave to pay for my family member’s outpatient treatment expenses?",
+			"Family MediSave",
+			"Can I use MediSave for my family member’s treatment?",
+			"Can my MediSave pay for outpatient care for a relative?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm4bzmza9001s2777m1znm98t",
+			"page_title": "Can I use my MediSave to pay for my family member’s outpatient treatment expenses?",
+			"source_modified_at": "2024-12-06",
+			"retrieved_at": "2026-09-19T09:59:38.867Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If your approved dependants do not have sufficient MediSave for their outpatient treatment expenses, you may consider using your MediSave to pay for them."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Approved dependants refer to a member’s spouse, children, parents, grandparents and siblings. They can be of any nationality except for grandparents and siblings who must be Singapore Citizens or Permanent Residents."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Should you wish to use your MediSave for your approved dependants’ medical expenses, you may approach the Medical Institution (MI) where they are receiving treatment at to sign the Medical Claims Authorisation Form (MCAF)."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "While they can tap on your MediSave, the amount they can use is subject to the MediSave withdrawal limits, which is applied on a per patient basis regardless of the number of payers."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "If they still have outstanding medical expenses after utilising up to the MediSave withdrawal limit, they would have to pay the remainder in cash."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:38.867Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:38.867Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:38.867Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm4bzmza9001s2777m1znm98t"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:38.867Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:38.867Z",
+		"updated_at": "2026-09-19T09:59:38.867Z"
+	}
+}

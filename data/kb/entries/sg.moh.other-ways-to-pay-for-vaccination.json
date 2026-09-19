@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.other-ways-to-pay-for-vaccination",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Vaccination help",
+		"full": "Other ways to pay for vaccination"
+	},
+	"summary": {
+		"text": "There are two options: full subsidy at CHAS GP clinics for Public Assistance card holders, or help from a polyclinic social worker.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "CHAS GP clinics",
+			"body": "These nationally recommended vaccinations are fully subsidised if you hold the Public Assistance card.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Polyclinics",
+			"body": "If you go to a polyclinic for your vaccination and have difficulty paying your bill, approach the social worker there to ask about assistance.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"payment"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"If I cannot afford the remaining vaccination co-payment, what other help is there?",
+			"Can I get the vaccination without paying the full remaining amount?",
+			"Are there other ways to receive the vaccination if I do not have enough in my MediSave?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clgx67vu0001wmf08ge7b19ez",
+			"page_title": "If I do not have enough in my MediSave, and I am not able to pay the remaining co-payment, are there other ways to receive the vaccination?",
+			"source_modified_at": "2023-04-26",
+			"retrieved_at": "2026-09-19T09:59:35.122Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "At CHAS GP clinics, these nationally recommended vaccinations are fully subsidised for those who hold the Public Assistance card."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Patients who go to the polyclinics for their vaccination(s) and have financial difficulties in paying for their bills can approach the social worker at polyclinics to enquire for assistance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T09:59:35.122Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T09:59:35.122Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T09:59:35.122Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clgx67vu0001wmf08ge7b19ez"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T09:59:35.122Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T09:59:35.122Z",
+		"updated_at": "2026-09-19T09:59:35.122Z"
+	}
+}
