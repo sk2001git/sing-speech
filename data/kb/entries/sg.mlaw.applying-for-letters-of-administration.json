@@ -1,0 +1,111 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.applying-for-letters-of-administration",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "No will process",
+		"full": "Applying for Letters of Administration"
+	},
+	"summary": {
+		"text": "If the Public Trustee cannot administer the estate, engage a lawyer to apply for Letters of Administration.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Engage a lawyer",
+			"text": "If the Public Trustee cannot administer the estate, engage a lawyer to apply for Letters of Administration so you can administer the estate yourself.",
+			"confirm_label": "I engaged a lawyer",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Get the renunciation letter",
+			"text": "Ask the Public Trustee for its letter renouncing the Government's right to apply for Letters of Administration.",
+			"confirm_label": "I got the letter",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"bona-vacantia"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"how do I apply for letters of administration when there is no will",
+			"How do I get Letters of Administration",
+			"Who applies for Letters of Administration"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr201rxed2her3pust3",
+			"page_title": "What is the process after Minister for Law has approved equitable or moral claim against a bona vacantia estate?",
+			"source_modified_at": "2025-10-06",
+			"retrieved_at": "2026-09-19T11:07:35.823Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "you will have to engage a lawyer to apply for Letters of Administration so that you can administer the estate on your own."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "For estates which we cannot administer due to reasons stated in \"What are the situations where the Public Trustee cannot act?\", you will have to engage a lawyer to apply for Letters of Administration so that you can administer the estate on your own."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "We will provide you with a renunciation letter renouncing the Government's right to apply for Letters of Administration."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:07:35.823Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:07:35.823Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:07:35.823Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr201rxed2her3pust3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:07:35.823Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:07:35.823Z",
+		"updated_at": "2026-09-19T11:07:35.823Z"
+	}
+}

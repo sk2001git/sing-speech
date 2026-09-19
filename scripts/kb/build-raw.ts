@@ -6,7 +6,7 @@
  *   npx tsx scripts/kb/build-raw.ts --report      # the trend analysis only, no write
  *
  * Writes:
- *   data/kb/raw-index.json   every usable question: id, agency, url, title, text, topics,
+ *   public/kb/raw-index.json   every usable question: id, agency, url, title, text, topics,
  *                            usefulness, last modified. 3,811 answers is ~1.6 MB, which
  *                            the Worker can carry; vectors for them could not.
  *   data/kb/priority.json    the questions in the topics our audience asks about, ranked,
@@ -23,7 +23,12 @@ import type { RawDoc } from '../../src/lib/kb/raw-store';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const RAW = path.join(ROOT, 'data/kb/raw');
-const INDEX = path.join(ROOT, 'data/kb/raw-index.json');
+/*
+ * Served as a static asset, not bundled: 6,867 questions is 3.9 MB, and the Worker script
+ * has a 3 MB compressed budget for everything. Tier B is a fallback most requests never
+ * reach, so it is fetched on the first miss instead of loaded on every request.
+ */
+const INDEX = path.join(ROOT, 'public/kb/raw-index.json');
 const PRIORITY = path.join(ROOT, 'data/kb/priority.json');
 const reportOnly = process.argv.includes('--report');
 
@@ -48,6 +53,15 @@ const PRIORITY_TOPICS: { key: string; label: string; match: RegExp; and?: RegExp
 		and: /medisave|medishield|cpf savings|treatment|hospital|medical|healthcare|premium/i,
 	},
 	{ key: 'scams', label: 'Scams', match: /scam|phishing|impersonat|fraud/i },
+	{
+		key: 'bereavement',
+		label: 'When someone dies',
+		// The whole journey: registering the death, the funeral, what the agencies need, the
+		// estate. MyLegacy, ICA, MinLaw, the courts, IRAS and HDB all publish parts of it.
+		// Word boundaries matter here: an unbounded "will" matched "will I renew my passport"
+		// and dragged 900 immigration questions into a bereavement topic.
+		match: /\b(death|dying|deceased|passed away|funeral|cremation|cremate|burial|buried|columbarium|probate|letters of administration|estate|intestate|executor|administrator of|next[- ]of[- ]kin|bereave\w*|inheritance|beneficiar\w+|nomination|make a will|makes a will|my will|the will)\b/i,
+	},
 	{ key: 'retirement-payouts', label: 'Retirement payouts', match: /retirement sum|payout|cpf life|withdraw.*55|monthly payout/i },
 ];
 

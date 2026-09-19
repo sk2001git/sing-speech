@@ -1,0 +1,165 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.what-you-need-for-a-nomination",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Nomination needs",
+		"full": "What you need for a nomination"
+	},
+	"summary": {
+		"text": "You need your Singpass, your nominees’ details, and details for two witnesses.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Get help in person",
+			"body": "You can visit any ServiceSG Centres to seek assistance to make an online Nomination.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "Witnesses and nominees",
+			"body": "Your witnesses cannot be your nominees.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Get your Singpass",
+			"text": "Have your Singpass ready.",
+			"confirm_label": "I have Singpass",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Gather nominee details",
+			"text": "Get each nominee’s NRIC or FIN. You may also provide their email address.",
+			"confirm_label": "I have nominee details",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Gather witness details",
+			"text": "Find two witnesses. Get each person’s full name, NRIC or FIN, email address, and Singapore-registered mobile phone number.",
+			"confirm_label": "I have two witnesses",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Check foreigner details",
+			"text": "If a nominee or witness is a foreigner, get their mailing address. Your witnesses cannot be your nominees.",
+			"confirm_label": "I checked the details",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"islamic-legacy-planning",
+			"cpf-nomination"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What do I need?",
+			"What do I need for a nomination?",
+			"What details do I need for my nominees and witnesses?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/clv0o5yom005b10qdqwmfd3ae",
+			"page_title": "What do I need?",
+			"source_modified_at": "2024-10-30",
+			"retrieved_at": "2026-09-19T11:05:32.717Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "For nomination, you will need the following:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your Singpass"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Your nominees’ NRIC/FIN and (optional) email address."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Two witnesses, Full Name, NRIC/FIN, email address and Singapore-registered mobile phone number."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "If your nominees or witness is a foreigner, you will need to furnish their mailing address as well."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "You can visit any ServiceSG Centres to seek assistance to make an online Nomination."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "Your witnesses cannot be your nominees."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:32.717Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:32.717Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:32.717Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/clv0o5yom005b10qdqwmfd3ae"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:32.717Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:32.717Z",
+		"updated_at": "2026-09-19T11:05:32.717Z"
+	}
+}

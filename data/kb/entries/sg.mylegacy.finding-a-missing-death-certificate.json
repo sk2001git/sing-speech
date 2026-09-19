@@ -1,0 +1,185 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.finding-a-missing-death-certificate",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "certificate",
+		"full": "Finding a missing death certificate"
+	},
+	"summary": {
+		"text": "Check the date and identification details, then try again after 24 hours. If it still fails, submit a query.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Deaths before 29 May 2022",
+			"body": "No digital death certificate will be issued. The physical death certificate remains valid. If it was misplaced or damaged, apply for a death extract. Fees apply.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "Check the recorded number",
+			"body": "The identification number must be the same one recorded by the hospital or doctor. For example, if the doctor used the deceased's FIN number, do not enter the passport number. You can also verify the document number with the hospital or doctor.",
+			"quote_refs": [
+				"q7"
+			]
+		},
+		{
+			"heading": "Documents not accepted",
+			"body": "An eRBD printout and a Certificate of Cause of Death cannot be used as alternatives for funeral arrangements or other immediate post-death matters.",
+			"quote_refs": [
+				"q8"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the date",
+			"text": "Check that the death was on or after 29 May 2022, and that less than 30 days have passed since the death or the issue of a new certificate.",
+			"confirm_label": "I checked the date",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check the details",
+			"text": "Check the identification number and document number. For a death certificate, use the deceased's identification number. For a stillbirth certificate, use the mother's identification number. The number must match the hospital or doctor's record.",
+			"confirm_label": "I checked the details",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Try again later",
+			"text": "If the details are correct, try downloading the certificate again after 24 hours.",
+			"confirm_label": "I tried again",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Use another document",
+			"text": "While waiting, ask the hospital or doctor for a Confirmation of Death, Confirmation of Stillbirth, or NEHR printout document. These can be accepted for funeral arrangements, burial, and cremation.",
+			"confirm_label": "I have another document",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"position": 5,
+			"name": "Submit a query",
+			"text": "If you still cannot download the certificate after 24 hours, submit a query.",
+			"confirm_label": "I submitted a query",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"death-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Certificate missing",
+			"Why cannot I download the digital death or stillbirth certificate?",
+			"What should I do if the record cannot be found?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/cmcenkdc300br765my57ncw35",
+			"page_title": "I was unable to download the digital death or stillbirth certificate as I was told the record cannot be found. What should I do?",
+			"source_modified_at": "2026-03-20",
+			"retrieved_at": "2026-09-19T11:04:41.466Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you are still unable to download after 24 hours, please proceed to submit a query to us."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Firstly, check whether the death occured on or after 29 May 2022 and that it has been less than 30 days since the date of death or date of issuance of new certifcate should this be an updated death or stillbirth certificate."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you're downloading the death certificate, you should enter the deceased's identification number. If you're downloading the stillbirth certificate, you should enter the mother's identification number."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please try again 24 hours later."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Meanwhile, any of these alternative documents issued by the hospital or doctor: Confirmation of Death (COD), Confirmation of Stillbirth (COS) NEHR printout document can be accepted for Funeral Arrangements & Wake Space Booking Burial & Cremation"
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "For deaths that occured before 29 May 2022, physical death certificates remain valid and no digital death certificate will be issued. If one has misplaced or damaged this death certificate instead and wishes to obtain it, please apply for a death extract instead. Relevant fees will apply."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "For example, if the doctor certified the death with the deceased's FIN number, you should not enter the deceased's passport number."
+		},
+		{
+			"id": "q8",
+			"source": "src1",
+			"text": "Documents such as the eRBD printout and Certificate of Cause of Death (CCOD) cannot be used as alternative documents for funeral arrangements and other immediate post-death matters."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:41.466Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:41.466Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:41.466Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/cmcenkdc300br765my57ncw35"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:41.466Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:41.466Z",
+		"updated_at": "2026-09-19T11:04:41.466Z"
+	}
+}

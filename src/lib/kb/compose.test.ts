@@ -209,6 +209,17 @@ describe('draftToEntry', () => {
 		expect(made.entry.action).toBeUndefined();
 	});
 
+	it('fills the phrasings from the page rather than throwing the card away', () => {
+		// The commonest reason a good card was rejected. A phrasing is a way of asking, not a
+		// claim, so the page's own question and the heading can stand in.
+		const quiet = { ...draft, phrasings: [] };
+		const made = draftToEntry(quiet, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		expect(made.entry.search.example_phrasings.length).toBeGreaterThanOrEqual(3);
+		expect(made.entry.search.example_phrasings).toContain(ASKED);
+		expect(made.entry.search.example_phrasings).toContain(doc.title);
+	});
+
 	it('is an answer, not a process, when there are no steps', () => {
 		const flat: Draft = {
 			...draft,

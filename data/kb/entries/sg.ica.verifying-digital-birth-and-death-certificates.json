@@ -1,0 +1,96 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.verifying-digital-birth-and-death-certificates",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "digital birth",
+		"full": "Verifying digital birth and death certificates"
+	},
+	"summary": {
+		"text": "Digital certificates are the default. Private entities should verify them using the QR code on the certificate.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Private entities",
+			"body": "Private entities such as banks or insurance companies should use the QR code on the digital certificate to verify it online at the ICA website.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"verification-of-digital-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Will banks accept digital certificates?",
+			"How do I verify a digital birth certificate?",
+			"How do I verify a digital death certificate?",
+			"Verifying digital birth and death certificates"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clrzlp3c30073jzsg3v82mio3",
+			"page_title": "Will private entities such as banks or insurance companies accept the digital certificates? How can one verify the digital birth certificate or digital death certificate?",
+			"source_modified_at": "2025-06-02",
+			"retrieved_at": "2026-09-19T11:10:15.924Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Digital birth or death certificates will be the default form issued from 29 May 2022."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Private entities should use the QR code embedded on the digital certificate to verify the digital certificate online at the ICA website."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:10:15.924Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:10:15.924Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:10:15.924Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clrzlp3c30073jzsg3v82mio3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:10:15.924Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:10:15.924Z",
+		"updated_at": "2026-09-19T11:10:15.924Z"
+	}
+}

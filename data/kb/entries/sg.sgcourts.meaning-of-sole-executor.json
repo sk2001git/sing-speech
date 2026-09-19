@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.sgcourts.meaning-of-sole-executor",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "One executor",
+		"full": "Meaning of sole executor"
+	},
+	"summary": {
+		"text": "It means the Will named only one executor.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What it means",
+			"body": "A sole executor is the only person named in the deceased’s Will to manage the estate.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"probate-and-administration",
+			"probate-eservice"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"For Probate applications, what does ‘sole executor’ mean?",
+			"What is a sole executor?",
+			"Does sole executor mean I am the only executor?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "SGCOURTS",
+			"url": "https://ask.gov.sg/sgcourts/questions/cm1k2660j001q14f34qowd82u",
+			"page_title": "For Probate applications, what does ‘sole executor’ mean?",
+			"source_modified_at": "2024-09-27",
+			"retrieved_at": "2026-09-19T11:05:39.432Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Sole executor means that the deceased’s Will named only one executor."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "A Grant of Probate legally recognises an individual (named in the deceased’s Will) as the executor of the deceased's estate."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:39.432Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:39.432Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:39.432Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/sgcourts/questions/cm1k2660j001q14f34qowd82u"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:39.432Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:39.432Z",
+		"updated_at": "2026-09-19T11:05:39.432Z"
+	}
+}

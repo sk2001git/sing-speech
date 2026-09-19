@@ -1,0 +1,105 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.using-the-nric-after-an-overseas-death",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Deceased NRIC",
+		"full": "Using the NRIC after an overseas death"
+	},
+	"summary": {
+		"text": "If the death happened overseas, provide the deceased person's NRIC when reporting the death to ICA.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Gather the NRIC",
+			"text": "Keep the deceased person's Singapore NRIC ready as an identification document for reporting an overseas death.",
+			"confirm_label": "I have the NRIC",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Report the death",
+			"text": "Report the overseas death to ICA using FormSG.",
+			"confirm_label": "I reported the death",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"death-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"what do I do with the NRIC of someone who died",
+			"What should I do with a dead person's NRIC",
+			"How do I use the NRIC after someone dies"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/cmcen2ose00d2czlgcf01jf7d",
+			"page_title": "What are the documents required for reporting overseas death?",
+			"source_modified_at": "2025-06-27",
+			"retrieved_at": "2026-09-19T11:07:31.968Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Deceased's Singapore identification documents (NRIC, Singapore passport or Long Term Pass card)"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may report the death of your family member (Singapore resident or Long-Term Pass holder) who died overseas to ICA via FormSG."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:07:31.968Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:07:31.968Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:07:31.968Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/cmcen2ose00d2czlgcf01jf7d"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:07:31.968Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:07:31.968Z",
+		"updated_at": "2026-09-19T11:07:31.968Z"
+	}
+}

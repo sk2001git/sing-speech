@@ -1,0 +1,108 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.how-un-nominated-cpf-money-is-shared",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF money shares",
+		"full": "How un-nominated CPF money is shared"
+	},
+	"summary": {
+		"text": "The Public Trustee's Office distributes the money. The rules differ for Muslim and non-Muslim families.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Non-Muslim families",
+			"body": "The money follows the Intestate Succession Act. A spouse with no children or parents receives all. A spouse with children receives half, and the children share half. Children without a spouse receive all equally. Other family shares depend on which relatives survive.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Muslim families",
+			"body": "The money follows Islamic inheritance law. The Syariah Court issues an Inheritance Certificate showing who receives the money and each person's share.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"cpf-monies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How are un-nominated CPF moneys distributed among beneficiaries?",
+			"CPF money shares",
+			"Who gets un-nominated CPF money?",
+			"How are un-nominated CPF moneys distributed?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmo81i6sx004a4d01fs7lyx5c",
+			"page_title": "How are un-nominated CPF moneys distributed among beneficiaries?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-19T11:05:06.231Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "When someone passed away, the Public Trustee's Office (PTO) distributes these savings to the beneficiary."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The distribution rules are different for Muslim and non-Muslim families because they follow different legal systems."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The Syariah Court will issue an Inheritance Certificate that lists down who are the beneficiary and how much each person receives."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:06.231Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:06.231Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:06.231Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmo81i6sx004a4d01fs7lyx5c"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:06.231Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:06.231Z",
+		"updated_at": "2026-09-19T11:05:06.231Z"
+	}
+}

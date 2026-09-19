@@ -1,0 +1,101 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.who-can-get-a-death-certificate",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "get a death",
+		"full": "Who can get a death certificate"
+	},
+	"summary": {
+		"text": "Non-next-of-kin cannot download it unless authorised by the deceased’s next-of-kin.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who can download it",
+			"body": "Only the deceased’s next-of-kin, or someone authorised by them, can download the digital death certificate.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "If there is no next-of-kin",
+			"body": "Someone helping with post-death matters can approach the hospital or certifying doctor for a hardcopy printout.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"death-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can a non-next-of-kin download the digital death certificate?",
+			"Who can get a death certificate for someone with no family?",
+			"Can a social worker or funeral director get the certificate?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iuv008t5v0xiuqq0epl",
+			"page_title": "Can non next-of-kins (e.g. social service practitioners, godchildren, funeral directors) download the digital death certificate for a deceased person with no next-of-kin (e.g. single elderly)?",
+			"source_modified_at": "2025-07-08",
+			"retrieved_at": "2026-09-19T11:08:56.450Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Only Next-of-Kin of the deceased or persons authorised by the Next-of-Kin are allowed to download a copy of the digital death certificate from My Legacy."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "For deceased with no immediate Next-of-Kin, individuals who are assisting in the post-death matters can approach the hospital or certifying doctor for a hardcopy printout of the death certificate."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:08:56.450Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:08:56.450Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:08:56.450Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iuv008t5v0xiuqq0epl"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:08:56.450Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:08:56.450Z",
+		"updated_at": "2026-09-19T11:08:56.450Z"
+	}
+}

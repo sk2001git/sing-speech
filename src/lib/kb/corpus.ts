@@ -9,7 +9,8 @@ import type { Corpus } from './search';
  * build step 6.
  */
 import places from '../../../data/kb/places.json';
-import rawIndex from '../../../data/kb/raw-index.json';
+import journeyIndex from '../../../data/kb/journey-index.json';
+import { parseJourney, type Journey } from './journey';
 import { buildRawIndex, type RawDoc, type RawIndex } from './raw-store';
 import type { PlaceIndex } from './search';
 
@@ -39,19 +40,48 @@ export function loadCorpus(): Corpus {
 	return cached;
 }
 
-let rawCached: RawIndex | undefined;
+let rawCached: Promise<RawIndex> | undefined;
 
 /**
  * Tier B: every crawled official answer, searched by words when no entry is near enough
  * (`raw-store.ts`, built by `scripts/kb/build-raw.ts`).
  *
- * The word index is built on first use rather than at module load, because most requests
- * are answered from the entries and never look at it.
+ * Fetched rather than bundled. The crawl is 3.9 MB and the Worker script has a 3 MB
+ * compressed budget for everything it carries; Tier B is a fallback most requests never
+ * reach. `fetchJson` is whatever can reach the site's own static files — the ASSETS
+ * binding in a Worker, plain fetch in dev.
+ *
+ * Held per isolate: the first miss pays for the fetch and the word index, and nothing
+ * after it does.
  */
-export function loadRaw(): RawIndex {
-	rawCached ??= buildRawIndex(rawIndex.questions as RawDoc[]);
+export function loadRaw(fetchJson: () => Promise<{ questions: RawDoc[] }>): Promise<RawIndex> {
+	rawCached ??= fetchJson()
+		.then((body) => buildRawIndex(body.questions ?? []))
+		.catch((err) => {
+			// A Tier B that cannot be loaded must not take the answers down with it: the next
+			// request tries again, and meanwhile the entries still answer.
+			rawCached = undefined;
+			throw err;
+		});
 	return rawCached;
 }
 
-export const RAW_BUILT = rawIndex.built as string;
-export const RAW_COUNT = rawIndex.count as number;
+let journeysCached: Journey[] | undefined;
+
+/**
+ * Life events, checked at build time: every card a stage names exists in the index above
+ * and is grounded (`scripts/kb/build-journeys.ts`). Re-validated here for the same reason
+ * entries are — an index built by an older schema must fail at load, not in front of
+ * somebody who has just been bereaved.
+ */
+export function loadJourneys(): Journey[] {
+	if (journeysCached) return journeysCached;
+	const out: Journey[] = [];
+	for (const raw of (journeyIndex.journeys ?? []) as unknown[]) {
+		const parsed = parseJourney(raw);
+		if (!parsed.ok) throw new Error(`journey invalid: ${parsed.errors.join('; ')}`);
+		out.push(parsed.entry);
+	}
+	journeysCached = out;
+	return out;
+}

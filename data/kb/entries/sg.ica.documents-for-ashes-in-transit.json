@@ -1,0 +1,91 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.documents-for-ashes-in-transit",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Ashes in transit",
+		"full": "Documents for ashes in transit"
+	},
+	"summary": {
+		"text": "If you do not go through Singapore immigration before your next flight, you do not need documents.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When documents are not needed",
+			"body": "You do not need to provide documents if you stay in transit and do not bring the ashes into Singapore.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services"
+	},
+	"search": {
+		"example_phrasings": [
+			"I will be transiting through Singapore to bring ashes to another country",
+			"Do I need documents for ashes during transit?",
+			"What are the procedures for carrying ashes through Singapore?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clz9bs3x10202f966gjdw9j2w",
+			"page_title": "I will be transiting through Singapore to bring the ashes of my deceased relative located overseas to another country. What are the procedures involved?",
+			"source_modified_at": "2024-07-31",
+			"retrieved_at": "2026-09-19T11:05:30.169Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You are not required to produce documentation if you are not clearing through Singapore’s immigration counter before your next flight"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "as you will only be in transit and will not be bringing the ashes into Singapore."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:30.169Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:30.169Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:30.169Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clz9bs3x10202f966gjdw9j2w"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:30.169Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:30.169Z",
+		"updated_at": "2026-09-19T11:05:30.169Z"
+	}
+}

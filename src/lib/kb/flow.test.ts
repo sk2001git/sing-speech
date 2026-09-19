@@ -154,3 +154,68 @@ describe('stale events', () => {
 		expect(s).toMatchObject({ phase: 'home', greeting: false });
 	});
 });
+
+describe('a journey', () => {
+	const card = () => process();
+	const stage = (id: string, over = {}) => ({
+		id,
+		name: `Stage ${id}`,
+		when: 'first-week',
+		priority: 'soon',
+		who: ['CPF'],
+		cards: ['sg.moh.gpfirst-emergency-referral'],
+		done_when: 'You have done it',
+		blocked_by: [],
+		...over,
+	});
+
+	const journeyResult = () => ({
+		heard: { short: 'Someone died', sentence: 'Your father has died.' },
+		journey: {
+			schema_version: '1.0.0',
+			id: 'sg.journey.death-of-a-loved-one',
+			language: 'en',
+			title: { short: 'Someone has died', full: 'When someone close to you dies' },
+			summary: 'What happens now.',
+			search: { example_phrasings: ['my father passed away', 'my mother died', 'someone died'] },
+			stages: [stage('certificate'), stage('funeral')],
+			concludes_when: 'The estate is settled.',
+		},
+		cards: [card()],
+		language: 'en',
+	});
+
+	it('opens on the journey, with nothing yet done', () => {
+		const state = next(initial(), { type: 'JOURNEY', result: journeyResult() } as FlowEvent);
+		expect(state.phase).toBe('journey');
+		if (state.phase !== 'journey') return;
+		expect(state.done).toEqual([]);
+	});
+
+	it('remembers what the person says they have finished, and lets them take it back', () => {
+		let state = next(initial(), { type: 'JOURNEY', result: journeyResult() } as FlowEvent);
+		state = next(state, { type: 'STAGE_DONE', id: 'certificate' } as FlowEvent);
+		expect(state.phase === 'journey' && state.done).toEqual(['certificate']);
+		state = next(state, { type: 'STAGE_DONE', id: 'certificate' } as FlowEvent);
+		expect(state.phase === 'journey' && state.done).toEqual(['certificate']);
+		state = next(state, { type: 'STAGE_UNDONE', id: 'certificate' } as FlowEvent);
+		expect(state.phase === 'journey' && state.done).toEqual([]);
+	});
+
+	it('opens a stage as cards, the same screen as any other answer', () => {
+		let state = next(initial(), { type: 'JOURNEY', result: journeyResult() } as FlowEvent);
+		state = next(state, { type: 'STAGE_CARDS', id: 'certificate' } as FlowEvent);
+		expect(state.phase).toBe('results');
+		if (state.phase !== 'results') return;
+		expect(state.result.cards).toHaveLength(1);
+		expect(state.result.heard.short).toBe('Stage certificate');
+	});
+
+	it('ignores a stage that is not in this journey', () => {
+		const state = next(next(initial(), { type: 'JOURNEY', result: journeyResult() } as FlowEvent), {
+			type: 'STAGE_CARDS',
+			id: 'nowhere',
+		} as FlowEvent);
+		expect(state.phase).toBe('journey');
+	});
+});

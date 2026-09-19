@@ -1,0 +1,148 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.sgcourts.preparing-probate-schedules",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Probate forms",
+		"full": "Preparing probate schedules"
+	},
+	"summary": {
+		"text": "Enter the assets in Probate eService, then prepare, swear or affirm, and submit the supplementary affidavit.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Enter the assets",
+			"text": "Log in to Probate eService using your Singpass. Follow the system prompt to key in the list of assets and submit it to the Court.",
+			"confirm_label": "I entered the assets",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check the schedule",
+			"text": "The Schedule of Assets document will be generated automatically in Probate eService.",
+			"confirm_label": "I checked the schedule",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Prepare the affidavit",
+			"text": "After the Schedule of Assets is approved, prepare the Schedule of Assets – Supplementary Affidavit.",
+			"confirm_label": "I prepared it",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Swear or affirm it",
+			"text": "Swear or affirm the Supplementary Affidavit before a Commissioner for Oaths.",
+			"confirm_label": "I swore or affirmed it",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 5,
+			"name": "Submit the document",
+			"text": "After this, log in to Probate eService and submit the document.",
+			"confirm_label": "I sent the document",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"probate-and-administration",
+			"probate-eservice"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Probate forms",
+			"How do I prepare the probate schedules?",
+			"How do I prepare the Schedule of Assets and Supplementary Affidavit after my matter is granted Order-in-Terms?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "SGCOURTS",
+			"url": "https://ask.gov.sg/sgcourts/questions/cm1k4iw8s002johkkyqsqmcwf",
+			"page_title": "How do I prepare the Schedule of Assets and Schedule of Assets – Supplementary Affidavit in Probate eService after my matter is granted Order-in-Terms?",
+			"source_modified_at": "2025-08-04",
+			"retrieved_at": "2026-09-19T11:09:32.046Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Log in to Probate eService using your Singpass and follow the system prompt to key in the list of assets and submit to the Court."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you are using the Probate eService, the Schedule of Assets document will be automatically generated for you."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Once the Schedule of Assets is approved, prepare the Schedule of Assets – Supplementary Affidavit."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "swear or affirm before a Commissioner for Oaths."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Once this is done, log in to Probate eService and submit the document."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:09:32.046Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:09:32.046Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:09:32.046Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/sgcourts/questions/cm1k4iw8s002johkkyqsqmcwf"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:09:32.046Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:09:32.046Z",
+		"updated_at": "2026-09-19T11:09:32.046Z"
+	}
+}

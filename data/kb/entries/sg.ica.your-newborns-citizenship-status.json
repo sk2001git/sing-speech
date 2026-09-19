@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.your-newborns-citizenship-status",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "newborn's",
+		"full": "Your newborn's citizenship status"
+	},
+	"summary": {
+		"text": "A child born in Singapore is automatically a Singapore Citizen if either parent is a Singapore citizen at birth.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When citizenship is automatic",
+			"body": "The child is automatically a Singapore Citizen if the child was born in Singapore and either parent was a Singapore citizen when the child was born. The parents must be legally married.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"general"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I check my newborn's citizenship status?",
+			"Is my newborn automatically a Singapore Citizen?",
+			"When is a newborn a Singapore Citizen?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clos83ft400715k0wteus9vb3",
+			"page_title": "How do I check my newborn's citizenship status?",
+			"source_modified_at": "2023-11-10",
+			"retrieved_at": "2026-09-19T11:04:45.847Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "A child born in Singapore to legally married parents who are both Singapore citizens (or either one is a Singapore citizen) at the time of child's birth, is automatically a Singapore Citizen."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:45.847Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:45.847Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:45.847Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clos83ft400715k0wteus9vb3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:45.847Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:45.847Z",
+		"updated_at": "2026-09-19T11:04:45.847Z"
+	}
+}

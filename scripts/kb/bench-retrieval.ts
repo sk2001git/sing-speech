@@ -16,7 +16,7 @@ const ROOT = path.resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2);
 const coverage = Number(args[args.indexOf('--coverage') + 1] ?? 0.4) || 0.4;
 
-const docs = (JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] }).questions;
+const docs = (JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] }).questions;
 const index = buildRawIndex(docs);
 console.log(`${docs.length} crawled questions, coverage floor ${coverage}\n`);
 

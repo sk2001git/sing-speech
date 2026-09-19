@@ -1,0 +1,19 @@
+I was unable to download the digital death or stillbirth certificate as I was told the record cannot be found. What should I do?
+Check the date of death
+Firstly, check whether the death occured on or after 29 May 2022 and that it has been less than 30 days since the date of death or date of issuance of new certifcate should this be an updated death or stillbirth certificate.
+For deaths that occured before 29 May 2022, physical death certificates remain valid and no digital death certificate will be issued. If one has misplaced or damaged this death certificate instead and wishes to obtain it, please apply for a death extract instead. Relevant fees will apply.
+Check the details
+Next, make sure that the NRIC, FIN, or passport number that you've entered is correct. If you're downloading the death certificate, you should enter the deceased's identification number. If you're downloading the stillbirth certificate, you should enter the mother's identification number.
+The identification number should also match the one that was recorded by the hospital or doctor. For example, if the doctor certified the death with the deceased's FIN number, you should not enter the deceased's passport number.
+You may also wish to verify the death or stillbirth document number with the hospital or doctor.
+If details are accurate
+Please try again 24 hours later. The doctor or hospital may not be able to submit the information online. If this happens, the certificate will not be available for download yet.
+Meanwhile, any of these alternative documents issued by the hospital or doctor:
+Confirmation of Death (COD),
+Confirmation of Stillbirth (COS)
+NEHR printout document
+can be accepted for
+Funeral Arrangements & Wake Space Booking
+Burial & Cremation
+Documents such as the eRBD printout and Certificate of Cause of Death (CCOD) cannot be used as alternative documents for funeral arrangements and other immediate post-death matters. Please see samples of these alternative documents here.
+If you are still unable to download after 24 hours, please proceed to submit a query to us.

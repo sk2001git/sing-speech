@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.who-you-can-nominate-as-cpf-nominees",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF nominees",
+		"full": "Who you can nominate as CPF nominees"
+	},
+	"summary": {
+		"text": "You can nominate family members who are not Singaporeans or Permanent Residents as your CPF nominees.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Non-Singaporean nominees",
+			"body": "CPF members can nominate any person, including family members who are not Singaporeans or Permanent Residents.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"cpf-nomination"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I nominate my family members who are not a Singaporean/ Permanent Resident as my CPF Nominees?",
+			"Can I name non-Singaporean family members as CPF nominees?",
+			"Can foreigners be my CPF nominees?",
+			"Who can I nominate for my CPF?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/clof41iv100bz5v0xdt5sqq8k",
+			"page_title": "Can I nominate my family members who are not a Singaporean/ Permanent Resident as my CPF Nominees?",
+			"source_modified_at": "2025-06-27",
+			"retrieved_at": "2026-09-19T11:04:52.718Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "CPF members can nominate any person in their nominations, including those who are non-Singaporeans / Permanent Residents."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:52.718Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:52.718Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:52.718Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/clof41iv100bz5v0xdt5sqq8k"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:52.718Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:52.718Z",
+		"updated_at": "2026-09-19T11:04:52.718Z"
+	}
+}

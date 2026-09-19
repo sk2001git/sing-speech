@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.when-nominees-are-notified",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Nominee updates",
+		"full": "When nominees are notified"
+	},
+	"summary": {
+		"text": "Your nomination stays confidential. CPF will only contact nominees about distributing your savings when you pass away.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Your nomination is confidential",
+			"body": "Your nominee(s) will not be notified when you make a nomination.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "When they will be contacted",
+			"body": "CPF will contact your nominee(s) about distributing your CPF savings only when you pass away.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"account-services",
+			"cpf-nomination-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Will my nominee(s) be notified when I make a nomination?",
+			"Will my nominees know about my nomination?",
+			"Do nominees get told when I nominate them?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0x022hpz7a6teb4quh",
+			"page_title": "Will my nominee(s) be notified when I make a nomination?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-19T11:05:36.359Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your nomination is confidential. We will not disclose your nomination details to anyone, including your nominee(s). We will only contact your nominee(s) regarding the distribution of your CPF savings when you pass away."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Your nomination is confidential. We will not disclose your nomination details to anyone, including your nominee(s)."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "We will only contact your nominee(s) regarding the distribution of your CPF savings when you pass away."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:36.359Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:36.359Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:36.359Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0x022hpz7a6teb4quh"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:36.359Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:36.359Z",
+		"updated_at": "2026-09-19T11:05:36.359Z"
+	}
+}

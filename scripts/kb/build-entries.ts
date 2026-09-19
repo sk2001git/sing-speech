@@ -5,6 +5,10 @@
  *   npx tsx scripts/kb/build-entries.ts --per 20        # more of each
  *   npx tsx scripts/kb/build-entries.ts --topic medishield --per 30
  *   npx tsx scripts/kb/build-entries.ts --refresh       # rewrite entries already held
+ *   npx tsx scripts/kb/build-entries.ts --find "how do I register a death"
+ *                                                     # one card for one thing we need
+ *   npx tsx scripts/kb/build-entries.ts --page clw1fhgtk001lrjdsx1grsvy3
+ *                                                     # one card for one page, chosen by hand
  *
  * The on-demand path (`src/lib/kb/compose.ts`) answers anything, but it makes the first
  * person to ask wait for a model call. The topics the crawl says the agencies publish most
@@ -19,7 +23,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { compose, type ComposeRequest } from '../../src/lib/kb/compose';
-import type { RawDoc } from '../../src/lib/kb/raw-store';
+import { buildRawIndex, searchRaw, type RawDoc } from '../../src/lib/kb/raw-store';
 import { writerFor } from '../../src/lib/routes/write';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
@@ -56,6 +60,12 @@ if (!writer) {
 	process.exit(2);
 }
 
+interface Chosen extends RawDoc {
+	priority: string;
+	/** The words of the need, when this card was asked for by name. */
+	asked?: string;
+}
+
 interface PriorityFile {
 	topics: { key: string; label: string }[];
 	questions: (RawDoc & { priority: string })[];
@@ -65,8 +75,43 @@ const priority = JSON.parse(fs.readFileSync(PRIORITY, 'utf8')) as PriorityFile;
 fs.mkdirSync(ENTRIES, { recursive: true });
 fs.mkdirSync(PAGES, { recursive: true });
 
-const chosen: (RawDoc & { priority: string })[] = [];
-for (const topic of priority.topics) {
+const chosen: Chosen[] = [];
+
+/*
+ * `--find` structures the answer to a particular need. The pages come from the same word
+ * search the app uses on a miss, so what gets written is what a person asking that would
+ * have been shown.
+ */
+const byId = args.filter((a, i) => args[i - 1] === '--page');
+if (byId.length > 0) {
+	const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] };
+	for (const id of byId) {
+		const doc = raw.questions.find((q) => q.id === id);
+		if (!doc) {
+			console.warn(`no crawled page with id ${id}`);
+			continue;
+		}
+		console.log(`${doc.agency}: ${doc.title.slice(0, 84)}`);
+		chosen.push({ ...doc, priority: 'asked-for' });
+	}
+}
+
+const needed = args.filter((a, i) => args[i - 1] === '--find');
+if (needed.length > 0) {
+	const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] };
+	const index = buildRawIndex(raw.questions);
+	for (const phrase of needed) {
+		const hits = searchRaw(index, phrase, 3);
+		if (hits.length === 0) {
+			console.warn(`nothing held for "${phrase}"`);
+			continue;
+		}
+		console.log(`"${phrase}" -> ${hits[0]!.doc.agency}: ${hits[0]!.doc.title.slice(0, 80)}`);
+		chosen.push({ ...hits[0]!.doc, priority: 'asked-for', asked: phrase });
+	}
+}
+
+for (const topic of needed.length > 0 || byId.length > 0 ? [] : priority.topics) {
 	if (onlyTopic && topic.key !== onlyTopic) continue;
 	const mine = priority.questions.filter((q) => q.priority === topic.key).slice(0, per);
 	chosen.push(...mine);
@@ -79,10 +124,11 @@ let refused = 0;
 let failed = 0;
 const reasons = new Map<string, number>();
 
-async function structure(doc: RawDoc & { priority: string }) {
+async function structure(doc: RawDoc & { priority: string; asked?: string }) {
 	// The page's own question is how the agency phrased it, which is the fairest starting
-	// point for a card written without a person in front of us.
-	const req: ComposeRequest = { asked: doc.title, docs: [doc], language: 'en' };
+	// point for a card written without a person in front of us. Where this was asked for by
+	// name, the words of the need are used instead, so the card answers that.
+	const req: ComposeRequest = { asked: doc.asked ?? doc.title, docs: [doc], language: 'en' };
 	const made = await compose(req, writer!, new Date().toISOString());
 	if (!made.ok) {
 		const first = made.errors[0] ?? 'unknown';

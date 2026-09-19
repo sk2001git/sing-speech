@@ -1,0 +1,136 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.handling-cpf-without-a-nomination",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF without",
+		"full": "Handling CPF without a nomination"
+	},
+	"summary": {
+		"text": "The next-of-kin must apply for a grant of letters of administration, then approach the Public Trustee's Office.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Where the CPF savings go",
+			"body": "Without a CPF nomination, the CPF savings are transferred to the Public Trustee's Office for distribution to family members under intestacy laws or inheritance laws for Muslims.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Administrative fee",
+			"body": "The Public Trustee's Office charges an administrative fee for this service.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Apply for administration",
+			"text": "Apply for a grant of letters of administration.",
+			"confirm_label": "I applied for the grant",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Approach the PTO",
+			"text": "After applying, approach the Public Trustee's Office to proceed with the CPF distribution.",
+			"confirm_label": "I approached the PTO",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"cpf-nomination"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"CPF without a nomination",
+			"What happens to CPF without a will or nomination?",
+			"If the deceased had no will or CPF nomination, will CPF contact the next-of-kin?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iv100c15v0xr5y2cwgq",
+			"page_title": "If the deceased passed on without a will and did not make a CPF nomination. Will CPF contact the next-of-kin directly or do we need to appoint an administrator ourselves?",
+			"source_modified_at": "2025-06-27",
+			"retrieved_at": "2026-09-19T11:09:06.540Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The next-of-kin would have to apply for a grant of letters of administration and approach PTO to proceed with the distribution."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The next-of-kin would have to apply for a grant of letters of administration"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "and approach PTO to proceed with the distribution."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If a member did not make a CPF nomination, upon his/her passing, his/her CPF savings will be transferred to the Public Trustee's Office (PTO) for distribution to family members under intestacy laws or inheritance laws (for Muslims)."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "PTO will charge an administrative fee for this service."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:09:06.540Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:09:06.540Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:09:06.540Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iv100c15v0xr5y2cwgq"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:09:06.540Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:09:06.540Z",
+		"updated_at": "2026-09-19T11:09:06.540Z"
+	}
+}

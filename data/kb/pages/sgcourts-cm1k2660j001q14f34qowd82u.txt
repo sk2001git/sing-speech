@@ -1,0 +1,9 @@
+For Probate applications, what does ‘sole executor’ mean?
+A Grant of Probate legally recognises an individual (named in the deceased’s Will) as the executor of the deceased's estate. The appointed individual manages the deceased's property. This includes distributing the estate to the beneficiaries after payment of the deceased's debts and other expenses.
+Sole executor means that the deceased’s Will named only one executor.
+Please note that if there are other person(s) named in the Will as executor apart from yourself, you may not be a “sole executor” and may not be eligible to use the Probate eService.
+Some examples are as follows:
+Example 1: Mr Tan and Miss Lim have been named in the deceased’s Will as joint executors. If Mr Tan has since passed away, will Miss Lim be considered the sole executor?
+Answer: No, Miss Lim is considered the “remaining executor” due to the death of Mr Tan and is therefore not a named sole executor under the deceased’s Will. Miss Lim is not eligible to use the Probate eService.
+Example 2: Mr Ang has been named in the deceased’s Will as the only executor. The Will further states that if Mr Ang passes away or is unable to act as executor, Miss Wong will be appointed as executor instead. If Mr Ang has passed away or does not wish to act as executor, is Miss Wong a named sole executor?
+Answer: No, Miss Wong is considered the ‘substituted executor’, and is therefore not a named sole executor under the deceased’s will. Miss Wong is not eligible to use the Probate eService.

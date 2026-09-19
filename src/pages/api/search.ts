@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
-import { EMBEDDING, loadCorpus, loadPlaces, loadRaw } from '../../lib/kb/corpus';
+import { EMBEDDING, loadCorpus, loadJourneys, loadPlaces, loadRaw } from '../../lib/kb/corpus';
+import type { RawDoc } from '../../lib/kb/raw-store';
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
 import { DEFAULT_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
 import { runtimeEnv } from '../../lib/env';
@@ -54,6 +55,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const deps: SearchDeps = {
 			corpus: loadCorpus(),
 			places: loadPlaces(),
+			journeys: loadJourneys(),
 			embed: async (text) => (await openai.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
 			hear: async (audio, mime) => {
 				const heard = await hearVia(chain, audio, mime);
@@ -64,7 +66,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			cache: translations,
 			// Tier B: a question no entry answers is looked up in the crawl and written into a
 			// card by the route's own model, then kept. Grounding decides whether it is shown.
-			raw: loadRaw(),
+			// The crawl is a static asset, fetched on the first request that needs it.
+			raw: () => loadRaw(() => crawledQuestions(request, locals)),
 			...(writer ? { write: writer } : {}),
 			thresholds: THRESHOLDS,
 			translateBudgetMs: 4000,
@@ -78,6 +81,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		return json({ error: 'search failed' }, 502);
 	}
 };
+
+/**
+ * The crawl, from the site's own static files.
+ *
+ * In a Worker that is the ASSETS binding; under the dev server there is no binding, so the
+ * same path is fetched over HTTP. Either way it is the file the build wrote, and it never
+ * leaves the origin.
+ */
+async function crawledQuestions(request: Request, locals: unknown): Promise<{ questions: RawDoc[] }> {
+	const url = new URL('/kb/raw-index.json', request.url);
+	const assets = (locals as { runtime?: { env?: { ASSETS?: { fetch: (req: Request) => Promise<Response> } } } }).runtime?.env
+		?.ASSETS;
+	const res = assets ? await assets.fetch(new Request(url)) : await fetch(url);
+	if (!res.ok) throw new Error(`crawl ${res.status}`);
+	return (await res.json()) as { questions: RawDoc[] };
+}
 
 function json(body: unknown, status = 200): Response {
 	return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });

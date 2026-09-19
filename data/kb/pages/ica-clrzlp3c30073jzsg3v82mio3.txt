@@ -1,0 +1,2 @@
+Will private entities such as banks or insurance companies accept the digital certificates? How can one verify the digital birth certificate or digital death certificate?
+Digital birth or death certificates will be the default form issued from 29 May 2022. Private entities should use the QR code embedded on the digital certificate to verify the digital certificate online at the ICA website.

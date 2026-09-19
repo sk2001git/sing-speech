@@ -252,6 +252,11 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			tell(reply.language === 'zh-Hans' ? '我没听到。请点一下再说。' : "I didn't hear you. Tap and try again.", reply.language);
 			return;
 		}
+		if (reply.kind === 'journey') {
+			dispatch({ type: 'JOURNEY', result: reply });
+			tell(`${reply.journey.title.full}. ${reply.journey.summary}`, reply.language);
+			return;
+		}
 		if (reply.kind === 'places') {
 			dispatch({ type: 'PLACES', result: reply });
 			const first = reply.places[0];

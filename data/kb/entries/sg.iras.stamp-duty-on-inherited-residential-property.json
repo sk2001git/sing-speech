@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.iras.stamp-duty-on-inherited-residential-property",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Stamp duty",
+		"full": "Stamp duty on inherited residential property"
+	},
+	"summary": {
+		"text": "No stamp duty is payable when property passes by assent under the listed inheritance rules.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When no stamp duty applies",
+			"body": "The answer covers a beneficiary who is an individual or an entity. No stamp duty is payable when the property is acquired by way of assent under the deceased’s Will, the Intestate Succession Act, or Muslim Law of Inheritance.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"stamp-duty",
+			"additional-buyers-stamp-duty-absd"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Inherited property",
+			"Is ABSD payable on an inherited home?",
+			"Will a company pay ABSD if it inherits a home?",
+			"Will I pay ABSD if I already own a property and inherit another?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "IRAS",
+			"url": "https://ask.gov.sg/iras/questions/cm5na9ujh002h2kzwagrknzrs",
+			"page_title": "Will Additional Buyer’s Stamp Duty (ABSD) be payable if an individual or a company inherits a residential property (HDB or private), especially when the beneficiary already owns one or more residential properties?",
+			"retrieved_at": "2026-09-19T11:04:46.854Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Stamp duty is not payable for properties acquired by way of assent to the beneficiaries (whether an individual or an entity) in accordance to the Deceased's Will, Intestate Succession Act or Muslim Law of Inheritance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:46.854Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:46.854Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:46.854Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/iras/questions/cm5na9ujh002h2kzwagrknzrs"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:46.854Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:46.854Z",
+		"updated_at": "2026-09-19T11:04:46.854Z"
+	}
+}

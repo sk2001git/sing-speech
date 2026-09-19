@@ -31,7 +31,7 @@ const env = Object.fromEntries(
 		}),
 ) as Record<string, string>;
 
-const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] };
+const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] };
 const byWords = (words: string) => {
 	const found = index.questions.find((q) => q.title.toLowerCase().includes(words.toLowerCase()));
 	if (!found) throw new Error(`no crawled question matching "${words}"`);

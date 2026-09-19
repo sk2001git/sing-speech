@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.registering-an-overseas-birth",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Overseas birth",
+		"full": "Registering an overseas birth"
+	},
+	"summary": {
+		"text": "No. Register your child's birth with the foreign authorities where the child was born, not via LifeSG.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Register the birth",
+			"text": "Register your child's birth with the foreign authorities in the country or place where the child was born.",
+			"confirm_label": "I registered the birth",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Obtain the certificate",
+			"text": "Obtain your child's birth certificate from the foreign authorities.",
+			"confirm_label": "I have the certificate",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"birth-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I am a Singaporean and my child is born overseas. Can I register my child's birth via LifeSG?",
+			"Can I register my overseas-born child's birth via LifeSG?",
+			"How do I register my child's birth if they were born overseas?",
+			"Can LifeSG register my child's overseas birth?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clqev757h001d9f3mjsf1uprd",
+			"page_title": "I am a Singaporean and my child is born overseas. Can I register my child's birth via LifeSG?",
+			"source_modified_at": "2025-05-30",
+			"retrieved_at": "2026-09-19T11:05:00.518Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "ICA does not register birth of a child who is born overseas."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You should register the child's birth and obtain the birth certificate from the foreign authorities in the country/ place where the child was born."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:00.518Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:00.518Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:00.518Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clqev757h001d9f3mjsf1uprd"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:00.518Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:00.518Z",
+		"updated_at": "2026-09-19T11:05:00.518Z"
+	}
+}

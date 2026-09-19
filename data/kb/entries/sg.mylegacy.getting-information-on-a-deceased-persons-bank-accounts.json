@@ -1,0 +1,119 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.getting-information-on-a-deceased-persons-bank-accounts",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "person's bank",
+		"full": "Getting information on a deceased person's bank accounts"
+	},
+	"summary": {
+		"text": "Contact the banks, then ask the Family Justice Courts about the court documents needed for disclosure.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Bank disclosure rules",
+			"body": "Banks may have their own processes. They cannot disclose details of the deceased's bank accounts without the appropriate court documents.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Contact the banks",
+			"text": "Contact the bank or banks directly. Explain that your loved one has passed on and that you want to check whether they held an account there.",
+			"confirm_label": "I contacted the banks",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Ask about court documents",
+			"text": "Ask the Family Justice Courts about applying for the appropriate court documents.",
+			"confirm_label": "I asked the courts",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"bank-insurance"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I obtain more information on my deceased next-of-kin's bank accounts?",
+			"How can I find out about a deceased person's bank accounts?",
+			"What court documents do I need for a deceased person's bank account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iuu00875v0xiv8ih51k",
+			"page_title": "How do I obtain more information on my deceased next-of-kin's bank accounts?",
+			"source_modified_at": "2025-07-04",
+			"retrieved_at": "2026-09-19T11:05:24.912Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To obtain more information on a deceased's bank accounts, the next-of-kin would have to contact the bank(s) directly and explain that your loved one has passed on and you would like to check if they held an account with the bank."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may check the Family Justice Courts website or enquire with the Family Justice Courts for more information on applying for these court documents."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "As the banks are required to comply with customer information confidentiality requirements under the Banking Act, the banks are unable to disclose details pertaining to the bank account(s) held by the deceased without the appropriate court documents such as the Grant of Probate (if the deceased made a will) or Grant of Letters of Administration (if the deceased did not make a will)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:24.912Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:24.912Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:24.912Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iuu00875v0xiv8ih51k"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:24.912Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:24.912Z",
+		"updated_at": "2026-09-19T11:05:24.912Z"
+	}
+}

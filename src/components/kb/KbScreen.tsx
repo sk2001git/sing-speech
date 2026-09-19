@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Waveform from './Waveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
+import JourneyView from './JourneyView';
 import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
@@ -91,6 +92,17 @@ const WORDS = {
 		home: 'Home',
 		language: 'Language',
 		find: 'Find',
+		journeyNow: 'Start with this',
+		journeyLater: 'Later, when these are done',
+		journeyDone: 'Done',
+		journeyDoneOne: 'I have done this',
+		journeyUndo: 'Not done after all',
+		journeyOpen: (n: number) => `Show me how (${n})`,
+		journeyWaiting: (name: string) => `Waits until: ${name}`,
+		journeyWho: 'With:',
+		journeyKnow: 'Finished when:',
+		journeyEnds: 'This ends when:',
+		journeyFinished: 'That is everything. Nothing is left outstanding.',
 		findPlaceholder: 'Type a few letters',
 		findNothing: 'Not in Suara yet.',
 		speakInstead: 'Say it instead',
@@ -157,6 +169,17 @@ const WORDS = {
 		home: '首页',
 		language: '语言',
 		find: '查找',
+		journeyNow: '先做这些',
+		journeyLater: '之后再说',
+		journeyDone: '已完成',
+		journeyDoneOne: '这个我做好了',
+		journeyUndo: '还没做好',
+		journeyOpen: (n: number) => `告诉我怎么做（${n}）`,
+		journeyWaiting: (name: string) => `要先完成：${name}`,
+		journeyWho: '联系：',
+		journeyKnow: '完成的标志：',
+		journeyEnds: '全部结束的标志：',
+		journeyFinished: '都办好了，没有未了的事。',
 		findPlaceholder: '输入几个字母',
 		findNothing: 'Suara 还没有这个。',
 		speakInstead: '改用说的',
@@ -254,6 +277,30 @@ function Body(p: BodyProps) {
 			return <Results {...p} state={s} />;
 		case 'places':
 			return <Places {...p} state={s} />;
+		case 'journey':
+			return (
+				<JourneyView
+					journey={s.result.journey}
+					done={s.done}
+					lang={p.lang}
+					w={{
+						now: p.w.journeyNow,
+						later: p.w.journeyLater,
+						done: p.w.journeyDone,
+						doneOne: p.w.journeyDoneOne,
+						undo: p.w.journeyUndo,
+						open: p.w.journeyOpen,
+						waitingFor: p.w.journeyWaiting,
+						withWho: p.w.journeyWho,
+						youKnow: p.w.journeyKnow,
+						ends: p.w.journeyEnds,
+						finished: p.w.journeyFinished,
+					}}
+					onOpen={(id) => p.dispatch({ type: 'STAGE_CARDS', id })}
+					onDone={(id) => p.dispatch({ type: 'STAGE_DONE', id })}
+					onUndo={(id) => p.dispatch({ type: 'STAGE_UNDONE', id })}
+				/>
+			);
 		case 'confirm':
 			return <Confirm {...p} state={s} />;
 		case 'steps':

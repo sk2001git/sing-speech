@@ -1,0 +1,127 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.documents-after-a-death",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Death documents",
+		"full": "Documents after a death"
+	},
+	"summary": {
+		"text": "You will receive one document from the hospital or doctor who certified the death.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Possible documents",
+			"body": "You may receive an NEHR printout, an eRBD printout, or a Confirmation of Death (COD) or Confirmation of Stillbirth (COS).",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "If certified outside hospital",
+			"body": "You may receive a photo of the document instead of a printout.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "If you received a CCOD",
+			"body": "Contact ICA for help.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"action": {
+		"type": "call",
+		"label": "Call 63916100",
+		"value": "63916100",
+		"quote_refs": [
+			"q4"
+		]
+	},
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"death-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What document will I receive from the hospital or doctor who registered the death?",
+			"Death documents",
+			"What document will I receive after a death?",
+			"What paper does the hospital give me?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/cmcent8vh008dr4ebo6czt91r",
+			"page_title": "What document will I receive from the hospital or doctor who registered the death?",
+			"source_modified_at": "2025-06-27",
+			"retrieved_at": "2026-09-19T11:09:08.344Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "After a death or stillbirth has been certified, you'll receive 1 document from the hospital or doctor."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "National Electronic Health Record (NEHR) printout Electronic Registration of Births and Deaths (eRBD) printout Confirmation of Death (COD) or Confirmation of Stillbirth (COS)"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If the death was certified outside of a hospital, you may receive a photo of the document instead of a printout."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you received a Certificate of Cause of Death (CCOD), please contact ICA at Go.gov.sg or 6391 6100 for assistance."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:09:08.344Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:09:08.344Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:09:08.344Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/cmcent8vh008dr4ebo6czt91r"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:09:08.344Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:09:08.344Z",
+		"updated_at": "2026-09-19T11:09:08.344Z"
+	}
+}

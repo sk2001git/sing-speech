@@ -1,4 +1,5 @@
 import type { Entry, EntryLanguage } from './entry';
+import type { Journey } from './journey';
 import type { Place, PlaceKind } from '../places/places';
 
 /**
@@ -34,6 +35,22 @@ export interface SearchResult {
 
 type Results = { view: View; phase: 'results'; result: SearchResult; openId: string | null };
 
+/**
+ * A life event, and how far through it they are.
+ *
+ * `done` is the person's own word for it — Suara never decides that a stage is finished,
+ * because being wrong means a missed legal deadline. It is held on the device and nowhere
+ * else (vault plan-suara-0010).
+ */
+export interface JourneyResult {
+	heard: Heard;
+	journey: Journey;
+	cards: Entry[];
+	language: EntryLanguage;
+}
+
+type JourneyPhase = { view: View; phase: 'journey'; result: JourneyResult; done: string[] };
+
 /** Addresses from open data: a different kind of answer, so a different screen. */
 export interface PlacesResult {
 	heard: Heard;
@@ -59,6 +76,7 @@ export type FlowState =
 	| { view: View; phase: 'listening' }
 	| { view: View; phase: 'searching'; topic: Area | null }
 	| Results
+	| JourneyPhase
 	| { view: View; phase: 'places'; result: PlacesResult }
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
 	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
@@ -82,6 +100,12 @@ export type FlowEvent =
 	| { type: 'ASKING' }
 	| { type: 'NOTHING'; heard: Heard }
 	| { type: 'PLACES'; result: PlacesResult }
+	| { type: 'JOURNEY'; result: JourneyResult }
+	/** The person says a stage is finished, or takes it back. */
+	| { type: 'STAGE_DONE'; id: string }
+	| { type: 'STAGE_UNDONE'; id: string }
+	/** Open one stage's cards, keeping the journey to come back to. */
+	| { type: 'STAGE_CARDS'; id: string }
 	| { type: 'TOPIC'; area: Area }
 	| { type: 'OPEN'; id: string }
 	| { type: 'VIEW'; view: View }
@@ -125,6 +149,36 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			return { view, phase: 'searching', topic: null };
 		case 'SILENCE':
 			return state.phase === 'listening' || state.phase === 'searching' ? { view, phase: 'home', greeting: false, notice: 'nothing' } : state;
+		case 'JOURNEY':
+			return { view, phase: 'journey', result: event.result, done: [] };
+		case 'STAGE_DONE':
+			return state.phase === 'journey' && !state.done.includes(event.id)
+				? { ...state, done: [...state.done, event.id] }
+				: state;
+		case 'STAGE_UNDONE':
+			return state.phase === 'journey' ? { ...state, done: state.done.filter((id) => id !== event.id) } : state;
+		case 'STAGE_CARDS': {
+			if (state.phase !== 'journey') return state;
+			const stage = state.result.journey.stages.find((s) => s.id === event.id);
+			if (!stage) return state;
+			const cards = stage.cards
+				.map((id) => state.result.cards.find((card) => card.id === id))
+				.filter((card): card is Entry => card !== undefined);
+			if (cards.length === 0) return state;
+			return {
+				view,
+				phase: 'results',
+				result: {
+					heard: { short: stage.name, sentence: stage.note ?? stage.name },
+					fit: 'topic',
+					cards,
+					nextOffset: null,
+					query: stage.name,
+					language: state.result.language,
+				},
+				openId: cards[0]!.id,
+			};
+		}
 		case 'PLACES':
 			return state.phase === 'searching' ? { view, phase: 'places', result: event.result } : state;
 		case 'NOTHING':

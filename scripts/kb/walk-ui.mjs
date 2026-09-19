@@ -157,6 +157,26 @@ try {
 		throw new Error('__done__');
 	}
 	check('searching after the recording ends', await waitFor(`document.querySelector('.k-dots') || document.querySelector('[data-card]') || document.querySelector('.k-notice')`, 5000));
+	if (process.env.WALK_EXPECT === 'journey') {
+		await waitFor(`document.querySelector('[data-journey]')`, 60000);
+		const stages = await js(`document.querySelectorAll('[data-stage]').length`);
+		check('a death in the family opens the journey, not a card', stages > 0, `${stages} stages in front of them`);
+		check(
+			'only what can be done now is in front of them',
+			stages > 0 && stages <= 3,
+			await js(`[...document.querySelectorAll('.k-stage-name')].map(el => el.textContent).join(' | ')`),
+		);
+		check('later work is held back', await js(`!!document.querySelector('.k-journey-later')`));
+		check('the journey says how it ends', await js(`!!document.querySelector('.k-journey-end')`));
+		await shot('journey');
+		await click('[data-stage] .k-btn-primary');
+		check('a stage opens the cards behind it', await waitFor(`document.querySelectorAll('[data-card]').length > 0`, 20000));
+		await shot('journey-stage');
+		check('no page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
+		ws.close();
+		throw new Error('__done__');
+	}
+
 	const answered = await waitFor(`document.querySelector('[data-card]') || /Not in Suara|还没有/.test(document.body.innerText) || document.querySelector('.k-notice')`, 60000);
 	const speech = await js(`({ cards: document.querySelectorAll('[data-card]').length, said: document.querySelector('.k-said p')?.textContent ?? '', heard: document.querySelector('.k-heard-text')?.textContent ?? '', best: document.querySelectorAll('.k-badge').length, weak: !!document.querySelector('.k-closest'), notice: document.querySelector('.k-notice')?.textContent ?? '' })`);
 	check('spoken request returns an answer screen', answered && !speech.notice, JSON.stringify(speech));
@@ -201,22 +221,26 @@ try {
 	await click('.k-brand');
 	await waitFor(`document.querySelector('[data-topic="digital-services"]')`);
 	await click('[data-topic="digital-services"]');
-	await waitFor(`document.querySelector('[data-card="sg.cpf.singpass-password-reset"]')`, 20000);
-	await click('[data-card="sg.cpf.singpass-password-reset"] .k-card-head');
+	// Any card that offers steps. Pinning to an id broke the day the entries were rebuilt
+	// one-per-page and that particular card was replaced by a fuller one.
+	await waitFor(`[...document.querySelectorAll('[data-card]')].some(c => /step/i.test(c.textContent))`, 20000);
+	await js(`[...document.querySelectorAll('[data-card]')].find(c => /step/i.test(c.textContent)).querySelector('.k-card-head').click()`);
 	await waitFor(`[...document.querySelectorAll('button')].some(b => /Start guide/.test(b.textContent))`, 3000);
 	await js(`[...document.querySelectorAll('button')].find(b => /Start guide/.test(b.textContent)).click()`);
 	check('Start guide asks first', await waitFor(`document.querySelector('.confirm-yes') && document.querySelector('.confirm-no')`, 3000));
 	await shot('confirm');
 	await click('.confirm-no');
-	check('Not this returns to the same cards', await waitFor(`document.querySelector('.k-card[data-open="true"][data-card="sg.cpf.singpass-password-reset"]')`, 3000));
+	check('Not this returns to the same cards', await waitFor(`document.querySelector('.k-card[data-open="true"]')`, 3000));
 	await js(`[...document.querySelectorAll('button')].find(b => /Start guide/.test(b.textContent)).click()`);
 	await waitFor(`document.querySelector('.confirm-yes')`, 3000);
 	await click('.confirm-yes');
-	check('steps start at step 1 of 4', await waitFor(`/Step 1 of 4/i.test(document.body.innerText)`, 3000));
+	// The count comes off the screen: the corpus decides how many steps a guide has.
+	const steps = Number((await js(`(document.body.innerText.match(/Step 1 of (\\d+)/i) ?? [])[1] ?? 0`)) || 0);
+	check('steps start at the first one', steps > 0, `1 of ${steps}`);
 	await click('.k-btn-yes');
-	check('confirming a step moves to the next', await waitFor(`/Step 2 of 4/i.test(document.body.innerText)`, 3000));
+	check('confirming a step moves to the next', steps === 1 || (await waitFor(`/Step 2 of/i.test(document.body.innerText)`, 3000)));
 	await shot('step-2');
-	for (let i = 0; i < 3; i++) {
+	for (let i = 0; i < steps; i++) {
 		await click('.k-btn-yes');
 		await sleep(200);
 	}

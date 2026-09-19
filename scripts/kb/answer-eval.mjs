@@ -40,7 +40,7 @@ const prebuilt = new Set(
 /** The crawl, to check quotes against the page they claim to come from. */
 const pageByUrl = new Map(
 	// Question plus answer: a page's published question is part of the page and may be quoted.
-	(JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kb/raw-index.json'), 'utf8')).questions ?? []).map((q) => [
+	(JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')).questions ?? []).map((q) => [
 		q.url,
 		`${q.title}\n${q.text}`,
 	]),

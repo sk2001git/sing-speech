@@ -217,6 +217,131 @@
 		font-size: 1rem;
 	}
 
+	/*
+	 * A journey screen holds the one thing to do now. Everything later is behind a drop-down,
+	 * because somebody whose father died last night should not be reading about probate.
+	 */
+	.k-journey {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.k-journey-title {
+		margin: 0;
+		font-size: 1.75rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1.2;
+	}
+
+	.k-journey-summary {
+		margin: 0;
+		color: var(--muted);
+		font-size: 1.125rem;
+	}
+
+	.k-journey-heading {
+		margin: 0.5rem 0 0;
+		font-size: 1.25rem;
+		font-weight: 700;
+	}
+
+	.k-stages {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.k-stage {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		padding: 1rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-card);
+		background: var(--surface);
+		box-shadow: var(--shadow-card);
+	}
+
+	.k-stage[data-open='true'] {
+		border-color: var(--ink);
+	}
+
+	.k-stage[data-done='true'] {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		background: var(--subtle);
+		box-shadow: none;
+	}
+
+	.k-stage-when {
+		margin: 0;
+		color: var(--muted);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		text-transform: none;
+	}
+
+	.k-stage-name {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 700;
+	}
+
+	.k-stage-note,
+	.k-stage-who,
+	.k-stage-donewhen,
+	.k-stage-wait {
+		margin: 0;
+		color: var(--muted);
+		font-size: 1rem;
+	}
+
+	.k-stage-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
+	}
+
+	.k-journey-later > summary,
+	.k-journey-done > summary {
+		min-height: 3.5rem;
+		display: flex;
+		align-items: center;
+		padding: 0 1rem;
+		border: 1px solid var(--line);
+		border-radius: var(--radius-btn);
+		background: var(--subtle);
+		font-size: 1.125rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.k-journey-later[open] > summary,
+	.k-journey-done[open] > summary {
+		margin-bottom: 0.75rem;
+	}
+
+	.k-journey-end {
+		margin: 0;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 1rem;
+	}
+
+	.k-journey-end[data-finished='true'] {
+		color: var(--ready);
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
 	.k-find-empty {
 		display: flex;
 		flex-direction: column;

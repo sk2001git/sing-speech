@@ -1,0 +1,125 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.downloading-the-digital-death-certificate",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "digital death",
+		"full": "Downloading the digital death certificate"
+	},
+	"summary": {
+		"text": "Yes. The Confirmation of Death is temporary. Download the digital death certificate after the doctor certifies the death online.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "The Confirmation of Death",
+			"body": "The Confirmation of Death is only a temporary document.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Get the details",
+			"text": "Find the Confirmation of Death Number, Deceased's ID Number and Date of Death on the Confirmation of Death.",
+			"confirm_label": "I have the details",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Download the certificate",
+			"text": "After online death certification by the doctor, download the digital death certificate at the My Legacy website.",
+			"confirm_label": "I downloaded it",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"death-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Do I need to download the digital death certificate if I have a Confirmation of Death?",
+			"Is the Confirmation of Death enough?",
+			"How do I get the digital death certificate?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clos83ft1005j5k0wc0h4j39u",
+			"page_title": "Do I need to download the digital death certificate if I have a Confirmation of Death?",
+			"source_modified_at": "2025-05-30",
+			"retrieved_at": "2026-09-19T11:05:23.036Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The Confirmation of Death is only a temporary document. You should download the digital death certificate at the My Legacy website, following online death certification by the doctor."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To do so, you will need to make use of the following information from the Confirmation of Death: Confirmation of Death Number, Deceased's ID Number and Date of Death."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You should download the digital death certificate at the My Legacy website, following online death certification by the doctor."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The Confirmation of Death is only a temporary document."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:23.036Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:23.036Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:23.036Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clos83ft1005j5k0wc0h4j39u"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:23.036Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:23.036Z",
+		"updated_at": "2026-09-19T11:05:23.036Z"
+	}
+}

@@ -1,0 +1,97 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.translating-foreign-documents",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "foreign",
+		"full": "Translating foreign documents"
+	},
+	"summary": {
+		"text": "Provide an official translation for documents in languages other than English.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Provide a translation",
+			"text": "Provide an official translation for each document that is in a language other than English.",
+			"confirm_label": "I have the translations",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"birth-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Do I need to translate foreign-issued documents into English for the purpose of birth registration?",
+			"Do foreign documents need an English translation?",
+			"Must I provide official translations for documents not in English?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clqev757h00159f3mmhgpjwhn",
+			"page_title": "Do I need to translate foreign-issued documents into English for the purpose of birth registration?",
+			"source_modified_at": "2023-12-21",
+			"retrieved_at": "2026-09-19T11:04:48.136Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "As with current procedures for submission of documents to ICA, you will need to provide official translation for documents in languages other than English."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "you will need to provide official translation for documents in languages other than English."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:48.136Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:48.136Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:48.136Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clqev757h00159f3mmhgpjwhn"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:48.136Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:48.136Z",
+		"updated_at": "2026-09-19T11:04:48.136Z"
+	}
+}

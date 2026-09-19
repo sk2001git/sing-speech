@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.birth-certificate-format",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "certificate",
+		"full": "Birth certificate format"
+	},
+	"summary": {
+		"text": "Birth certificates issued from 29 May 2022 are digital PDF files. You can print a copy if needed.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Printing a copy",
+			"body": "Parents can save a copy and print it if required.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"birth-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Will there still be physical birth certificates issued?",
+			"Are birth certificates still printed?",
+			"Can I get a paper birth certificate?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clqev757h001n9f3mvt3yehr7",
+			"page_title": "Will there still be physical birth certificates issued?",
+			"source_modified_at": "2023-12-21",
+			"retrieved_at": "2026-09-19T11:05:37.725Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "All birth certificates issued on and after 29 May 2022 will be in digital (PDF) format."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "When downloading the certificates from the ICA website, parents can save a copy and print if required."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:37.725Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:37.725Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:37.725Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clqev757h001n9f3mvt3yehr7"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:37.725Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:37.725Z",
+		"updated_at": "2026-09-19T11:05:37.725Z"
+	}
+}

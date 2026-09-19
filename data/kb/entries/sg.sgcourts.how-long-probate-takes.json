@@ -1,0 +1,103 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.sgcourts.how-long-probate-takes",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Grant timing",
+		"full": "How long probate takes"
+	},
+	"summary": {
+		"text": "Complete applications, including a schedule of assets, can typically be processed in less than 3 months.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Typical processing time",
+			"body": "Complete applications, which include a schedule of assets, can typically be processed in less than 3 months.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "What can affect the timing",
+			"body": "The timing depends on the Court’s calendar, the applicant’s personal schedule, the time taken to swear or affirm the Supporting Affidavit and Administration Oath, and the time taken to verify the original will at the Probate registry.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"probate-and-administration",
+			"probate-eservice"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How long would it typically take for a Grant of Probate to be granted when using the Probate eService?",
+			"Grant timing",
+			"How long probate takes",
+			"How long does a Grant of Probate take?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "SGCOURTS",
+			"url": "https://ask.gov.sg/sgcourts/questions/cm1k3kb0t0023ohkkk1rbtwbh",
+			"page_title": "How long would it typically take for a Grant of Probate to be granted when using the Probate eService?",
+			"source_modified_at": "2024-09-27",
+			"retrieved_at": "2026-09-19T11:09:01.265Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Complete applications, which include a schedule of assets, can typically be processed in less than 3 months."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The timeframe will depend on a variety of factors including:"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:09:01.265Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:09:01.265Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:09:01.265Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/sgcourts/questions/cm1k3kb0t0023ohkkk1rbtwbh"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:09:01.265Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:09:01.265Z",
+		"updated_at": "2026-09-19T11:09:01.265Z"
+	}
+}

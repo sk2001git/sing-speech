@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.your-childs-race-options",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Race options",
+		"full": "Your child's race options"
+	},
+	"summary": {
+		"text": "Your child may take either parent's race, an acceptable mixed race, or, if a Singapore citizen, both parents' races.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Available race choices",
+			"body": "Your child can follow either parent's race. If you and your spouse have different races, your child may also have an acceptable mixed race. If your child is a Singapore citizen, a double-barrelled race using both parents' races is also available.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "For siblings",
+			"body": "All children below 21 from the same parents should have the same race.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"general"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the race options available for my child if my spouse and I are of different races?",
+			"What race can my child have if we are different races?",
+			"Can my child use either parent's race?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clos83ft4007b5k0wjd2chukj",
+			"page_title": "What are the race options available for my child if my spouse and I are of different races?",
+			"source_modified_at": "2023-11-10",
+			"retrieved_at": "2026-09-19T11:04:51.797Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "The race of a child can follow that of either parent, or an acceptable mixed race if the child's parents are of different races."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "A child who is a Singapore citizen is also eligible to have a double-barrelled race comprising both parents’ races."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "All siblings of the child who are below 21 years old from the same set of parents should have the same race."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:51.797Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:51.797Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:51.797Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clos83ft4007b5k0wjd2chukj"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:51.797Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:51.797Z",
+		"updated_at": "2026-09-19T11:04:51.797Z"
+	}
+}

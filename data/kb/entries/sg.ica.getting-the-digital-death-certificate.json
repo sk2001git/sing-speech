@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.getting-the-digital-death-certificate",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "digital death",
+		"full": "Getting the digital death certificate"
+	},
+	"summary": {
+		"text": "After the doctor certifies the death online, download the digital death certificate from My Legacy.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Get the details",
+			"text": "Get these details from the certifying doctor or hospital: the death certificate number or Confirmation of Death document number, the deceased’s Identification Document number, and the deceased’s date of death.",
+			"confirm_label": "I have the details",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Download the certificate",
+			"text": "After the doctor certifies the death online, visit the My Legacy website and download the digital death certificate.",
+			"confirm_label": "I downloaded it",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"death-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I get the death certificate?",
+			"How do I know the death was registered?",
+			"Getting the digital death certificate"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clw1fhgtk001lrjdsx1grsvy3",
+			"page_title": "How do I know that the death has been registered if I do not need to register the death? How do I obtain a death certificate?",
+			"source_modified_at": "2025-05-30",
+			"retrieved_at": "2026-09-19T11:10:32.203Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "After the doctor certifies the death online, you can visit the My Legacy website to download the digital death certificate."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To access and download the digital death certificate, you will require the following information from the certifying doctor or hospital:"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:10:32.203Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:10:32.203Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:10:32.203Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clw1fhgtk001lrjdsx1grsvy3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:10:32.203Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:10:32.203Z",
+		"updated_at": "2026-09-19T11:10:32.203Z"
+	}
+}

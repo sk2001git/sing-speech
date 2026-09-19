@@ -359,7 +359,13 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 	const stepRefs = steps.map((s, i) => refFor(s.quote, `steps.${i}`));
 	const detailRefs = details.map((d, i) => refFor(d.quote, `details.${i}`));
 
-	const phrasings = [req.asked, ...(draft.phrasings ?? [])]
+	/*
+	 * The person's words, then the model's, then the page's own question and the card's
+	 * heading if those leave fewer than three. A phrasing is how somebody might ask for this,
+	 * not a statement about the world, so filling it costs nothing and rejecting a good card
+	 * for want of one costs an answer.
+	 */
+	const phrasings = [req.asked, ...(draft.phrasings ?? []), primary.title, squash(draft.full ?? '')]
 		.map((p) => squash(p))
 		.filter((p) => p.length >= 3 && p.length <= 120)
 		.filter((p, i, all) => all.indexOf(p) === i)

@@ -1,0 +1,125 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.reporting-an-overseas-death",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Overseas death",
+		"full": "Reporting an overseas death"
+	},
+	"summary": {
+		"text": "Register the death and get a foreign death certificate. Then report it to ICA.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Register the death",
+			"text": "Register the death with the foreign authorities in the country where the person passed on.",
+			"confirm_label": "I registered the death",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Get the certificate",
+			"text": "Get a death certificate from the foreign authorities in that country.",
+			"confirm_label": "I have the certificate",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Report it to ICA",
+			"text": "Report the death to ICA with the foreign death certificate, so ICA can update its records.",
+			"confirm_label": "I reported it to ICA",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"birth-and-death-registration",
+			"death-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I report death that occurred overseas?",
+			"How do I report an overseas death?",
+			"What should I do if someone dies overseas?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/clos83ft1005p5k0wnl15ub8u",
+			"page_title": "How do I report death that occurred overseas?",
+			"source_modified_at": "2025-05-30",
+			"retrieved_at": "2026-09-19T11:04:56.575Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If a Singapore citizen or permanent resident had passed on overseas, you should register the death and get a death certificate from the foreign authorities in the country where the person had passed on."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "you should register the death"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "get a death certificate from the foreign authorities in the country where the person had passed on"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You can then report the death to ICA with the foreign death certificate to update ICA's records."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:56.575Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:56.575Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:56.575Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/clos83ft1005p5k0wnl15ub8u"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:56.575Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:56.575Z",
+		"updated_at": "2026-09-19T11:04:56.575Z"
+	}
+}

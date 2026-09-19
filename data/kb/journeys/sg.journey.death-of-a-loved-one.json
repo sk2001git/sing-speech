@@ -1,0 +1,121 @@
+{
+	"schema_version": "1.0.0",
+	"id": "sg.journey.death-of-a-loved-one",
+	"language": "en",
+	"title": {
+		"short": "Someone has died",
+		"full": "When someone close to you dies"
+	},
+	"summary": "What has to happen in the first days, what can wait a few weeks, and what is settled months later.",
+	"search": {
+		"example_phrasings": [
+			"my father passed away",
+			"my husband died last night",
+			"what do I do when someone dies",
+			"my mother just died, what now",
+			"my friend passed away and I am the next of kin",
+			"somebody in my family died, what must I settle",
+			"what to do after a death in Singapore",
+			"my wife passed on, how do I handle her CPF and the flat"
+		]
+	},
+	"stages": [
+		{
+			"id": "the-certificate",
+			"name": "Get the death certificate",
+			"note": "A doctor certifies the death and it is registered for you. The certificate is downloaded, not collected.",
+			"when": "within-24-hours",
+			"priority": "must-do-now",
+			"who": ["ICA", "MyLegacy@LifeSG", "The hospital or doctor"],
+			"cards": [
+				"sg.ica.getting-the-digital-death-certificate",
+				"sg.mylegacy.documents-after-a-death",
+				"sg.mylegacy.who-can-get-a-death-certificate"
+			],
+			"done_when": "You have the digital death certificate on your phone or printed.",
+			"blocked_by": []
+		},
+		{
+			"id": "the-funeral",
+			"name": "Arrange the funeral",
+			"note": "The funeral director does most of this. Cremation and burial slots are booked through them.",
+			"when": "within-24-hours",
+			"priority": "must-do-now",
+			"who": ["A funeral director", "Mandai Crematorium and Columbarium"],
+			"cards": ["sg.mylegacy.booking-a-cremation-at-mandai"],
+			"done_when": "The funeral, cremation or burial is arranged and a date is set.",
+			"blocked_by": []
+		},
+		{
+			"id": "the-nric",
+			"name": "Hand back the NRIC",
+			"note": "One small thing that is easy to forget in the first week.",
+			"when": "first-week",
+			"priority": "soon",
+			"who": ["ICA"],
+			"cards": ["sg.mylegacy.what-to-do-with-the-deceased-nric"],
+			"done_when": "The NRIC has been returned, or you have been told you need not.",
+			"blocked_by": ["the-certificate"]
+		},
+		{
+			"id": "the-cpf-money",
+			"name": "Claim the CPF savings",
+			"note": "If they made a nomination, CPF pays the nominees. If they did not, the Public Trustee handles it.",
+			"when": "first-month",
+			"priority": "soon",
+			"who": ["CPF Board", "The Public Trustee"],
+			"cards": [
+				"sg.mlaw.what-happens-to-cpf-monies-after-death",
+				"sg.mylegacy.handling-cpf-without-a-nomination",
+				"sg.mlaw.how-un-nominated-cpf-money-is-shared",
+				"sg.cpf.help-with-un-nominated-cpf-money"
+			],
+			"done_when": "The CPF savings have been paid out, or the Public Trustee has your application.",
+			"blocked_by": ["the-certificate"]
+		},
+		{
+			"id": "funeral-costs",
+			"name": "Claim the funeral costs back",
+			"note": "Money already spent on the funeral can be reimbursed out of what they left.",
+			"when": "first-month",
+			"priority": "soon",
+			"who": ["The Public Trustee"],
+			"cards": ["sg.mlaw.claiming-funeral-costs-from-cpf"],
+			"done_when": "The claim for funeral expenses has been sent with the receipts.",
+			"blocked_by": ["the-funeral"]
+		},
+		{
+			"id": "banks-and-shares",
+			"name": "Find and claim what they held",
+			"note": "Banks will not talk to you without the certificate, and often not without a grant.",
+			"when": "first-month",
+			"priority": "settlement",
+			"who": ["Their banks", "The Public Trustee"],
+			"cards": [
+				"sg.mylegacy.getting-information-on-a-deceased-persons-bank-accounts",
+				"sg.mlaw.claiming-the-deceaseds-bank-balances",
+				"sg.mlaw.claiming-the-deceaseds-shares"
+			],
+			"done_when": "You know what accounts and shares there are, and have claimed them.",
+			"blocked_by": ["the-certificate"]
+		},
+		{
+			"id": "the-estate",
+			"name": "Settle the estate",
+			"note": "With a will, this is probate. Without one, it is Letters of Administration. Either takes months.",
+			"when": "months",
+			"priority": "settlement",
+			"who": ["Family Justice Courts", "A lawyer", "The Public Trustee"],
+			"cards": [
+				"sg.mlaw.applying-for-letters-of-administration",
+				"sg.sgcourts.preparing-probate-schedules",
+				"sg.sgcourts.how-long-probate-takes",
+				"sg.sgcourts.meaning-of-sole-executor",
+				"sg.mlaw.estate-administration-criteria-and-fees"
+			],
+			"done_when": "The grant has been issued and what they left has been distributed.",
+			"blocked_by": ["the-certificate", "banks-and-shares"]
+		}
+	],
+	"concludes_when": "The estate is distributed, the accounts are closed, and nothing is left outstanding in their name."
+}

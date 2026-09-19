@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.whether-the-will-learning-tool-is-binding",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Will tool limits",
+		"full": "Whether the Will Learning tool is binding"
+	},
+	"summary": {
+		"text": "No. The Will Learning tool is only for learning. Nothing entered there is final or legally binding.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What the tool does",
+			"body": "It helps you understand will-writing concepts. The Will Preparation Template can be revisited and amended at any time, even after you finish the exercise.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"will",
+			"will-learning-tool"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I use the Will Learning tool to write a legally binding Will?",
+			"Is the Will Learning tool legally binding?",
+			"Can the tool create a legal Will?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/cmny4069l00464401gdm6o352",
+			"page_title": "Can I use the Will Learning tool to write a legally binding Will?",
+			"source_modified_at": "2026-04-20",
+			"retrieved_at": "2026-09-19T11:05:38.061Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "No, nothing you enter in the learning tool is final or legally binding."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "This is purely a learning tool to help you understand will-writing concepts. The Will Preparation Template you receive at the end can be revisited and amended at any time, even after completing the exercise."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:38.061Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:38.061Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:38.061Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/cmny4069l00464401gdm6o352"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:38.061Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:38.061Z",
+		"updated_at": "2026-09-19T11:05:38.061Z"
+	}
+}

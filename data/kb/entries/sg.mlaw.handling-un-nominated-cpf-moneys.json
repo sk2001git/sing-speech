@@ -1,0 +1,152 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.handling-un-nominated-cpf-moneys",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Un-nominated CPF",
+		"full": "Handling un-nominated CPF moneys"
+	},
+	"summary": {
+		"text": "The CPF Board sends the moneys to the Public Trustee, who contacts the informant or next of kin.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When to apply",
+			"body": "Apply only after the Public Trustee has received the moneys from CPF Board.",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"heading": "What to have ready",
+			"body": "You will need to have your Singpass ready to access the online application form. If you are ineligible for a Singpass, you may apply for a login ID and password.",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Wait for the transfer",
+			"text": "Wait for CPF Board to transfer the moneys to the Public Trustee. This takes around 17 working days after CPF Board is notified of the death.",
+			"confirm_label": "I have waited",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Wait for contact",
+			"text": "Wait for the Public Trustee to write to the person who informed CPF Board about the death, and/or the Deceased's next of kin.",
+			"confirm_label": "I received the letter",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Apply online",
+			"text": "After the Public Trustee has received the moneys, the next of kin can apply online for the Public Trustee to distribute them. A friend may apply on the next of kin's behalf.",
+			"confirm_label": "I sent the application",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"cpf-monies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What happens to the Deceased’s un-nominated Central Provident Fund (“CPF”) moneys",
+			"Un-nominated CPF",
+			"What happens to CPF money with no nominee?",
+			"How is a deceased person's CPF money distributed?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr301s7ed2hwsfr56dq",
+			"page_title": "What happens to the Deceased’s un-nominated Central Provident Fund (“CPF”) moneys",
+			"source_modified_at": "2026-04-21",
+			"retrieved_at": "2026-09-19T11:05:10.909Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "When a CPF member passed away without nominating anyone to receive his / her CPF moneys, the CPF Board will transfer these moneys to the Public Trustee for distribution to the rightful beneficiary."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Upon being notified of the death, CPF Board takes around 17 working days to transfer the moneys to the Public Trustee."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Public Trustee will write to:"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The next of kin can then apply online for the Public Trustee to distribute the moneys."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Only after the Public Trustee has received the moneys from CPF Board."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "You will need to have your Singpass ready in order to access our online application form."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:10.909Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:10.909Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:10.909Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr301s7ed2hwsfr56dq"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:10.909Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:10.909Z",
+		"updated_at": "2026-09-19T11:05:10.909Z"
+	}
+}

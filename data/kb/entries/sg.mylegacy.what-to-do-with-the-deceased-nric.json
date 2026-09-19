@@ -1,0 +1,96 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.what-to-do-with-the-deceased-nric",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "NRIC return",
+		"full": "What to do with the deceased NRIC"
+	},
+	"summary": {
+		"text": "You no longer need to return the deceased’s NRIC to a police station. Destroy it or punch a hole in it.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Prevent misuse",
+			"text": "Destroy the deceased’s NRIC or punch a hole in it.",
+			"confirm_label": "I dealt with the NRIC",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"death-certificate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Do we still need to return the deceased's NRIC to the police?",
+			"Must I hand in the deceased’s NRIC?",
+			"What should I do with the deceased’s NRIC?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iuv008x5v0xdphx9khf",
+			"page_title": "Do we still need to return the deceased's NRIC to the police?",
+			"source_modified_at": "2023-11-01",
+			"retrieved_at": "2026-09-19T11:05:04.961Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "There is no longer a need to surrender the deceased’s NRIC in police station for physical invalidation."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To prevent it from being misused, you can either destroy the NRIC or punch a hole in it."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:04.961Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:04.961Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:04.961Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iuv008x5v0xdphx9khf"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:04.961Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:04.961Z",
+		"updated_at": "2026-09-19T11:05:04.961Z"
+	}
+}

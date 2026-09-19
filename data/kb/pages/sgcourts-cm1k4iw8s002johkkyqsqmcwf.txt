@@ -1,0 +1,4 @@
+How do I prepare the Schedule of Assets and Schedule of Assets – Supplementary Affidavit in Probate eService after my matter is granted Order-in-Terms?
+Log in to Probate eService using your Singpass and follow the system prompt to key in the list of assets and submit to the Court. If you are using the Probate eService, the Schedule of Assets document will be automatically generated for you. An example of how a completed Schedule of Assets may look like can be found at https://go.gov.sg/samplesoa.
+Once the Schedule of Assets is approved, prepare the Schedule of Assets – Supplementary Affidavit. You may view a sample here.
+Bring the Supplementary Affidavit and swear or affirm before a Commissioner for Oaths. Once this is done, log in to Probate eService and submit the document. The court will process the document and if everything is in order, the Grant of Probate will be issued through Probate eService accordingly.

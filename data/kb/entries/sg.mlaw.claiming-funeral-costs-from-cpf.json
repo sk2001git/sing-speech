@@ -1,0 +1,172 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.claiming-funeral-costs-from-cpf",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Funeral costs",
+		"full": "Claiming funeral costs from CPF"
+	},
+	"summary": {
+		"text": "A beneficiary may claim up to $6,000 from the deceased’s un-nominated CPF monies for funeral expenses.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "How much can be claimed",
+			"body": "Generally, claims of up to $6,000 are allowable.",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"heading": "Relationship documents",
+			"body": "The document needed depends on whether you are the spouse, child, parent or sibling of the deceased.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "How payment is made",
+			"body": "Payment is made by PayNow or direct credit to a bank account. PayNow must be registered with your NRIC.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check that you can claim",
+			"text": "You must be a beneficiary of the deceased to claim reimbursement of funeral expenses from the deceased’s un-nominated CPF monies.",
+			"confirm_label": "I am a beneficiary",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Apply for the amount",
+			"text": "In the online application form, indicate the amount of funeral expenses you want to claim.",
+			"confirm_label": "I entered the amount",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Gather your documents",
+			"text": "Prepare the documents that show your relationship to the deceased, the Declaration Form for funeral expenses, and the relevant funeral receipts.",
+			"confirm_label": "I have the documents",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Submit the claim",
+			"text": "Submit the required supporting documents, including the Declaration Form and relevant receipts for funeral expenses.",
+			"confirm_label": "I submitted my claim",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"cpf-monies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"what help is there to pay for a funeral",
+			"Funeral costs",
+			"Can CPF pay funeral expenses"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr201rzed2hu07ydcrf",
+			"page_title": "How can I claim for reimbursement of funeral expenses out of the deceased's un-nominated CPF monies?",
+			"source_modified_at": "2025-09-01",
+			"retrieved_at": "2026-09-19T11:07:37.978Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Generally, claims of up to $6,000 are allowable."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Only a beneficiary is eligible to claim for reimbursement of funeral expenses from the deceased's un-nominated CPF monies."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You can indicate the amount of funeral expenses which you would like to claim from the deceased's un-nominated CPF monies in the online application form."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "The claimant will have to submit the following supporting documents:"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Relevant receipts incurred for Funeral Expenses."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "If claimant is:"
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "Payment will be made to the claimant via PayNow (which has to be registered with your NRIC) or Direct Credit to the bank account."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:07:37.978Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:07:37.978Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:07:37.978Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr201rzed2hu07ydcrf"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:07:37.978Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:07:37.978Z",
+		"updated_at": "2026-09-19T11:07:37.978Z"
+	}
+}

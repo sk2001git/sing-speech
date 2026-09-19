@@ -1,0 +1,90 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.when-digital-certificates-are-issued",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "digital",
+		"full": "When digital certificates are issued"
+	},
+	"summary": {
+		"text": "Digital birth certificates are issued only for births registered from 29 May 2022.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Digital birth certificate",
+			"body": "Digital birth certificates are issued only for births registered from 29 May 2022. An earlier registration at ICA does not qualify.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"birth-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I had earlier registered my child’s birth at ICA. Will I be issued with a digital birth certificate?",
+			"Will I get a digital birth certificate?",
+			"Does an earlier birth registration get a digital certificate?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clqev757h001f9f3mnaik3b9k",
+			"page_title": "I had earlier registered my child’s birth at ICA. Will I be issued with a digital birth certificate?",
+			"source_modified_at": "2023-12-21",
+			"retrieved_at": "2026-09-19T11:05:30.134Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Digital birth certificates will be issued only for births that are registered from 29 May 2022."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:30.134Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:30.134Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:30.134Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clqev757h001f9f3mnaik3b9k"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:30.134Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:30.134Z",
+		"updated_at": "2026-09-19T11:05:30.134Z"
+	}
+}

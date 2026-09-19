@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { AREA_LABEL, AREAS } from './areas';
 import { compose, type Writer } from './compose';
+import type { Journey } from './journey';
+import { journeyFor } from './journey-match';
 import { documentTexts, nearest, queryText, type StoredVector } from './embed';
 import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
@@ -33,6 +35,8 @@ export type SearchResponse =
 	| { kind: 'silence'; language: EntryLanguage }
 	/** Addresses from open data, which are rows in a published dataset rather than quoted answers. */
 	| { kind: 'places'; heard: Heard; places: Place[]; what: PlaceKind; area: string; source: PlaceSource; language: EntryLanguage }
+	/** A life event rather than a question: what to do now, what waits, and how it ends. */
+	| { kind: 'journey'; heard: Heard; journey: Journey; cards: Entry[]; language: EntryLanguage }
 	| { kind: 'nothing'; heard: Heard; language: EntryLanguage }
 	/** `englishIds`: cards shown in English although the reader's language is not English. */
 	| { kind: 'results'; result: SearchResult; englishIds: string[] };
@@ -85,6 +89,8 @@ export interface PlaceIndex {
 
 export interface SearchDeps {
 	corpus: Corpus;
+	/** Life events. Absent means every request is treated as a question. */
+	journeys?: Journey[];
 	/** Open-data addresses. Absent means "where is…" questions fall through to the entries. */
 	places?: PlaceIndex;
 	/** Embed one query text, already carrying its instruction. */
@@ -101,8 +107,11 @@ export interface SearchDeps {
 	/**
 	 * Tier B: every crawled official answer, searched by words when no entry is near enough.
 	 * Absent means a miss stays a miss.
+	 *
+	 * A function because the crawl is a 3.9 MB static asset rather than part of the Worker,
+	 * so it is fetched on the first request that actually needs it and never on the others.
 	 */
-	raw?: RawIndex;
+	raw?: RawIndex | (() => Promise<RawIndex>);
 	/** Writes a card from a retrieved page. Absent means the crawl is never drawn on. */
 	write?: Writer;
 	/** Keeps what was composed beyond this isolate, where a store is configured. */
@@ -135,6 +144,20 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 		heard = req.heard ?? { short: req.query.slice(0, 40), sentence: req.query };
 		query = req.query;
 		offset = req.offset;
+	}
+
+	/*
+	 * "My father passed away" is not a question; it is the start of nine months of them. The
+	 * test is narrow on purpose (`journey-match.ts`): a question that merely mentions death
+	 * falls through to the ordinary search, where an answer belongs.
+	 */
+	const event = deps.journeys ? journeyFor(deps.journeys, heard.said ?? query) : undefined;
+	if (event) {
+		const cards = event.stages
+			.flatMap((stage) => stage.cards)
+			.map((id) => deps.corpus.entries.get(id))
+			.filter((e): e is Entry => e !== undefined);
+		return { kind: 'journey', heard, journey: event, cards, language };
 	}
 
 	// "Where is a clinic in Bedok" is answered from the dataset, not from quoted pages. An
@@ -201,7 +224,16 @@ async function onDemand(
 	existing: Entry[] = [],
 ): Promise<SearchResponse | null> {
 	if (!deps.raw || !deps.write) return null;
-	const hits = searchRaw(deps.raw, query, PAGES_OFFERED);
+	let index: RawIndex;
+	try {
+		index = typeof deps.raw === 'function' ? await deps.raw() : deps.raw;
+	} catch (err) {
+		// The crawl could not be loaded. The entries have already failed to answer, so this
+		// request ends honestly rather than in an error page.
+		console.error('tier B unavailable:', err instanceof Error ? err.message.slice(0, 120) : err);
+		return null;
+	}
+	const hits = searchRaw(index, query, PAGES_OFFERED);
 	if (hits.length === 0) return null;
 
 	/*

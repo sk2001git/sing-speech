@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.what-to-do-with-the-deceaseds-nric",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "NRIC after death",
+		"full": "What to do with the deceased's NRIC"
+	},
+	"summary": {
+		"text": "You do not need to surrender the deceased’s NRIC. It is automatically invalidated when the death is registered.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Prevent misuse",
+			"body": "You may destroy the invalidated NRIC, or punch a hole in it.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"death-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Do I need to surrender the deceased's NRIC to the police station or ICA for physical invalidation?",
+			"Must I hand in the deceased's NRIC?",
+			"What should I do with the deceased's NRIC?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clos83ft1005l5k0wz56y9ha3",
+			"page_title": "Do I need to surrender the deceased's NRIC to the police station or ICA for physical invalidation?",
+			"source_modified_at": "2025-04-25",
+			"retrieved_at": "2026-09-19T11:04:41.466Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "There is no longer a need to surrender the deceased’s NRIC for physical invalidation. The deceased’s NRIC will be automatically invalidated in ICA’s system once the death is registered."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To prevent misuse, you may either destroy the invalidated NRIC, or punch a hole in it."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:04:41.466Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:04:41.466Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:04:41.466Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clos83ft1005l5k0wz56y9ha3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:04:41.466Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:04:41.466Z",
+		"updated_at": "2026-09-19T11:04:41.466Z"
+	}
+}

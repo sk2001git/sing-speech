@@ -1,0 +1,95 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.converting-a-birth-certificate",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "certificate",
+		"full": "Converting a birth certificate"
+	},
+	"summary": {
+		"text": "Birth certificates issued before 29 May 2022 remain valid and will not be converted to digital format.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "When digital format applies",
+			"body": "Birth certificates issued after 29 May 2022 are in digital format. Older birth certificates remain valid and will not be converted.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"birth-registration-process"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I convert current physical copy of birth certificate into digital format?",
+			"Can my paper birth certificate become digital?",
+			"Will an older birth certificate be converted?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clqev757g000x9f3mnk7uvbu5",
+			"page_title": "Can I convert current physical copy of birth certificate into digital format?",
+			"source_modified_at": "2023-12-21",
+			"retrieved_at": "2026-09-19T11:05:21.460Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Birth certificates issued before this date remain valid and will not be converted into digital format."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Birth certificates issued after 29 May 2022 are in digital format. Birth certificates issued before this date remain valid and will not be converted into digital format."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:21.460Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:21.460Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:21.460Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clqev757g000x9f3mnk7uvbu5"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:21.460Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:21.460Z",
+		"updated_at": "2026-09-19T11:05:21.460Z"
+	}
+}

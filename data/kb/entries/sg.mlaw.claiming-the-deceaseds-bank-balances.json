@@ -1,0 +1,180 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.claiming-the-deceaseds-bank-balances",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Bank balances",
+		"full": "Claiming the deceased’s bank balances"
+	},
+	"summary": {
+		"text": "For balances up to $5,000, ask the bank directly. For higher balances up to $50,000, apply to the Public Trustee.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Balances over $5,000",
+			"body": "The Public Trustee’s Office may assist with balances over $5,000 and up to $50,000. Each case is considered separately.",
+			"quote_refs": [
+				"q7"
+			]
+		},
+		{
+			"heading": "Documents you may need",
+			"body": "Common documents include the deceased’s death, birth and marriage certificates, and the beneficiary’s birth certificate and identity card. Other documents may also be needed.",
+			"quote_refs": [
+				"q8"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the balance",
+			"text": "Find out how much money was in the deceased’s bank account.",
+			"confirm_label": "I know the balance",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Ask the bank",
+			"text": "If the balance is $5,000 or below, approach the bank directly to claim the deceased’s bank money.",
+			"confirm_label": "I asked the bank",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Apply online",
+			"text": "If the balance is more than $5,000 and up to $50,000, apply at go.gov.sg/pto for the Public Trustee to administer the deceased’s estate.",
+			"confirm_label": "I opened the application",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Choose the service",
+			"text": "Select “Deceased’s Assets other than Un-nominated CPF Moneys / Baby Bonus / Edusave / PSEA”.",
+			"confirm_label": "I chose the service",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"position": 5,
+			"name": "Prepare your details",
+			"text": "Have your Singpass ready. If you cannot apply for a Singpass, apply for a login ID and password through go.gov.sg/pto. Disclose the deceased’s shares, bank savings account, death gratuity, insurance policies and vehicles, if any.",
+			"confirm_label": "I have my login ready",
+			"quote_refs": [
+				"q6"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"deceased-persons-estate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How to claim the Deceased's bank account balances?",
+			"Bank balances",
+			"How do I claim money from a deceased person’s bank account?",
+			"What should I do about the deceased’s bank account?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr601tled2hqntrwx3n",
+			"page_title": "How to claim the Deceased's bank account balances?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-19T11:05:14.876Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Bank account balance $5,000 or below For your convenience and in order to save costs at your end, you may approach the bank directly to claim the Deceased’s bank moneys."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Bank account balance $5,000 or below"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "you may approach the bank directly to claim the Deceased’s bank moneys."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You will need to make an online application via https://go.gov.sg/pto"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "select \"Deceased’s Assets other than Un-nominated CPF Moneys / Baby Bonus / Edusave / PSEA\""
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "You will need to have your Singpass ready in order to access our online application form."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "The Public Trustee’s Office may assist to administer such cases on a case-by-case basis."
+		},
+		{
+			"id": "q8",
+			"source": "src1",
+			"text": "Common types of documents required are:"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:14.876Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:14.876Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:14.876Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr601tled2hqntrwx3n"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:14.876Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:14.876Z",
+		"updated_at": "2026-09-19T11:05:14.876Z"
+	}
+}

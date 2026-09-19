@@ -1,0 +1,180 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.claiming-the-deceaseds-shares",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Claim shares",
+		"full": "Claiming the deceased’s shares"
+	},
+	"summary": {
+		"text": "Apply through the Public Trustee’s Office, or contact CDP directly if the shareholding is $5,000 or below.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Value limit for Public Trustee help",
+			"body": "The Public Trustee can help transfer the Deceased’s CDP shares only when the total value of the estate is $50,000 or less.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Common documents",
+			"body": "These may include the Death Certificate, Birth Certificate and Marriage Certificate of the Deceased; the beneficiary’s Birth Certificate and Identity Card; and other documents listed by the Public Trustee.",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"heading": "If there are other beneficiaries",
+			"body": "Other family members may give up their share, or you may buy over their shares. Only a beneficiary aged 21 or above can give up their share.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "After you apply",
+			"body": "You will receive an email confirming receipt. A case officer will review the application, and you may be asked for more documents and to pay the administration fee.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the share value",
+			"text": "Find out whether the Deceased’s shareholding is $5,000 or below.",
+			"confirm_label": "I checked the value",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Choose where to apply",
+			"text": "If the shareholding is $5,000 or below, approach CDP directly. Otherwise, use the Public Trustee’s Office online application.",
+			"confirm_label": "I chose where to apply",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Prepare your documents",
+			"text": "Prepare the documents that apply to the Deceased and the beneficiary, such as certificates and identity cards.",
+			"confirm_label": "I have the documents",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Send your claim",
+			"text": "Submit the online application under “Deceased’s estate other than un-nominated CPF moneys / Baby Bonus / Edusave / PSEA”, or approach CDP directly if the shareholding is $5,000 or below.",
+			"confirm_label": "I sent my claim",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"deceased-persons-estate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How to claim the Deceased's shares?",
+			"Claim shares",
+			"How do I get the deceased’s shares?",
+			"Where do I apply for the shares?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmo8039u8003w4a01ihu9qvgo",
+			"page_title": "How to claim the Deceased's shares?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-19T11:05:16.691Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You will need to submit an online application via https://go.gov.sg/pto under “Deceased’s estate other than un-nominated CPF moneys / Baby Bonus / Edusave / PSEA”."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If the value of the shareholding is $5,000 or below, you can approach CDP directly to claim the Deceased’s shareholding."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Common types of documents required are:"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please take note that the Public Trustee can only assist in the transfer of the Deceased’s CDP shares, if the total value of the estate is $50,000 or less, to the intended transferee."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Death Certificate of Deceased Birth Certificate of Deceased Marriage Certificate of Deceased Decree Nisi Absolute (if the Deceased was divorced) Birth Certificate of Beneficiary Identity Card of Beneficiary"
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "If there are multiple beneficiaries, (e.g., Deceased left behind a spouse and children) the other family members may choose to give up his / her share so claimant can claim the shares. Alternatively, the claimant may buy over the other beneficiary’ shares."
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "You will get an email confirming your application was received"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:16.691Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:16.691Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:16.691Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmo8039u8003w4a01ihu9qvgo"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:16.691Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:16.691Z",
+		"updated_at": "2026-09-19T11:05:16.691Z"
+	}
+}

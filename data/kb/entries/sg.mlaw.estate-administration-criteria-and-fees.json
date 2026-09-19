@@ -1,0 +1,131 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.estate-administration-criteria-and-fees",
+	"kind": "answer",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Estate fees",
+		"full": "Estate administration criteria and fees"
+	},
+	"summary": {
+		"text": "The Public Trustee helps with estates worth $50,000 or less. Fees are deducted before distribution.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Who can use this service",
+			"body": "The Public Trustee's Office helps administer a deceased person's money, property and other assets. It distributes them to beneficiaries under intestacy law. The service is for estates worth $50,000 or less. The Public Trustee cannot assist in certain situations.",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"heading": "Administration fee rates",
+			"body": "The fee is calculated in bands: 6.50% for the first $5,000; 6.00% for the next $2,000; 4.25% for the next $3,000; 2.75% for the next $10,000; and 2.25% for the next $30,000.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Important fee information",
+			"body": "The minimum fee is $15. GST is included. Fees cannot be waived. They are taken from the estate before distribution, or before an asset is transferred.",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"heading": "Example for a $10,000 estate",
+			"body": "The total fee is $572.50. The beneficiary receives $9,427.50.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"deceased-persons-estate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What are the criteria and fees charged for estate administration?",
+			"How much does estate administration cost?",
+			"Can the Public Trustee manage a small estate?"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr401sted2hof0s5j6u",
+			"page_title": "What are the criteria and fees charged for estate administration?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-19T11:05:32.334Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "This service is for families who need help managing a Deceased's estate where the total value is $50,000 or less."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The Public Trustee's Office assists to administer the Deceased's assets (which means the Deceased’s moneys, property, and assets) and distributes them to the beneficiary in accordance with the intestacy law."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "For the first $5,000 6.50% For the next $2,000 6.00% For the next $3,000 4.25% For the next $10,000 2.75% For the next $30,000 2.25%"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Minimum fee: $15 (even for very small estates)"
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Total fee: $572.50 Beneficiary receives: $10,000 - $572.50 = $9,427.50"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-19T11:05:32.334Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-1",
+			"at": "2026-09-19T11:05:32.334Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-19T11:05:32.334Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr401sted2hof0s5j6u"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-19T11:05:32.334Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-19T11:05:32.334Z",
+		"updated_at": "2026-09-19T11:05:32.334Z"
+	}
+}
