@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara voice taste lab</title>
+<style>
+:root{
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --bg:#FFFFFF;--bg-2:#F6F7F9;--line:#E8E9ED;--ink:#121316;--ink-2:#62656E;--ink-3:#9A9DA6;--focus:#2F5BEA;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}}
+:root[data-theme="dark"]{--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+kbd{font:inherit;font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-left:6px}
+@media (hover:none){kbd{display:none}}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.brand{font-weight:600;font-size:15px}
+.tabs,.seg{display:flex;gap:2px;background:var(--bg-2);padding:3px;border-radius:10px}
+.tabs button,.seg button{padding:6px 11px;border-radius:8px;color:var(--ink-2);font-weight:500;font-size:13px}
+.tabs button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06),0 0 0 1px var(--line)}
+.meta{margin-left:auto;display:flex;gap:14px;color:var(--ink-3);font-size:12.5px;font-variant-numeric:tabular-nums}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.scene b{font-weight:600;font-size:17px;letter-spacing:-.015em}
+.scene span{color:var(--ink-3);font-size:13px;margin-left:8px}
+.hint{color:var(--ink-3);font-size:12.5px;margin:-4px 0 14px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;transition:opacity .22s}
+.duel.leaving{opacity:0}
+.side{display:grid;gap:10px}
+.pick{height:44px;border-radius:12px;background:var(--bg-2);font-weight:500;transition:background-color .2s,transform .12s}
+.pick:hover{background:color-mix(in srgb,var(--ink) 7%,var(--bg))}
+.pick:active{transform:scale(.98)}
+.pick.chosen{background:var(--ink);color:var(--bg)}
+.row2{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.row2 button{padding:8px 14px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:13px}
+.row2 button:hover{background:var(--bg-2);color:var(--ink)}
+.after{display:grid;justify-items:center;gap:8px;margin-top:14px;min-height:64px}
+.learned{color:var(--ink-2);font-size:13px;text-align:center}
+.why{display:none;width:min(440px,100%);height:38px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:13px}
+.why.show{display:block}
+@media (max-width:720px){.duel{grid-template-columns:1fr}.meta span:last-child{display:none}}
+.head2{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head2 h1{font-size:24px;font-weight:600;letter-spacing:-.02em}
+.head2 p{color:var(--ink-2);margin-top:4px;max-width:60ch;line-height:1.5}
+.actions{display:flex;gap:8px}
+.actions button{padding:8px 14px;border-radius:10px;background:var(--bg-2);font-weight:500;font-size:13px}
+.actions .warn{color:#D14343}
+.genes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:28px}
+.gene{background:var(--bg-2);border-radius:14px;padding:14px}
+.gene h3{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-bottom:10px;display:flex;justify-content:space-between}
+.gene h3 em{font-style:normal;color:var(--ink-3)}
+.gv{display:grid;grid-template-columns:84px 1fr 28px;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:var(--ink-2)}
+.gv.lead{color:var(--ink);font-weight:600}
+.gv .track{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.gv .track i{display:block;height:100%;background:var(--ink-3);border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.gv.lead .track i{background:var(--ink)}
+.gv em{font-style:normal;text-align:right;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sub-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.gcell{display:grid;gap:8px}.gcell .cap{font-size:12.5px;color:var(--ink-3)}
+.export{margin-top:14px;display:none}.export.show{display:block}
+.export textarea{width:100%;height:180px;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font:12px/1.5 ui-monospace,Menlo,monospace;padding:12px}
+
+/* Stage: the specimen frame. Always light so specimens are judged consistently. */
+.stage{position:relative;min-height:300px;border-radius:20px;background:#fff;color:#15171B;display:grid;place-items:center;overflow:hidden;
+  box-shadow:0 0 0 1px var(--line);font-family:var(--font);padding:20px}
+.stage.resetting>*{opacity:0;transition:opacity .18s}
+</style>
+
+<!-- ═══════════════ DOMAIN CSS: styles for specimens (rewrite per project) ═══════════════ -->
+<style id="domain-css">
+/* ═════ motion.css (knowledge-store/skills/modern-ui/primitives), pasted verbatim ═════ */
+/* Motion primitives. Tokens default to taste.json; override via tasteVars() or :root. */
+:root {
+  --mx-accent: #2F5BEA;
+  --mx-accent-fg: #FFFFFF;
+  --mx-light: var(--mx-accent);           /* glows and marks only: needs 3:1, not 4.5:1 */
+  --mx-ease: cubic-bezier(.2,.8,.2,1);   /* movement, pop-ins (may overshoot) */
+  --mx-draw: cubic-bezier(.2,.8,.2,1);   /* strokes, fills, exits (never overshoots) */
+  --mx-t: 1;                              /* tempo multiplier */
+  --mx-stroke: 2.4;                       /* px at any size */
+  --mx-r: 18px;                           /* panel radius */
+  --mx-rb: 14px;                          /* button radius */
+  --mx-h: 44px;                           /* button height */
+  --mx-idle: #E3E5EA;                     /* inactive track / star / step */
+}
+
+@keyframes mx-pop   { from { transform: scale(0) } to { transform: scale(1) } }
+@keyframes mx-draw  { from { stroke-dashoffset: 1 } to { stroke-dashoffset: 0 } }
+@keyframes mx-in    { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+@keyframes mx-out   { from { opacity: 1; transform: none } to { opacity: 0; transform: translateY(-6px) } }
+@keyframes mx-spin  { to { transform: rotate(360deg) } }
+@keyframes mx-shake { 20%,60% { transform: translateX(-4px) } 40%,80% { transform: translateX(4px) } }
+@keyframes mx-ripple{ 0% { opacity: 0; transform: scale(.95) } 8% { opacity: .5 } 100% { opacity: 0; transform: scale(1.9) } }
+@keyframes mx-burst { 0% { opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--mx-size) * -.45)) scale(.3) }
+                      15% { opacity: 1 }
+                      100%{ opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--mx-size) * -1)) scale(1) } }
+@keyframes mx-glowp { 0% { opacity: 0; transform: scale(.5) } 35% { opacity: .45; transform: scale(1.2) } 100% { opacity: .16; transform: scale(1.05) } }
+@keyframes mx-bob   { 0%,60%,100% { transform: none } 30% { transform: translateY(-3px) } }
+@keyframes mx-pulse { 50% { opacity: .35 } }
+
+/* ── SuccessMark ── */
+.mx-mark { --mx-delay: 0s; position: relative; display: inline-block; width: var(--mx-size); height: var(--mx-size); flex: none; vertical-align: middle; }
+.mx-mark > * { position: absolute; inset: 0; }
+.mx-mark svg { width: 100%; height: 100%; overflow: visible; }
+.mx-disc { border-radius: 50%; background: var(--mx-accent);
+  animation: mx-pop calc(var(--mx-t) * .42s) var(--mx-ease) calc(var(--mx-t) * var(--mx-delay)) both; }
+.mx-ring { transform: rotate(-90deg); }
+.mx-ring circle, .mx-tick path { fill: none; stroke-width: calc(var(--mx-stroke) * 24px / var(--mx-sizen));
+  stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.mx-ring circle { stroke: var(--mx-accent); animation: mx-draw calc(var(--mx-t) * .5s) var(--mx-draw) calc(var(--mx-t) * var(--mx-delay)) both; }
+.mx-tick path { stroke: var(--mx-tick, var(--mx-accent));
+  animation: mx-draw calc(var(--mx-t) * .34s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .2s)) both; }
+.mx-mark[data-variant="filled"] .mx-ring { display: none; }
+.mx-mark[data-variant="filled"] { --mx-tick: var(--mx-accent-fg); }
+.mx-mark[data-variant="soft"] .mx-ring { display: none; }
+.mx-mark[data-variant="soft"] .mx-disc { background: color-mix(in srgb, var(--mx-accent) 15%, #fff); }
+.mx-mark[data-variant="outline"] .mx-disc { display: none; }
+.mx-mark[data-variant="bare"] .mx-disc, .mx-mark[data-variant="bare"] .mx-ring { display: none; }
+.mx-mark[data-variant="bare"] .mx-tick { transform: scale(1.3); }
+.mx-fx { display: none; }
+.mx-mark[data-flourish="ripple"] .mx-fx-ripple { display: block; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--mx-accent); opacity: 0;
+  animation: mx-ripple calc(var(--mx-t) * .8s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .26s)) both; }
+.mx-mark[data-flourish="burst"] .mx-fx-burst { display: block; }
+.mx-fx-burst i { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: var(--mx-accent); opacity: 0;
+  animation: mx-burst calc(var(--mx-t) * .62s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .24s)) both; }
+.mx-mark[data-flourish="glow"] .mx-fx-glow { display: block; border-radius: 50%; background: var(--mx-accent); filter: blur(calc(var(--mx-size) / 4)); opacity: 0;
+  animation: mx-glowp calc(var(--mx-t) * 1.1s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .12s)) both; }
+
+/* ── MorphButton: label → spinner → mark, in place ── */
+.mx-morph-wrap { display: grid; justify-items: center; width: 100%; }
+.mx-morph { box-sizing: border-box; position: relative; display: inline-grid; grid-template-columns: minmax(0, 1fr); place-items: center; height: var(--mx-h); padding: 0 20px;
+  border: 0; border-radius: var(--mx-rb); background: var(--mx-accent); color: var(--mx-accent-fg); font: inherit; font-weight: 600;
+  white-space: nowrap; overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: width calc(var(--mx-t) * .42s) var(--mx-ease), border-radius calc(var(--mx-t) * .42s) var(--mx-ease),
+              padding calc(var(--mx-t) * .42s) var(--mx-ease), background-color .2s, transform .12s ease-out; }
+.mx-morph > * { grid-area: 1 / 1; }
+.mx-morph:active:not(:disabled) { transform: scale(.97); }
+.mx-morph:focus-visible { outline: 2px solid var(--mx-accent); outline-offset: 3px; }
+.mx-morph:disabled { cursor: default; }
+.mx-morph[data-status="pending"], .mx-morph[data-status="success"] { padding: 0; border-radius: calc(var(--mx-h) / 2); }
+.mx-morph[data-status="success"]:not([data-mark="filled"]) { background: transparent; }
+.mx-morph[data-status="error"] { animation: mx-shake .36s ease-out; }
+.mx-morph-label { transition: opacity .12s; }
+.mx-morph[data-status="pending"] .mx-morph-label, .mx-morph[data-status="success"] .mx-morph-label { opacity: 0; }
+.mx-spinner { display: inline-block; box-sizing: border-box; width: 18px; height: 18px; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor; opacity: 0; transition: opacity .15s; animation: mx-spin .7s linear infinite; }
+.mx-spinner[data-visible="true"] { opacity: 1; }
+
+/* ── SwapText ── */
+.mx-swap { display: inline-grid; }
+.mx-swap > * { grid-area: 1 / 1; }
+.mx-swap-in  { animation: mx-in calc(var(--mx-t) * .36s) var(--mx-ease) calc(var(--mx-t) * .06s) both; }
+.mx-swap-out { animation: mx-out calc(var(--mx-t) * .2s) var(--mx-draw) both; pointer-events: none; }
+
+/* ── ProgressFill ── */
+.mx-progress { height: 4px; border-radius: 2px; background: var(--mx-idle); overflow: hidden; }
+.mx-progress > i { display: block; height: 100%; background: var(--mx-accent); transform-origin: left;
+  transition: transform calc(var(--mx-t) * .5s) var(--mx-draw); }
+
+/* ── StepTracker ── */
+.mx-steps { display: flex; align-items: flex-start; }
+.mx-step { display: grid; justify-items: center; gap: 8px; min-width: 64px; font-size: 12px; text-align: center; }
+.mx-step-dot { position: relative; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--mx-idle); }
+.mx-step-dot > .mx-mark { position: absolute; inset: 0; }
+.mx-step[data-state="active"] .mx-step-dot { box-shadow: inset 0 0 0 2px var(--mx-accent); }
+.mx-step[data-state="active"] .mx-step-dot::after { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--mx-accent); animation: mx-pulse 1.2s ease-in-out infinite; }
+.mx-step-link { flex: 1; height: 2px; margin-top: 10px; background: var(--mx-idle); overflow: hidden; border-radius: 1px; }
+.mx-step-link > i { display: block; height: 100%; background: var(--mx-accent); transform-origin: left; transform: scaleX(0);
+  transition: transform calc(var(--mx-t) * .45s) var(--mx-draw); }
+.mx-step-link[data-done="true"] > i { transform: scaleX(1); }
+
+/* ── TypingDots ── */
+.mx-typing { display: inline-flex; gap: 4px; padding: 4px 2px; }
+.mx-typing i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .45; animation: mx-bob 1s ease-in-out infinite; }
+.mx-typing i:nth-child(2) { animation-delay: .15s; } .mx-typing i:nth-child(3) { animation-delay: .3s; }
+
+/* ── Edge light: the shared core of EdgeBolt and AiGlow ──
+   Lag-free by construction: a STATIC conic gradient on an oversized square that only
+   rotates (transform), clipped to the border by a STATIC mask. Animating the gradient
+   angle itself (@property), offset-distance or stroke-dashoffset repaints every frame;
+   this paints once. Measured by scripts/motion_cost.cjs. */
+.mx-edge { position: relative; isolation: isolate; border-radius: var(--mx-edge-r, var(--mx-r)); }
+.mx-edge > :not(.mx-edge-ring):not(.mx-edge-halo) { position: relative; z-index: 1; }
+.mx-edge-ring, .mx-edge-halo { position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  opacity: 0; transition: opacity calc(var(--mx-t) * .35s) var(--mx-draw); }
+.mx-edge-ring, .mx-edge-halo > span { overflow: hidden; container-type: size;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.mx-edge-ring { z-index: 2; padding: var(--mx-edge-w, 2px); }
+/* halo: the same light on a slightly wider ring, blurred by its parent so it falls off with
+   distance from the edge. It sits behind the (opaque) card, so only the outer half shows. */
+.mx-edge-halo { z-index: 0; filter: blur(var(--mx-edge-glow, 6px)); }
+.mx-edge-halo > span { position: absolute; inset: -2px; border-radius: inherit; padding: 5px; }
+.mx-edge-ring > i, .mx-edge-halo i { position: absolute; left: 50%; top: 50%; width: 150cqmax; aspect-ratio: 1; translate: -50% -50%;
+  background: var(--mx-edge-paint); animation: mx-spin calc(var(--mx-t) * var(--mx-edge-lap, 1.6s)) linear infinite; will-change: transform; }
+.mx-edge[data-state="run"] .mx-edge-ring { opacity: 1; }
+.mx-edge[data-state="run"] .mx-edge-halo { opacity: .7; }
+/* land: the whole border lights once, then everything fades. Pair it with a SuccessMark. */
+.mx-edge-ring::after { content: ""; position: absolute; inset: 0; background: var(--mx-light); opacity: 0; }
+.mx-edge[data-state="land"] .mx-edge-ring { opacity: 1; animation: mx-land-out calc(var(--mx-t) * .7s) var(--mx-draw) both; }
+.mx-edge[data-state="land"] .mx-edge-ring::after { animation: mx-land calc(var(--mx-t) * .7s) var(--mx-draw) both; }
+@keyframes mx-land     { 0% { opacity: 0 } 30% { opacity: 1 } 100% { opacity: 0 } }
+@keyframes mx-land-out { 0%, 45% { opacity: 1 } 100% { opacity: 0 } }
+
+/* EdgeBolt: one small light travelling the border while the card loads. */
+.mx-bolt { --mx-edge-paint: conic-gradient(transparent 0 var(--mx-bolt-tail, 300deg),
+  color-mix(in srgb, var(--mx-light) 40%, transparent) calc(var(--mx-bolt-tail, 300deg) + 30deg),
+  var(--mx-light) 356deg, color-mix(in srgb, var(--mx-light) 30%, #fff) 359deg, transparent 360deg); }
+.mx-bolt[data-twin="true"] { --mx-edge-paint: conic-gradient(transparent 0 130deg, var(--mx-light) 176deg, transparent 180deg 310deg, var(--mx-light) 356deg, transparent 360deg); }
+
+/* AiGlow: the multicolour version, for content an AI is working on. */
+.mx-glow { --mx-edge-paint: conic-gradient(transparent 0deg 110deg, #5AD1FF 160deg, #7A6BFF 210deg, #FF5FA2 260deg, #FFB547 300deg, transparent 340deg); --mx-edge-lap: 2s; }
+.mx-glow[data-state="run"] .mx-edge-halo { opacity: .6; }
+
+/* ── LevelRing: the microphone visibly hears someone ──
+   Two discs behind the child scale with loudness: the inner one follows fast, the outer
+   one trails slowly, so a spoken word leaves a short echo. Only transform changes. */
+.mx-level { position: relative; display: inline-grid; place-items: center; isolation: isolate; }
+.mx-level > :not(.mx-level-disc) { position: relative; z-index: 1; }
+.mx-level-disc { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0;
+  transform: scale(calc(1 + var(--mx-level, 0) * var(--mx-level-reach, .5)));
+  transition: transform calc(var(--mx-t) * 90ms) linear, opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
+.mx-level-disc[data-layer="inner"] { background: color-mix(in srgb, var(--mx-level-c, var(--mx-light)) 22%, transparent); }
+.mx-level-disc[data-layer="outer"] { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--mx-level-c, var(--mx-light)) 45%, transparent);
+  transform: scale(calc(1.06 + var(--mx-level, 0) * var(--mx-level-reach, .5) * 1.25));
+  transition: transform calc(var(--mx-t) * 420ms) var(--mx-draw), opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
+.mx-level[data-active="true"] .mx-level-disc { opacity: 1; }
+
+/* ── FillFrom: a colour grows from where the finger touched until it covers the card ── */
+.mx-fill-host { position: relative; overflow: hidden; isolation: isolate; }
+.mx-fill-host > :not(.mx-fill) { position: relative; z-index: 1; transition: color calc(var(--mx-t) * .2s) var(--mx-draw) calc(var(--mx-t) * .08s); }
+.mx-fill-host[data-filled="true"] > :not(.mx-fill) { color: var(--mx-fill-fg, #fff); }
+.mx-fill { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; background: var(--mx-fill-c, var(--mx-accent));
+  transform: translate(-50%, -50%) scale(0); animation: mx-fill calc(var(--mx-t) * .46s) var(--mx-draw) both; }
+@keyframes mx-fill { to { transform: translate(-50%, -50%) scale(1) } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-mark *, .mx-swap > *, .mx-morph, .mx-progress > i, .mx-step-link > i, .mx-fill, .mx-level-disc, .mx-edge-ring, .mx-edge-halo { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  /* the edge light stops travelling but still says "working": the whole border holds a soft tint */
+  .mx-edge-ring > i, .mx-edge-halo i { animation: none; background: var(--mx-light); opacity: .5; }
+}
+
+/* ═════ Suara domain styles ═════ */
+/* ───────── Suara voice specimens ─────────
+   Stage is always light. A 360px phone sits inside it; the phone's background is the
+   "ground" the surface gene separates cards from. Every colour comes from a gene. */
+.stage{--s-ink:#1D1D1F; --s-ink2:#6E6E73; --ground:#FBFBFD; --card:#FFFFFF;
+  --sfont:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",sans-serif;
+  position:relative;height:640px;min-height:0;padding:16px;border-radius:20px;background:#FFFFFF;display:grid;place-items:center;overflow:hidden;
+  box-shadow:0 0 0 1px var(--line);color:var(--s-ink);font-family:var(--sfont)}
+.stage.sf-tint{--ground:#FFFFFF; --card:#F5F5F7}
+
+.phone{width:min(360px,100%);height:100%;background:var(--ground);border:1px solid #D2D2D7;border-radius:36px;
+  padding:32px 20px 24px;display:flex;flex-direction:column;overflow:hidden;font-size:17px;line-height:1.35;text-align:left}
+
+.card{background:var(--card);border-radius:var(--r);padding:18px 20px}
+.sf-hairline .card{border:1px solid #E5E5EA}
+.sf-lift .card{box-shadow:0 1px 2px rgb(0 0 0/4%),0 8px 24px rgb(0 0 0/6%)}
+
+.h1{font-size:28px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.sub{font-size:18px;color:var(--s-ink2);margin-top:8px}
+.label{font-size:16px;font-weight:600;color:var(--s-ink)}
+.muted{color:var(--s-ink2)}
+.s16{font-size:16px}
+.title{font-size:21px;font-weight:700;line-height:1.25;margin-top:6px}
+.title2{font-size:19px;font-weight:700;line-height:1.25}
+.row{display:flex;align-items:center;gap:10px}
+.center{text-align:center}
+
+.primary{flex:none;height:64px;border-radius:var(--rb);background:var(--action);color:#FFFFFF;font-size:20px;font-weight:600;
+  display:grid;place-items:center;margin-top:auto}
+
+/* search */
+.said{padding:14px 18px}
+.said-q{font-size:18px;margin-top:4px}
+.answer-wrap{margin-top:14px}
+.answer{min-height:118px;display:grid;align-content:center}
+.stack{display:grid}
+.stack>*{grid-area:1/1}
+.seeking{align-self:center;color:var(--s-ink2);display:flex;align-items:center;gap:12px;font-size:18px}
+.seeking .mx-spinner{width:22px;height:22px;border-width:2.5px;color:var(--mx-light);flex:none}
+.ghost{visibility:hidden}
+.slot{display:inline-grid;width:22px;height:22px;flex:none}
+
+/* listen */
+.listen-top{text-align:center;margin-top:24px}
+.mic-zone{flex:1;display:grid;justify-items:center;align-content:center;gap:60px;padding-bottom:40px}
+.mic{width:120px;height:120px;border-radius:50%;background:var(--listen-btn);display:grid;place-items:center}
+.mic i{display:block;width:34px;height:34px;border-radius:8px;background:#FFFFFF}
+.tap-done{font-size:19px;color:var(--s-ink2)}
+
+/* confirm */
+.choices{display:grid;gap:12px;margin-top:32px}
+.choice{min-height:80px;display:flex;align-items:center;font-size:20px;font-weight:700;transition:transform .12s ease-out,border-color .2s}
+.choice.pressed{transform:scale(.98)}
+.sf-hairline .choice[data-filled="true"]{border-color:transparent}
+
+/* results */
+.list{display:grid;gap:12px;margin-top:12px}
+.list .card{display:grid;gap:4px}
+.list .card.pair{display:flex;align-items:center;gap:12px}
+.pair>div{flex:1;min-width:0;display:grid;gap:4px}
+.chev{flex:none;color:var(--s-ink2)}
+.rise{animation:mx-in calc(var(--mx-t) * .42s) var(--mx-ease) calc(var(--mx-t) * var(--d, 0s)) both}
+
+/* done */
+.done-mid{flex:1;display:grid;justify-items:center;align-content:center;gap:24px;padding-bottom:24px}
+
+/* A static mark (no draw-in) for lists that are already settled */
+.mx-mark.is-static, .mx-mark.is-static *{animation:none!important}
+.mx-mark.is-static .mx-ring circle, .mx-mark.is-static .mx-tick path{stroke-dashoffset:0}
+
+@media (prefers-reduced-motion:reduce){
+  .stage *,.stage *::before,.stage *::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+}
+</style>
+
+<script>
+/* ═══════════════ DOMAIN: Suara voice screens ═══════════════
+   genes  : the axes of the space. First value = the conventional default.
+   scenes : five real Suara moments; content is fixed within a pair.
+   render : parametric. Each stage runs its own JS timeline, restarted whenever the
+            engine re-adds the .play class (first show, loop, Replay). */
+const GENES = {
+  light:   {label:'Glow blue', values:{
+    x:{name:'X blue', v:'#1D9BF0'}, apple:{name:'Apple blue', v:'#007AFF'},
+    paypal:{name:'PayPal blue', v:'#0070E0'}, cobalt:{name:'Cobalt', v:'#2F5BEA'}}},
+  action:  {label:'Primary button', values:{
+    black:{name:'Black', v:'#000000'},
+    blue:{name:'Blue', rule:'#0B57D0 when the glow is X or Apple blue, otherwise the glow colour itself'}}},
+  listen:  {label:'Microphone on', values:{
+    red:{name:'Red (current)', v:'#D70015'}, blue:{name:'Blue (same as light)', rule:'button and ring use the glow colour'},
+    black:{name:'Black with blue ring', v:'#000000', rule:'ring uses the glow colour'}}},
+  bolt:    {label:'Searching', values:{single:{name:'One light'}, twin:{name:'Two lights'}, spinner:{name:'Spinner only'}}},
+  surface: {label:'Card surface', values:{
+    hairline:{name:'Hairline', ground:'#FBFBFD', card:'#FFFFFF', line:'1px #E5E5EA'},
+    tint:{name:'Tint', ground:'#FFFFFF', card:'#F5F5F7', line:'none'},
+    lift:{name:'Lift', ground:'#FBFBFD', card:'#FFFFFF', shadow:'0 1px 2px rgb(0 0 0/4%), 0 8px 24px rgb(0 0 0/6%)'}}},
+  tempo:   {label:'Tempo', values:{standard:{name:'Standard', t:1}, calm:{name:'Calm', t:1.3}, brisk:{name:'Brisk', t:.8}}},
+  mark:    {label:'Success mark', values:{filled:{name:'Filled disc'}, soft:{name:'Soft disc'}, outline:{name:'Outline'}}},
+  radius:  {label:'Corner radius', values:{r20:{name:'20', r:20, rb:16}, r14:{name:'14', r:14, rb:10}, r28:{name:'28', r:28, rb:24}}},
+};
+
+const actionColour = g => g.action === 'black' ? '#000000'
+  : (g.light === 'x' || g.light === 'apple') ? '#0B57D0' : GENES.light.values[g.light].v;
+const listenColours = g => {
+  const L = GENES.light.values[g.light].v;
+  if (g.listen === 'red') return {btn:'#D70015', ring:'#D70015'};
+  if (g.listen === 'blue') return {btn:L, ring:L};
+  return {btn:'#000000', ring:L};
+};
+
+/* SuccessMark, same markup as primitives/motion.tsx */
+const mark = (size, variant, delay = 0, cls = '') =>
+  `<span role="img" aria-label="Done" class="mx-mark ${cls}" data-variant="${variant}" data-flourish="none" style="--mx-size:${size}px;--mx-sizen:${size};--mx-delay:${delay}s">`+
+  `<span class="mx-fx mx-fx-glow"></span><span class="mx-fx mx-fx-ripple"></span><span class="mx-fx mx-fx-burst">${'<i></i>'.repeat(8)}</span>`+
+  `<span class="mx-disc"></span><svg class="mx-ring" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.8" pathLength="1"/></svg>`+
+  `<svg class="mx-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 12.4l3.1 3.1 6.2-6.4" pathLength="1"/></svg></span>`;
+const CHEV = `<svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>`;
+
+/* Per-stage timers. Every callback checks the stage is still in the page. */
+const ctl = el => el.__sv || (el.__sv = {timers:[], obs:null});
+const clearTimers = el => { const c = ctl(el); c.timers.forEach(id => { clearTimeout(id); clearInterval(id); }); c.timers = []; };
+const later = (el, ms, fn) => ctl(el).timers.push(setTimeout(() => { if (!el.isConnected) return clearTimers(el); fn(); }, ms));
+const every = (el, ms, fn) => ctl(el).timers.push(setInterval(() => { if (!el.isConnected) return clearTimers(el); fn(); }, ms));
+
+/* Speech-like loudness: six syllable bursts over ~2s, then quiet. Times in base seconds. */
+const SYLLABLES = [[.18,.40,.55],[.46,.70,.85],[.76,.90,.45],[1.02,1.34,.95],[1.40,1.58,.6],[1.66,1.98,.8]];
+const loudness = s => { for (const [a,b,amp] of SYLLABLES) if (s >= a && s <= b) return amp * Math.sin(Math.PI * (s - a) / (b - a)) * (.8 + Math.random() * .2); return .02; };
+
+const SCENES = [
+ {id:'search', name:'Finding an answer', group:'Searching after a question', loop:3.2,
+  html:g => `
+   <div class="card said"><div class="muted s16">You said</div><div class="said-q">“How much do I pay at the polyclinic?”</div></div>
+   <div class="mx-edge mx-bolt answer-wrap" data-state="${g.bolt==='spinner'?'off':'run'}"${g.bolt==='twin'?' data-twin="true"':''}>
+    <span class="mx-edge-halo"><span><i></i></span></span><span class="mx-edge-ring"><i></i></span>
+    <div class="card answer"><div class="stack">
+     <div class="seeking">${g.bolt==='spinner'?'<span class="mx-spinner" data-visible="true"></span>':''}<span>Finding the best answer</span></div>
+     <div class="found ghost"><div class="row"><span class="slot"></span><span class="label">Best match</span></div><div class="title">Polyclinic fees for seniors</div></div>
+    </div></div>
+   </div>`,
+  run:(el, g, t) => later(el, 1600 * t, () => {
+    const edge = el.querySelector('.mx-edge'), found = el.querySelector('.found');
+    if (g.bolt !== 'spinner') edge.dataset.state = 'land';
+    const sp = el.querySelector('.mx-spinner'); if (sp) sp.dataset.visible = 'false';
+    el.querySelector('.seeking').classList.add('mx-swap-out');
+    found.querySelector('.slot').innerHTML = mark(22, g.mark);
+    found.classList.remove('ghost'); found.classList.add('mx-swap-in');
+  })},
+
+ {id:'listen', name:'Listening', group:'Microphone open', loop:3.0,
+  html:g => `
+   <div class="listen-top"><div class="h1">I'm listening</div></div>
+   <div class="mic-zone">
+    <span class="mx-level" data-active="true" style="--mx-level:0">
+     <span class="mx-level-disc" data-layer="outer"></span><span class="mx-level-disc" data-layer="inner"></span>
+     <span class="mic" aria-label="Stop listening"><i></i></span>
+    </span>
+    <div class="tap-done">Tap when done</div>
+   </div>`,
+  run:(el, g, t) => {
+    const lvl = el.querySelector('.mx-level'), t0 = performance.now();
+    every(el, 60, () => lvl.style.setProperty('--mx-level', loudness((performance.now() - t0) / 1000 / t).toFixed(3)));
+  }},
+
+ {id:'confirm', name:'Confirm before acting', group:'Tapping a choice', loop:2.6,
+  html:g => `
+   <div class="h1">Start these steps?</div><div class="sub">3 steps · you confirm each one</div>
+   <div class="choices">
+    <div class="card choice mx-fill-host" data-yes><span>Yes, start</span></div>
+    <div class="card choice mx-fill-host"><span>Not this</span></div>
+   </div>`,
+  run:(el, g, t) => {
+    const yes = el.querySelector('[data-yes]');
+    later(el, 550 * t, () => yes.classList.add('pressed'));
+    later(el, 650 * t, () => {
+      const w = yes.offsetWidth || 318, h = yes.offsetHeight || 80, x = w * .72, y = h * .55;
+      const d = 2 * Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
+      const f = document.createElement('span'); f.className = 'mx-fill';
+      Object.assign(f.style, {left:x+'px', top:y+'px', width:d+'px', height:d+'px'});
+      yes.appendChild(f); yes.dataset.filled = 'true';
+    });
+    later(el, 780 * t, () => yes.classList.remove('pressed'));
+  }},
+
+ {id:'results', name:'Answers', group:'Choosing from matches', loop:null,
+  html:g => `
+   <div class="label muted rise">3 answers</div>
+   <div class="list">
+    <div class="card rise" style="--d:.06s"><div class="row">${mark(20, g.mark, 0, 'is-static')}<span class="label">Best match</span></div>
+     <div class="title">Polyclinic fees for seniors</div><div class="muted">Free for Pioneer and Merdeka cardholders</div></div>
+    <div class="card rise pair" style="--d:.12s"><div><div class="title2">Polyclinic appointment</div><div class="muted">3 steps</div></div>${CHEV}</div>
+    <div class="card rise pair" style="--d:.18s"><div><div class="title2">CHAS card</div><div class="muted">Answer</div></div>${CHEV}</div>
+   </div>
+   <div class="primary rise" style="--d:.24s">Start guide</div>`},
+
+ {id:'done', name:'Finished', group:'Every step done', loop:2.2,
+  html:g => `
+   <div class="done-mid">${mark(56, g.mark, .15)}<div class="h1 center">That is every step</div></div>
+   <div class="primary">Ask something else</div>`},
+];
+
+const LAB = {
+  id: 'suara-voice-v1',
+  title: 'Suara voice taste lab',
+  genes: GENES,
+  scenes: SCENES.map(s => ({id:s.id, name:s.name, group:s.group})),
+  priors: {action:{black:[2,1]}, listen:{red:[2,1]}},
+  pool: null,
+  render(el, sceneId, g){
+    const c = ctl(el); if (c.obs) c.obs.disconnect(); clearTimers(el);
+    const sc = SCENES.find(s => s.id === sceneId), V = k => GENES[k].values[g[k]], t = V('tempo').t;
+    const light = V('light').v, lc = listenColours(g), r = V('radius');
+    el.classList.add(`sf-${g.surface}`);
+    const st = el.style;
+    st.setProperty('--mx-light', light); st.setProperty('--mx-accent', light);
+    st.setProperty('--action', actionColour(g));
+    st.setProperty('--listen-btn', lc.btn); st.setProperty('--mx-level-c', lc.ring);
+    st.setProperty('--mx-fill-c', '#248A3D');
+    st.setProperty('--mx-t', t);
+    st.setProperty('--r', r.r+'px'); st.setProperty('--rb', r.rb+'px');
+    st.setProperty('--mx-r', r.r+'px'); st.setProperty('--mx-rb', r.rb+'px'); st.setProperty('--mx-edge-r', r.r+'px');
+    const start = () => { clearTimers(el); el.innerHTML = `<div class="phone">${sc.html(g)}</div>`; if (sc.run) sc.run(el, g, t); };
+    start();
+    // the engine replays by removing and re-adding .play; rebuild the timeline each time it comes back
+    c.obs = new MutationObserver(recs => {
+      if (el.classList.contains('play') && recs.some(rc => !(rc.oldValue || '').split(/\s+/).includes('play'))) start();
+    });
+    c.obs.observe(el, {attributes:true, attributeFilter:['class'], attributeOldValue:true});
+    return sc.loop ? sc.loop * t * 1000 : null;
+  },
+};
+/* ═══════════════ END DOMAIN ═══════════════ */
+</script>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand" id="brand"></div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="compare" aria-selected="true">Compare</button>
+    <button role="tab" data-tab="profile" aria-selected="false">Profile</button>
+  </nav>
+  <div class="meta"><span id="rounds">0 rounds</span><span id="sync">Saved on this device</span></div>
+</div></header>
+<main>
+  <section id="compare">
+    <div class="bar">
+      <div class="scene"><b id="sceneName"></b><span id="sceneGroup"></span></div>
+      <div class="seg" id="mode"><button data-mode="explore">Explore</button><button data-mode="balanced">Balanced</button><button data-mode="exploit">Exploit</button></div>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="duel" id="duel">
+      <div class="side"><div class="stage" id="stL"></div><button class="pick" data-pick="L">Prefer this<kbd>←</kbd></button></div>
+      <div class="side"><div class="stage" id="stR"></div><button class="pick" data-pick="R">Prefer this<kbd>→</kbd></button></div>
+    </div>
+    <div class="row2">
+      <button data-pick="both">Both good<kbd>↑</kbd></button><button data-pick="none">Neither<kbd>↓</kbd></button>
+      <button id="replay">Replay<kbd>Space</kbd></button><button data-pick="skip">Skip</button>
+    </div>
+    <div class="after">
+      <p class="learned" id="learned" aria-live="polite"></p>
+      <input class="why" id="why" placeholder="What made it better? Optional, press Enter" aria-label="Reason for your pick">
+    </div>
+  </section>
+  <section id="profile" hidden>
+    <div class="head2"><div><h1>What you're converging on</h1><p id="note"></p></div>
+      <div class="actions"><button id="copy">Copy profile</button><button id="reset" class="warn">Reset</button></div></div>
+    <div class="export" id="export"><textarea id="exportText" readonly></textarea></div>
+    <div class="genes" id="genes"></div>
+    <div class="sub-title">Current favourite on every scene</div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<script>
+/* ═══════════════ ENGINE (generic; no need to edit) ═══════════════ */
+const G = LAB.genes, GK = Object.keys(G), POOL = window.__POOL__ || LAB.pool, PARAM = typeof LAB.render === 'function';
+const $ = id => document.getElementById(id);
+$('brand').textContent = LAB.title; document.title = LAB.title;
+
+// Beta posteriors + Thompson sampling
+const randn = () => { let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+function gamma(k){ if (k<1) return gamma(k+1)*Math.pow(Math.random(),1/k); const d=k-1/3,c=1/Math.sqrt(9*d);
+  for(;;){ let x,v; do{ x=randn(); v=1+c*x; }while(v<=0); v=v*v*v; const u=Math.random();
+    if (u<1-.0331*x**4 || Math.log(u)<.5*x*x+d*(1-v+Math.log(v))) return d*v; } }
+const beta = (a,b) => { const x=gamma(a), y=gamma(b); return x/(x+y); };
+const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+const KEY = 'lab:' + LAB.id;
+function fresh(){ const post={}; for (const g of GK){ post[g]={}; for (const v in G[g].values){ const p = LAB.priors?.[g]?.[v]; post[g][v] = p ? [...p] : [1,1]; } }
+  return {v:1, lab:LAB.id, rounds:0, mode:'explore', post, history:[], order:null, idx:0}; }
+function normalize(s){ const f=fresh(); s=Object.assign(f,s); for (const g of GK){ s.post[g]=s.post[g]||{}; for (const v in G[g].values) if(!Array.isArray(s.post[g][v])) s.post[g][v]=f.post[g][v]; } return s; }
+let S = fresh(); try { const r = localStorage.getItem(KEY); if (r) S = normalize(JSON.parse(r)); } catch(e){}
+
+const mean = (g,v) => { const [a,b]=S.post[g][v]; return a/(a+b); };
+const seen = (g,v) => { const [a,b]=S.post[g][v]; const p=LAB.priors?.[g]?.[v]||[1,1]; return Math.round((a+b-p[0]-p[1])*2)/2; };
+function thompson(g, ex){ let best, bv=-1; for (const v in G[g].values){ if (v===ex) continue; const x=beta(...S.post[g][v]); if (x>bv){ bv=x; best=v; } } return best; }
+function champion(){ const c={}; for (const g of GK){ let best,bm=-1; for (const v in G[g].values){ const m=mean(g,v); if (m>bm+1e-9){ bm=m; best=v; } } c[g]=best; } return c; }
+const unc = g => Object.keys(G[g].values).reduce((s,v)=>{ const [a,b]=S.post[g][v]; return s + a*b/((a+b)**2*(a+b+1)); }, 0);
+function status(g){ // settled | leaning | open | indifferent
+  const vals = Object.keys(G[g].values).map(v=>({v, m:mean(g,v), n:seen(g,v)})).sort((x,y)=>y.m-x.m);
+  const total = vals.reduce((s,x)=>s+x.n,0), gap = vals[0].m - vals[1].m;
+  if (vals[0].n >= 6 && vals[0].m > .68 && gap > .15) return 'settled';
+  if (total >= 12 && gap < .06) return 'indifferent';
+  if (total >= 4 && gap > .08) return 'leaning';
+  return 'open';
+}
+
+// Pair construction. Content (scene) is shared; style genes differ in 1–3 places.
+function nextScene(){ const ids = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  if (!S.order || S.idx >= S.order.length || !S.order.every(id=>ids.includes(id))){ S.order = shuffle(ids); S.idx = 0; } return S.order[S.idx++]; }
+function targets(){
+  let A = {}; if (S.mode==='explore') for (const g of GK) A[g]=thompson(g); else A = champion();
+  let change;
+  if (S.mode==='exploit'){ const w=GK.map(unc), t=w.reduce((a,b)=>a+b,0); let r=Math.random()*t, i=0; while (r>w[i] && i<w.length-1){ r-=w[i]; i++; } change=[GK[i]]; }
+  else change = shuffle([...GK]).slice(0, S.mode==='explore' ? Math.min(GK.length, 2+(Math.random()<.5)) : 1+(Math.random()<.5));
+  const B = {...A}; for (const g of change) B[g] = thompson(g, A[g]);
+  return [A, B];
+}
+const matches = (x,y) => GK.reduce((s,g)=>s+(x[g]===y[g]),0);
+function nearest(target, scene, notItem){
+  let best=null, bs=-1;
+  for (const it of shuffle(POOL.filter(p=>p.scene===scene && p!==notItem && (!notItem || matches(p.genes, notItem.genes) < GK.length)))){
+    const s = matches(it.genes, target); if (s>bs){ bs=s; best=it; } }
+  return best;
+}
+function makePair(){
+  const scene = nextScene(); const [A, B] = targets();
+  if (PARAM) return {scene, L:{genes:A}, R:{genes:B}, swap:Math.random()<.5};
+  const a = nearest(A, scene), b = nearest(B, scene, a) || nearest(A, scene, a);
+  return {scene, L:a, R:b, swap:Math.random()<.5};
+}
+
+// Rendering + replay loop (parametric scenes with animation return a cycle length)
+const loops = new Map();
+function show(el, scene, item){
+  el.className = 'stage'; el.removeAttribute('style');
+  if (PARAM){ el.dataset.cycle = LAB.render(el, scene, item.genes) || ''; el.classList.add('play'); }
+  else { el.innerHTML = item.html; el.dataset.cycle = ''; }
+}
+function restart(stages){ stages.forEach(s=>s.classList.add('resetting'));
+  setTimeout(()=>{ stages.forEach(s=>s.classList.remove('play')); void document.body.offsetWidth; stages.forEach(s=>{ s.classList.add('play'); s.classList.remove('resetting'); }); }, 190); }
+function loop(key, stages){ clearTimeout(loops.get(key)); const c = Math.max(0, ...stages.map(s=>+s.dataset.cycle||0)); if (!c) return;
+  loops.set(key, setTimeout(()=>{ restart(stages); loop(key, stages); }, c)); }
+const stop = pre => { for (const [k,t] of loops) if (k.startsWith(pre)){ clearTimeout(t); loops.delete(k); } };
+
+// Compare view
+const HINT = {explore:'Bold differences, to find what you respond to. Start here.',
+  balanced:'Your current favourite against a challenger that differs in one or two ways.',
+  exploit:'Your favourite against one tweak to the trait the lab is least sure about.'};
+let cur = null, busy = false;
+function showPair(){
+  cur = makePair(); if (cur.swap) [cur.L, cur.R] = [cur.R, cur.L];
+  const sc = LAB.scenes.find(s=>s.id===cur.scene) || {name:cur.scene, group:''};
+  $('sceneName').textContent = sc.name; $('sceneGroup').textContent = sc.group || '';
+  show($('stL'), cur.scene, cur.L); show($('stR'), cur.scene, cur.R); loop('cmp', [$('stL'), $('stR')]);
+}
+const vn = (g,v) => G[g].values[v]?.name || v;
+function vote(pick){
+  if (busy || !cur) return; busy = true;
+  const L = cur.L.genes, R = cur.R.genes; let msg = '';
+  if (pick==='L' || pick==='R'){
+    const W = pick==='L'?L:R, Lo = pick==='L'?R:L, bits=[];
+    for (const g of GK) if (W[g]!==Lo[g]){ S.post[g][W[g]][0]++; S.post[g][Lo[g]][1]++; bits.push(`${vn(g,W[g])} over ${vn(g,Lo[g])} (${G[g].label.toLowerCase()})`); }
+    msg = 'Learned: ' + bits.join(', ') + '.'; document.querySelector(`.pick[data-pick="${pick}"]`).classList.add('chosen');
+  } else if (pick==='both' || pick==='none'){
+    const i = pick==='both' ? 0 : 1; for (const g of GK) for (const v of new Set([L[g], R[g]])) S.post[g][v][i] += .5;
+    msg = pick==='both' ? 'Noted: both work for you.' : 'Noted: neither. If you can say what was missing, type it below.';
+  }
+  if (pick !== 'skip'){
+    S.rounds++; S.history.push({t:Date.now(), scene:cur.scene, mode:S.mode, pick, left:{id:cur.L.id, genes:L}, right:{id:cur.R.id, genes:R}});
+    if (S.history.length > 200) S.history = S.history.slice(-200);
+    save(); $('why').value = ''; $('why').classList.toggle('show', pick!=='both');
+  }
+  $('learned').textContent = msg; meta();
+  setTimeout(()=>$('duel').classList.add('leaving'), pick==='skip'?0:420);
+  setTimeout(()=>{ document.querySelectorAll('.pick').forEach(b=>b.classList.remove('chosen')); showPair(); $('duel').classList.remove('leaving'); busy=false; }, pick==='skip'?220:650);
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => vote(b.dataset.pick));
+$('replay').onclick = () => { restart([$('stL'),$('stR')]); loop('cmp',[$('stL'),$('stR')]); };
+$('why').addEventListener('keydown', e => { if (e.key==='Enter' && $('why').value.trim()){ const h = S.history[S.history.length-1]; if (h){ h.note = $('why').value.trim(); save(); }
+  $('why').value=''; $('why').classList.remove('show'); $('learned').textContent = 'Reason saved.'; } e.stopPropagation(); });
+function setMode(m){ S.mode=m; document.querySelectorAll('#mode button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.mode===m)); $('hint').textContent = HINT[m]; }
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => { setMode(b.dataset.mode); save(); showPair(); });
+document.addEventListener('keydown', e => { if ($('compare').hidden || e.target.closest('input,textarea')) return;
+  const k = {ArrowLeft:'L', ArrowRight:'R', ArrowUp:'both', ArrowDown:'none'}[e.key];
+  if (k){ e.preventDefault(); vote(k); } else if (e.key===' '){ e.preventDefault(); $('replay').click(); } });
+
+// Profile view
+function renderProfile(){
+  const c = champion(), n = S.rounds, neither = S.history.filter(h=>h.pick==='none').length;
+  $('note').textContent = n < 12 ? `${n} round${n===1?'':'s'} so far. Early picks move things a lot; each trait needs roughly 6+ showings to settle.`
+    : `${n} rounds. ${neither/n > .3 ? 'You pick "Neither" often, which usually means what you want is outside these options.' : 'Darker bar is the current favourite; the number is how many times that option was shown in a decisive pick.'}`;
+  $('genes').innerHTML = GK.map(g => `<div class="gene"><h3>${G[g].label}<em>${status(g)}</em></h3>${Object.keys(G[g].values).map(v =>
+    `<div class="gv${c[g]===v?' lead':''}"><span>${vn(g,v)}</span><span class="track"><i style="width:${Math.round(mean(g,v)*100)}%"></i></span><em>${seen(g,v)}</em></div>`).join('')}</div>`).join('');
+  stop('gal');
+  const scenes = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  $('gallery').innerHTML = scenes.map(id => { const s = LAB.scenes.find(x=>x.id===id) || {name:id}; return `<div class="gcell"><div class="stage" data-scene="${id}"></div><div class="cap">${s.name}</div></div>`; }).join('');
+  $('gallery').querySelectorAll('.stage').forEach(el => { const id = el.dataset.scene; show(el, id, PARAM ? {genes:c} : nearest(c, id)); loop('gal-'+id, [el]); });
+}
+function summary(){
+  const c = champion(), fav = {}, post = {};
+  for (const g of GK){ const {name, ...rest} = G[g].values[c[g]]; fav[g] = {choice:c[g], name, status:status(g), ...rest};
+    post[g] = Object.fromEntries(Object.keys(G[g].values).map(v=>[v,{winRate:+mean(g,v).toFixed(3), seen:seen(g,v)}])); }
+  const decisive = S.history.filter(h=>h.pick==='L'||h.pick==='R').slice(-12).map(h=>{ const w=h.pick==='L'?h.left:h.right, l=h.pick==='L'?h.right:h.left; return {scene:h.scene, winner:w, loser:l, note:h.note}; });
+  return {lab:LAB.id, rounds:S.rounds, neitherRate:S.rounds? +(S.history.filter(h=>h.pick==='none').length/S.rounds).toFixed(2):0,
+    favourite:fav, posteriors:post, recentDecisive:decisive, notes:S.history.filter(h=>h.note).map(h=>({pick:h.pick, scene:h.scene, note:h.note}))};
+}
+document.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => { const t=b.dataset.tab;
+  document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute('aria-selected', x===b));
+  $('compare').hidden = t!=='compare'; $('profile').hidden = t!=='profile';
+  if (t==='profile'){ stop('cmp'); renderProfile(); } else { stop('gal'); $('gallery').innerHTML=''; showPair(); } });
+$('copy').onclick = async () => { const txt = JSON.stringify(summary(), null, 2);
+  try { await navigator.clipboard.writeText(txt); $('copy').textContent='Copied'; setTimeout(()=>$('copy').textContent='Copy profile',1400); }
+  catch(e){ $('exportText').value = txt; $('export').classList.add('show'); $('exportText').select(); } };
+let armed = false;
+$('reset').onclick = () => { if (!armed){ armed=true; $('reset').textContent='Click again to reset'; setTimeout(()=>{armed=false; $('reset').textContent='Reset';},2500); return; }
+  armed=false; $('reset').textContent='Reset'; const m=S.mode; S=fresh(); S.mode=m; save(); meta(); renderProfile(); };
+
+// Persistence: localStorage always; plus a local server (Claude Code) or the artifact db (claude.ai)
+let remote = null, saving = false, dirty = false;
+const meta = () => $('rounds').textContent = `${S.rounds} round${S.rounds===1?'':'s'}`;
+const sync = t => $('sync').textContent = t;
+async function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){}
+  if (!remote) return; if (saving){ dirty=true; return; } saving = true;
+  try { await remote.put({state:S, summary:summary(), updatedAt:new Date().toISOString()}); sync(remote.label); } catch(e){ sync('Saved on this device'); }
+  saving = false; if (dirty){ dirty=false; save(); }
+}
+async function adopt(doc){ if (doc && doc.state && doc.state.lab===LAB.id && doc.state.rounds >= S.rounds){ S = normalize(JSON.parse(JSON.stringify(doc.state))); setMode(S.mode); meta(); if (!$('profile').hidden) renderProfile(); } else if (S.rounds) save(); }
+async function initRemote(){
+  if (['localhost','127.0.0.1'].includes(location.hostname)){
+    try { const r = await fetch('/api/state'); remote = {label:'Saved to project', put: d => fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(x=>{ if(!x.ok) throw 0; })};
+      await adopt(r.ok ? await r.json() : null); sync(remote.label); return; } catch(e){ remote = null; } }
+  try { if (!window.claude?.use) return;
+    const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]); if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return; const ref = db.doc(`data/users/${uid}/${LAB.id}`);
+    const snap = await ref.get(); remote = {label:'Synced', put: d => ref.set(d)}; await adopt(snap.exists ? snap.data() : null); sync('Synced');
+  } catch(e){ remote = null; }
+}
+setMode(S.mode); meta(); showPair(); initRemote();
+</script>
+</body>
+</html>
