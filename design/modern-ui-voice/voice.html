@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara — voice screens, modern-ui mockup</title>
+<!--
+  Stage-3 mockup for vault plan suara-2026-09-24-spike-modern-ui-voice-redesign.
+  Static and self-contained: no network, no microphone. Motion comes from modern-ui 0.2.0
+  (./motion.css, copied). Content is real: entries sg.moh.appealing-for-merdeka-generation-package
+  and sg.moh.pioneer-card-replacement.
+
+    voice.html                     clickable prototype, direction A
+    voice.html?dir=b               direction B
+    voice.html?state=searching     one state, frozen (see STATES below)
+    voice.html?canvas=1            every state, both directions, side by side
+    voice.html?play=1              the whole flow plays itself, looping
+-->
+<link rel="stylesheet" href="./motion.css">
+<style>
+@font-face {
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2');
+  font-weight: 400 700; font-display: swap;
+}
+
+/* ───────────── Tokens. Nothing below uses a raw hex. ───────────── */
+:root {
+  --font: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ground: #FFFFFF;          /* the page */
+  --tint: #F4F5F7;            /* cards, pills, tiles: tone, not borders */
+  --tint-press: #E9EAEE;
+  --ink: #1D1D1F;             /* 15.4:1 on tint */
+  --muted: #5F5F64;           /* 5.8:1 on tint, 6.4:1 on white */
+  --line: #E5E5EA;
+  --action: #000000;          /* primary action fill */
+  --on-action: #FFFFFF;
+  --live: #D70015;            /* microphone open. White on it 5.38:1 */
+  --yes: #1F7A36;             /* white on it 5.39:1. The live app's #248A3D is 4.40:1 and fails */
+  --no: #D70015;
+  --r-card: 24px; --pad-card: 20px;
+  --r-btn: 18px;              /* concentric with a 24px card at ~6px inset */
+  --r-pill: 999px;
+  --h-btn: 64px;
+  /* modern-ui */
+  --mx-light: #1D9BF0;        /* X blue: bolt, level ring, tick disc, progress. 3.00:1, never text */
+  --mx-accent: #1D9BF0;       /* A has no blue text, so the accent is the light */
+  --mx-accent-fg: #FFFFFF;
+  --mx-ease: cubic-bezier(.2,.8,.2,1);
+  --mx-draw: cubic-bezier(.2,.8,.2,1);
+  --mx-t: 1.15;               /* a touch calmer than default for this audience */
+  --mx-r: var(--r-card);
+  --mx-idle: #E3E5EA;
+}
+/* Direction B: blue is the product colour. Text-safe PayPal blue for fills (white 4.78:1);
+   X blue stays the light. Blue text only ever sits on white. */
+[data-dir="b"] {
+  --action: #0070E0;
+  --live: #0070E0;
+  --mx-accent: #0070E0;
+}
+
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font); color: var(--ink); background: var(--ground);
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+svg { display: block; }
+
+/* On a wide screen, show the phone in a frame with review controls above it. */
+.stage { min-height: 100%; }
+.controls { display: none; }
+@media (min-width: 640px) {
+  body { background: #DCDDE3; }
+  .stage { display: grid; justify-items: center; align-content: start; gap: 16px; padding: 24px; }
+  .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-size: 14px; color: #3A3A3C; }
+  .controls select, .controls button { height: 36px; padding: 0 12px; border-radius: 10px; background: #fff; font-size: 14px; }
+  .controls button[aria-pressed="true"] { background: #1D1D1F; color: #fff; }
+  .phone { width: 390px; height: 844px; border-radius: 48px; overflow: hidden; background: var(--ground);
+    box-shadow: 0 0 0 10px #0D0D10, 0 30px 60px -20px rgb(20 22 30 / 45%); }
+}
+
+/* ───────────── App shell ───────────── */
+.app { position: relative; display: flex; flex-direction: column; height: 100%; min-height: 100dvh; overflow: hidden; }
+@media (min-width: 640px) { .app { min-height: 0; } }
+.top { display: flex; align-items: center; gap: 10px; padding: 16px 20px 8px; }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-right: auto; }
+.brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: #fff; }
+.pill { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 18px; border-radius: var(--r-pill);
+  background: var(--tint); font-size: 18px; font-weight: 600; }
+.pill:active { background: var(--tint-press); }
+.body { position: relative; flex: 1; overflow: hidden auto; padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 20px; }
+.screen-in { animation: mx-in calc(var(--mx-t) * .34s) var(--mx-ease) both; }
+
+/* ───────────── Type ───────────── */
+.h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.03em; text-wrap: balance; }
+.lead { font-size: 20px; line-height: 1.45; color: var(--muted); text-wrap: pretty; }
+.label { font-size: 16px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+
+/* ───────────── Microphone ───────────── */
+.mic-zone { display: grid; justify-items: center; gap: 18px; padding: 20px 0 8px; }
+.mic { position: relative; display: grid; place-items: center; width: 144px; height: 144px; border-radius: 50%;
+  background: var(--action); color: var(--on-action); transition: transform .12s ease-out, background-color calc(var(--mx-t) * .25s) var(--mx-draw); }
+.mic:active { transform: scale(.96); }
+.mic[data-live="true"] { background: var(--live); }
+.mic-zone .mx-level { --mx-level-c: var(--live); --mx-level-reach: .42; }
+[data-dir="a"] .mic-zone .mx-level { --mx-level-c: var(--live); }
+.mic-label { font-size: 22px; font-weight: 600; min-height: 1.3em; }
+
+/* ───────────── Topics ───────────── */
+.topics { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 12px; }
+.topic { display: flex; align-items: center; min-height: 76px; padding: 14px 18px; border-radius: var(--r-card);
+  background: var(--tint); font-size: 19px; font-weight: 600; line-height: 1.25; text-align: left; }
+.topic:active { background: var(--tint-press); }
+
+/* ───────────── Cards ───────────── */
+.card { position: relative; border-radius: var(--r-card); background: var(--tint); padding: var(--pad-card); }
+.card-white { background: var(--ground); box-shadow: inset 0 0 0 1px var(--line); }
+.said { display: grid; gap: 4px; }
+.said q { font-size: 22px; line-height: 1.35; font-weight: 600; quotes: '\201C' '\201D'; }
+.said-row { display: block; padding: 14px 18px; font-size: 18px; line-height: 1.4; }
+.said-row .label { font-size: 16px; margin-right: 6px; }
+.said-row .said-short { display: inline; font-weight: 700; }
+
+.answer { display: grid; gap: 10px; text-align: left; width: 100%; }
+.answer-top { display: flex; align-items: center; gap: 10px; min-height: 24px; }
+.best { font-size: 16px; font-weight: 700; }
+.answer-title { font-size: 23px; line-height: 1.22; font-weight: 700; letter-spacing: -.015em; }
+.answer-sum { font-size: 18px; line-height: 1.45; color: var(--muted); }
+.meta { display: flex; align-items: center; gap: 8px; font-size: 17px; color: var(--muted); }
+.meta b { font-weight: 600; color: var(--ink); }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.chev { margin-left: auto; color: var(--muted); }
+.answer-small { gap: 6px; padding: 16px 20px; }
+.answer-small .answer-title { font-size: 20px; }
+.h2 { font-size: 26px; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; }
+/* the bolt carries the loading moment, so it is drawn a little heavier than the skill default */
+.mx-bolt { --mx-edge-w: 3px; --mx-edge-glow: 8px; --mx-bolt-tail: 250deg; }
+
+/* Placeholder: the answer's final layout, reserved while the bolt runs. Static; the bolt is the only motion. */
+.ph { display: grid; gap: 12px; }
+.ph i { display: block; height: 14px; border-radius: 7px; background: var(--mx-idle); }
+.ph i:nth-child(1) { width: 34%; height: 12px; }
+.ph i:nth-child(2) { width: 88%; height: 22px; border-radius: 10px; }
+.ph i:nth-child(3) { width: 72%; }
+.ph i:nth-child(4) { width: 40%; }
+
+.stagger > * { animation: mx-in calc(var(--mx-t) * .36s) var(--mx-ease) both; }
+.stagger > :nth-child(2) { animation-delay: calc(var(--mx-t) * .06s); }
+.stagger > :nth-child(3) { animation-delay: calc(var(--mx-t) * .12s); }
+.stagger > :nth-child(4) { animation-delay: calc(var(--mx-t) * .18s); }
+
+/* ───────────── Buttons ───────────── */
+.btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; height: var(--h-btn);
+  border-radius: var(--r-btn); font-size: 21px; font-weight: 700; transition: transform .12s ease-out; }
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--action); color: var(--on-action); }
+.btn-quiet { background: var(--tint); color: var(--ink); }
+.btn-row { display: grid; gap: 12px; }
+.push { margin-top: auto; }
+
+/* ───────────── Confirm ───────────── */
+.choice { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 92px; padding: 0 24px;
+  border-radius: var(--r-card); background: var(--tint); font-size: 24px; font-weight: 700; text-align: left; }
+.choice .ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ground); flex: none;
+  transition: background-color calc(var(--mx-t) * .2s) var(--mx-draw) calc(var(--mx-t) * .08s); }
+.choice[data-filled="true"] .ic { background: rgb(255 255 255 / 20%); }
+.choice-other-dim { opacity: .4; transition: opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
+
+/* ───────────── Steps ───────────── */
+.step-head { display: grid; gap: 12px; }
+.step-count { font-size: 18px; font-weight: 700; }
+.mx-progress { height: 6px; border-radius: 3px; }
+.step-text { font-size: 23px; line-height: 1.45; font-weight: 500; }
+.step-text strong { font-weight: 700; }
+.src { font-size: 16px; color: var(--muted); }
+
+/* ───────────── Notices ───────────── */
+.notice { display: flex; gap: 14px; align-items: flex-start; font-size: 20px; line-height: 1.4; }
+.notice .ic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--ground); }
+
+/* ───────────── Done ───────────── */
+.done { display: grid; justify-items: center; text-align: center; gap: 16px; padding-top: 48px; }
+
+/* ───────────── Canvas ───────────── */
+.canvas { display: grid; gap: 36px; padding: 32px; background: #DCDDE3; min-height: 100%; font-family: var(--font); }
+.canvas h2 { font-size: 22px; font-weight: 700; }
+.canvas h2 small { font-size: 16px; font-weight: 400; color: #3A3A3C; margin-left: 8px; }
+.row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 8px; }
+.art { flex: none; display: grid; gap: 8px; }
+.art span { font-size: 14px; font-weight: 600; color: #3A3A3C; }
+.art .frame { width: 234px; height: 506px; border-radius: 28px; overflow: hidden; background: #fff; box-shadow: 0 0 0 6px #0D0D10; }
+.art iframe { width: 390px; height: 844px; border: 0; transform: scale(.6); transform-origin: 0 0; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-in, .stagger > * { animation: none; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* ───────────── Content: real corpus entries ───────────── */
+const SAID = 'I want to appeal for the Merdeka package';
+const BEST = {
+  title: 'Appealing for the Merdeka Generation Package',
+  sum: 'You can appeal if you meet the age and citizenship conditions.',
+  steps: 2, from: 'MOH',
+};
+const OTHERS = [
+  { title: 'Appealing the Pioneer Generation Package', meta: '2 steps', from: 'MOH' },
+  { title: 'Replacing a lost Pioneer Generation card', meta: 'Answer', from: 'MOH' },
+];
+const STEPS = [
+  { text: 'Check that you were <strong>aged 60 or above in 2019</strong>, were born in 1959 or earlier, became a Singapore citizen after 31 December 1996, and have good reason to be counted among the Merdeka Generation.' },
+  { text: 'Send your appeal <strong>by email, phone or post</strong>. Email contactus@merdeka.gov.sg, call 1800 2222 888, or post it to Robinson Road P.O. Box 3060, Singapore 905060.',
+    call: 'Call 1800 2222 888' },
+];
+const TOPICS = ['Health costs', 'CPF and support', 'Scams', 'Getting around', 'Bills and housing', 'Phone help'];
+
+/* ───────────── Icons ───────────── */
+const I = {
+  wave: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>',
+  search: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  mic: '<svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>',
+  micSm: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
+  stop: '<svg width="44" height="44" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor"/></svg>',
+  chev: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+  tick: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>',
+  cross: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>',
+  speaker: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h4l5 4v-13l-5 4z"/><path d="M16.5 9a4 4 0 0 1 0 6"/></svg>',
+  phone: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+  wifi: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/><path d="M3 3l18 18"/></svg>',
+};
+
+/* ───────────── modern-ui primitives as markup (motion.tsx renders the same) ───────────── */
+const mark = (size, { delay = 0, flourish = 'none', label = 'Done' } = {}) =>
+  `<span role="img" aria-label="${label}" class="mx-mark" data-variant="filled" data-flourish="${flourish}"
+     style="--mx-size:${size}px;--mx-sizen:${size};--mx-delay:${delay}s">
+     <span class="mx-fx mx-fx-glow"></span><span class="mx-fx mx-fx-ripple"></span>
+     <span class="mx-fx mx-fx-burst">${'<i></i>'.repeat(8)}</span><span class="mx-disc"></span>
+     <svg class="mx-ring" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.8" pathLength="1"/></svg>
+     <svg class="mx-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 12.4l3.1 3.1 6.2-6.4" pathLength="1"/></svg></span>`;
+const edge = (state, inner, r = 24) =>
+  `<div class="mx-edge mx-bolt" data-state="${state}" style="--mx-edge-r:${r}px" aria-busy="${state === 'run'}">
+     <span class="mx-edge-halo" aria-hidden="true"><span><i></i></span></span>
+     <span class="mx-edge-ring" aria-hidden="true"><i></i></span>${inner}</div>`;
+const level = (active, inner) =>
+  `<span class="mx-level" data-active="${active}" style="--mx-level:0">
+     <span class="mx-level-disc" data-layer="outer" aria-hidden="true"></span>
+     <span class="mx-level-disc" data-layer="inner" aria-hidden="true"></span>${inner}</span>`;
+function swap(el, text) {           // SwapText: old line out, new line in, same grid cell
+  if (!el) return;
+  const cur = el.querySelector('[data-cur]');
+  if (cur && cur.textContent === text) return;
+  if (cur) { cur.removeAttribute('data-cur'); cur.className = 'mx-swap-out'; cur.setAttribute('aria-hidden', 'true'); setTimeout(() => cur.remove(), 320); }
+  el.insertAdjacentHTML('beforeend', `<span data-cur class="${cur ? 'mx-swap-in' : ''}">${text}</span>`);
+}
+
+/* ───────────── Screens ───────────── */
+const header = () => `<header class="top">
+  <div class="brand"><span class="brand-mark">${I.wave}</span>Suara</div>
+  <button class="pill" type="button">${I.search}Find</button>
+  <button class="pill" type="button">English</button></header>`;
+
+const SCREENS = {
+  home: () => `
+    <h1 class="h1 mx-swap" id="heading"><span data-cur>What do you need?</span></h1>
+    <div class="mic-zone">
+      ${level(false, `<button class="mic" type="button" data-go="listening" aria-label="Tap to speak">${I.mic}</button>`)}
+      <p class="mic-label mx-swap" id="miclabel"><span data-cur>Tap to speak</span></p>
+    </div>
+    <p class="label">Or pick a topic</p>
+    <div class="topics">${TOPICS.map(t => `<button class="topic" type="button" data-go="searching">${t}</button>`).join('')}</div>`,
+
+  quiet: () => `
+    <h1 class="h1">What do you need?</h1>
+    <div class="card notice"><span class="ic">${I.micSm}</span><p>I did not hear anything. Tap the button and try again.</p></div>
+    <div class="mic-zone">
+      ${level(false, `<button class="mic" type="button" data-go="listening" aria-label="Tap to speak">${I.mic}</button>`)}
+      <p class="mic-label">Tap to speak</p>
+    </div>
+    <p class="label">Or pick a topic</p>
+    <div class="topics">${TOPICS.map(t => `<button class="topic" type="button" data-go="searching">${t}</button>`).join('')}</div>`,
+
+  listening: () => `
+    <h1 class="h1">I'm listening</h1>
+    <p class="lead">Say it in your own words. Take your time.</p>
+    <div class="mic-zone" style="padding-top:44px">
+      ${level(true, `<button class="mic" type="button" data-live="true" data-go="searching" aria-label="Tap when done">${I.stop}</button>`)}
+      <p class="mic-label" style="margin-top:22px">Tap when done</p>
+    </div>`,
+
+  searching: () => `
+    <div class="card said"><span class="label">You said</span><q>${SAID}</q></div>
+    <h1 class="h1 mx-swap" id="heading"><span data-cur>Finding answers</span></h1>
+    <div id="slot">${edge('run', `<div class="card card-white"><div class="ph"><i></i><i></i><i></i><i></i></div></div>`)}</div>`,
+
+  results: (o = {}) => `
+    <p class="card said-row"><span class="label">You said</span><span class="said-short">${SAID}</span></p>
+    <h1 class="h2">3 answers</h1>
+    <div class="stagger" style="display:grid;gap:12px" id="list">
+      ${edge(o.landing ? 'land' : 'off', bestCard(o.landing))}
+      ${OTHERS.map(x => `<button class="card answer answer-small" type="button">
+        <span class="answer-title">${x.title}</span>
+        <span class="meta"><b>${x.meta}</b><i class="dot"></i>${x.from}<span class="chev">${I.chev}</span></span></button>`).join('')}
+    </div>
+    <button class="btn btn-quiet" type="button" data-go="listening">${I.micSm}None of these? Ask again</button>`,
+
+  open: () => `
+    <p class="card said-row"><span class="label">You said</span><span class="said-short">${SAID}</span></p>
+    <article class="card card-white answer" style="gap:14px">
+      <span class="answer-top">${mark(22, { label: 'Best match' })}<span class="best">Best match</span></span>
+      <h1 class="answer-title" style="font-size:27px">${BEST.title}</h1>
+      <p class="answer-sum">${BEST.sum} Send it by email, phone or post.</p>
+      <span class="meta"><b>${BEST.steps} steps</b><i class="dot"></i>From ${BEST.from}, ask.gov.sg</span>
+      <div class="btn-row" style="margin-top:6px">
+        <button class="btn btn-primary" type="button" data-go="confirm">Start guide</button>
+        <button class="btn btn-quiet" type="button">${I.speaker}Read aloud</button>
+      </div>
+    </article>
+    <button class="btn btn-quiet push" type="button" data-go="results">Back to answers</button>`,
+
+  confirm: (o = {}) => `
+    <h1 class="h1" style="margin-top:12px">Start these steps?</h1>
+    <p class="lead">${BEST.title}. ${BEST.steps} steps, and you confirm each one.</p>
+    <div class="btn-row" style="gap:14px;margin-top:8px">
+      <button class="choice mx-fill-host" type="button" id="yes" data-fill="yes" data-go="step1" ${o.filled === 'yes' ? 'data-filled="true"' : ''}
+        style="--mx-fill-c:var(--yes)">${o.filled === 'yes' ? '<span class="mx-fill" style="left:70%;top:50%;width:900px;height:900px;animation:none;transform:translate(-50%,-50%)"></span>' : ''}<span class="ic">${I.tick}</span><span>Yes, start</span></button>
+      <button class="choice mx-fill-host ${o.filled === 'yes' ? 'choice-other-dim' : ''}" type="button" id="no" data-fill="no" data-go="results"
+        style="--mx-fill-c:var(--no)"><span class="ic">${I.cross}</span><span>Not this</span></button>
+    </div>`,
+
+  step1: () => stepScreen(0),
+  step2: () => stepScreen(1),
+
+  done: () => `
+    <div class="done">
+      ${mark(80, { flourish: 'ripple', label: 'All steps done' }).replace('--mx-delay', '--mx-stroke:4.5;--mx-delay')}
+      <h1 class="h1">That is every step</h1>
+      <p class="lead">${BEST.title}</p>
+    </div>
+    <div class="btn-row push">
+      <button class="btn btn-primary" type="button" data-go="home">${I.micSm}Ask something else</button>
+    </div>`,
+
+  offline: () => `
+    <h1 class="h1" style="margin-top:12px">I could not connect</h1>
+    <div class="card notice"><span class="ic">${I.wifi}</span><p>Please check your internet connection, then try again.</p></div>
+    <div class="btn-row push">
+      <button class="btn btn-primary" type="button" data-go="searching">Try again</button>
+    </div>`,
+};
+
+function bestCard(landing) {
+  return `<button class="card card-white answer" type="button" data-go="open">
+    <span class="answer-top">${mark(22, { delay: landing ? 0.12 : 0, label: 'Best match' })}<span class="best">Best match</span></span>
+    <span class="answer-title">${BEST.title}</span>
+    <span class="answer-sum">${BEST.sum}</span>
+    <span class="meta"><b>${BEST.steps} steps</b><i class="dot"></i>${BEST.from}<span class="chev">${I.chev}</span></span></button>`;
+}
+function stepScreen(i) {
+  const s = STEPS[i], last = i === STEPS.length - 1;
+  return `
+    <div class="step-head">
+      <span class="step-count">Step ${i + 1} of ${STEPS.length}</span>
+      <div class="mx-progress" role="progressbar" aria-valuenow="${Math.round((i + 1) / STEPS.length * 100)}" aria-valuemin="0" aria-valuemax="100">
+        <i id="bar" style="transform:scaleX(${i / STEPS.length})"></i></div>
+    </div>
+    <article class="card card-white" style="display:grid;gap:16px">
+      <p class="step-text">${s.text}</p>
+      <p class="src">From MOH, ask.gov.sg</p>
+    </article>
+    <div class="btn-row push">
+      ${s.call ? `<button class="btn btn-quiet" type="button">${I.phone}${s.call}</button>` : ''}
+      <button class="btn btn-quiet" type="button">${I.speaker}Read again</button>
+      <button class="btn btn-primary" type="button" data-go="${last ? 'done' : 'step' + (i + 2)}">${last ? 'I have done this' : 'Next step'}</button>
+    </div>`;
+}
+
+/* ───────────── Driver ───────────── */
+const STATES = ['home', 'listening', 'quiet', 'searching', 'results', 'open', 'confirm', 'confirm-yes', 'step1', 'step2', 'done', 'offline'];
+window.STATES = STATES;
+window.PRIMITIVES = STATES;   // lets modern-ui's motion_cost.cjs measure ?p=<state>
+const q = new URLSearchParams(location.search);
+const dir = (q.get('dir') || 'a').toLowerCase() === 'b' ? 'b' : 'a';
+const frozen = q.get('state') || q.get('p');
+const timers = new Set();
+const later = (ms, fn) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); };
+let speech = 0;
+
+function mount(name, opts = {}) {
+  timers.forEach(clearTimeout); timers.clear(); clearInterval(speech);
+  const body = document.getElementById('body');
+  const key = name === 'confirm-yes' ? 'confirm' : name;
+  body.innerHTML = SCREENS[key](name === 'confirm-yes' ? { filled: 'yes' } : opts);
+  body.dataset.screen = name;
+  if (!frozen) { body.classList.remove('screen-in'); void body.offsetWidth; body.classList.add('screen-in'); }
+  body.scrollTop = 0;
+  const sel = document.getElementById('pick'); if (sel) sel.value = name;
+  if (name === 'listening') speak();
+  if (name === 'step1' || name === 'step2') requestAnimationFrame(() => requestAnimationFrame(() => {
+    const bar = document.getElementById('bar'); if (bar) bar.style.transform = `scaleX(${(name === 'step1' ? 1 : 2) / STEPS.length})`;
+  }));
+  if (name === 'searching' && !frozen) later(1900, land);
+}
+
+/* The answer arrives: bolt lands, tick pops, the other answers fade in behind. */
+function land() {
+  mount('results', { landing: true });
+  document.body.querySelector('#body').classList.remove('screen-in');
+  later(800 * 1.15, () => { const e = document.querySelector('#list .mx-edge'); if (e) e.dataset.state = 'off'; });
+}
+
+/* Simulated speech for the level ring: syllable bursts, then a pause. A real build feeds mic RMS
+   at the analyser's own cadence. Not from requestAnimationFrame: with the ring's smoothing
+   transitions that measured 60 restyles/s against 34 for a 60 ms interval (0 paints either way). */
+function speak() {
+  const lvl = document.querySelector('.mic-zone .mx-level'); if (!lvl) return;
+  const t0 = performance.now();
+  speech = setInterval(() => {
+    const s = ((performance.now() - t0) / 1000) % 3.2;
+    const v = s < 2.2 ? Math.abs(Math.sin(s * 9.5)) * (0.55 + 0.45 * Math.sin(s * 2.3)) : 0.02;
+    lvl.style.setProperty('--mx-level', Math.max(0, v).toFixed(3));
+  }, 60);
+}
+
+function onTap(e) {
+  const t = e.target.closest('[data-go]'); if (!t || frozen) return;
+  if (t.dataset.fill) {                                    // useFillFrom, by hand
+    const r = t.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const d = 2 * Math.hypot(Math.max(x, r.width - x), Math.max(y, r.height - y));
+    t.insertAdjacentHTML('afterbegin', `<span class="mx-fill" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px"></span>`);
+    t.dataset.filled = 'true';
+    const other = t.id === 'yes' ? document.getElementById('no') : document.getElementById('yes');
+    other.classList.add('choice-other-dim');
+    later(460 * 1.15 + 250, () => mount(t.dataset.go));
+    return;
+  }
+  mount(t.dataset.go);
+}
+
+/* Play mode: the whole flow, for review without clicking. */
+function play() {
+  const seq = [['home', 1600], ['listening', 3200], ['searching', 1900], ['results', 2600], ['open', 2200], ['confirm', 1200], ['confirm-yes', 1100], ['step1', 2200], ['step2', 2200], ['done', 2600]];
+  let i = 0;
+  const next = () => {
+    const [name, ms] = seq[i % seq.length]; i++;
+    if (name === 'results') { /* arrived via land() from searching */ }
+    else if (name === 'confirm-yes') {
+      const yes = document.getElementById('yes'); const r = yes.getBoundingClientRect();
+      onTap({ target: yes, clientX: r.left + r.width * .7, clientY: r.top + r.height / 2 });
+    } else mount(name);
+    setTimeout(next, ms);
+  };
+  next();
+}
+
+function canvas() {
+  const src = (d, s) => `${location.pathname}?dir=${d}&state=${s}`;
+  const row = (d, title, note) => `<section><h2>${title}<small>${note}</small></h2><div class="row">
+    ${STATES.map(s => `<div class="art"><span>${s}</span><div class="frame"><iframe loading="lazy" src="${src(d, s)}" title="${d} ${s}"></iframe></div></div>`).join('')}</div></section>`;
+  document.getElementById('root').innerHTML = `<div class="canvas">
+    ${row('a', 'A — Black action, blue means "working"', 'black buttons, red open microphone; X blue only for the bolt, the tick and progress')}
+    ${row('b', 'B — Blue action', 'PayPal blue #0070E0 for buttons and the open microphone; X blue for the light')}</div>`;
+}
+
+if (q.get('canvas')) canvas();
+else {
+  document.getElementById('root').innerHTML = `<div class="stage" data-dir="${dir}">
+    <div class="controls">
+      <button type="button" data-dir-pick="a" aria-pressed="${dir === 'a'}">A · Black action</button>
+      <button type="button" data-dir-pick="b" aria-pressed="${dir === 'b'}">B · Blue action</button>
+      <select id="pick" aria-label="State">${STATES.map(s => `<option>${s}</option>`).join('')}</select>
+      <button type="button" id="replay">Play the flow</button>
+    </div>
+    <div class="phone" data-dir="${dir}"><div class="app">${header()}<main class="body" id="body"></main></div></div></div>`;
+  document.getElementById('root').addEventListener('click', onTap);
+  document.querySelectorAll('[data-dir-pick]').forEach(b => b.onclick = () => { q.set('dir', b.dataset.dirPick); location.search = q; });
+  document.getElementById('pick').onchange = (e) => mount(e.target.value);
+  document.getElementById('replay').onclick = () => { q.set('play', '1'); location.search = q; };
+  if (frozen === 'listening-live') mount('listening');   // for motion_cost: the ring driven by speech
+  else if (frozen) {
+    mount(STATES.includes(frozen) ? frozen : 'home');
+    if (frozen === 'listening') {         // hold a mid-word level so a still frame shows the ring
+      clearInterval(speech);
+      document.querySelector('.mic-zone .mx-level').style.setProperty('--mx-level', '.55');
+    }
+  } else if (q.get('play')) play();
+  else mount('home');
+}
+</script>
+</body>
+</html>

@@ -225,7 +225,7 @@ main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
    one trails slowly, so a spoken word leaves a short echo. Only transform changes. */
 .mx-level { position: relative; display: inline-grid; place-items: center; isolation: isolate; }
 .mx-level > :not(.mx-level-disc) { position: relative; z-index: 1; }
-.mx-level-disc { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0;
+.mx-level-disc { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; will-change: transform;
   transform: scale(calc(1 + var(--mx-level, 0) * var(--mx-level-reach, .5)));
   transition: transform calc(var(--mx-t) * 90ms) linear, opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
 .mx-level-disc[data-layer="inner"] { background: color-mix(in srgb, var(--mx-level-c, var(--mx-light)) 22%, transparent); }
@@ -464,7 +464,7 @@ const LAB = {
     st.setProperty('--mx-light', light); st.setProperty('--mx-accent', light);
     st.setProperty('--action', actionColour(g));
     st.setProperty('--listen-btn', lc.btn); st.setProperty('--mx-level-c', lc.ring);
-    st.setProperty('--mx-fill-c', '#248A3D');
+    st.setProperty('--mx-fill-c', '#1F7A36');
     st.setProperty('--mx-t', t);
     st.setProperty('--r', r.r+'px'); st.setProperty('--rb', r.rb+'px');
     st.setProperty('--mx-r', r.r+'px'); st.setProperty('--mx-rb', r.rb+'px'); st.setProperty('--mx-edge-r', r.r+'px');
