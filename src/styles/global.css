@@ -42,7 +42,8 @@
  */
 
 :root {
-	--ground: #fbfbfd;
+	/* White canvas, hierarchy by tone: tiles and cards sit on --subtle (modern-ui, 2026-09-24). */
+	--ground: #ffffff;
 	--surface: #ffffff;
 	--subtle: #f5f5f7;
 	--line: #e5e5ea;
@@ -57,7 +58,10 @@
 
 	/* Only while the microphone is open, and for the help line. Colour carries state. */
 	--live: #d70015;
-	--ready: #248a3d;
+	/* White text on it: 5.39:1. The previous #248a3d was 4.40:1 and failed. */
+	--ready: #1f7a36;
+	/* X blue. Glows and marks only (bolt, level ring, tick, progress): 3.00:1, never text. */
+	--light: #1d9bf0;
 	--busy: #8e8e93;
 	--sample-ink: #7a5200;
 	--sample-bg: #fff6de;
@@ -79,6 +83,15 @@
 	--radius-btn: 1rem;
 	--shadow-card: 0 2px 12px rgb(0 0 0 / 4%);
 	--shadow-orb: 0 16px 36px rgb(0 0 0 / 22%), 0 4px 10px rgb(0 0 0 / 8%);
+
+	/* modern-ui motion primitives (src/components/motion), tuned for this audience. */
+	--mx-accent: var(--light);
+	--mx-light: var(--light);
+	--mx-accent-fg: #ffffff;
+	--mx-idle: var(--line);
+	--mx-t: 1.15;
+	--mx-stroke: 2.6;
+	--mx-r: var(--radius-card);
 }
 
 /*
@@ -97,8 +110,10 @@
 		--primary: #ffffff;
 		--primary-press: #e5e5ea;
 		--on-primary: #000000;
-		--live: #ff453a;
-		--ready: #30d158;
+		/* White text sits on both in the yes/no cards: #ff453a (3.5:1) and #30d158 (1.9:1) failed. */
+		--live: #d70015;
+		--ready: #1f7a36;
+		--light: #1d9bf0;
 		--busy: #98989d;
 		--sample-ink: #ffd60a;
 		--sample-bg: #2e2600;

@@ -1,0 +1,14 @@
+{
+  "_status": "Suara direction A from the 2026-09-24 mockup (vault plan suara-2026-09-24-spike-modern-ui-voice-redesign), taken on the owner's 'continue'. Not calibrated: replace from the voice taste lab (.taste/voice/lab.html) once the owner has voted.",
+  "accent": "#1D9BF0",
+  "accentForeground": "#FFFFFF",
+  "light": "#1D9BF0",
+  "motion": { "name": "crisp", "ease": "cubic-bezier(.2,.8,.2,1)", "draw": "cubic-bezier(.2,.8,.2,1)" },
+  "tempo": 1.15,
+  "stroke": 2.6,
+  "mark": "filled",
+  "flourish": "none",
+  "radius": { "panel": 20, "button": 16 },
+  "surface": "tint",
+  "evidence": {}
+}

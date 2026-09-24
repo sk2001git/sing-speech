@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import index from '../../../data/kb/index.json';
@@ -200,5 +201,87 @@ describe('Chinese interface', () => {
 		const html = render({ phase: 'home', view: 'grid', greeting: false }, { setting: 'zh-Hans' });
 		expect(html).toContain('您需要什么帮助？');
 		expect(html).toContain('中文');
+	});
+});
+
+/**
+ * Direction A of the modern-ui voice redesign (vault plan
+ * suara-2026-09-24-feature-port-modern-ui-voice): motion only where something is happening.
+ */
+describe('Motion and state', () => {
+	const home = (): FlowState => ({ phase: 'home', view: 'grid', greeting: false });
+
+	it('draws no waveform and no status chip while nothing is listening', () => {
+		const html = render(home());
+		expect(html).not.toContain('k-wave-canvas');
+		expect(html).not.toContain('k-chip');
+		expect(html).toMatch(/class="mx-level"[^>]*data-active="false"/);
+	});
+
+	it('rings the microphone with the level while listening, and keeps the waveform', () => {
+		const html = render({ phase: 'listening', view: 'grid' }, { level: 0.5 });
+		expect(html).toMatch(/class="mx-level"[^>]*data-active="true"/);
+		expect(html).toContain('k-wave-canvas');
+	});
+
+	it('runs a bolt round a placeholder card while it finds answers, instead of a dead button', () => {
+		const html = render({ phase: 'searching', view: 'grid', topic: null });
+		expect(html).toContain('Finding answers');
+		expect(html).toMatch(/class="mx-edge mx-bolt[^"]*"[^>]*data-state="run"/);
+		expect(html).not.toContain('class="k-orb"');
+	});
+
+	it('ticks the best match and lights its edge once as it lands', () => {
+		const html = render(results(result()));
+		expect(html.match(/Best match/g)).toHaveLength(1);
+		expect(html.match(/class="mx-mark/g)).toHaveLength(1);
+		expect(html).toMatch(/class="mx-edge mx-bolt[^"]*"[^>]*data-state="land"/);
+	});
+
+	it('gives a weak match no tick and no light', () => {
+		const html = render(results(result({ fit: 'weak' })));
+		expect(html).not.toContain('mx-mark');
+		expect(html).not.toContain('mx-bolt');
+	});
+
+	it('fills yes and no from the finger', () => {
+		const e = aProcess();
+		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
+		const html = render({ phase: 'confirm', view: 'grid', entry: e, back });
+		expect(html.match(/mx-fill-host/g)).toHaveLength(2);
+	});
+
+	it('shows how far through the steps they are', () => {
+		const e = aProcess();
+		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
+		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
+		expect(html).toContain('role="progressbar"');
+		expect(html).toContain(`aria-valuenow="${Math.round((2 / e.steps!.length) * 100)}"`);
+	});
+
+	it('ends with one large tick', () => {
+		const e = aProcess();
+		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
+		const html = render({ phase: 'done', view: 'grid', entry: e, back });
+		expect(html).toContain('--mx-size:80px');
+	});
+});
+
+describe('Colour', () => {
+	const css = readFileSync(new URL('../../styles/global.css', import.meta.url), 'utf8');
+	/** Every value the token takes: the light scheme first, then dark. */
+	const token = (name: string) => [...css.matchAll(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`, 'g'))].map((m) => m[1]!);
+	const lum = (hex: string) => {
+		const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+		return 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
+	};
+	const contrast = (a: string, b: string) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+
+	it('puts white text on yes and on no at 4.5:1 or better, light and dark', () => {
+		for (const name of ['ready', 'live']) {
+			const values = token(name);
+			expect(values).toHaveLength(2);
+			for (const hex of values) expect(contrast(hex, '#ffffff'), `--${name} ${hex}`).toBeGreaterThanOrEqual(4.5);
+		}
 	});
 });

@@ -21,9 +21,10 @@ const legacy = Astro.url.searchParams.get('legacy') === '1';
 // `?route=gemini` or `?route=openai-ws` overrides SUARA_ROUTE for review.
 const route = resolveRoute(Astro.url.searchParams.get('route'), env.SUARA_ROUTE);
 const mode = resolveMode(Astro.url.searchParams.get('mode'), env.SUARA_MODE);
+// Demo builds also name the vendor route at the foot, for review; users never see it.
 const demo = import.meta.env.DEV || env.SUARA_DEMO === 'true';
 ---
 
 <BaseLayout title="Suara">
-	{legacy ? <Voice client:load mode={mode} demo={demo} /> : <Suara client:load route={route} routeLabel={ROUTE_LABEL[route]} />}
+	{legacy ? <Voice client:load mode={mode} demo={demo} /> : <Suara client:load route={route} routeLabel={demo ? ROUTE_LABEL[route] : undefined} />}
 </BaseLayout>

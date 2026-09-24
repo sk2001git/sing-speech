@@ -462,20 +462,16 @@
 		border-radius: 50%;
 		background: var(--primary);
 		color: var(--on-primary);
-		box-shadow: var(--shadow-orb);
 		cursor: pointer;
 		transition: transform 160ms ease-out, background-color 160ms ease-out;
+	}
+	/* Room for the level ring, which grows past the button while someone speaks. */
+	.k-orb-zone .mx-level {
+		margin: 1rem 0;
 	}
 	.k-orb .k-icon {
 		width: 3rem;
 		height: 3rem;
-	}
-	.k-orb::before {
-		content: '';
-		position: absolute;
-		inset: -0.75rem;
-		border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-		border-radius: 50%;
 	}
 	.k-orb:active {
 		transform: scale(0.96);
@@ -487,10 +483,6 @@
 	.k-orb[data-live='true'] {
 		background: var(--live);
 		color: #ffffff;
-	}
-	.k-orb[data-live='true']::before {
-		border-color: color-mix(in srgb, var(--live) 45%, transparent);
-		animation: ring 1.6s ease-out infinite;
 	}
 
 	.k-dots circle {
@@ -557,11 +549,11 @@
 	}
 
 	.k-topic {
-		min-height: 4rem;
-		padding: 0.75rem 1rem;
-		border: 1px solid var(--line);
-		border-radius: var(--radius-btn);
-		background: var(--surface);
+		min-height: 4.75rem;
+		padding: 0.75rem 1.125rem;
+		border: 0;
+		border-radius: var(--radius-card);
+		background: var(--subtle);
 		color: var(--ink);
 		font: inherit;
 		font-size: 1.125rem;
@@ -755,13 +747,70 @@
 	.k-card {
 		display: flex;
 		flex-direction: column;
-		border: 1px solid var(--line);
+		border: 0;
 		border-radius: var(--radius-card);
-		background: var(--surface);
-		box-shadow: var(--shadow-card);
+		background: var(--subtle);
 	}
 	.k-card[data-best='true'] {
-		border: 2px solid var(--ink);
+		background: var(--surface);
+		box-shadow: inset 0 0 0 1px var(--line-strong);
+	}
+
+	/* The best card is wrapped in the edge light (EdgeBolt); the wrapper is the grid item. */
+	.k-cards > .mx-edge > .k-card {
+		height: 100%;
+	}
+	.k-cards[data-view='grid'] > .mx-edge:has(.k-card[data-open='true']) {
+		grid-column: 1 / -1;
+	}
+
+	/* Answers arrive one after another, 60 ms apart, rather than all at once. */
+	.k-cards > * {
+		animation: mx-in calc(var(--mx-t) * 0.36s) var(--mx-ease) both;
+	}
+	.k-cards > :nth-child(2) { animation-delay: calc(var(--mx-t) * 0.06s); }
+	.k-cards > :nth-child(3) { animation-delay: calc(var(--mx-t) * 0.12s); }
+	.k-cards > :nth-child(4) { animation-delay: calc(var(--mx-t) * 0.18s); }
+	.k-cards > :nth-child(5) { animation-delay: calc(var(--mx-t) * 0.24s); }
+	.k-cards > :nth-child(6) { animation-delay: calc(var(--mx-t) * 0.3s); }
+	/* The best match is already there when its edge lights; the others arrive behind it. */
+	.k-cards > .k-landed {
+		animation: none;
+	}
+
+	/* Searching: the answer's final layout, reserved. Static; the bolt is the only motion. */
+	.k-placeholder {
+		display: grid;
+		gap: 0.75rem;
+		padding: 1.25rem;
+		background: var(--surface);
+		box-shadow: inset 0 0 0 1px var(--line);
+	}
+	.k-placeholder i {
+		display: block;
+		height: 0.875rem;
+		border-radius: 0.5rem;
+		background: var(--subtle);
+	}
+	.k-placeholder i:nth-child(1) { width: 34%; height: 0.75rem; }
+	.k-placeholder i:nth-child(2) { width: 88%; height: 1.375rem; }
+	.k-placeholder i:nth-child(3) { width: 72%; }
+	.k-placeholder i:nth-child(4) { width: 40%; }
+
+	/* The bolt carries the waiting moment, so it is drawn heavier than modern-ui's default,
+	   as in the approved mockup. Custom properties only: motion.css does not set these. */
+	.mx-bolt {
+		--mx-edge-w: 3px;
+		--mx-edge-glow: 8px;
+		--mx-bolt-tail: 250deg;
+	}
+
+	.k-best {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 1rem;
+		font-weight: 700;
 	}
 	.k-cards[data-view='grid'] .k-card[data-open='true'] {
 		grid-column: 1 / -1;
@@ -787,15 +836,6 @@
 		padding: 1.125rem 1.25rem;
 	}
 
-	.k-badge {
-		align-self: flex-start;
-		padding: 0.125rem 0.625rem;
-		border-radius: 999px;
-		background: var(--ink);
-		color: var(--ground);
-		font-size: 0.875rem;
-		font-weight: 600;
-	}
 
 	.k-card-title {
 		overflow: hidden;
@@ -984,24 +1024,52 @@
 		padding: 1.25rem 0.75rem;
 		border: 0;
 		border-radius: var(--radius-card);
-		color: #ffffff;
+		background: var(--subtle);
+		color: var(--ink);
 		font: inherit;
 		font-size: 1.375rem;
 		font-weight: 700;
 		cursor: pointer;
+		transition: opacity calc(var(--mx-t) * 0.3s) var(--mx-draw), transform 120ms ease-out;
+	}
+	.k-confirm-card:active {
+		transform: scale(0.98);
+	}
+	.k-confirm-card[data-dim='true'] {
+		opacity: 0.4;
+	}
+	.k-confirm-disc {
+		display: grid;
+		place-items: center;
+		width: 4.5rem;
+		height: 4.5rem;
+		border-radius: 50%;
+		color: #ffffff;
+		transition: background-color calc(var(--mx-t) * 0.2s) var(--mx-draw) calc(var(--mx-t) * 0.08s);
+	}
+	.confirm-yes .k-confirm-disc {
+		background: var(--ready);
+	}
+	.confirm-no .k-confirm-disc {
+		background: var(--live);
+	}
+	.k-confirm-card[data-filled='true'] .k-confirm-disc {
+		background: rgb(255 255 255 / 22%);
 	}
 	.k-confirm-card .k-icon {
-		width: 3.75rem;
-		height: 3.75rem;
-		stroke-width: 2.5;
+		width: 2.75rem;
+		height: 2.75rem;
+		stroke-width: 2.75;
 	}
-	.confirm-yes {
-		background: var(--ready);
-		box-shadow: 0 6px 16px color-mix(in srgb, var(--ready) 28%, transparent);
+
+	.k-done-mark {
+		padding: 1rem 0 0.25rem;
 	}
-	.confirm-no {
-		background: var(--live);
-		box-shadow: 0 6px 16px color-mix(in srgb, var(--live) 28%, transparent);
+
+	@media (prefers-reduced-motion: reduce) {
+		.k-cards > * {
+			animation: none;
+		}
 	}
 
 	/* Steps */
@@ -1103,4 +1171,13 @@
 		font-size: 1rem;
 		text-align: center;
 	}
+}
+
+/*
+ * Outside the layer on purpose: motion.css (modern-ui) is unlayered, and unlayered rules beat
+ * anything inside @layer components, so overrides of its classes have to live out here.
+ */
+.mx-progress.k-progress {
+	height: 0.375rem;
+	border-radius: 0.1875rem;
 }

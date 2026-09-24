@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { EdgeBolt, LevelRing, ProgressFill, SuccessMark, useFillFrom, type EdgeState } from '../motion/motion';
 import Waveform from './Waveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
@@ -309,7 +310,9 @@ function Body(p: BodyProps) {
 			return (
 				<>
 					<BackRow {...p} />
-					<Chip tone="ready" text={p.w.ready} />
+					<div className="k-done-mark">
+						<SuccessMark size={80} stroke={4.5} flourish="ripple" label={null} />
+					</div>
 					<h1 className="k-h1">{p.w.allDone}</h1>
 					<p className="k-lead">{s.entry.title.full}</p>
 					<AskButton {...p} label={p.w.askElse} primary />
@@ -357,29 +360,52 @@ function Chip({ tone, text }: { tone: 'ready' | 'live' | 'busy' | 'alert'; text:
 	);
 }
 
+/** The card radius in kb.css (--radius-card, 1.25rem), which the edge light has to follow. */
+const CARD_RADIUS = 20;
+
 function Talk(p: BodyProps) {
 	const s = p.state;
 	const live = s.phase === 'listening';
-	const waiting = s.phase === 'arming' || s.phase === 'searching';
+	const waiting = s.phase === 'arming';
 	const greeting = s.phase === 'home' && s.greeting;
-	const heading = live ? p.w.imListening : s.phase === 'arming' ? p.w.gettingReady : s.phase === 'searching' ? p.w.finding : greeting ? p.w.hello : p.w.whatNeed;
+	// While it searches, the button has nothing to offer: a card waits where the answer will land.
+	if (s.phase === 'searching') {
+		return (
+			<>
+				<h1 className="k-h1" aria-live="polite">
+					{p.w.finding}
+				</h1>
+				<EdgeBolt state="run" radius={CARD_RADIUS}>
+					<div className="k-card k-placeholder" aria-hidden="true">
+						<i />
+						<i />
+						<i />
+						<i />
+					</div>
+				</EdgeBolt>
+			</>
+		);
+	}
+	const heading = live ? p.w.imListening : waiting ? p.w.gettingReady : greeting ? p.w.hello : p.w.whatNeed;
 	return (
 		<>
-			<Chip tone={live ? 'live' : waiting ? 'busy' : 'ready'} text={live ? p.w.listening : waiting ? p.w.busy : p.w.ready} />
 			<h1 className="k-h1">{heading}</h1>
 			{s.phase === 'home' && s.notice === 'nothing' && <p className="k-notice">{p.w.nothingHeard}</p>}
 			<section className="k-orb-zone">
-				<button
-					className="k-orb"
-					type="button"
-					data-live={live}
-					onClick={p.onSpeak}
-					disabled={waiting}
-					aria-label={live ? p.w.tapDone : p.w.tapSpeak}
-				>
-					{live ? <StopIcon /> : waiting ? <DotsIcon /> : <MicIcon />}
-				</button>
-				<Waveform active={live} level={p.level ?? 0} />
+				{/* The waveform reads loudness about as 0-0.17 RMS; the ring wants 0-1. */}
+				<LevelRing active={live} level={Math.min(1, (p.level ?? 0) * 6)} reach={0.34} color="var(--live)">
+					<button
+						className="k-orb"
+						type="button"
+						data-live={live}
+						onClick={p.onSpeak}
+						disabled={waiting}
+						aria-label={live ? p.w.tapDone : p.w.tapSpeak}
+					>
+						{live ? <StopIcon /> : waiting ? <DotsIcon /> : <MicIcon />}
+					</button>
+				</LevelRing>
+				{live && <Waveform active level={p.level ?? 0} />}
 				<p className="k-orb-label" aria-live="polite">
 					{live ? p.w.tapDone : waiting ? p.w.busy : p.w.tapSpeak}
 				</p>
@@ -472,16 +498,11 @@ function Results(p: BodyProps & { state: ResultsState }) {
 				</div>
 			</div>
 			<div className="k-cards" data-view={view}>
-				{result.cards.map((card, i) => (
-					<Card
-						key={card.id}
-						{...p}
-						entry={card}
-						best={result.fit === 'strong' && i === 0}
-						open={openId === card.id}
-						inEnglish={english.has(card.id)}
-					/>
-				))}
+				{result.cards.map((card, i) => {
+					const best = result.fit === 'strong' && i === 0;
+					const c = <Card key={card.id} {...p} entry={card} best={best} open={openId === card.id} inEnglish={english.has(card.id)} />;
+					return best ? <Landed key={card.id}>{c}</Landed> : c;
+				})}
 			</div>
 			{result.nextOffset !== null && (
 				<button className="k-btn k-btn-quiet" type="button" onClick={p.onMore} disabled={p.loadingMore}>
@@ -494,13 +515,35 @@ function Results(p: BodyProps & { state: ResultsState }) {
 	);
 }
 
+/**
+ * The answer has arrived: the best card's edge lights once, where the searching card's bolt
+ * was running, then goes quiet. Only a strong match earns it; a weak one is not a success.
+ */
+function Landed({ children }: { children: ReactNode }) {
+	const [state, setState] = useState<EdgeState>('land');
+	useEffect(() => {
+		const t = setTimeout(() => setState('off'), 900);
+		return () => clearTimeout(t);
+	}, []);
+	return (
+		<EdgeBolt state={state} radius={CARD_RADIUS} halo={false} className="k-landed">
+			{children}
+		</EdgeBolt>
+	);
+}
+
 function Card(p: BodyProps & { entry: Entry; best: boolean; open: boolean; inEnglish: boolean }) {
 	const e = p.entry;
 	const steps = e.steps?.length ?? 0;
 	return (
 		<article className="k-card" data-card={e.id} data-best={p.best} data-open={p.open} {...(p.inEnglish ? { 'data-english': 'true' } : {})}>
 			<button className="k-card-head" type="button" aria-expanded={p.open} onClick={() => p.dispatch({ type: 'OPEN', id: e.id })}>
-				{p.best && <span className="k-badge">{p.w.best}</span>}
+				{p.best && (
+					<span className="k-best">
+						<SuccessMark size={22} delay={0.12} label={null} />
+						{p.w.best}
+					</span>
+				)}
 				<span className="k-card-title">{p.state.view === 'grid' && !p.open ? e.title.short : e.title.full}</span>
 				<span className="k-card-meta">
 					<span>
@@ -622,9 +665,27 @@ function BackRow(p: BodyProps) {
 	);
 }
 
+/**
+ * How long the chosen colour takes to cover the card (motion.css `mx-fill`, 0.46 s at tempo
+ * 1.15), plus a beat so the person sees their choice land before the screen changes.
+ */
+const FILL_MS = 530 + 120;
+
 function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }> }) {
 	const e = p.state.entry;
 	const steps = e.steps ?? [];
+	const yes = useFillFrom<HTMLButtonElement>({ color: 'var(--ready)' });
+	const no = useFillFrom<HTMLButtonElement>({ color: 'var(--live)' });
+	const [chosen, setChosen] = useState<'yes' | 'no' | null>(null);
+	useEffect(() => {
+		if (!chosen) return;
+		const still = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const t = setTimeout(() => p.dispatch({ type: chosen === 'yes' ? 'YES' : 'NO' }), still ? 0 : FILL_MS);
+		return () => clearTimeout(t);
+	}, [chosen]); // once per choice; dispatch is the reducer's and does not change
+	const choose = (which: 'yes' | 'no') => () => {
+		if (!chosen) setChosen(which);
+	};
 	return (
 		<>
 			<BackRow {...p} />
@@ -644,13 +705,33 @@ function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }
 					</ol>
 				</details>
 			</article>
+			{/* Neutral until tapped, then the colour grows from the finger. The discs keep the
+			    meaning visible before the tap: green tick, red cross. */}
 			<div className="k-confirm">
-				<button className="k-confirm-card confirm-yes" type="button" onClick={() => p.dispatch({ type: 'YES' })}>
-					<CheckIcon />
+				<button
+					{...yes.host}
+					className={`k-confirm-card confirm-yes ${yes.host.className}`}
+					type="button"
+					data-dim={chosen === 'no' || undefined}
+					onClick={choose('yes')}
+				>
+					{yes.fill}
+					<span className="k-confirm-disc">
+						<CheckIcon />
+					</span>
 					<span>{p.w.yesStart}</span>
 				</button>
-				<button className="k-confirm-card confirm-no" type="button" onClick={() => p.dispatch({ type: 'NO' })}>
-					<CrossIcon />
+				<button
+					{...no.host}
+					className={`k-confirm-card confirm-no ${no.host.className}`}
+					type="button"
+					data-dim={chosen === 'yes' || undefined}
+					onClick={choose('no')}
+				>
+					{no.fill}
+					<span className="k-confirm-disc">
+						<CrossIcon />
+					</span>
 					<span>{p.w.notThis}</span>
 				</button>
 			</div>
@@ -667,6 +748,7 @@ function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> })
 			<BackRow {...p} />
 			<div className="k-guide-head">
 				<p className="k-label">{p.w.stepOf(p.state.index + 1, steps.length)}</p>
+				<ProgressFill value={(p.state.index + 1) / steps.length} label={p.w.stepOf(p.state.index + 1, steps.length)} className="k-progress" />
 				<h1 className="k-h1">{e.title.short}</h1>
 			</div>
 			<ol className="k-steps">

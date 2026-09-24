@@ -112,7 +112,7 @@ interface Recording {
  * The driver for the knowledge-base screens: microphone, network and speech. Every pixel
  * is in `KbScreen.tsx`, every transition in `lib/kb/flow.ts`.
  */
-export default function Suara({ route, routeLabel }: { route: string; routeLabel: string }) {
+export default function Suara({ route, routeLabel }: { route: string; routeLabel?: string }) {
 	const [state, dispatch] = useReducer(next, 'grid' as View, initial);
 	const [setting, setSetting] = useState<ReplySetting>('en');
 	const [englishIds, setEnglishIds] = useState<string[]>([]);
