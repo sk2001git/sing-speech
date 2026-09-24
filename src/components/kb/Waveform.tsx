@@ -30,7 +30,9 @@ export default function Waveform({ active, level, height = 44, bars = 28 }: Wave
 		if (!ctx) return;
 
 		const still = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const colour = getComputedStyle(el).getPropertyValue('--live').trim() || '#d70015';
+		// --wave lets a container choose the bar colour (the voice pill uses ink); else the open-mic red.
+		const css = getComputedStyle(el);
+		const colour = css.getPropertyValue('--wave').trim() || css.getPropertyValue('--live').trim() || '#d70015';
 		let timer: ReturnType<typeof setInterval> | undefined;
 
 		const size = () => {

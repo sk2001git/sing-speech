@@ -1,0 +1,513 @@
+{
+  "state": {
+    "v": 1,
+    "lab": "suara-voice-10",
+    "rounds": 10,
+    "mode": "explore",
+    "post": {
+      "home": {
+        "tiles": [
+          2,
+          2
+        ],
+        "list": [
+          1,
+          2
+        ],
+        "big": [
+          3,
+          1
+        ]
+      },
+      "action": {
+        "black": [
+          4,
+          1
+        ],
+        "blue": [
+          1,
+          2
+        ],
+        "navy": [
+          1,
+          2
+        ]
+      },
+      "listen": {
+        "red": [
+          2,
+          1.5
+        ],
+        "blue": [
+          1,
+          1.5
+        ],
+        "black": [
+          1,
+          1.5
+        ]
+      },
+      "light": {
+        "x": [
+          1,
+          2
+        ],
+        "apple": [
+          3,
+          1
+        ],
+        "cobalt": [
+          1,
+          2
+        ]
+      },
+      "loading": {
+        "one": [
+          1,
+          1.5
+        ],
+        "twin": [
+          1,
+          1.5
+        ],
+        "spin": [
+          1,
+          1.5
+        ]
+      },
+      "results": {
+        "grid": [
+          2,
+          2
+        ],
+        "list": [
+          1,
+          2
+        ],
+        "lead": [
+          3,
+          1
+        ]
+      },
+      "surface": {
+        "tint": [
+          1,
+          2
+        ],
+        "hairline": [
+          1,
+          2
+        ],
+        "lift": [
+          3,
+          1
+        ]
+      },
+      "confirm": {
+        "squares": [
+          1,
+          1.5
+        ],
+        "stacked": [
+          1,
+          1.5
+        ],
+        "buttons": [
+          1,
+          1.5
+        ]
+      },
+      "tempo": {
+        "standard": [
+          3,
+          1
+        ],
+        "calm": [
+          1,
+          2
+        ],
+        "brisk": [
+          1,
+          2
+        ]
+      },
+      "done": {
+        "ripple": [
+          3,
+          1
+        ],
+        "plain": [
+          1,
+          2
+        ],
+        "burst": [
+          1,
+          2
+        ]
+      }
+    },
+    "history": [
+      {
+        "t": 1790264361103,
+        "mode": "choose",
+        "gene": "home",
+        "scene": "home",
+        "shown": [
+          "big",
+          "tiles",
+          "list"
+        ],
+        "best": "big",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264367485,
+        "mode": "choose",
+        "gene": "action",
+        "scene": "home",
+        "shown": [
+          "blue",
+          "black",
+          "navy"
+        ],
+        "best": "black",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264374702,
+        "mode": "choose",
+        "gene": "listen",
+        "scene": "listening",
+        "shown": [
+          "red",
+          "black",
+          "blue"
+        ],
+        "best": null,
+        "worst": null,
+        "pick": "none"
+      },
+      {
+        "t": 1790264389059,
+        "mode": "choose",
+        "gene": "light",
+        "scene": "searching",
+        "shown": [
+          "x",
+          "cobalt",
+          "apple"
+        ],
+        "best": "apple",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264398764,
+        "mode": "choose",
+        "gene": "loading",
+        "scene": "searching",
+        "shown": [
+          "spin",
+          "twin",
+          "one"
+        ],
+        "best": null,
+        "worst": null,
+        "pick": "none"
+      },
+      {
+        "t": 1790264432756,
+        "mode": "choose",
+        "gene": "results",
+        "scene": "results",
+        "shown": [
+          "lead",
+          "list",
+          "grid"
+        ],
+        "best": "lead",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264450958,
+        "mode": "choose",
+        "gene": "surface",
+        "scene": "results",
+        "shown": [
+          "hairline",
+          "lift",
+          "tint"
+        ],
+        "best": "lift",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264468983,
+        "mode": "choose",
+        "gene": "confirm",
+        "scene": "confirm",
+        "shown": [
+          "squares",
+          "stacked",
+          "buttons"
+        ],
+        "best": null,
+        "worst": null,
+        "pick": "none"
+      },
+      {
+        "t": 1790264537600,
+        "mode": "choose",
+        "gene": "tempo",
+        "scene": "confirm",
+        "shown": [
+          "brisk",
+          "calm",
+          "standard"
+        ],
+        "best": "standard",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790264550508,
+        "mode": "choose",
+        "gene": "done",
+        "scene": "done",
+        "shown": [
+          "burst",
+          "plain",
+          "ripple"
+        ],
+        "best": "ripple",
+        "worst": null,
+        "pick": "best"
+      }
+    ],
+    "order": null,
+    "idx": 0,
+    "lastGene": "done",
+    "qi": 10
+  },
+  "summary": {
+    "lab": "suara-voice-10",
+    "rounds": 10,
+    "neitherRate": 0.3,
+    "favourite": {
+      "home": {
+        "choice": "big",
+        "name": "Just the mic",
+        "status": "leaning",
+        "source": "Generated: the extreme"
+      },
+      "action": {
+        "choice": "black",
+        "name": "Black",
+        "status": "leaning",
+        "source": "Current Suara",
+        "hex": "#000000"
+      },
+      "listen": {
+        "choice": "red",
+        "name": "Red",
+        "status": "open",
+        "source": "Current Suara"
+      },
+      "light": {
+        "choice": "apple",
+        "name": "Apple blue",
+        "status": "leaning",
+        "source": {
+          "name": "Apple systemBlue",
+          "url": "https://sarunw.com/posts/dark-color-cheat-sheet/"
+        },
+        "hex": "#007AFF"
+      },
+      "loading": {
+        "choice": "one",
+        "name": "One light round the card",
+        "status": "open",
+        "source": "Current Suara"
+      },
+      "results": {
+        "choice": "lead",
+        "name": "Best answer large, others below",
+        "status": "leaning"
+      },
+      "surface": {
+        "choice": "lift",
+        "name": "White with a shadow",
+        "status": "leaning"
+      },
+      "confirm": {
+        "choice": "squares",
+        "name": "Two big squares",
+        "status": "open",
+        "source": "Current Suara"
+      },
+      "tempo": {
+        "choice": "standard",
+        "name": "Standard",
+        "status": "leaning",
+        "t": 1.15,
+        "source": "Current Suara"
+      },
+      "done": {
+        "choice": "ripple",
+        "name": "Tick and a ripple",
+        "status": "leaning",
+        "source": "Current Suara"
+      }
+    },
+    "posteriors": {
+      "home": {
+        "tiles": {
+          "winRate": 0.5,
+          "seen": 1
+        },
+        "list": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "big": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "action": {
+        "black": {
+          "winRate": 0.8,
+          "seen": 2
+        },
+        "blue": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "navy": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "listen": {
+        "red": {
+          "winRate": 0.571,
+          "seen": 0.5
+        },
+        "blue": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "black": {
+          "winRate": 0.4,
+          "seen": 0.5
+        }
+      },
+      "light": {
+        "x": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "apple": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "cobalt": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "loading": {
+        "one": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "twin": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "spin": {
+          "winRate": 0.4,
+          "seen": 0.5
+        }
+      },
+      "results": {
+        "grid": {
+          "winRate": 0.5,
+          "seen": 1
+        },
+        "list": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "lead": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "surface": {
+        "tint": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "hairline": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "lift": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "confirm": {
+        "squares": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "stacked": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "buttons": {
+          "winRate": 0.4,
+          "seen": 0.5
+        }
+      },
+      "tempo": {
+        "standard": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "calm": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "brisk": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "done": {
+        "ripple": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "plain": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "burst": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      }
+    },
+    "recentDecisive": [],
+    "consistency": {},
+    "notes": []
+  },
+  "updatedAt": "2026-09-24T15:42:30.509Z"
+}

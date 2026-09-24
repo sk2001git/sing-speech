@@ -60,8 +60,8 @@
 	--live: #d70015;
 	/* White text on it: 5.39:1. The previous #248a3d was 4.40:1 and failed. */
 	--ready: #1f7a36;
-	/* X blue. Glows and marks only (bolt, level ring, tick, progress): 3.00:1, never text. */
-	--light: #1d9bf0;
+	/* Apple blue (owner's pick, taste lab round 1). Marks only: tick, progress. 4.02:1, never text. */
+	--light: #007aff;
 	--busy: #8e8e93;
 	--sample-ink: #7a5200;
 	--sample-bg: #fff6de;
@@ -81,6 +81,10 @@
 
 	--radius-card: 1.25rem;
 	--radius-btn: 1rem;
+	/* Main actions are black pills (taste lab round 2). */
+	--radius-action: 999px;
+	/* Loading outlines (Airbnb, measured 2026-09-24). */
+	--skeleton: #ebebeb;
 	--shadow-card: 0 2px 12px rgb(0 0 0 / 4%);
 	--shadow-orb: 0 16px 36px rgb(0 0 0 / 22%), 0 4px 10px rgb(0 0 0 / 8%);
 
@@ -113,7 +117,8 @@
 		/* White text sits on both in the yes/no cards: #ff453a (3.5:1) and #30d158 (1.9:1) failed. */
 		--live: #d70015;
 		--ready: #1f7a36;
-		--light: #1d9bf0;
+		--light: #007aff;
+		--skeleton: #2c2c2e;
 		--busy: #98989d;
 		--sample-ink: #ffd60a;
 		--sample-bg: #2e2600;

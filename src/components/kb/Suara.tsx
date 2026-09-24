@@ -113,7 +113,7 @@ interface Recording {
  * is in `KbScreen.tsx`, every transition in `lib/kb/flow.ts`.
  */
 export default function Suara({ route, routeLabel }: { route: string; routeLabel?: string }) {
-	const [state, dispatch] = useReducer(next, 'grid' as View, initial);
+	const [state, dispatch] = useReducer(next, 'single' as View, initial);
 	const [setting, setSetting] = useState<ReplySetting>('en');
 	const [englishIds, setEnglishIds] = useState<string[]>([]);
 	const [loadingMore, setLoadingMore] = useState(false);
@@ -131,7 +131,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	// Restore the remembered view and language after hydration, so server and client agree.
 	useEffect(() => {
 		setSetting(stored('suara.lang', ['en', 'zh-Hans', 'auto'] as const, 'en'));
-		dispatch({ type: 'VIEW', view: stored('suara.view', ['grid', 'single'] as const, 'grid') });
+		dispatch({ type: 'VIEW', view: stored('suara.view', ['grid', 'single'] as const, 'single') });
 	}, []);
 
 	useEffect(() => store('suara.view', state.view), [state.view]);

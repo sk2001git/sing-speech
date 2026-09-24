@@ -465,10 +465,6 @@
 		cursor: pointer;
 		transition: transform 160ms ease-out, background-color 160ms ease-out;
 	}
-	/* Room for the level ring, which grows past the button while someone speaks. */
-	.k-orb-zone .mx-level {
-		margin: 1rem 0;
-	}
 	.k-orb .k-icon {
 		width: 3rem;
 		height: 3rem;
@@ -744,24 +740,22 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
+	/* White cards with a soft shadow; the best answer leads, larger (taste lab rounds 1 and 2). */
 	.k-card {
 		display: flex;
 		flex-direction: column;
 		border: 0;
 		border-radius: var(--radius-card);
-		background: var(--subtle);
-	}
-	.k-card[data-best='true'] {
 		background: var(--surface);
-		box-shadow: inset 0 0 0 1px var(--line-strong);
+		box-shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
 	}
-
-	/* The best card is wrapped in the edge light (EdgeBolt); the wrapper is the grid item. */
-	.k-cards > .mx-edge > .k-card {
-		height: 100%;
+	.k-card-sum {
+		color: var(--muted);
+		font-size: 1.0625rem;
+		line-height: 1.45;
 	}
-	.k-cards[data-view='grid'] > .mx-edge:has(.k-card[data-open='true']) {
-		grid-column: 1 / -1;
+	.k-cards[data-view='single'] .k-card[data-best='true'] .k-card-title {
+		font-size: 1.625rem;
 	}
 
 	/* Answers arrive one after another, 60 ms apart, rather than all at once. */
@@ -773,36 +767,87 @@
 	.k-cards > :nth-child(4) { animation-delay: calc(var(--mx-t) * 0.18s); }
 	.k-cards > :nth-child(5) { animation-delay: calc(var(--mx-t) * 0.24s); }
 	.k-cards > :nth-child(6) { animation-delay: calc(var(--mx-t) * 0.3s); }
-	/* The best match is already there when its edge lights; the others arrive behind it. */
-	.k-cards > .k-landed {
-		animation: none;
-	}
-
-	/* Searching: the answer's final layout, reserved. Static; the bolt is the only motion. */
-	.k-placeholder {
+	/* Searching: grey outlines of the answer, pulsing (owner's pick; Airbnb's #EBEBEB bars). */
+	.k-skeleton {
 		display: grid;
 		gap: 0.75rem;
 		padding: 1.25rem;
+		border-radius: var(--radius-card);
 		background: var(--surface);
-		box-shadow: inset 0 0 0 1px var(--line);
+		box-shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
 	}
-	.k-placeholder i {
+	.k-skeleton i {
 		display: block;
 		height: 0.875rem;
-		border-radius: 0.5rem;
+		border-radius: 0.25rem;
+		background: var(--skeleton);
+		animation: k-pulse calc(var(--mx-t) * 1.4s) ease-in-out infinite;
+	}
+	.k-skeleton i:nth-child(1) { width: 34%; }
+	.k-skeleton i:nth-child(2) { width: 86%; height: 1.375rem; }
+	.k-skeleton i:nth-child(3) { width: 64%; }
+	@keyframes k-pulse {
+		50% { opacity: 0.45; }
+	}
+
+	/* Listening: a voice pill, stop button beside a live waveform (after ElevenLabs UI's Voice Button). */
+	.k-voice-zone {
+		display: grid;
+		justify-items: center;
+		gap: 1rem;
+		padding: 2.5rem 0 0.5rem;
+	}
+	.k-voice {
+		--wave: var(--ink);
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		width: min(22rem, 100%);
+		padding: 0.75rem 1.25rem 0.75rem 0.75rem;
+		border-radius: 999px;
 		background: var(--subtle);
 	}
-	.k-placeholder i:nth-child(1) { width: 34%; height: 0.75rem; }
-	.k-placeholder i:nth-child(2) { width: 88%; height: 1.375rem; }
-	.k-placeholder i:nth-child(3) { width: 72%; }
-	.k-placeholder i:nth-child(4) { width: 40%; }
+	.k-voice-stop {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 4.5rem;
+		height: 4.5rem;
+		border: 0;
+		border-radius: 50%;
+		background: var(--primary);
+		color: var(--on-primary);
+		cursor: pointer;
+		transition: transform 120ms ease-out;
+	}
+	.k-voice-stop:active {
+		transform: scale(0.96);
+	}
+	.k-voice-stop .k-icon {
+		width: 2rem;
+		height: 2rem;
+	}
+	.k-voice .k-wave-canvas {
+		flex: 1;
+		width: auto;
+		min-width: 0;
+		margin: 0;
+	}
 
-	/* The bolt carries the waiting moment, so it is drawn heavier than modern-ui's default,
-	   as in the approved mockup. Custom properties only: motion.css does not set these. */
-	.mx-bolt {
-		--mx-edge-w: 3px;
-		--mx-edge-glow: 8px;
-		--mx-bolt-tail: 250deg;
+	/* Home: the topics are one tap away, not on screen. */
+	.k-more > summary {
+		list-style: none;
+		justify-content: space-between;
+	}
+	.k-more > summary::-webkit-details-marker {
+		display: none;
+	}
+	.k-more[open] > summary .k-icon {
+		transform: rotate(180deg);
+	}
+	.k-more[open] > .k-topics {
+		margin-top: 0.75rem;
+		animation: mx-in calc(var(--mx-t) * 0.3s) var(--mx-ease) both;
 	}
 
 	.k-best {
@@ -849,6 +894,15 @@
 	.k-cards[data-view='single'] .k-card-title,
 	.k-card[data-open='true'] .k-card-title {
 		font-size: 1.5rem;
+	}
+	/* One per row has room: the full title wraps to two lines instead of being cut off. */
+	.k-cards[data-view='single'] .k-card-title {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-height: 1.2;
+		white-space: normal;
+		text-wrap: balance;
 	}
 	.k-card-title-lg {
 		font-size: 1.375rem;
@@ -942,7 +996,7 @@
 		min-height: 4.5rem;
 		padding: 0.75rem 1.25rem;
 		border: 0;
-		border-radius: var(--radius-btn);
+		border-radius: var(--radius-action);
 		font: inherit;
 		font-size: 1.25rem;
 		font-weight: 600;
@@ -1007,59 +1061,54 @@
 		border: 2px solid var(--ink);
 	}
 
-	.k-confirm {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.75rem;
-		padding-top: 0.75rem;
+	/* Confirm: a bottom sheet with one black button and a plain "Not this" (owner's pick; Airbnb's sheet). */
+	.k-scrim {
+		position: fixed;
+		inset: 0;
+		z-index: 20;
+		background: rgb(0 0 0 / 32%);
+		animation: k-fade calc(var(--mx-t) * 0.25s) ease-out both;
 	}
-
-	.k-confirm-card {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+	.k-sheet {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 21;
+		display: grid;
 		gap: 0.75rem;
-		min-height: 11.25rem;
-		padding: 1.25rem 0.75rem;
+		max-width: 40rem;
+		margin: 0 auto;
+		padding: 2rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom));
+		border-radius: 2rem 2rem 0 0;
+		background: var(--surface);
+		box-shadow: 0 8px 28px rgb(0 0 0 / 28%);
+		text-align: center;
+		animation: k-rise calc(var(--mx-t) * 0.36s) var(--mx-ease) both;
+	}
+	.k-sheet-title {
+		margin: 0;
+		font-size: 1.75rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+	.k-link {
+		min-height: 3.5rem;
 		border: 0;
-		border-radius: var(--radius-card);
-		background: var(--subtle);
+		background: none;
 		color: var(--ink);
 		font: inherit;
-		font-size: 1.375rem;
-		font-weight: 700;
+		font-size: 1.25rem;
+		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 0.25em;
 		cursor: pointer;
-		transition: opacity calc(var(--mx-t) * 0.3s) var(--mx-draw), transform 120ms ease-out;
 	}
-	.k-confirm-card:active {
-		transform: scale(0.98);
+	@keyframes k-rise {
+		from { transform: translateY(100%); }
 	}
-	.k-confirm-card[data-dim='true'] {
-		opacity: 0.4;
-	}
-	.k-confirm-disc {
-		display: grid;
-		place-items: center;
-		width: 4.5rem;
-		height: 4.5rem;
-		border-radius: 50%;
-		color: #ffffff;
-		transition: background-color calc(var(--mx-t) * 0.2s) var(--mx-draw) calc(var(--mx-t) * 0.08s);
-	}
-	.confirm-yes .k-confirm-disc {
-		background: var(--ready);
-	}
-	.confirm-no .k-confirm-disc {
-		background: var(--live);
-	}
-	.k-confirm-card[data-filled='true'] .k-confirm-disc {
-		background: rgb(255 255 255 / 22%);
-	}
-	.k-confirm-card .k-icon {
-		width: 2.75rem;
-		height: 2.75rem;
-		stroke-width: 2.75;
+	@keyframes k-fade {
+		from { opacity: 0; }
 	}
 
 	.k-done-mark {
@@ -1067,7 +1116,11 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.k-cards > * {
+		.k-cards > *,
+		.k-skeleton i,
+		.k-sheet,
+		.k-scrim,
+		.k-more[open] > .k-topics {
 			animation: none;
 		}
 	}

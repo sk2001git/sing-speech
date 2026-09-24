@@ -1,0 +1,534 @@
+{
+  "state": {
+    "v": 1,
+    "lab": "suara-voice-10b",
+    "rounds": 11,
+    "mode": "explore",
+    "post": {
+      "listen": {
+        "orb": [
+          1,
+          3
+        ],
+        "vbtn": [
+          5,
+          1
+        ],
+        "bviz": [
+          1,
+          3
+        ]
+      },
+      "voice": {
+        "pastel": [
+          1,
+          1.5
+        ],
+        "apple": [
+          1,
+          1.5
+        ],
+        "mono": [
+          1,
+          1.5
+        ]
+      },
+      "think": {
+        "orb": [
+          1,
+          2
+        ],
+        "shim": [
+          1,
+          2
+        ],
+        "pulse": [
+          3,
+          1
+        ]
+      },
+      "confirm": {
+        "sheet": [
+          3,
+          1
+        ],
+        "tiles": [
+          1,
+          2
+        ],
+        "cards": [
+          1,
+          2
+        ]
+      },
+      "heading": {
+        "airbnb": [
+          1,
+          2
+        ],
+        "bold": [
+          3,
+          1
+        ],
+        "light": [
+          1,
+          2
+        ]
+      },
+      "header": {
+        "suara": [
+          3,
+          1
+        ],
+        "ask": [
+          1,
+          2
+        ],
+        "none": [
+          1,
+          2
+        ]
+      },
+      "topics": {
+        "quiet": [
+          3,
+          1
+        ],
+        "chips": [
+          1,
+          2
+        ],
+        "link": [
+          1,
+          2
+        ]
+      },
+      "page": {
+        "white": [
+          3,
+          1
+        ],
+        "warm": [
+          1,
+          2
+        ],
+        "grey": [
+          1,
+          2
+        ]
+      },
+      "card": {
+        "lift": [
+          3,
+          1
+        ],
+        "airbnb": [
+          1,
+          2
+        ],
+        "rows": [
+          1,
+          2
+        ]
+      },
+      "button": {
+        "airbnb": [
+          1,
+          2
+        ],
+        "pill": [
+          3,
+          1
+        ],
+        "current": [
+          1,
+          2
+        ]
+      }
+    },
+    "history": [
+      {
+        "t": 1790265414040,
+        "mode": "choose",
+        "gene": "listen",
+        "scene": "listening",
+        "shown": [
+          "orb",
+          "vbtn",
+          "bviz"
+        ],
+        "best": "vbtn",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265438776,
+        "mode": "choose",
+        "gene": "voice",
+        "scene": "listening",
+        "shown": [
+          "apple",
+          "mono",
+          "pastel"
+        ],
+        "best": null,
+        "worst": null,
+        "pick": "none"
+      },
+      {
+        "t": 1790265451738,
+        "mode": "choose",
+        "gene": "think",
+        "scene": "searching",
+        "shown": [
+          "pulse",
+          "shim",
+          "orb"
+        ],
+        "best": "pulse",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265465200,
+        "mode": "choose",
+        "gene": "confirm",
+        "scene": "confirm",
+        "shown": [
+          "sheet",
+          "tiles",
+          "cards"
+        ],
+        "best": "sheet",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265472012,
+        "mode": "choose",
+        "gene": "heading",
+        "scene": "home",
+        "shown": [
+          "light",
+          "bold",
+          "airbnb"
+        ],
+        "best": "bold",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265505785,
+        "mode": "choose",
+        "gene": "header",
+        "scene": "home",
+        "shown": [
+          "suara",
+          "none",
+          "ask"
+        ],
+        "best": "suara",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265529287,
+        "mode": "choose",
+        "gene": "topics",
+        "scene": "home",
+        "shown": [
+          "chips",
+          "link",
+          "quiet"
+        ],
+        "best": "quiet",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265537153,
+        "mode": "choose",
+        "gene": "page",
+        "scene": "results",
+        "shown": [
+          "grey",
+          "white",
+          "warm"
+        ],
+        "best": "white",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265544141,
+        "mode": "choose",
+        "gene": "card",
+        "scene": "results",
+        "shown": [
+          "rows",
+          "airbnb",
+          "lift"
+        ],
+        "best": "lift",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265558746,
+        "mode": "choose",
+        "gene": "button",
+        "scene": "done",
+        "shown": [
+          "airbnb",
+          "current",
+          "pill"
+        ],
+        "best": "pill",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790265916528,
+        "mode": "choose",
+        "gene": "listen",
+        "scene": "listening",
+        "shown": [
+          "bviz",
+          "vbtn",
+          "orb"
+        ],
+        "best": "vbtn",
+        "worst": null,
+        "pick": "best"
+      }
+    ],
+    "order": null,
+    "idx": 0,
+    "lastGene": "button",
+    "qi": 11
+  },
+  "summary": {
+    "lab": "suara-voice-10b",
+    "rounds": 11,
+    "neitherRate": 0.09,
+    "favourite": {
+      "listen": {
+        "choice": "vbtn",
+        "name": "Voice button with a waveform",
+        "status": "leaning",
+        "source": {
+          "name": "ElevenLabs UI Voice Button",
+          "url": "https://github.com/elevenlabs/ui/tree/main/apps/www/registry/elevenlabs-ui/ui"
+        }
+      },
+      "voice": {
+        "choice": "pastel",
+        "name": "Soft blue-grey",
+        "status": "open",
+        "source": {
+          "name": "ElevenLabs Orb default #CADCFC / #A0B9D1",
+          "url": "https://github.com/elevenlabs/ui"
+        }
+      },
+      "think": {
+        "choice": "pulse",
+        "name": "Grey outline, pulsing",
+        "status": "leaning",
+        "source": {
+          "name": "Airbnb, measured: #EBEBEB loading bars",
+          "url": "https://www.airbnb.com/"
+        }
+      },
+      "confirm": {
+        "choice": "sheet",
+        "name": "A sheet, one black button",
+        "status": "leaning",
+        "source": {
+          "name": "Airbnb, measured: sheet 32px, button #222 8px 48px",
+          "url": "https://www.airbnb.com/"
+        }
+      },
+      "heading": {
+        "choice": "bold",
+        "name": "Heavy, 34px",
+        "status": "leaning",
+        "source": "Current Suara"
+      },
+      "header": {
+        "choice": "suara",
+        "name": "Logo, Find, English",
+        "status": "leaning",
+        "source": "Current Suara"
+      },
+      "topics": {
+        "choice": "quiet",
+        "name": "One button",
+        "status": "leaning",
+        "source": "Round 1 pick"
+      },
+      "page": {
+        "choice": "white",
+        "name": "White",
+        "status": "leaning",
+        "source": "Current Suara"
+      },
+      "card": {
+        "choice": "lift",
+        "name": "White, soft shadow",
+        "status": "leaning",
+        "source": "Round 1 pick"
+      },
+      "button": {
+        "choice": "pill",
+        "name": "Black pill",
+        "status": "leaning"
+      }
+    },
+    "posteriors": {
+      "listen": {
+        "orb": {
+          "winRate": 0.25,
+          "seen": 2
+        },
+        "vbtn": {
+          "winRate": 0.833,
+          "seen": 4
+        },
+        "bviz": {
+          "winRate": 0.25,
+          "seen": 2
+        }
+      },
+      "voice": {
+        "pastel": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "apple": {
+          "winRate": 0.4,
+          "seen": 0.5
+        },
+        "mono": {
+          "winRate": 0.4,
+          "seen": 0.5
+        }
+      },
+      "think": {
+        "orb": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "shim": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "pulse": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "confirm": {
+        "sheet": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "tiles": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "cards": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "heading": {
+        "airbnb": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "bold": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "light": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "header": {
+        "suara": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "ask": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "none": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "topics": {
+        "quiet": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "chips": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "link": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "page": {
+        "white": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "warm": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "grey": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "card": {
+        "lift": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "airbnb": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "rows": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "button": {
+        "airbnb": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "pill": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "current": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      }
+    },
+    "recentDecisive": [],
+    "consistency": {},
+    "notes": []
+  },
+  "updatedAt": "2026-09-24T16:05:16.528Z"
+}

@@ -205,65 +205,65 @@ describe('Chinese interface', () => {
 });
 
 /**
- * Direction A of the modern-ui voice redesign (vault plan
- * suara-2026-09-24-feature-port-modern-ui-voice): motion only where something is happening.
+ * The owner's taste-lab picks, rounds 1 and 2 (vault plan
+ * suara-2026-09-25-feature-apply-taste-lab-picks): a quiet home, a voice pill while listening,
+ * a grey outline while searching, the best answer first, and a sheet for yes and no.
  */
 describe('Motion and state', () => {
-	const home = (): FlowState => ({ phase: 'home', view: 'grid', greeting: false });
+	const home = (): FlowState => ({ phase: 'home', view: 'single', greeting: false });
+	const e = aProcess();
+	const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
 
-	it('draws no waveform and no status chip while nothing is listening', () => {
+	it('keeps home to the microphone, with the topics behind one button', () => {
 		const html = render(home());
 		expect(html).not.toContain('k-wave-canvas');
 		expect(html).not.toContain('k-chip');
-		expect(html).toMatch(/class="mx-level"[^>]*data-active="false"/);
+		expect(html).toMatch(/<details class="k-more"><summary[^>]*>[^<]*Or pick a topic/);
+		expect(html.match(/data-topic=/g)).toHaveLength(6);
 	});
 
-	it('rings the microphone with the level while listening, and keeps the waveform', () => {
-		const html = render({ phase: 'listening', view: 'grid' }, { level: 0.5 });
-		expect(html).toMatch(/class="mx-level"[^>]*data-active="true"/);
-		expect(html).toContain('k-wave-canvas');
+	it('listens in a voice pill: a stop button beside a live waveform, no red button', () => {
+		const html = render({ phase: 'listening', view: 'single' }, { level: 0.5 });
+		expect(html).toMatch(/class="k-voice"[\s\S]*aria-label="Tap when done"[\s\S]*k-wave-canvas/);
+		expect(html).not.toContain('class="k-orb"');
+		expect(html).not.toContain('mx-level');
 	});
 
-	it('runs a bolt round a placeholder card while it finds answers, instead of a dead button', () => {
-		const html = render({ phase: 'searching', view: 'grid', topic: null });
+	it('shows a pulsing grey outline where the answer will be, and no light', () => {
+		const html = render({ phase: 'searching', view: 'single', topic: null });
 		expect(html).toContain('Finding answers');
-		expect(html).toMatch(/class="mx-edge mx-bolt[^"]*"[^>]*data-state="run"/);
+		expect(html).toContain('k-skeleton');
+		expect(html).not.toContain('mx-bolt');
 		expect(html).not.toContain('class="k-orb"');
 	});
 
-	it('ticks the best match and lights its edge once as it lands', () => {
-		const html = render(results(result()));
+	it('leads with the best answer: ticked, and with its summary showing', () => {
+		const html = render(results(result(), null, 'single'));
 		expect(html.match(/Best match/g)).toHaveLength(1);
 		expect(html.match(/class="mx-mark/g)).toHaveLength(1);
-		expect(html).toMatch(/class="mx-edge mx-bolt[^"]*"[^>]*data-state="land"/);
-	});
-
-	it('gives a weak match no tick and no light', () => {
-		const html = render(results(result({ fit: 'weak' })));
-		expect(html).not.toContain('mx-mark');
+		expect(html).toContain(entries[0]!.summary.text);
+		expect(html).not.toContain(entries[1]!.summary.text);
 		expect(html).not.toContain('mx-bolt');
 	});
 
-	it('fills yes and no from the finger', () => {
-		const e = aProcess();
-		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
-		const html = render({ phase: 'confirm', view: 'grid', entry: e, back });
-		expect(html.match(/mx-fill-host/g)).toHaveLength(2);
+	it('gives a weak match no tick', () => {
+		expect(render(results(result({ fit: 'weak' })))).not.toContain('mx-mark');
+	});
+
+	it('asks yes or no in a sheet: one black button, and a plain "Not this"', () => {
+		const html = render({ phase: 'confirm', view: 'single', entry: e, back });
+		expect(html).toMatch(/class="k-sheet"[\s\S]*Start these steps\?[\s\S]*class="k-btn k-btn-primary confirm-yes"[\s\S]*class="k-link confirm-no"/);
+		expect(html).not.toContain('mx-fill-host');
 	});
 
 	it('shows how far through the steps they are', () => {
-		const e = aProcess();
-		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
-		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
+		const html = render({ phase: 'steps', view: 'single', entry: e, index: 1, back });
 		expect(html).toContain('role="progressbar"');
 		expect(html).toContain(`aria-valuenow="${Math.round((2 / e.steps!.length) * 100)}"`);
 	});
 
 	it('ends with one large tick', () => {
-		const e = aProcess();
-		const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
-		const html = render({ phase: 'done', view: 'grid', entry: e, back });
-		expect(html).toContain('--mx-size:80px');
+		expect(render({ phase: 'done', view: 'single', entry: e, back })).toContain('--mx-size:80px');
 	});
 });
 
@@ -276,6 +276,10 @@ describe('Colour', () => {
 		return 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
 	};
 	const contrast = (a: string, b: string) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+
+	it('uses Apple blue for ticks and progress, in both schemes', () => {
+		expect(token('light')).toEqual(['#007aff', '#007aff']);
+	});
 
 	it('puts white text on yes and on no at 4.5:1 or better, light and dark', () => {
 		for (const name of ['ready', 'live']) {
