@@ -1,0 +1,298 @@
+{
+  "tripcom": {
+    "question": "How do I book a hotel on Trip.com and earn its rewards?",
+    "model": "gpt-6-luna",
+    "ms": 14218,
+    "searches": 2,
+    "guide": {
+      "fit": "good",
+      "title_short": "Book & earn",
+      "title_full": "Book a Trip.com hotel and earn Trip Coins",
+      "summary": "Search and book your stay while signed in; eligible hotel bookings earn Trip Coins after you check out.",
+      "steps": [
+        {
+          "name": "Sign in or join",
+          "text": "Open Trip.com and sign in to your account, or join as a member. Members can earn Trip Coins from eligible hotel bookings made on Trip.com.",
+          "confirm_label": "I’m signed in",
+          "source_urls": [
+            "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"
+          ]
+        },
+        {
+          "name": "Search for a hotel",
+          "text": "Choose Hotels & Homes. Enter your destination, check-in and check-out dates, and the number of guests, then search.",
+          "confirm_label": "I see hotels",
+          "source_urls": [
+            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"
+          ]
+        },
+        {
+          "name": "Choose a room",
+          "text": "Select a hotel and room. Check the room’s price, payment terms, and cancellation rules before you continue.",
+          "confirm_label": "I chose a room",
+          "source_urls": [
+            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html",
+            "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"
+          ]
+        },
+        {
+          "name": "Enter details and book",
+          "text": "Enter the guest details requested, choose a payment method, and complete the booking. Check the confirmation for your booking details.",
+          "confirm_label": "Booking confirmed",
+          "source_urls": [
+            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"
+          ]
+        },
+        {
+          "name": "Complete your stay",
+          "text": "Stay at the hotel to qualify for booking Trip Coins. The amount depends on your final payment and member tier; Trip.com says hotel booking coins usually arrive 2–6 weeks after your stay.",
+          "confirm_label": "I’ve checked out",
+          "source_urls": [
+            "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions",
+            "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html",
+          "title": "How can I book a hotel through Trip.com?",
+          "site": "Trip.com"
+        },
+        {
+          "url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions",
+          "title": "Trip.com loyalty program",
+          "site": "Trip.com"
+        },
+        {
+          "url": "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG",
+          "title": "Trip.com Terms and Conditions",
+          "site": "Trip.com"
+        },
+        {
+          "url": "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us",
+          "title": "Trip.com loyalty program",
+          "site": "Trip.com"
+        }
+      ],
+      "cautions": [
+        "Trip Coins are not guaranteed for every booking. Trip.com says the exact reward is shown after payment, and some bookings, promotions, or fully cancelled stays may not earn coins."
+      ]
+    }
+  },
+  "paynow": {
+    "question": "How do I set up PayNow on DBS digibank and send money?",
+    "model": "gpt-6-luna",
+    "ms": 12806,
+    "searches": 1,
+    "guide": {
+      "fit": "good",
+      "title_short": "Set up PayNow",
+      "title_full": "Set up PayNow and send money in DBS digibank",
+      "summary": "Register your mobile number to receive PayNow, then use the recipient’s mobile number to send money.",
+      "steps": [
+        {
+          "name": "Open PayNow",
+          "text": "Log in to the DBS digibank app, tap Pay & Transfer at the bottom, then tap PayNow.",
+          "confirm_label": "PayNow is open",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
+          ]
+        },
+        {
+          "name": "Start registration",
+          "text": "Tap PayNow Profile, then tap Register your mobile number.",
+          "confirm_label": "Registration started",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
+          ]
+        },
+        {
+          "name": "Choose your account",
+          "text": "Select the DBS/POSB account you want linked to your mobile number, then tap Next.",
+          "confirm_label": "Account selected",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
+          ]
+        },
+        {
+          "name": "Finish registration",
+          "text": "Check the details shown and tap Register now to complete registration.",
+          "confirm_label": "PayNow registered",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
+          ]
+        },
+        {
+          "name": "Choose mobile transfer",
+          "text": "In PayNow, select the option to send to a mobile number. If asked to log in, sign in with Face ID, Touch ID, or your digibank User ID and PIN.",
+          "confirm_label": "Mobile transfer selected",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
+            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
+          ]
+        },
+        {
+          "name": "Enter their number",
+          "text": "Enter the recipient’s mobile number, then tap Next.",
+          "confirm_label": "Number entered",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow"
+          ]
+        },
+        {
+          "name": "Enter the amount",
+          "text": "Enter the amount to send, then tap Next.",
+          "confirm_label": "Amount entered",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
+            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
+          ]
+        },
+        {
+          "name": "Check and send",
+          "text": "Check the recipient and transfer details carefully. If they are correct, tap Transfer now.",
+          "confirm_label": "Transfer sent",
+          "source_urls": [
+            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
+            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html",
+          "title": "Apply for PayNow",
+          "site": "DBS Singapore"
+        },
+        {
+          "url": "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
+          "title": "PayNow with DBS",
+          "site": "DBS Singapore"
+        },
+        {
+          "url": "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html",
+          "title": "Transfer Funds using PayNow",
+          "site": "DBS Singapore"
+        }
+      ],
+      "cautions": [
+        "The recipient must have registered that mobile number for PayNow. The app may show only selected letters of the recipient’s name, so check carefully that it is the right person before sending."
+      ]
+    }
+  },
+  "ibkr": {
+    "question": "How do I deposit money to IBKR from my Singapore bank account?",
+    "model": "gpt-6-luna",
+    "ms": 13044,
+    "searches": 3,
+    "guide": {
+      "fit": "good",
+      "title_short": "Deposit to IBKR",
+      "title_full": "Deposit money from a Singapore bank to IBKR",
+      "summary": "Create a deposit notification in IBKR, then send the money from your bank using the exact instructions IBKR gives you.",
+      "steps": [
+        {
+          "name": "Start a deposit in IBKR",
+          "text": "Sign in to Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.",
+          "confirm_label": "I opened deposits",
+          "source_urls": [
+            "https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm"
+          ]
+        },
+        {
+          "name": "Choose bank wire and currency",
+          "text": "Choose a new deposit method, select Bank Wire, and select the currency you want to send, such as SGD if available for your account.",
+          "confirm_label": "I chose wire",
+          "source_urls": [
+            "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm",
+            "https://www.interactivebrokers.com.sg/en/index.php?f=48276"
+          ]
+        },
+        {
+          "name": "Enter the deposit details",
+          "text": "Enter your bank’s name and the amount you plan to send. Select Get Wire Instructions and keep the instructions shown for this deposit.",
+          "confirm_label": "I have instructions",
+          "source_urls": [
+            "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm"
+          ]
+        },
+        {
+          "name": "Make the bank transfer",
+          "text": "Use your Singapore bank’s app or website, or contact your bank, to send the money using IBKR’s instructions. Match the currency and include any reference details IBKR provides.",
+          "confirm_label": "I sent the money",
+          "source_urls": [
+            "https://www.interactivebrokers.com.sg/en/index.php?f=48276"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm",
+          "title": "Deposit Funds",
+          "site": "IBKR Guides"
+        },
+        {
+          "url": "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm",
+          "title": "Enter Wire Deposit",
+          "site": "IBKR Guides"
+        },
+        {
+          "url": "https://www.interactivebrokers.com.sg/en/index.php?f=48276",
+          "title": "Fund Your Account",
+          "site": "Interactive Brokers Singapore"
+        }
+      ],
+      "cautions": [
+        "The deposit notification only tells IBKR to expect the money; it does not move money by itself.",
+        "IBKR’s bank details depend on the currency and account. Always use the instructions generated in your own Client Portal; do not reuse old details. Your bank may charge a transfer fee.",
+        "Send from a bank account in your own name. IBKR says third-party deposits are generally discouraged and may be rejected."
+      ]
+    }
+  },
+  "coinbase": {
+    "question": "How can I buy bitcoin on Coinbase?",
+    "model": "gpt-6-luna",
+    "ms": 7314,
+    "searches": 1,
+    "guide": {
+      "fit": "good",
+      "title_short": "Buy Bitcoin",
+      "title_full": "Buy Bitcoin on Coinbase",
+      "summary": "In the Coinbase app, choose Bitcoin, enter an amount, review the order and confirm the purchase.",
+      "steps": [
+        {
+          "name": "Choose Bitcoin",
+          "text": "Open the Coinbase app, tap “Buy & sell,” then “Buy,” and select Bitcoin (BTC).",
+          "confirm_label": "Bitcoin selected",
+          "source_urls": [
+            "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"
+          ]
+        },
+        {
+          "name": "Review and buy",
+          "text": "Enter the amount, tap “Review order,” check the purchase details and payment method, then tap “Buy now” to complete the purchase.",
+          "confirm_label": "Purchase complete",
+          "source_urls": [
+            "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency",
+          "title": "How do I buy cryptocurrency?",
+          "site": "Coinbase Help"
+        },
+        {
+          "url": "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac",
+          "title": "Add and verify a payment method - APAC",
+          "site": "Coinbase Help"
+        }
+      ],
+      "cautions": [
+        "You need a verified payment method. Coinbase lists debit cards as available for purchases by Singapore customers; Singapore-issued credit or charge cards are limited to verified accredited investors. Check the order preview for the payment method and purchase details before confirming."
+      ]
+    }
+  }
+}

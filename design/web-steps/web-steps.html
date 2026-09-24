@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara — steps from the web (mockup)</title>
+<!--
+  Screens-first mockup for vault plan suara-2026-09-25-feature-web-steps. Not wired to anything.
+  The guides are real: gpt-6-luna with web_search, run by scripts/kb/spike-web-steps.mjs
+  (fixtures.json, inlined below). Styled to the live app (taste-lab rounds 1 and 2).
+    web-steps.html?state=<name>     one state (see STATES)
+    web-steps.html?canvas=1         all states side by side
+-->
+<style>
+@font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+:root { --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7; --surface: #fff; --light: #007aff; --skeleton: #ebebeb;
+  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%); --r: 1.25rem; }
+* { box-sizing: border-box; margin: 0; }
+body { font-family: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+.app { width: 390px; min-height: 844px; position: relative; overflow: hidden; background: #fff; }
+.bar { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
+.mk { width: 44px; height: 44px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
+.nm { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-right: auto; }
+.pill { height: 48px; padding: 0 16px; border-radius: 999px; background: var(--subtle); border: 1px solid var(--line); display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; }
+.page { padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 16px; }
+h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.03em; text-wrap: balance; }
+.lead { font-size: 19px; color: var(--muted); line-height: 1.45; }
+.said { font-size: 17px; color: var(--muted); padding: 14px 18px; border-radius: var(--r); border: 1px solid var(--line); }
+.said b { color: var(--ink); font-weight: 600; }
+.card { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 10px; }
+.badge { display: inline-flex; align-items: center; gap: 7px; align-self: start; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--subtle); font-size: 15px; font-weight: 700; color: var(--ink); width: max-content; }
+.badge svg { width: 18px; height: 18px; }
+.title { font-size: 26px; font-weight: 700; letter-spacing: -.02em; line-height: 1.18; }
+.sum { font-size: 18px; color: var(--muted); line-height: 1.45; }
+.meta { font-size: 16px; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 600; }
+.btn { height: 72px; border-radius: 999px; border: 0; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 21px; font-weight: 600; width: 100%; }
+.btn.quiet { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line-strong); height: 60px; font-size: 19px; }
+.btn.yes { background: #1f7a36; }
+.link { background: none; border: 0; font-size: 19px; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; padding: 12px; }
+.note { display: flex; gap: 12px; padding: 16px 18px; border-radius: var(--r); background: #fff8e6; border: 1px solid #f0d9a0; font-size: 17px; line-height: 1.45; color: #5c3d00; }
+.note svg { flex: none; width: 22px; height: 22px; margin-top: 2px; }
+.sources { display: grid; gap: 0; border-radius: var(--r); border: 1px solid var(--line); overflow: hidden; }
+.sources .h { padding: 12px 18px; font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: .02em; background: var(--subtle); }
+.src { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); }
+.src b { font-size: 16px; font-weight: 600; }
+.src span { font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* searching the web: what is happening, not a blank wait */
+.stages { display: grid; gap: 14px; padding: 4px 2px; }
+.stage { display: flex; align-items: center; gap: 12px; font-size: 19px; color: var(--muted); }
+.stage i { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; box-shadow: inset 0 0 0 2px var(--line-strong); }
+.stage[data-s="done"] { color: var(--ink); }
+.stage[data-s="done"] i { background: var(--light); box-shadow: none; }
+.stage[data-s="done"] i::after { content: ''; width: 10px; height: 6px; border: solid #fff; border-width: 0 0 2.6px 2.6px; transform: translateY(-1px) rotate(-45deg); }
+.stage[data-s="now"] { color: var(--ink); font-weight: 600; }
+.stage[data-s="now"] i { box-shadow: inset 0 0 0 2px var(--ink); }
+.stage[data-s="now"] i::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); animation: pulse 1.2s ease-in-out infinite; }
+.skel { display: grid; gap: 12px; padding: 20px; border-radius: var(--r); background: #fff; box-shadow: var(--shadow); }
+.skel i { display: block; height: 14px; border-radius: 4px; background: var(--skeleton); animation: pulse 1.4s ease-in-out infinite; }
+.skel i:nth-child(1) { width: 34%; } .skel i:nth-child(2) { width: 86%; height: 22px; } .skel i:nth-child(3) { width: 64%; }
+@keyframes pulse { 50% { opacity: .45; } }
+.small { font-size: 16px; color: var(--muted); }
+
+/* steps: any number, the current one open, the rest compact */
+.prog { display: grid; gap: 10px; }
+.prog .lbl { font-size: 16px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--light); border-radius: 3px; }
+.row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--r); background: #fff; border: 1px solid var(--line); font-size: 18px; color: var(--muted); }
+.row .n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--subtle); font-weight: 700; font-size: 16px; color: var(--ink); }
+.row.done .n { background: var(--light); color: #fff; }
+.row.more { justify-content: space-between; font-weight: 600; color: var(--ink); background: var(--subtle); border-color: transparent; }
+.now { border: 2px solid var(--ink); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; background: #fff; }
+.now .hd { display: flex; align-items: center; gap: 14px; }
+.now .n { width: 40px; height: 40px; border-radius: 50%; background: #000; color: #fff; display: grid; place-items: center; font-weight: 700; }
+.now .nm2 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+.now p { font-size: 20px; line-height: 1.5; }
+.now .from { font-size: 15px; color: var(--muted); text-decoration: underline; text-underline-offset: .2em; }
+
+/* confirm sheet */
+.scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 32%); }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 32px 32px 0 0; padding: 30px 24px 26px; display: grid; gap: 12px; text-align: center; box-shadow: 0 8px 28px rgb(0 0 0 / 28%); }
+.sheet h2 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+
+/* canvas */
+.canvas { display: flex; flex-wrap: wrap; gap: 28px; padding: 28px; background: #dcdde3; width: max-content; max-width: 2100px; }
+.art { display: grid; gap: 8px; }
+.art > span { font: 600 15px system-ui; color: #3a3a3c; }
+.art .frame { width: 390px; height: 844px; overflow: hidden; border-radius: 28px; box-shadow: 0 0 0 6px #0d0d10; background: #fff; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>const FX = {"tripcom": {"question": "How do I book a hotel on Trip.com and earn its rewards?", "model": "gpt-6-luna", "ms": 14218, "searches": 2, "guide": {"fit": "good", "title_short": "Book & earn", "title_full": "Book a Trip.com hotel and earn Trip Coins", "summary": "Search and book your stay while signed in; eligible hotel bookings earn Trip Coins after you check out.", "steps": [{"name": "Sign in or join", "text": "Open Trip.com and sign in to your account, or join as a member. Members can earn Trip Coins from eligible hotel bookings made on Trip.com.", "confirm_label": "I’m signed in", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}, {"name": "Search for a hotel", "text": "Choose Hotels & Homes. Enter your destination, check-in and check-out dates, and the number of guests, then search.", "confirm_label": "I see hotels", "source_urls": ["https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"]}, {"name": "Choose a room", "text": "Select a hotel and room. Check the room’s price, payment terms, and cancellation rules before you continue.", "confirm_label": "I chose a room", "source_urls": ["https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html", "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"]}, {"name": "Enter details and book", "text": "Enter the guest details requested, choose a payment method, and complete the booking. Check the confirmation for your booking details.", "confirm_label": "Booking confirmed", "source_urls": ["https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"]}, {"name": "Complete your stay", "text": "Stay at the hotel to qualify for booking Trip Coins. The amount depends on your final payment and member tier; Trip.com says hotel booking coins usually arrive 2–6 weeks after your stay.", "confirm_label": "I’ve checked out", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions", "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us"]}], "sources": [{"url": "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html", "title": "How can I book a hotel through Trip.com?", "site": "Trip.com"}, {"url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions", "title": "Trip.com loyalty program", "site": "Trip.com"}, {"url": "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG", "title": "Trip.com Terms and Conditions", "site": "Trip.com"}, {"url": "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us", "title": "Trip.com loyalty program", "site": "Trip.com"}], "cautions": ["Trip Coins are not guaranteed for every booking. Trip.com says the exact reward is shown after payment, and some bookings, promotions, or fully cancelled stays may not earn coins."]}}, "paynow": {"question": "How do I set up PayNow on DBS digibank and send money?", "model": "gpt-6-luna", "ms": 12806, "searches": 1, "guide": {"fit": "good", "title_short": "Set up PayNow", "title_full": "Set up PayNow and send money in DBS digibank", "summary": "Register your mobile number to receive PayNow, then use the recipient’s mobile number to send money.", "steps": [{"name": "Open PayNow", "text": "Log in to the DBS digibank app, tap Pay & Transfer at the bottom, then tap PayNow.", "confirm_label": "PayNow is open", "source_urls": ["https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"]}, {"name": "Start registration", "text": "Tap PayNow Profile, then tap Register your mobile number.", "confirm_label": "Registration started", "source_urls": ["https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"]}, {"name": "Choose your account", "text": "Select the DBS/POSB account you want linked to your mobile number, then tap Next.", "confirm_label": "Account selected", "source_urls": ["https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"]}, {"name": "Finish registration", "text": "Check the details shown and tap Register now to complete registration.", "confirm_label": "PayNow registered", "source_urls": ["https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"]}, {"name": "Choose mobile transfer", "text": "In PayNow, select the option to send to a mobile number. If asked to log in, sign in with Face ID, Touch ID, or your digibank User ID and PIN.", "confirm_label": "Mobile transfer selected", "source_urls": ["https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow", "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"]}, {"name": "Enter their number", "text": "Enter the recipient’s mobile number, then tap Next.", "confirm_label": "Number entered", "source_urls": ["https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow"]}, {"name": "Enter the amount", "text": "Enter the amount to send, then tap Next.", "confirm_label": "Amount entered", "source_urls": ["https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow", "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"]}, {"name": "Check and send", "text": "Check the recipient and transfer details carefully. If they are correct, tap Transfer now.", "confirm_label": "Transfer sent", "source_urls": ["https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow", "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"]}], "sources": [{"url": "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html", "title": "Apply for PayNow", "site": "DBS Singapore"}, {"url": "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow", "title": "PayNow with DBS", "site": "DBS Singapore"}, {"url": "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html", "title": "Transfer Funds using PayNow", "site": "DBS Singapore"}], "cautions": ["The recipient must have registered that mobile number for PayNow. The app may show only selected letters of the recipient’s name, so check carefully that it is the right person before sending."]}}, "ibkr": {"question": "How do I deposit money to IBKR from my Singapore bank account?", "model": "gpt-6-luna", "ms": 13044, "searches": 3, "guide": {"fit": "good", "title_short": "Deposit to IBKR", "title_full": "Deposit money from a Singapore bank to IBKR", "summary": "Create a deposit notification in IBKR, then send the money from your bank using the exact instructions IBKR gives you.", "steps": [{"name": "Start a deposit in IBKR", "text": "Sign in to Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.", "confirm_label": "I opened deposits", "source_urls": ["https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm"]}, {"name": "Choose bank wire and currency", "text": "Choose a new deposit method, select Bank Wire, and select the currency you want to send, such as SGD if available for your account.", "confirm_label": "I chose wire", "source_urls": ["https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}, {"name": "Enter the deposit details", "text": "Enter your bank’s name and the amount you plan to send. Select Get Wire Instructions and keep the instructions shown for this deposit.", "confirm_label": "I have instructions", "source_urls": ["https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm"]}, {"name": "Make the bank transfer", "text": "Use your Singapore bank’s app or website, or contact your bank, to send the money using IBKR’s instructions. Match the currency and include any reference details IBKR provides.", "confirm_label": "I sent the money", "source_urls": ["https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}], "sources": [{"url": "https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm", "title": "Deposit Funds", "site": "IBKR Guides"}, {"url": "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm", "title": "Enter Wire Deposit", "site": "IBKR Guides"}, {"url": "https://www.interactivebrokers.com.sg/en/index.php?f=48276", "title": "Fund Your Account", "site": "Interactive Brokers Singapore"}], "cautions": ["The deposit notification only tells IBKR to expect the money; it does not move money by itself.", "IBKR’s bank details depend on the currency and account. Always use the instructions generated in your own Client Portal; do not reuse old details. Your bank may charge a transfer fee.", "Send from a bank account in your own name. IBKR says third-party deposits are generally discouraged and may be rejected."]}}, "coinbase": {"question": "How can I buy bitcoin on Coinbase?", "model": "gpt-6-luna", "ms": 7314, "searches": 1, "guide": {"fit": "good", "title_short": "Buy Bitcoin", "title_full": "Buy Bitcoin on Coinbase", "summary": "In the Coinbase app, choose Bitcoin, enter an amount, review the order and confirm the purchase.", "steps": [{"name": "Choose Bitcoin", "text": "Open the Coinbase app, tap “Buy & sell,” then “Buy,” and select Bitcoin (BTC).", "confirm_label": "Bitcoin selected", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}, {"name": "Review and buy", "text": "Enter the amount, tap “Review order,” check the purchase details and payment method, then tap “Buy now” to complete the purchase.", "confirm_label": "Purchase complete", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}], "sources": [{"url": "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency", "title": "How do I buy cryptocurrency?", "site": "Coinbase Help"}, {"url": "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac", "title": "Add and verify a payment method - APAC", "site": "Coinbase Help"}], "cautions": ["You need a verified payment method. Coinbase lists debit cards as available for purchases by Singapore customers; Singapore-issued credit or charge cards are limited to verified accredited investors. Check the order preview for the payment method and purchase details before confirming."]}}};</script>
+<script>
+const I = {
+  wave: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/></svg>',
+  find: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>',
+  chev: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  back: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+  tick: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+};
+const bar = `<header class="bar"><span class="mk">${I.wave}</span><span class="nm">Suara</span><span class="pill">${I.find}Find</span><span class="pill">English</span></header>`;
+const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const siteOf = (u) => (Object.values(FX).flatMap((f) => f.guide.sources).find((s) => s.url === u) || { site: new URL(u).hostname });
+const sitesLine = (g) => [...new Set(g.sources.map((s) => s.site))].join(', ');
+
+function searching(stage) {
+  const st = (i) => (i < stage ? 'done' : i === stage ? 'now' : 'todo');
+  return `<div class="said">You said <b>${esc(FX.tripcom.question)}</b></div>
+    <h1>Searching the web</h1>
+    <div class="stages">
+      <div class="stage" data-s="${st(0)}"><i></i>Searching trip.com</div>
+      <div class="stage" data-s="${st(1)}"><i></i>Reading 4 pages</div>
+      <div class="stage" data-s="${st(2)}"><i></i>Writing your steps</div>
+    </div>
+    <div class="skel"><i></i><i></i><i></i></div>
+    <p class="small">This usually takes about 15 seconds.</p>`;
+}
+function result(key) {
+  const f = FX[key], g = f.guide;
+  return `<div class="said">You said <b>${esc(f.question)}</b></div>
+    <article class="card">
+      <span class="badge">${I.globe}From the web</span>
+      <p class="title">${esc(g.title_full)}</p>
+      <p class="sum">${esc(g.summary)}</p>
+      <p class="meta"><b>${g.steps.length} steps</b> · ${esc(sitesLine(g))}</p>
+      <button class="btn">Start guide</button>
+    </article>
+    ${g.cautions.length ? `<div class="note">${I.info}<div style="display:grid;gap:8px">${g.cautions.slice(0, 3).map((c) => `<span>${esc(c)}</span>`).join('')}</div></div>` : ''}
+    <div class="sources"><div class="h">WHERE THIS IS FROM · ${g.sources.length} PAGES</div>
+      ${g.sources.map((s) => `<div class="src"><b>${esc(s.site)}</b><span>${esc(s.title)}</span></div>`).join('')}</div>
+    <p class="small">Found on the web, not an official government answer. Check the page before you pay or sign up.</p>`;
+}
+function confirm(key) {
+  const f = FX[key], g = f.guide;
+  return result(key) + `<div class="scrim"></div><section class="sheet"><h2>Start these ${g.steps.length} steps?</h2>
+    <p class="lead">You confirm each one. You can stop at any time.</p><button class="btn">Yes, start</button><button class="link">Not this</button></section>`;
+}
+function steps(key, i) {
+  const g = FX[key].guide, n = g.steps.length, s = g.steps[i];
+  const doneRow = i ? `<div class="row done"><span class="n">${I.tick}</span>${i === 1 ? esc(g.steps[0].name) : `${i} steps done`}</div>` : '';
+  const upcoming = g.steps.slice(i + 1, i + 3).map((x, k) => `<div class="row"><span class="n">${i + 2 + k}</span>${esc(x.name)}</div>`).join('');
+  const rest = n - (i + 3);
+  const src = siteOf(s.source_urls[0]);
+  return `<button class="link" style="justify-self:start;padding:0;text-decoration:none;display:flex;gap:6px;align-items:center">${I.back}Answer</button>
+    <div class="prog"><span class="lbl">Step ${i + 1} of ${n}</span><div class="track"><i style="width:${((i + 1) / n) * 100}%"></i></div></div>
+    <h1 style="font-size:30px">${esc(g.title_short)}</h1>
+    ${doneRow}
+    <div class="now"><div class="hd"><span class="n">${i + 1}</span><span class="nm2">${esc(s.name)}</span></div>
+      <p>${esc(s.text)}</p><span class="from">From ${esc(src.site)} · ${esc(src.title || '')}</span>
+      <button class="btn yes">${I.tick}${esc(s.confirm_label)}</button><button class="btn quiet">Read again</button></div>
+    ${upcoming}
+    ${rest > 0 ? `<div class="row more"><span>${rest} more ${rest === 1 ? 'step' : 'steps'}</span>${I.chev}</div>` : ''}`;
+}
+function partial() {
+  const g = FX.paynow.guide;
+  return `<div class="said">You said <b>How do I set up the Singpass app on my new phone?</b></div>
+    <article class="card"><span class="badge">${I.globe}From the web</span><p class="title">Set up Singpass on a new phone</p>
+      <p class="sum">Download the app, sign in, then move your Singpass from your old phone.</p><p class="meta"><b>1 step</b> · ask.gov.sg</p>
+      <button class="btn">Start guide</button></article>
+    <div class="note">${I.info}<span>I could only check 1 of the 4 steps against the pages I found, so I have left the other 3 out. Ask again, or look on ask.gov.sg.</span></div>`;
+}
+function none() {
+  return `<div class="said">You said <b>How do I get free hotel upgrades with my senior card?</b></div>
+    <h1>I could not find a reliable answer</h1>
+    <p class="lead">The pages I found did not agree, so I will not guess.</p>
+    <button class="btn">Ask again</button>`;
+}
+const SCREENS = {
+  'searching-1': () => searching(1),
+  'result-tripcom': () => result('tripcom'),
+  'result-paynow': () => result('paynow'),
+  'confirm-paynow': () => confirm('paynow'),
+  'step-paynow-1': () => steps('paynow', 0),
+  'step-paynow-4': () => steps('paynow', 3),
+  'step-tripcom-5': () => steps('tripcom', 4),
+  'result-ibkr': () => result('ibkr'),
+  'step-ibkr-2': () => steps('ibkr', 1),
+  'result-coinbase': () => result('coinbase'),
+  'step-coinbase-2': () => steps('coinbase', 1),
+  'partial': partial,
+  'none': none,
+};
+window.STATES = Object.keys(SCREENS);
+const q = new URLSearchParams(location.search);
+const app = (name) => `<div class="app">${bar}<main class="page">${SCREENS[name]()}</main></div>`;
+if (q.get('canvas')) {
+  document.getElementById('root').innerHTML = `<div class="canvas">${window.STATES.map((s) => `<div class="art"><span>${s}</span><div class="frame">${app(s)}</div></div>`).join('')}</div>`;
+} else {
+  document.getElementById('root').innerHTML = app(q.get('state') || 'result-tripcom');
+}
+</script>
+</body>
+</html>
