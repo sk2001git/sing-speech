@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preference lab</title>
+<style>
+:root{
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --bg:#FFFFFF;--bg-2:#F6F7F9;--line:#E8E9ED;--ink:#121316;--ink-2:#62656E;--ink-3:#9A9DA6;--focus:#2F5BEA;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}}
+:root[data-theme="dark"]{--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+kbd{font:inherit;font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-left:6px}
+@media (hover:none){kbd{display:none}}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.brand{font-weight:600;font-size:15px}
+.tabs,.seg{display:flex;gap:2px;background:var(--bg-2);padding:3px;border-radius:10px}
+.tabs button,.seg button{padding:6px 11px;border-radius:8px;color:var(--ink-2);font-weight:500;font-size:13px}
+.tabs button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06),0 0 0 1px var(--line)}
+.meta{margin-left:auto;display:flex;gap:14px;color:var(--ink-3);font-size:12.5px;font-variant-numeric:tabular-nums}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.scene b{font-weight:600;font-size:17px;letter-spacing:-.015em}
+.scene span{color:var(--ink-3);font-size:13px;margin-left:8px}
+.hint{color:var(--ink-3);font-size:12.5px;margin:-4px 0 14px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;transition:opacity .22s}
+.duel.leaving{opacity:0}
+.side{display:grid;gap:10px}
+.pick{height:44px;border-radius:12px;background:var(--bg-2);font-weight:500;transition:background-color .2s,transform .12s}
+.pick:hover{background:color-mix(in srgb,var(--ink) 7%,var(--bg))}
+.pick:active{transform:scale(.98)}
+.pick.chosen{background:var(--ink);color:var(--bg)}
+.row2{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.row2 button{padding:8px 14px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:13px}
+.row2 button:hover{background:var(--bg-2);color:var(--ink)}
+.after{display:grid;justify-items:center;gap:8px;margin-top:14px;min-height:64px}
+.learned{color:var(--ink-2);font-size:13px;text-align:center}
+.why{display:none;width:min(440px,100%);height:38px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:13px}
+.why.show{display:block}
+@media (max-width:720px){.duel{grid-template-columns:1fr}.meta span:last-child{display:none}}
+.step{color:var(--ink-2);font-size:13px;font-weight:500}
+.board{display:grid;grid-template-columns:repeat(var(--k,3),minmax(0,1fr));gap:16px;transition:opacity .22s}
+.board.leaving{opacity:0}
+.card{display:grid;gap:10px;align-content:start;border-radius:22px;transition:opacity .2s}
+.card .stage{min-height:260px;transition:box-shadow .2s}
+.card.best .stage{box-shadow:0 0 0 2px var(--ink)}
+.card.worst{opacity:.45}
+.card.done:not(.best):not(.worst){opacity:.8}
+.cap{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:13px;padding:0 4px}
+.cap b{font-weight:600}
+.cap a,.cap i{color:var(--ink-3);font-style:normal;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap a{text-decoration:underline;text-underline-offset:2px}
+.card .pick.worst-mode{background:transparent;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2)}
+.card.best .pick{background:var(--ink);color:var(--bg)}
+@media (max-width:720px){.board{grid-template-columns:1fr}.card .stage{min-height:220px}.top-in{flex-wrap:wrap;gap:10px}.meta{margin-left:0}}
+.head2{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head2 h1{font-size:24px;font-weight:600;letter-spacing:-.02em}
+.head2 p{color:var(--ink-2);margin-top:4px;max-width:60ch;line-height:1.5}
+.actions{display:flex;gap:8px}
+.actions button{padding:8px 14px;border-radius:10px;background:var(--bg-2);font-weight:500;font-size:13px}
+.actions .warn{color:#D14343}
+.genes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:28px}
+.gene{background:var(--bg-2);border-radius:14px;padding:14px}
+.gene h3{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-bottom:10px;display:flex;justify-content:space-between}
+.gene h3 em{font-style:normal;color:var(--ink-3)}
+.gv{display:grid;grid-template-columns:84px 1fr 28px;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:var(--ink-2)}
+.gv.lead{color:var(--ink);font-weight:600}
+.gv .track{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.gv .track i{display:block;height:100%;background:var(--ink-3);border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.gv.lead .track i{background:var(--ink)}
+.gv em{font-style:normal;text-align:right;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sub-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.gcell{display:grid;gap:8px}.gcell .cap{font-size:12.5px;color:var(--ink-3)}
+.export{margin-top:14px;display:none}.export.show{display:block}
+.export textarea{width:100%;height:180px;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font:12px/1.5 ui-monospace,Menlo,monospace;padding:12px}
+
+/* Stage: the specimen frame. Always light so specimens are judged consistently. */
+.stage{position:relative;min-height:300px;border-radius:20px;background:#fff;color:#15171B;display:grid;place-items:center;overflow:hidden;
+  box-shadow:0 0 0 1px var(--line);font-family:var(--font);padding:20px}
+.stage.resetting>*{opacity:0;transition:opacity .18s}
+</style>
+
+<!-- ═══════════════ DOMAIN CSS: styles for specimens (rewrite per project) ═══════════════ -->
+<style id="domain-css">
+/* modern-ui 0.2.2, copied from knowledge-store/skills/modern-ui/primitives. Change the skill, then copy again. */
+/* Motion primitives. Tokens default to taste.json; override via tasteVars() or :root. */
+:root {
+  --mx-accent: #2F5BEA;
+  --mx-accent-fg: #FFFFFF;
+  --mx-light: var(--mx-accent);           /* glows and marks only: needs 3:1, not 4.5:1 */
+  --mx-ease: cubic-bezier(.2,.8,.2,1);   /* movement, pop-ins (may overshoot) */
+  --mx-draw: cubic-bezier(.2,.8,.2,1);   /* strokes, fills, exits (never overshoots) */
+  --mx-t: 1;                              /* tempo multiplier */
+  --mx-stroke: 2.4;                       /* px at any size */
+  --mx-r: 18px;                           /* panel radius */
+  --mx-rb: 14px;                          /* button radius */
+  --mx-h: 44px;                           /* button height */
+  --mx-idle: #E3E5EA;                     /* inactive track / star / step */
+}
+
+@keyframes mx-pop   { from { transform: scale(0) } to { transform: scale(1) } }
+@keyframes mx-draw  { from { stroke-dashoffset: 1 } to { stroke-dashoffset: 0 } }
+@keyframes mx-in    { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+@keyframes mx-out   { from { opacity: 1; transform: none } to { opacity: 0; transform: translateY(-6px) } }
+@keyframes mx-spin  { to { transform: rotate(360deg) } }
+@keyframes mx-shake { 20%,60% { transform: translateX(-4px) } 40%,80% { transform: translateX(4px) } }
+@keyframes mx-ripple{ 0% { opacity: 0; transform: scale(.95) } 8% { opacity: .5 } 100% { opacity: 0; transform: scale(1.9) } }
+@keyframes mx-burst { 0% { opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--mx-size) * -.45)) scale(.3) }
+                      15% { opacity: 1 }
+                      100%{ opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--mx-size) * -1)) scale(1) } }
+@keyframes mx-glowp { 0% { opacity: 0; transform: scale(.5) } 35% { opacity: .45; transform: scale(1.2) } 100% { opacity: .16; transform: scale(1.05) } }
+@keyframes mx-bob   { 0%,60%,100% { transform: none } 30% { transform: translateY(-3px) } }
+@keyframes mx-pulse { 50% { opacity: .35 } }
+
+/* ── SuccessMark ── */
+.mx-mark { --mx-delay: 0s; position: relative; display: inline-block; width: var(--mx-size); height: var(--mx-size); flex: none; vertical-align: middle; }
+.mx-mark > * { position: absolute; inset: 0; }
+.mx-mark svg { width: 100%; height: 100%; overflow: visible; }
+.mx-disc { border-radius: 50%; background: var(--mx-accent);
+  animation: mx-pop calc(var(--mx-t) * .42s) var(--mx-ease) calc(var(--mx-t) * var(--mx-delay)) both; }
+.mx-ring { transform: rotate(-90deg); }
+.mx-ring circle, .mx-tick path { fill: none; stroke-width: calc(var(--mx-stroke) * 24px / var(--mx-sizen));
+  stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.mx-ring circle { stroke: var(--mx-accent); animation: mx-draw calc(var(--mx-t) * .5s) var(--mx-draw) calc(var(--mx-t) * var(--mx-delay)) both; }
+.mx-tick path { stroke: var(--mx-tick, var(--mx-accent));
+  animation: mx-draw calc(var(--mx-t) * .34s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .2s)) both; }
+.mx-mark[data-variant="filled"] .mx-ring { display: none; }
+.mx-mark[data-variant="filled"] { --mx-tick: var(--mx-accent-fg); }
+.mx-mark[data-variant="soft"] .mx-ring { display: none; }
+.mx-mark[data-variant="soft"] .mx-disc { background: color-mix(in srgb, var(--mx-accent) 15%, #fff); }
+.mx-mark[data-variant="outline"] .mx-disc { display: none; }
+.mx-mark[data-variant="bare"] .mx-disc, .mx-mark[data-variant="bare"] .mx-ring { display: none; }
+.mx-mark[data-variant="bare"] .mx-tick { transform: scale(1.3); }
+.mx-fx { display: none; }
+.mx-mark[data-flourish="ripple"] .mx-fx-ripple { display: block; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--mx-accent); opacity: 0;
+  animation: mx-ripple calc(var(--mx-t) * .8s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .26s)) both; }
+.mx-mark[data-flourish="burst"] .mx-fx-burst { display: block; }
+.mx-fx-burst i { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: var(--mx-accent); opacity: 0;
+  animation: mx-burst calc(var(--mx-t) * .62s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .24s)) both; }
+.mx-mark[data-flourish="glow"] .mx-fx-glow { display: block; border-radius: 50%; background: var(--mx-accent); filter: blur(calc(var(--mx-size) / 4)); opacity: 0;
+  animation: mx-glowp calc(var(--mx-t) * 1.1s) var(--mx-draw) calc(var(--mx-t) * (var(--mx-delay) + .12s)) both; }
+
+/* ── MorphButton: label → spinner → mark, in place ── */
+.mx-morph-wrap { display: grid; justify-items: center; width: 100%; }
+.mx-morph { box-sizing: border-box; position: relative; display: inline-grid; grid-template-columns: minmax(0, 1fr); place-items: center; height: var(--mx-h); padding: 0 20px;
+  border: 0; border-radius: var(--mx-rb); background: var(--mx-accent); color: var(--mx-accent-fg); font: inherit; font-weight: 600;
+  white-space: nowrap; overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: width calc(var(--mx-t) * .42s) var(--mx-ease), border-radius calc(var(--mx-t) * .42s) var(--mx-ease),
+              padding calc(var(--mx-t) * .42s) var(--mx-ease), background-color .2s, transform .12s ease-out; }
+.mx-morph > * { grid-area: 1 / 1; }
+.mx-morph:active:not(:disabled) { transform: scale(.97); }
+.mx-morph:focus-visible { outline: 2px solid var(--mx-accent); outline-offset: 3px; }
+.mx-morph:disabled { cursor: default; }
+.mx-morph[data-status="pending"], .mx-morph[data-status="success"] { padding: 0; border-radius: calc(var(--mx-h) / 2); }
+.mx-morph[data-status="success"]:not([data-mark="filled"]) { background: transparent; }
+.mx-morph[data-status="error"] { animation: mx-shake .36s ease-out; }
+.mx-morph-label { transition: opacity .12s; }
+.mx-morph[data-status="pending"] .mx-morph-label, .mx-morph[data-status="success"] .mx-morph-label { opacity: 0; }
+.mx-spinner { display: inline-block; box-sizing: border-box; width: 18px; height: 18px; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor; opacity: 0; transition: opacity .15s; animation: mx-spin .7s linear infinite; }
+.mx-spinner[data-visible="true"] { opacity: 1; }
+
+/* ── SwapText ── */
+.mx-swap { display: inline-grid; }
+.mx-swap > * { grid-area: 1 / 1; }
+.mx-swap-in  { animation: mx-in calc(var(--mx-t) * .36s) var(--mx-ease) calc(var(--mx-t) * .06s) both; }
+.mx-swap-out { animation: mx-out calc(var(--mx-t) * .2s) var(--mx-draw) both; pointer-events: none; }
+
+/* ── ProgressFill ── */
+.mx-progress { height: 4px; border-radius: 2px; background: var(--mx-idle); overflow: hidden; }
+.mx-progress > i { display: block; height: 100%; background: var(--mx-accent); transform-origin: left;
+  transition: transform calc(var(--mx-t) * .5s) var(--mx-draw); }
+
+/* ── StepTracker ── */
+.mx-steps { display: flex; align-items: flex-start; }
+.mx-step { display: grid; justify-items: center; gap: 8px; min-width: 64px; font-size: 12px; text-align: center; }
+.mx-step-dot { position: relative; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--mx-idle); }
+.mx-step-dot > .mx-mark { position: absolute; inset: 0; }
+.mx-step[data-state="active"] .mx-step-dot { box-shadow: inset 0 0 0 2px var(--mx-accent); }
+.mx-step[data-state="active"] .mx-step-dot::after { content: ""; position: absolute; inset: 7px; border-radius: 50%; background: var(--mx-accent); animation: mx-pulse 1.2s ease-in-out infinite; }
+.mx-step-link { flex: 1; height: 2px; margin-top: 10px; background: var(--mx-idle); overflow: hidden; border-radius: 1px; }
+.mx-step-link > i { display: block; height: 100%; background: var(--mx-accent); transform-origin: left; transform: scaleX(0);
+  transition: transform calc(var(--mx-t) * .45s) var(--mx-draw); }
+.mx-step-link[data-done="true"] > i { transform: scaleX(1); }
+
+/* ── TypingDots ── */
+.mx-typing { display: inline-flex; gap: 4px; padding: 4px 2px; }
+.mx-typing i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .45; animation: mx-bob 1s ease-in-out infinite; }
+.mx-typing i:nth-child(2) { animation-delay: .15s; } .mx-typing i:nth-child(3) { animation-delay: .3s; }
+
+/* ── Edge light: the shared core of EdgeBolt and AiGlow ──
+   Lag-free by construction: a STATIC conic gradient on an oversized square that only
+   rotates (transform), clipped to the border by a STATIC mask. Animating the gradient
+   angle itself (@property), offset-distance or stroke-dashoffset repaints every frame;
+   this paints once. Measured by scripts/motion_cost.cjs. */
+.mx-edge { position: relative; isolation: isolate; border-radius: var(--mx-edge-r, var(--mx-r)); }
+.mx-edge > :not(.mx-edge-ring):not(.mx-edge-halo) { position: relative; z-index: 1; }
+.mx-edge-ring, .mx-edge-halo { position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  opacity: 0; transition: opacity calc(var(--mx-t) * .35s) var(--mx-draw); }
+.mx-edge-ring, .mx-edge-halo > span { overflow: hidden; container-type: size;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.mx-edge-ring { z-index: 2; padding: var(--mx-edge-w, 2px); }
+/* halo: the same light on a slightly wider ring, blurred by its parent so it falls off with
+   distance from the edge. It sits behind the (opaque) card, so only the outer half shows. */
+.mx-edge-halo { z-index: 0; filter: blur(var(--mx-edge-glow, 6px)); }
+.mx-edge-halo > span { position: absolute; inset: -2px; border-radius: inherit; padding: 5px; }
+.mx-edge-ring > i, .mx-edge-halo i { position: absolute; left: 50%; top: 50%; width: 150cqmax; aspect-ratio: 1; translate: -50% -50%;
+  background: var(--mx-edge-paint); animation: mx-spin calc(var(--mx-t) * var(--mx-edge-lap, 1.6s)) linear infinite; will-change: transform; }
+.mx-edge[data-state="run"] .mx-edge-ring { opacity: 1; }
+.mx-edge[data-state="run"] .mx-edge-halo { opacity: .7; }
+/* land: the whole border lights once, then everything fades. Pair it with a SuccessMark. */
+.mx-edge-ring::after { content: ""; position: absolute; inset: 0; background: var(--mx-light); opacity: 0; }
+.mx-edge[data-state="land"] .mx-edge-ring { opacity: 1; animation: mx-land-out calc(var(--mx-t) * .7s) var(--mx-draw) both; }
+.mx-edge[data-state="land"] .mx-edge-ring::after { animation: mx-land calc(var(--mx-t) * .7s) var(--mx-draw) both; }
+@keyframes mx-land     { 0% { opacity: 0 } 30% { opacity: 1 } 100% { opacity: 0 } }
+@keyframes mx-land-out { 0%, 45% { opacity: 1 } 100% { opacity: 0 } }
+
+/* EdgeBolt: one small light travelling the border while the card loads. */
+.mx-bolt { --mx-edge-paint: conic-gradient(transparent 0 var(--mx-bolt-tail, 300deg),
+  color-mix(in srgb, var(--mx-light) 40%, transparent) calc(var(--mx-bolt-tail, 300deg) + 30deg),
+  var(--mx-light) 356deg, color-mix(in srgb, var(--mx-light) 30%, #fff) 359deg, transparent 360deg); }
+.mx-bolt[data-twin="true"] { --mx-edge-paint: conic-gradient(transparent 0 130deg, var(--mx-light) 176deg, transparent 180deg 310deg, var(--mx-light) 356deg, transparent 360deg); }
+
+/* AiGlow: the multicolour version, for content an AI is working on. */
+.mx-glow { --mx-edge-paint: conic-gradient(transparent 0deg 110deg, #5AD1FF 160deg, #7A6BFF 210deg, #FF5FA2 260deg, #FFB547 300deg, transparent 340deg); --mx-edge-lap: 2s; }
+.mx-glow[data-state="run"] .mx-edge-halo { opacity: .6; }
+
+/* ── LevelRing: the microphone visibly hears someone ──
+   Two discs behind the child scale with loudness: the inner one follows fast, the outer
+   one trails slowly, so a spoken word leaves a short echo. Only transform changes. */
+.mx-level { position: relative; display: inline-grid; place-items: center; isolation: isolate; }
+.mx-level > :not(.mx-level-disc) { position: relative; z-index: 1; }
+.mx-level-disc { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; will-change: transform;
+  transform: scale(calc(1 + var(--mx-level, 0) * var(--mx-level-reach, .5)));
+  transition: transform calc(var(--mx-t) * 90ms) linear, opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
+.mx-level-disc[data-layer="inner"] { background: color-mix(in srgb, var(--mx-level-c, var(--mx-light)) 22%, transparent); }
+.mx-level-disc[data-layer="outer"] { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--mx-level-c, var(--mx-light)) 45%, transparent);
+  transform: scale(calc(1.06 + var(--mx-level, 0) * var(--mx-level-reach, .5) * 1.25));
+  transition: transform calc(var(--mx-t) * 420ms) var(--mx-draw), opacity calc(var(--mx-t) * .3s) var(--mx-draw); }
+.mx-level[data-active="true"] .mx-level-disc { opacity: 1; }
+
+/* ── FillFrom: a colour grows from where the finger touched until it covers the card ── */
+.mx-fill-host { position: relative; overflow: hidden; isolation: isolate; }
+.mx-fill-host > :not(.mx-fill) { position: relative; z-index: 1; transition: color calc(var(--mx-t) * .2s) var(--mx-draw) calc(var(--mx-t) * .08s); }
+.mx-fill-host[data-filled="true"] > :not(.mx-fill) { color: var(--mx-fill-fg, #fff); }
+.mx-fill { position: absolute; z-index: 0; border-radius: 50%; pointer-events: none; background: var(--mx-fill-c, var(--mx-accent));
+  transform: translate(-50%, -50%) scale(0); animation: mx-fill calc(var(--mx-t) * .46s) var(--mx-draw) both; }
+@keyframes mx-fill { to { transform: translate(-50%, -50%) scale(1) } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-mark *, .mx-swap > *, .mx-morph, .mx-progress > i, .mx-step-link > i, .mx-fill, .mx-level-disc, .mx-edge-ring, .mx-edge-halo { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  /* the edge light stops travelling but still says "working": the whole border holds a soft tint */
+  .mx-edge-ring > i, .mx-edge-halo i { animation: none; background: var(--mx-light); opacity: .5; }
+}
+
+/* Suara specimens: a phone screen per card. Only the decision under test changes between
+   the three cards on a screen; everything else is the current favourite. */
+.stage{min-height:600px;padding:14px}
+[data-tab="compare"]{display:none}
+.ph{--ground:#fff;--tint:#F4F5F7;--line:#E5E5EA;--ink:#1D1D1F;--muted:#5F5F64;--yes:#1F7A36;--no:#D70015;
+  --r:var(--s-r,18px);--rb:calc(var(--r) - 4px);
+  width:300px;height:570px;border-radius:30px;background:var(--ground);box-shadow:0 0 0 1px var(--line),0 12px 30px -18px rgb(0 0 0/35%);
+  overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:12px 16px 18px;text-align:left;color:var(--ink);
+  font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif}
+.ph *{box-sizing:border-box;margin:0}
+.ph .bar{display:flex;align-items:center;gap:8px;padding-bottom:4px}
+.ph .mark{width:30px;height:30px;border-radius:9px;background:#1D1D1F;display:grid;place-items:center;color:#fff}
+.ph .brand{font-weight:700;font-size:17px;margin-right:auto;letter-spacing:-.02em}
+.ph .pill{height:34px;padding:0 12px;border-radius:999px;background:var(--tint);display:grid;place-items:center;font-size:13px;font-weight:600}
+.ph h1{font-size:26px;line-height:1.12;font-weight:700;letter-spacing:-.03em}
+.ph .lead{font-size:15px;color:var(--muted);line-height:1.4}
+.ph .lbl{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.ph .small{font-size:13px;color:var(--muted)}
+.ph .grow{flex:1}
+
+/* Microphone */
+.ph .mz{display:grid;justify-items:center;gap:12px;padding:10px 0 4px}
+.ph .mic{width:var(--mic,110px);height:var(--mic,110px);border-radius:50%;background:var(--act);color:#fff;display:grid;place-items:center}
+.ph .mic svg{width:40%;height:40%}
+.ph .miclbl{font-size:17px;font-weight:600}
+.ph .mz .mx-level{--mx-level-c:var(--listen-ring)}
+.ph .wave{display:flex;gap:3px;align-items:center;height:26px}
+.ph .wave i{width:4px;height:6px;border-radius:2px;background:var(--listen-ring);transform-origin:center}
+.stage.play .ph .wave i{animation:s-wave .9s ease-in-out infinite alternate}
+.ph .wave i:nth-child(3n){animation-delay:.15s}.ph .wave i:nth-child(3n+1){animation-delay:.3s}.ph .wave i:nth-child(4n){animation-delay:.45s}
+@keyframes s-wave{to{transform:scaleY(3.4)}}
+/* simulated speech: the discs scale by keyframes here; the live app feeds the mic level */
+.stage.play .ph .mx-level[data-active="true"] .mx-level-disc[data-layer="inner"]{animation:s-talk-in 3s linear infinite}
+.stage.play .ph .mx-level[data-active="true"] .mx-level-disc[data-layer="outer"]{animation:s-talk-out 3s linear infinite}
+@keyframes s-talk-in{0%,100%{transform:scale(1)}8%{transform:scale(1.28)}14%{transform:scale(1.1)}22%{transform:scale(1.34)}30%{transform:scale(1.06)}40%{transform:scale(1.3)}52%{transform:scale(1.12)}62%{transform:scale(1.25)}72%,95%{transform:scale(1.02)}}
+@keyframes s-talk-out{0%,100%{transform:scale(1.06)}12%{transform:scale(1.42)}28%{transform:scale(1.46)}46%{transform:scale(1.44)}66%{transform:scale(1.4)}80%,95%{transform:scale(1.1)}}
+
+/* Topics */
+.ph .tiles{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:8px}
+.ph .tile{min-height:52px;padding:8px 12px;border-radius:var(--r);background:var(--tint);font-size:14px;font-weight:600;display:flex;align-items:center;line-height:1.2}
+.ph .rows{display:grid;gap:6px}
+.ph .row{display:flex;align-items:center;justify-content:space-between;height:40px;padding:0 14px;border-radius:var(--rb);background:var(--tint);font-size:14px;font-weight:600}
+.ph .quiet{height:48px;border-radius:var(--rb);background:var(--tint);display:grid;place-items:center;font-size:15px;font-weight:700}
+
+/* Cards and surfaces */
+.ph .sc{position:relative;border-radius:var(--r);padding:14px;display:grid;gap:6px;background:var(--tint)}
+.ph[data-surface="hairline"] .sc{background:#fff;box-shadow:inset 0 0 0 1px #D1D1D6}
+.ph[data-surface="lift"] .sc{background:#fff;box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/8%)}
+.ph .sc.best{background:#fff;box-shadow:inset 0 0 0 1px #C7C7CC}
+.ph[data-surface="lift"] .sc.best{box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/10%)}
+.ph .said{border-radius:var(--r);background:var(--tint);padding:10px 12px;font-size:14px;line-height:1.35}
+.ph .said b{font-weight:700}
+.ph .t{font-size:17px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.ph .t.lg{font-size:19px}
+.ph .sum{font-size:13.5px;color:var(--muted);line-height:1.4}
+.ph .meta{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.ph .meta b{color:var(--ink);font-weight:600}
+.ph .bm{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.ph .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ph .grid2 .sc{min-height:84px;align-content:start}
+.ph .list{display:grid;gap:8px}
+.ph .compact{padding:10px 14px}
+.ph .compact .t{font-size:15px}
+.ph .cards>*{opacity:0}
+.stage.play .ph .cards>*{animation:mx-in calc(var(--mx-t)*.36s) var(--mx-ease) both}
+.stage.play .ph .cards>:nth-child(2){animation-delay:calc(var(--mx-t)*.06s)}
+.stage.play .ph .cards>:nth-child(3){animation-delay:calc(var(--mx-t)*.12s)}
+.stage.play .ph .cards>:nth-child(4){animation-delay:calc(var(--mx-t)*.18s)}
+.ph .ph-bars{display:grid;gap:9px}
+.ph .ph-bars i{display:block;height:10px;border-radius:5px;background:#EDEEF1}
+.ph .ph-bars i:nth-child(1){width:36%;height:9px}.ph .ph-bars i:nth-child(2){width:86%;height:16px}.ph .ph-bars i:nth-child(3){width:70%}
+.ph .mx-bolt{--mx-edge-w:3px;--mx-edge-glow:8px;--mx-bolt-tail:250deg}
+.ph .spin{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:600}
+.ph .spin .mx-spinner{color:var(--mx-light);width:20px;height:20px}
+
+/* Buttons */
+.ph .btn{height:52px;border-radius:var(--rb);display:grid;place-items:center;font-size:16px;font-weight:700;background:var(--act);color:#fff}
+
+/* Confirm */
+.ph .yn{display:grid;gap:10px}
+.ph .yn[data-l="squares"]{grid-template-columns:1fr 1fr}
+.ph .ch{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--r);background:var(--tint);display:flex;align-items:center;gap:12px;font-size:17px;font-weight:700;padding:0 16px;min-height:64px}
+.ph .yn[data-l="squares"] .ch{flex-direction:column;justify-content:center;min-height:150px;padding:0}
+.ph .yn[data-l="buttons"] .ch{min-height:52px;justify-content:center;border-radius:var(--rb)}
+.ph .yn[data-l="buttons"] .ch.no{background:#fff;box-shadow:inset 0 0 0 2px #C7C7CC}
+.ph .ch>*{position:relative;z-index:1}
+.ph .disc{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.ph .yn[data-l="squares"] .disc{width:56px;height:56px}
+.ph .yn[data-l="buttons"] .disc{width:26px;height:26px;background:none!important}
+.ph .yn[data-l="buttons"] .ch.yes{background:var(--yes);color:#fff}
+.ph .yn[data-l="buttons"] .ch.no .disc{color:var(--no)}
+.ph .ch.yes .disc{background:var(--yes)}.ph .ch.no .disc{background:var(--no)}
+.ph .ch .fill{position:absolute;z-index:0;border-radius:50%;background:var(--yes);width:620px;height:620px;left:70%;top:45%;transform:translate(-50%,-50%) scale(0)}
+.ph .ch .tap{position:absolute;z-index:2;width:30px;height:30px;margin:-15px;border-radius:50%;background:rgb(0 0 0/18%);left:70%;top:45%;opacity:0}
+.stage.play .ph .ch .tap{animation:s-tap calc(var(--mx-t)*.5s) ease-out calc(var(--mx-t)*.7s) both}
+.stage.play .ph .ch .fill{animation:s-fill calc(var(--mx-t)*.46s) var(--mx-draw) calc(var(--mx-t)*.8s) both}
+.stage.play .ph .ch.yes>span{animation:s-white .01s linear calc(var(--mx-t)*.84s) both}
+.stage.play .ph .ch.yes .disc{animation:s-disc .01s linear calc(var(--mx-t)*.84s) both}
+.stage.play .ph .ch.no{animation:s-dim calc(var(--mx-t)*.3s) var(--mx-draw) calc(var(--mx-t)*.85s) both}
+@keyframes s-tap{0%{opacity:0;transform:scale(.6)}30%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+@keyframes s-fill{to{transform:translate(-50%,-50%) scale(1)}}
+@keyframes s-white{to{color:#fff}}
+@keyframes s-disc{to{background:rgb(255 255 255/22%)}}
+@keyframes s-dim{to{opacity:.4}}
+
+/* Done */
+.ph .done{display:grid;justify-items:center;text-align:center;gap:12px;padding-top:40px}
+.stage:not(.play) .ph .mx-mark *{animation:none!important}
+
+</style>
+
+<script>
+/* ═══════════════ DOMAIN: Suara voice screens, 10 decisions, one screen each ═══════════════
+   Owner's limits (2026-09-24): at most 10 multiple-choice screens, broad decisions only, no
+   repeats. So: one screen per decision in a fixed order through the app, three options each,
+   best pick only, then the combined result. One pick per decision is a direct choice, not a
+   settled estimate; the Profile says so. */
+const SRC = {
+  current: 'Current Suara',
+  x: {name: 'X / Twitter legacy blue', url: 'https://mobbin.com/colors/brand/twitter'},
+  apple: {name: 'Apple systemBlue', url: 'https://sarunw.com/posts/dark-color-cheat-sheet/'},
+  paypal: {name: 'PayPal brand guide', url: 'https://www.scribd.com/document/959133671/PayPal-Newsroom-2022'},
+  visa: {name: 'Visa brand standards', url: 'https://corporate.visa.com/content/dam/VCOM/corporate/about-visa/documents/visa-brand-standards-sept2025.pdf'},
+  mui: 'modern-ui default',
+  gen: 'Generated: the extreme',
+};
+const LAB = {
+  id: 'suara-voice-10',
+  title: 'Suara · 10 choices',
+  choose: 3,
+  askWorst: false,       // one pick per screen
+  repeatEvery: 0,        // no repeat screens
+  order: ['home', 'action', 'listen', 'light', 'loading', 'results', 'surface', 'confirm', 'tempo', 'done'],
+  genes: {
+    home:    {label: 'Home screen', scene: 'home', values: {
+      tiles: {name: 'Mic and topic tiles', source: SRC.current},
+      list:  {name: 'Mic and a topic list'},
+      big:   {name: 'Just the mic', source: SRC.gen}}},
+    action:  {label: 'Main button colour', scene: 'home', values: {
+      black: {name: 'Black', source: SRC.current, hex: '#000000'},
+      blue:  {name: 'Payment blue', source: SRC.paypal, hex: '#0070E0'},
+      navy:  {name: 'Card navy', source: SRC.visa, hex: '#1A1F71'}}},
+    listen:  {label: 'Microphone while listening', scene: 'listening', values: {
+      red:   {name: 'Red', source: SRC.current},
+      blue:  {name: 'Blue'},
+      black: {name: 'Black, blue ring'}}},
+    light:   {label: 'Blue for "working" and "done"', scene: 'searching', values: {
+      x:     {name: 'X blue', source: SRC.x, hex: '#1D9BF0'},
+      apple: {name: 'Apple blue', source: SRC.apple, hex: '#007AFF'},
+      cobalt:{name: 'Cobalt', source: SRC.mui, hex: '#2F5BEA'}}},
+    loading: {label: 'While it searches', scene: 'searching', values: {
+      one:   {name: 'One light round the card', source: SRC.current},
+      twin:  {name: 'Two lights'},
+      spin:  {name: 'A spinner'}}},
+    results: {label: 'How answers are laid out', scene: 'results', values: {
+      grid:  {name: 'Two per row', source: SRC.current},
+      list:  {name: 'One per row'},
+      lead:  {name: 'Best answer large, others below'}}},
+    surface: {label: 'Card style', scene: 'results', values: {
+      tint:     {name: 'Soft grey', source: SRC.current},
+      hairline: {name: 'White with a line'},
+      lift:     {name: 'White with a shadow'}}},
+    confirm: {label: 'Yes and no', scene: 'confirm', values: {
+      squares: {name: 'Two big squares', source: SRC.current},
+      stacked: {name: 'Two wide rows'},
+      buttons: {name: 'Two plain buttons'}}},
+    tempo:   {label: 'Animation speed', scene: 'confirm', values: {
+      standard: {name: 'Standard', t: 1.15, source: SRC.current},
+      calm:     {name: 'Calm', t: 1.6},
+      brisk:    {name: 'Brisk', t: 0.75}}},
+    done:    {label: 'The last step is done', scene: 'done', values: {
+      ripple: {name: 'Tick and a ripple', source: SRC.current},
+      plain:  {name: 'Just the tick'},
+      burst:  {name: 'Tick and a burst'}}},
+  },
+  scenes: [
+    {id: 'home', name: 'Home', group: 'Start'},
+    {id: 'listening', name: 'Listening', group: 'Voice'},
+    {id: 'searching', name: 'Finding the answer', group: 'Voice'},
+    {id: 'results', name: 'Answers', group: 'Answers'},
+    {id: 'confirm', name: 'Start these steps?', group: 'Steps'},
+    {id: 'done', name: 'Finished', group: 'Steps'},
+  ],
+  // The current approved direction, as a nudge only; one pick overturns it.
+  priors: {home: {tiles: [2, 1]}, action: {black: [2, 1]}, listen: {red: [2, 1]}, results: {grid: [2, 1]}},
+  pool: null,
+  render: renderSuara,
+};
+
+const IC = {
+  wave: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>',
+  mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>',
+  stop: '<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor"/></svg>',
+  chev: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+  tick: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>',
+  cross: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>',
+};
+const TOPICS = ['Health costs', 'CPF and support', 'Scams', 'Getting around', 'Bills and housing', 'Phone help'];
+const bar = () => `<div class="bar"><span class="mark">${IC.wave}</span><span class="brand">Suara</span><span class="pill">Find</span><span class="pill">English</span></div>`;
+const mark = (size, flourish = 'none', stroke) => `<span class="mx-mark" aria-hidden="true" data-variant="filled" data-flourish="${flourish}"
+  style="--mx-size:${size}px;--mx-sizen:${size};--mx-delay:.1s${stroke ? `;--mx-stroke:${stroke}` : ''}"><span class="mx-fx mx-fx-glow"></span><span class="mx-fx mx-fx-ripple"></span>
+  <span class="mx-fx mx-fx-burst">${'<i></i>'.repeat(8)}</span><span class="mx-disc"></span>
+  <svg class="mx-ring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.8" pathLength="1"/></svg>
+  <svg class="mx-tick" viewBox="0 0 24 24"><path d="M7.4 12.4l3.1 3.1 6.2-6.4" pathLength="1"/></svg></span>`;
+const edge = (state, inner, twin) => `<div class="mx-edge mx-bolt" data-state="${state}"${twin ? ' data-twin="true"' : ''} style="--mx-edge-r:18px">
+  <span class="mx-edge-halo"><span><i></i></span></span><span class="mx-edge-ring"><i></i></span>${inner}</div>`;
+const level = (active, inner) => `<span class="mx-level" data-active="${active}"><span class="mx-level-disc" data-layer="outer"></span><span class="mx-level-disc" data-layer="inner"></span>${inner}</span>`;
+
+/** Re-runs a scene's own timeline each time the lab replays the card (it toggles .play). */
+function onPlay(el, run) {
+  el._mo?.disconnect();
+  const clear = () => { (el._ts || []).forEach(clearTimeout); el._ts = []; };
+  const go = () => { clear(); run((ms, f) => el._ts.push(setTimeout(f, ms))); };
+  el._mo = new MutationObserver(() => { if (el.classList.contains('play') && !el.classList.contains('resetting')) go(); });
+  el._mo.observe(el, {attributes: true, attributeFilter: ['class']});
+  go();
+}
+
+function renderSuara(el, scene, g) {
+  const V = LAB.genes, t = V.tempo.values[g.tempo].t, light = V.light.values[g.light].hex, act = V.action.values[g.action].hex;
+  const listenFill = g.listen === 'red' ? '#D70015' : g.listen === 'blue' ? '#0070E0' : '#000000';
+  const listenRing = g.listen === 'red' ? '#D70015' : light;
+  const vars = `--act:${act};--mx-light:${light};--mx-accent:${light};--mx-t:${t};--listen-ring:${listenRing}`;
+  let body = '', cycle = null;
+
+  if (scene === 'home') {
+    const big = g.home === 'big';
+    const topics = g.home === 'tiles' ? `<p class="lbl">Or pick a topic</p><div class="tiles">${TOPICS.map((x) => `<div class="tile">${x}</div>`).join('')}</div>`
+      : g.home === 'list' ? `<p class="lbl">Or pick a topic</p><div class="rows">${TOPICS.map((x) => `<div class="row">${x}${IC.chev}</div>`).join('')}</div>`
+      : `<div class="grow"></div><div class="quiet">Or pick a topic</div>`;
+    body = `<h1>What do you need?</h1><div class="mz" style="--mic:${big ? 150 : g.home === 'list' ? 92 : 104}px;${big ? 'padding-top:40px' : ''}">
+      ${level(false, `<div class="mic">${IC.mic}</div>`)}<p class="miclbl">Tap to speak</p></div>${topics}`;
+  }
+
+  if (scene === 'listening') {
+    body = `<h1>I'm listening</h1><p class="lead">Say it in your own words. Take your time.</p>
+      <div class="mz" style="--mic:118px;--act:${listenFill};padding-top:34px">${level(true, `<div class="mic">${IC.stop}</div>`)}
+      <div class="wave" style="margin-top:22px">${'<i></i>'.repeat(18)}</div><p class="miclbl">Tap when done</p></div>`;
+    cycle = 3000;
+  }
+
+  if (scene === 'searching') {
+    const said = `<p class="said"><span class="small">You said </span><b>How much is a polyclinic visit for me?</b></p>`;
+    const answer = (st) => `<div class="sc best"><span class="bm">${st === 'run' ? '' : mark(20)}${st === 'run' ? '' : 'Best match'}</span>
+      <span class="t">Polyclinic fees for seniors</span><span class="sum">Pioneer and Merdeka cardholders pay less.</span></div>`;
+    const waiting = g.loading === 'spin'
+      ? `<div class="sc best"><span class="spin"><span class="mx-spinner" data-visible="true"></span>Finding the right answer</span><div class="ph-bars"><i></i><i></i><i></i></div></div>`
+      : edge('run', `<div class="sc best"><div class="ph-bars"><i></i><i></i><i></i></div></div>`, g.loading === 'twin');
+    body = `${said}<h1 class="head">Finding answers</h1><div class="slot">${waiting}</div>`;
+    cycle = Math.round(3600 * t / 1.15);
+    setTimeout(() => onPlay(el, (at) => {
+      const slot = el.querySelector('.slot'), head = el.querySelector('.head'); if (!slot) return;
+      slot.innerHTML = waiting; head.textContent = 'Finding answers';
+      at(Math.round(1800 * t / 1.15), () => {
+        head.textContent = '1 answer';
+        slot.innerHTML = g.loading === 'spin' ? answer('land') : edge('land', answer('land'));
+        at(Math.round(900 * t / 1.15), () => { const e = slot.querySelector('.mx-edge'); if (e) e.dataset.state = 'off'; });
+      });
+    }), 0);
+  }
+
+  if (scene === 'results') {
+    const best = (lg) => `<div class="sc best"><span class="bm">${mark(20)}Best match</span><span class="t${lg ? ' lg' : ''}">${lg ? 'Polyclinic fees for seniors' : 'Polyclinic fees'}</span>${lg ? '<span class="sum">Pioneer and Merdeka cardholders pay less at polyclinics.</span>' : ''}<span class="meta"><b>Answer</b>${IC.chev}</span></div>`;
+    const others = [['CHAS card', 'CHAS card: what it covers', 'Answer'], ['MediSave outpatient', 'MediSave for outpatient bills', '2 steps'], ['Pioneer card', 'Replacing a lost Pioneer card', 'Answer']];
+    const said = `<p class="said"><span class="small">You said </span><b>How much is a polyclinic visit for me?</b></p><p class="lbl" style="margin-top:2px">4 answers</p>`;
+    const cards = g.results === 'grid'
+      ? `<div class="grid2 cards">${best(false)}${others.map(([s, , m]) => `<div class="sc"><span class="t">${s}</span><span class="meta">${m}${IC.chev}</span></div>`).join('')}</div>`
+      : g.results === 'list'
+      ? `<div class="list cards">${best(true)}${others.map(([, f, m]) => `<div class="sc"><span class="t">${f}</span><span class="meta">${m}${IC.chev}</span></div>`).join('')}</div>`
+      : `<div class="list cards">${best(true)}${others.map(([, f, m]) => `<div class="sc compact"><span class="t">${f}</span><span class="meta">${m}${IC.chev}</span></div>`).join('')}</div>`;
+    body = `${said}${cards}`;
+    cycle = 2400;
+  }
+
+  if (scene === 'confirm') {
+    const l = g.confirm;
+    body = `<h1 style="margin-top:6px">Start these steps?</h1><p class="lead">MediSave for outpatient bills. 2 steps, and you confirm each one.</p>
+      <div class="yn" data-l="${l}" style="margin-top:6px">
+        <div class="ch yes"><i class="fill"></i><i class="tap"></i><span class="disc">${IC.tick}</span><span>Yes, start</span></div>
+        <div class="ch no"><span class="disc">${IC.cross}</span><span>Not this</span></div></div>`;
+    cycle = Math.round(2400 * t / 1.15) + 600;
+  }
+
+  if (scene === 'done') {
+    const fl = g.done === 'plain' ? 'none' : g.done;
+    body = `<div class="done">${mark(76, fl, 4.5)}<h1>That is every step</h1><p class="lead">MediSave for outpatient bills</p></div>
+      <div class="grow"></div><div class="btn">Ask something else</div>`;
+    cycle = Math.round(2400 * t / 1.15);
+  }
+
+  el.innerHTML = `<div class="ph" data-surface="${g.surface}" style="${vars}">${bar()}${body}</div>`;
+  return cycle;
+}
+/* ═══════════════ END DOMAIN ═══════════════ */
+
+</script>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand" id="brand"></div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="choose" aria-selected="true">Choose</button>
+    <button role="tab" data-tab="compare" aria-selected="false">Duel</button>
+    <button role="tab" data-tab="profile" aria-selected="false">Profile</button>
+  </nav>
+  <div class="meta"><span id="rounds">0 rounds</span><span id="sync">Saved on this device</span></div>
+</div></header>
+<main>
+  <section id="choose">
+    <div class="bar">
+      <div class="scene"><b id="cGene"></b><span id="cScene"></span></div>
+      <span class="step" id="cStep"></span>
+    </div>
+    <p class="hint" id="cHint"></p>
+    <div class="board" id="board"></div>
+    <div class="row2">
+      <button data-choose="both">No clear favourite<kbd>↑</kbd></button><button data-choose="none">None of these<kbd>↓</kbd></button>
+      <button id="cReplay">Replay<kbd>Space</kbd></button><button data-choose="skip" id="cSkip">Skip</button>
+    </div>
+    <div class="after">
+      <p class="learned" id="cLearned" aria-live="polite"></p>
+      <input class="why" id="cWhy" placeholder="What made it the best, or what was missing? Optional, press Enter" aria-label="Reason for your choice">
+    </div>
+  </section>
+  <section id="compare" hidden>
+    <div class="bar">
+      <div class="scene"><b id="sceneName"></b><span id="sceneGroup"></span></div>
+      <div class="seg" id="mode"><button data-mode="explore">Explore</button><button data-mode="balanced">Balanced</button><button data-mode="exploit">Exploit</button></div>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="duel" id="duel">
+      <div class="side"><div class="stage" id="stL"></div><button class="pick" data-pick="L">Prefer this<kbd>←</kbd></button></div>
+      <div class="side"><div class="stage" id="stR"></div><button class="pick" data-pick="R">Prefer this<kbd>→</kbd></button></div>
+    </div>
+    <div class="row2">
+      <button data-pick="both">Both good<kbd>↑</kbd></button><button data-pick="none">Neither<kbd>↓</kbd></button>
+      <button id="replay">Replay<kbd>Space</kbd></button><button data-pick="skip">Skip</button>
+    </div>
+    <div class="after">
+      <p class="learned" id="learned" aria-live="polite"></p>
+      <input class="why" id="why" placeholder="What made it better? Optional, press Enter" aria-label="Reason for your pick">
+    </div>
+  </section>
+  <section id="profile" hidden>
+    <div class="head2"><div><h1>What you're converging on</h1><p id="note"></p></div>
+      <div class="actions"><button id="copy">Copy profile</button><button id="reset" class="warn">Reset</button></div></div>
+    <div class="export" id="export"><textarea id="exportText" readonly></textarea></div>
+    <div class="genes" id="genes"></div>
+    <div class="sub-title">Current favourite on every scene</div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<script>
+/* ═══════════════ ENGINE (generic; no need to edit) ═══════════════ */
+const G = LAB.genes, GK = Object.keys(G), POOL = window.__POOL__ || LAB.pool, PARAM = typeof LAB.render === 'function';
+const $ = id => document.getElementById(id);
+$('brand').textContent = LAB.title; document.title = LAB.title;
+
+// Beta posteriors + Thompson sampling
+const randn = () => { let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+function gamma(k){ if (k<1) return gamma(k+1)*Math.pow(Math.random(),1/k); const d=k-1/3,c=1/Math.sqrt(9*d);
+  for(;;){ let x,v; do{ x=randn(); v=1+c*x; }while(v<=0); v=v*v*v; const u=Math.random();
+    if (u<1-.0331*x**4 || Math.log(u)<.5*x*x+d*(1-v+Math.log(v))) return d*v; } }
+const beta = (a,b) => { const x=gamma(a), y=gamma(b); return x/(x+y); };
+const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+const KEY = 'lab:' + LAB.id;
+function fresh(){ const post={}; for (const g of GK){ post[g]={}; for (const v in G[g].values){ const p = LAB.priors?.[g]?.[v]; post[g][v] = p ? [...p] : [1,1]; } }
+  return {v:1, lab:LAB.id, rounds:0, mode:'explore', post, history:[], order:null, idx:0}; }
+function normalize(s){ const f=fresh(); s=Object.assign(f,s); for (const g of GK){ s.post[g]=s.post[g]||{}; for (const v in G[g].values) if(!Array.isArray(s.post[g][v])) s.post[g][v]=f.post[g][v]; } return s; }
+let S = fresh(); try { const r = localStorage.getItem(KEY); if (r) S = normalize(JSON.parse(r)); } catch(e){}
+
+const mean = (g,v) => { const [a,b]=S.post[g][v]; return a/(a+b); };
+const seen = (g,v) => { const [a,b]=S.post[g][v]; const p=LAB.priors?.[g]?.[v]||[1,1]; return Math.round((a+b-p[0]-p[1])*2)/2; };
+function thompson(g, ex){ let best, bv=-1; for (const v in G[g].values){ if (v===ex) continue; const x=beta(...S.post[g][v]); if (x>bv){ bv=x; best=v; } } return best; }
+function champion(){ const c={}; for (const g of GK){ let best,bm=-1; for (const v in G[g].values){ const m=mean(g,v); if (m>bm+1e-9){ bm=m; best=v; } } c[g]=best; } return c; }
+const unc = g => Object.keys(G[g].values).reduce((s,v)=>{ const [a,b]=S.post[g][v]; return s + a*b/((a+b)**2*(a+b+1)); }, 0);
+function status(g){ // settled | leaning | open | indifferent
+  const vals = Object.keys(G[g].values).map(v=>({v, m:mean(g,v), n:seen(g,v)})).sort((x,y)=>y.m-x.m);
+  const total = vals.reduce((s,x)=>s+x.n,0), gap = vals[0].m - vals[1].m;
+  if (vals[0].n >= 6 && vals[0].m > .68 && gap > .15) return 'settled';
+  if (total >= 12 && gap < .06) return 'indifferent';
+  if (total >= 4 && gap > .08) return 'leaning';
+  return 'open';
+}
+
+// Pair construction. Content (scene) is shared; style genes differ in 1–3 places.
+function nextScene(){ const ids = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  if (!S.order || S.idx >= S.order.length || !S.order.every(id=>ids.includes(id))){ S.order = shuffle(ids); S.idx = 0; } return S.order[S.idx++]; }
+function targets(){
+  let A = {}; if (S.mode==='explore') for (const g of GK) A[g]=thompson(g); else A = champion();
+  let change;
+  if (S.mode==='exploit'){ const w=GK.map(unc), t=w.reduce((a,b)=>a+b,0); let r=Math.random()*t, i=0; while (r>w[i] && i<w.length-1){ r-=w[i]; i++; } change=[GK[i]]; }
+  else change = shuffle([...GK]).slice(0, S.mode==='explore' ? Math.min(GK.length, 2+(Math.random()<.5)) : 1+(Math.random()<.5));
+  const B = {...A}; for (const g of change) B[g] = thompson(g, A[g]);
+  return [A, B];
+}
+const matches = (x,y) => GK.reduce((s,g)=>s+(x[g]===y[g]),0);
+function nearest(target, scene, notItem){
+  let best=null, bs=-1;
+  for (const it of shuffle(POOL.filter(p=>p.scene===scene && p!==notItem && (!notItem || matches(p.genes, notItem.genes) < GK.length)))){
+    const s = matches(it.genes, target); if (s>bs){ bs=s; best=it; } }
+  return best;
+}
+function makePair(){
+  const scene = nextScene(); const [A, B] = targets();
+  if (PARAM) return {scene, L:{genes:A}, R:{genes:B}, swap:Math.random()<.5};
+  const a = nearest(A, scene), b = nearest(B, scene, a) || nearest(A, scene, a);
+  return {scene, L:a, R:b, swap:Math.random()<.5};
+}
+
+// Rendering + replay loop (parametric scenes with animation return a cycle length)
+const loops = new Map();
+function show(el, scene, item){
+  el.className = 'stage'; el.removeAttribute('style');
+  if (PARAM){ el.dataset.cycle = LAB.render(el, scene, item.genes) || ''; el.classList.add('play'); }
+  else { el.innerHTML = item.html; el.dataset.cycle = ''; }
+}
+function restart(stages){ stages.forEach(s=>s.classList.add('resetting'));
+  setTimeout(()=>{ stages.forEach(s=>s.classList.remove('play')); void document.body.offsetWidth; stages.forEach(s=>{ s.classList.add('play'); s.classList.remove('resetting'); }); }, 190); }
+function loop(key, stages){ clearTimeout(loops.get(key)); const c = Math.max(0, ...stages.map(s=>+s.dataset.cycle||0)); if (!c) return;
+  loops.set(key, setTimeout(()=>{ restart(stages); loop(key, stages); }, c)); }
+const stop = pre => { for (const [k,t] of loops) if (k.startsWith(pre)){ clearTimeout(t); loops.delete(k); } };
+
+// Compare view
+const HINT = {explore:'Bold differences, to find what you respond to. Start here.',
+  balanced:'Your current favourite against a challenger that differs in one or two ways.',
+  exploit:'Your favourite against one tweak to the trait the lab is least sure about.'};
+let cur = null, busy = false;
+function showPair(){
+  cur = makePair(); if (cur.swap) [cur.L, cur.R] = [cur.R, cur.L];
+  const sc = LAB.scenes.find(s=>s.id===cur.scene) || {name:cur.scene, group:''};
+  $('sceneName').textContent = sc.name; $('sceneGroup').textContent = sc.group || '';
+  show($('stL'), cur.scene, cur.L); show($('stR'), cur.scene, cur.R); loop('cmp', [$('stL'), $('stR')]);
+}
+const vn = (g,v) => G[g].values[v]?.name || v;
+function vote(pick){
+  if (busy || !cur) return; busy = true;
+  const L = cur.L.genes, R = cur.R.genes; let msg = '';
+  if (pick==='L' || pick==='R'){
+    const W = pick==='L'?L:R, Lo = pick==='L'?R:L, bits=[];
+    for (const g of GK) if (W[g]!==Lo[g]){ S.post[g][W[g]][0]++; S.post[g][Lo[g]][1]++; bits.push(`${vn(g,W[g])} over ${vn(g,Lo[g])} (${G[g].label.toLowerCase()})`); }
+    msg = 'Learned: ' + bits.join(', ') + '.'; document.querySelector(`.pick[data-pick="${pick}"]`).classList.add('chosen');
+  } else if (pick==='both' || pick==='none'){
+    const i = pick==='both' ? 0 : 1; for (const g of GK) for (const v of new Set([L[g], R[g]])) S.post[g][v][i] += .5;
+    msg = pick==='both' ? 'Noted: both work for you.' : 'Noted: neither. If you can say what was missing, type it below.';
+  }
+  if (pick !== 'skip'){
+    S.rounds++; S.history.push({t:Date.now(), scene:cur.scene, mode:S.mode, pick, left:{id:cur.L.id, genes:L}, right:{id:cur.R.id, genes:R}});
+    if (S.history.length > 200) S.history = S.history.slice(-200);
+    save(); $('why').value = ''; $('why').classList.toggle('show', pick!=='both');
+  }
+  $('learned').textContent = msg; meta();
+  setTimeout(()=>$('duel').classList.add('leaving'), pick==='skip'?0:420);
+  setTimeout(()=>{ document.querySelectorAll('.pick').forEach(b=>b.classList.remove('chosen')); showPair(); $('duel').classList.remove('leaving'); busy=false; }, pick==='skip'?220:650);
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => vote(b.dataset.pick));
+$('replay').onclick = () => { restart([$('stL'),$('stR')]); loop('cmp',[$('stL'),$('stR')]); };
+$('why').addEventListener('keydown', e => { if (e.key==='Enter' && $('why').value.trim()){ const h = S.history[S.history.length-1]; if (h){ h.note = $('why').value.trim(); save(); }
+  $('why').value=''; $('why').classList.remove('show'); $('learned').textContent = 'Reason saved.'; } e.stopPropagation(); });
+// Choose view: one dimension per screen, the rest held at the favourite. Pick the best, then
+// optionally the worst. Every CHECK_EVERY-th screen repeats an earlier one to measure consistency.
+const K = Math.max(2, LAB.choose || 3), CHECK_EVERY = LAB.repeatEvery ?? 8;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ch = null, cbusy = false;
+function nextGene(){ if (LAB.order) return (S.lastGene = LAB.order[Math.min(S.qi || 0, LAB.order.length - 1)]); // rotate through dimensions that are not settled yet; all of them once everything is
+  const live = GK.filter(g => status(g) !== 'settled'), ids = live.length ? live : GK;
+  if (!S.gorder || S.gi >= S.gorder.length || !S.gorder.every(g=>ids.includes(g))){ S.gorder = shuffle([...ids]); S.gi = 0;
+    if (S.gorder.length > 1 && S.gorder[0] === S.lastGene) S.gorder.push(S.gorder.shift()); }
+  return (S.lastGene = S.gorder[S.gi++]);
+}
+function itemFor(g, v, scene, base){ // the specimen for value v with every other dimension at the favourite
+  if (PARAM) return {genes:{...base, [g]:v}};
+  const pool = POOL.filter(p => p.scene===scene && p.genes[g]===v); if (!pool.length) return null;
+  const t = {...base, [g]:v}; let best=null, bs=-1; for (const it of shuffle(pool)){ const s = matches(it.genes, t); if (s>bs){ bs=s; best=it; } } return best;
+}
+function makeBoard(){
+  const n = S.history.filter(h=>h.mode==='choose').length;
+  const past = S.history.filter(h=>h.mode==='choose' && h.best && !h.repeatOf && h.shown.length > 2 && GK.includes(h.gene));
+  if (CHECK_EVERY > 0 && n && n % CHECK_EVERY === CHECK_EVERY-1 && past.length){ // consistency check: same set, new order
+    const o = past[Math.floor(Math.random()*past.length)], base = champion();
+    const cards = shuffle(o.shown.map(v => ({v, item:itemFor(o.gene, v, o.scene, base)}))).filter(c=>c.item);
+    if (cards.length === o.shown.length) return {gene:o.gene, scene:o.scene, cards, repeatOf:o.t};
+  }
+  const g = nextGene(), scene = G[g].scene || nextScene(), base = champion();
+  const vals = Object.keys(G[g].values).map(v=>({v, x:beta(...S.post[g][v])})).sort((a,b)=>b.x-a.x).map(o=>o.v);
+  const cards = []; for (const v of vals){ if (cards.length >= K) break; const item = itemFor(g, v, scene, base); if (item) cards.push({v, item}); }
+  return {gene:g, scene, cards:shuffle(cards)};
+}
+function finished(){
+  ch = null; $('cGene').textContent = 'All ' + LAB.order.length + ' done'; $('cScene').textContent = ''; $('cStep').textContent = '';
+  $('cHint').textContent = 'Here is Suara with every choice you made. Reset on the Profile tab starts again.';
+  $('board').style.setProperty('--k', 1); $('board').innerHTML = '<p class="learned">Opening your Suara…</p>';
+  meta(); setTimeout(() => document.querySelector('[data-tab="profile"]').click(), 700);
+}
+function source(v){ const s = v.source; if (!s) return '';
+  if (typeof s === 'string') return `<i>${esc(s)}</i>`;
+  return s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name||'Source')}</a>` : `<i>${esc(s.name)}</i>`; }
+function showBoard(){
+  if (LAB.order && (S.qi || 0) >= LAB.order.length) return finished();
+  ch = makeBoard(); ch.phase = 'best';
+  if (ch.cards.length < 2){ $('board').innerHTML = `<p class="learned">Not enough options for ${esc(G[ch.gene].label)} in this scene. Add values or pool items.</p>`; return; }
+  const sc = LAB.scenes.find(s=>s.id===ch.scene) || {name:ch.scene};
+  $('cGene').textContent = G[ch.gene].label; $('cScene').textContent = sc.name + (ch.repeatOf ? ' · checking an earlier pick' : '');
+  $('board').style.setProperty('--k', ch.cards.length);
+  $('board').innerHTML = ch.cards.map((c,i) => { const val = G[ch.gene].values[c.v];
+    return `<div class="card" data-i="${i}"><div class="stage"></div><div class="cap"><b>${esc(val.name||c.v)}</b>${source(val)}</div>
+      <button class="pick" data-card="${i}">Best<kbd>${i+1}</kbd></button></div>`; }).join('');
+  const stages = [...$('board').querySelectorAll('.stage')];
+  ch.cards.forEach((c,i) => show(stages[i], ch.scene, c.item)); loop('cho', stages);
+  $('board').querySelectorAll('[data-card]').forEach(b => b.onclick = () => choose(+b.dataset.card));
+  phase('best');
+}
+function phase(p){ ch.phase = p; const n = ch.cards.length;
+  $('cStep').textContent = p==='best' ? 'Which is best?' : 'And the one you like least?';
+  const also = GK.filter(g => g !== ch.gene && new Set(ch.cards.map(c=>c.item.genes?.[g])).size > 1).map(g => G[g].label.toLowerCase());
+  $('cHint').textContent = p==='worst' ? 'Optional, but it teaches the lab twice as much. Enter skips.'
+    : also.length ? `These also differ in ${also.join(' and ')}: the pool has no cleaner set. Judge the ${G[ch.gene].label.toLowerCase()}; only it is credited.`
+    : `Only the ${G[ch.gene].label.toLowerCase()} changes between these ${n}. Everything else is your current favourite.`;
+  $('cSkip').textContent = p==='best' ? 'Skip' : 'Skip this'; $('cSkip').querySelector('kbd')?.remove();
+  if (p==='worst') $('cSkip').insertAdjacentHTML('beforeend','<kbd>Enter</kbd>');
+  $('board').querySelectorAll('.card').forEach((el,i) => { const b = el.querySelector('.pick');
+    if (p==='best'){ b.hidden = false; b.classList.remove('worst-mode'); b.firstChild.textContent = 'Best'; return; }
+    el.classList.add('done'); if (i===ch.best){ b.firstChild.textContent = 'Best'; b.disabled = true; return; }
+    b.classList.add('worst-mode'); b.firstChild.textContent = 'Least'; });
+}
+function credit(g, w, l){ S.post[g][w][0]++; S.post[g][l][1]++; }
+function choose(i){
+  if (cbusy || !ch || i >= ch.cards.length) return;
+  const g = ch.gene, shown = ch.cards.map(c=>c.v);
+  if (ch.phase === 'best'){
+    ch.best = i; const b = shown[i];
+    for (const v of shown) if (v !== b) credit(g, b, v);
+    ch.rec = {t:Date.now(), mode:'choose', gene:g, scene:ch.scene, shown, best:b, worst:null, pick:'best', ...(ch.repeatOf ? {repeatOf:ch.repeatOf} : {})};
+    S.rounds++; S.qi = (S.qi || 0) + 1; S.history.push(ch.rec); if (S.history.length > 300) S.history = S.history.slice(-300); save(); meta();
+    $('board').querySelector(`.card[data-i="${i}"]`).classList.add('best');
+    $('cLearned').textContent = `Learned: ${vn(g,b)} over ${shown.filter(v=>v!==b).map(v=>vn(g,v)).join(' and ')}.`;
+    $('cWhy').value = ''; $('cWhy').classList.add('show');
+    if (shown.length > 2 && LAB.askWorst !== false) phase('worst'); else nextBoard();
+    return;
+  }
+  if (i === ch.best) return;
+  const w = shown[i]; for (const v of shown) if (v !== w && v !== shown[ch.best]) credit(g, v, w);
+  ch.rec.worst = w; save();
+  $('board').querySelector(`.card[data-i="${i}"]`).classList.add('worst');
+  $('cLearned').textContent += ` Least: ${vn(g,w)}.`; nextBoard();
+}
+function chooseOther(kind){ // both = no clear favourite, none = none of these, skip
+  if (cbusy || !ch) return;
+  if (ch.phase === 'worst'){ nextBoard(); return; }
+  if (kind !== 'skip' && ch.cards.length){ const g = ch.gene, shown = ch.cards.map(c=>c.v), idx = kind==='both' ? 0 : 1;
+    for (const v of shown) S.post[g][v][idx] += .5;
+    ch.rec = {t:Date.now(), mode:'choose', gene:g, scene:ch.scene, shown, best:null, worst:null, pick:kind, ...(ch.repeatOf ? {repeatOf:ch.repeatOf} : {})};
+    S.rounds++; S.history.push(ch.rec); save(); meta();
+    $('cLearned').textContent = kind==='both' ? `Noted: no clear favourite for ${G[g].label.toLowerCase()}. It may not matter to you.`
+      : 'Noted: none of these. Say what was missing below; it tells me which options to source next.';
+    $('cWhy').value = ''; $('cWhy').classList.add('show');
+  }
+  if (LAB.order) { S.qi = (S.qi || 0) + (kind === 'skip' || ch.cards.length ? 1 : 0); save(); meta(); }
+  nextBoard(kind==='skip' ? 0 : 420);
+}
+function nextBoard(wait = 520){ cbusy = true;
+  setTimeout(()=>$('board').classList.add('leaving'), wait);
+  setTimeout(()=>{ stop('cho'); showBoard(); $('board').classList.remove('leaving'); cbusy = false; }, wait + 240); }
+document.querySelectorAll('[data-choose]').forEach(b => b.onclick = () => chooseOther(b.dataset.choose));
+$('cReplay').onclick = () => { const st = [...$('board').querySelectorAll('.stage')]; restart(st); loop('cho', st); };
+$('cWhy').addEventListener('keydown', e => { if (e.key==='Enter' && $('cWhy').value.trim()){ const h = [...S.history].reverse().find(x=>x.mode==='choose');
+  if (h){ h.note = $('cWhy').value.trim(); save(); } $('cWhy').value=''; $('cWhy').classList.remove('show'); $('cLearned').textContent = 'Reason saved.'; } e.stopPropagation(); });
+function consistency(){ const out = {};
+  for (const h of S.history) if (h.mode==='choose' && h.repeatOf && h.best){ const o = S.history.find(x=>x.t===h.repeatOf); if (!o || !o.best) continue;
+    const r = out[h.gene] ||= {checks:0, agreed:0}; r.checks++; r.agreed += o.best===h.best; }
+  return out; }
+
+function setMode(m){ S.mode=m; document.querySelectorAll('#mode button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.mode===m)); $('hint').textContent = HINT[m]; }
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => { setMode(b.dataset.mode); save(); showPair(); });
+document.addEventListener('keydown', e => { if (e.target.closest('input,textarea')) return;
+  if (!$('choose').hidden){
+    if (/^[1-9]$/.test(e.key)){ e.preventDefault(); choose(+e.key - 1); return; }
+    const k = {ArrowUp:'both', ArrowDown:'none', Enter:'skip'}[e.key];
+    if (k && (k!=='skip' || ch?.phase==='worst')){ e.preventDefault(); chooseOther(k); } else if (e.key===' '){ e.preventDefault(); $('cReplay').click(); }
+    return; }
+  if ($('compare').hidden) return;
+  const k = {ArrowLeft:'L', ArrowRight:'R', ArrowUp:'both', ArrowDown:'none'}[e.key];
+  if (k){ e.preventDefault(); vote(k); } else if (e.key===' '){ e.preventDefault(); $('replay').click(); } });
+
+// Profile view
+function renderProfile(){
+  const c = champion(), n = S.rounds, neither = S.history.filter(h=>h.pick==='none').length, cons = consistency();
+  $('note').textContent = LAB.order ? `${Math.min(S.qi || 0, LAB.order.length)} of ${LAB.order.length} choices made. One pick per decision: these are your choices put together, not a settled estimate.` : n < 12 ? `${n} round${n===1?'':'s'} so far. Early picks move things a lot; each trait needs roughly 6+ showings to settle.`
+    : `${n} rounds. ${neither/n > .3 ? 'You pick "Neither" often, which usually means what you want is outside these options.' : 'Darker bar is the current favourite; the number is how many times that option was shown in a decisive pick.'}`;
+  $('genes').innerHTML = GK.map(g => `<div class="gene"><h3>${G[g].label}<em>${status(g)}${cons[g] ? ` · same pick ${cons[g].agreed}/${cons[g].checks}` : ''}</em></h3>${Object.keys(G[g].values).map(v =>
+    `<div class="gv${c[g]===v?' lead':''}"><span>${vn(g,v)}</span><span class="track"><i style="width:${Math.round(mean(g,v)*100)}%"></i></span><em>${seen(g,v)}</em></div>`).join('')}</div>`).join('');
+  stop('gal');
+  const scenes = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  $('gallery').innerHTML = scenes.map(id => { const s = LAB.scenes.find(x=>x.id===id) || {name:id}; return `<div class="gcell"><div class="stage" data-scene="${id}"></div><div class="cap">${s.name}</div></div>`; }).join('');
+  $('gallery').querySelectorAll('.stage').forEach(el => { const id = el.dataset.scene; show(el, id, PARAM ? {genes:c} : nearest(c, id)); loop('gal-'+id, [el]); });
+}
+function summary(){
+  const c = champion(), fav = {}, post = {};
+  for (const g of GK){ const {name, ...rest} = G[g].values[c[g]]; fav[g] = {choice:c[g], name, status:status(g), ...rest};
+    post[g] = Object.fromEntries(Object.keys(G[g].values).map(v=>[v,{winRate:+mean(g,v).toFixed(3), seen:seen(g,v)}])); }
+  const decisive = S.history.filter(h=>h.pick==='L'||h.pick==='R').slice(-12).map(h=>{ const w=h.pick==='L'?h.left:h.right, l=h.pick==='L'?h.right:h.left; return {scene:h.scene, winner:w, loser:l, note:h.note}; });
+  return {lab:LAB.id, rounds:S.rounds, neitherRate:S.rounds? +(S.history.filter(h=>h.pick==='none').length/S.rounds).toFixed(2):0,
+    favourite:fav, posteriors:post, recentDecisive:decisive, consistency:consistency(),
+    notes:S.history.filter(h=>h.note).map(h=>({pick:h.pick, scene:h.scene, ...(h.gene ? {gene:h.gene, best:h.best} : {}), note:h.note}))};
+}
+document.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => { const t=b.dataset.tab;
+  document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute('aria-selected', x===b));
+  for (const id of ['choose','compare','profile']) $(id).hidden = t!==id;
+  stop('cmp'); stop('cho'); stop('gal'); $('gallery').innerHTML='';
+  if (t==='profile') renderProfile(); else if (t==='compare') showPair(); else showBoard(); });
+$('copy').onclick = async () => { const txt = JSON.stringify(summary(), null, 2);
+  try { await navigator.clipboard.writeText(txt); $('copy').textContent='Copied'; setTimeout(()=>$('copy').textContent='Copy profile',1400); }
+  catch(e){ $('exportText').value = txt; $('export').classList.add('show'); $('exportText').select(); } };
+let armed = false;
+$('reset').onclick = () => { if (!armed){ armed=true; $('reset').textContent='Click again to reset'; setTimeout(()=>{armed=false; $('reset').textContent='Reset';},2500); return; }
+  armed=false; $('reset').textContent='Reset'; const m=S.mode; S=fresh(); S.mode=m; save(); meta(); renderProfile(); };
+
+// Persistence: localStorage always; plus a local server (Claude Code) or the artifact db (claude.ai)
+let remote = null, saving = false, dirty = false;
+const meta = () => $('rounds').textContent = LAB.order ? `${Math.min((S.qi || 0) + 1, LAB.order.length)} of ${LAB.order.length}` : `${S.rounds} round${S.rounds===1?'':'s'}`;
+const sync = t => $('sync').textContent = t;
+async function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){}
+  if (!remote) return; if (saving){ dirty=true; return; } saving = true;
+  try { await remote.put({state:S, summary:summary(), updatedAt:new Date().toISOString()}); sync(remote.label); } catch(e){ sync('Saved on this device'); }
+  saving = false; if (dirty){ dirty=false; save(); }
+}
+async function adopt(doc){ if (doc && doc.state && doc.state.lab===LAB.id && doc.state.rounds >= S.rounds){ S = normalize(JSON.parse(JSON.stringify(doc.state))); setMode(S.mode); meta(); if (!$('profile').hidden) renderProfile(); } else if (S.rounds) save(); }
+async function initRemote(){
+  if (['localhost','127.0.0.1'].includes(location.hostname)){
+    try { const r = await fetch('/api/state'); remote = {label:'Saved to project', put: d => fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(x=>{ if(!x.ok) throw 0; })};
+      await adopt(r.ok ? await r.json() : null); sync(remote.label); return; } catch(e){ remote = null; } }
+  try { if (!window.claude?.use) return;
+    const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]); if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return; const ref = db.doc(`data/users/${uid}/${LAB.id}`);
+    const snap = await ref.get(); remote = {label:'Synced', put: d => ref.set(d)}; await adopt(snap.exists ? snap.data() : null); sync('Synced');
+  } catch(e){ remote = null; }
+}
+setMode(S.mode); meta(); showBoard(); initRemote();
+</script>
+</body>
+</html>

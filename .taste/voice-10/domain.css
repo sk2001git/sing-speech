@@ -1,0 +1,108 @@
+/* Suara specimens: a phone screen per card. Only the decision under test changes between
+   the three cards on a screen; everything else is the current favourite. */
+.stage{min-height:600px;padding:14px}
+[data-tab="compare"]{display:none}
+.ph{--ground:#fff;--tint:#F4F5F7;--line:#E5E5EA;--ink:#1D1D1F;--muted:#5F5F64;--yes:#1F7A36;--no:#D70015;
+  --r:var(--s-r,18px);--rb:calc(var(--r) - 4px);
+  width:300px;height:570px;border-radius:30px;background:var(--ground);box-shadow:0 0 0 1px var(--line),0 12px 30px -18px rgb(0 0 0/35%);
+  overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:12px 16px 18px;text-align:left;color:var(--ink);
+  font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif}
+.ph *{box-sizing:border-box;margin:0}
+.ph .bar{display:flex;align-items:center;gap:8px;padding-bottom:4px}
+.ph .mark{width:30px;height:30px;border-radius:9px;background:#1D1D1F;display:grid;place-items:center;color:#fff}
+.ph .brand{font-weight:700;font-size:17px;margin-right:auto;letter-spacing:-.02em}
+.ph .pill{height:34px;padding:0 12px;border-radius:999px;background:var(--tint);display:grid;place-items:center;font-size:13px;font-weight:600}
+.ph h1{font-size:26px;line-height:1.12;font-weight:700;letter-spacing:-.03em}
+.ph .lead{font-size:15px;color:var(--muted);line-height:1.4}
+.ph .lbl{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.ph .small{font-size:13px;color:var(--muted)}
+.ph .grow{flex:1}
+
+/* Microphone */
+.ph .mz{display:grid;justify-items:center;gap:12px;padding:10px 0 4px}
+.ph .mic{width:var(--mic,110px);height:var(--mic,110px);border-radius:50%;background:var(--act);color:#fff;display:grid;place-items:center}
+.ph .mic svg{width:40%;height:40%}
+.ph .miclbl{font-size:17px;font-weight:600}
+.ph .mz .mx-level{--mx-level-c:var(--listen-ring)}
+.ph .wave{display:flex;gap:3px;align-items:center;height:26px}
+.ph .wave i{width:4px;height:6px;border-radius:2px;background:var(--listen-ring);transform-origin:center}
+.stage.play .ph .wave i{animation:s-wave .9s ease-in-out infinite alternate}
+.ph .wave i:nth-child(3n){animation-delay:.15s}.ph .wave i:nth-child(3n+1){animation-delay:.3s}.ph .wave i:nth-child(4n){animation-delay:.45s}
+@keyframes s-wave{to{transform:scaleY(3.4)}}
+/* simulated speech: the discs scale by keyframes here; the live app feeds the mic level */
+.stage.play .ph .mx-level[data-active="true"] .mx-level-disc[data-layer="inner"]{animation:s-talk-in 3s linear infinite}
+.stage.play .ph .mx-level[data-active="true"] .mx-level-disc[data-layer="outer"]{animation:s-talk-out 3s linear infinite}
+@keyframes s-talk-in{0%,100%{transform:scale(1)}8%{transform:scale(1.28)}14%{transform:scale(1.1)}22%{transform:scale(1.34)}30%{transform:scale(1.06)}40%{transform:scale(1.3)}52%{transform:scale(1.12)}62%{transform:scale(1.25)}72%,95%{transform:scale(1.02)}}
+@keyframes s-talk-out{0%,100%{transform:scale(1.06)}12%{transform:scale(1.42)}28%{transform:scale(1.46)}46%{transform:scale(1.44)}66%{transform:scale(1.4)}80%,95%{transform:scale(1.1)}}
+
+/* Topics */
+.ph .tiles{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:8px}
+.ph .tile{min-height:52px;padding:8px 12px;border-radius:var(--r);background:var(--tint);font-size:14px;font-weight:600;display:flex;align-items:center;line-height:1.2}
+.ph .rows{display:grid;gap:6px}
+.ph .row{display:flex;align-items:center;justify-content:space-between;height:40px;padding:0 14px;border-radius:var(--rb);background:var(--tint);font-size:14px;font-weight:600}
+.ph .quiet{height:48px;border-radius:var(--rb);background:var(--tint);display:grid;place-items:center;font-size:15px;font-weight:700}
+
+/* Cards and surfaces */
+.ph .sc{position:relative;border-radius:var(--r);padding:14px;display:grid;gap:6px;background:var(--tint)}
+.ph[data-surface="hairline"] .sc{background:#fff;box-shadow:inset 0 0 0 1px #D1D1D6}
+.ph[data-surface="lift"] .sc{background:#fff;box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/8%)}
+.ph .sc.best{background:#fff;box-shadow:inset 0 0 0 1px #C7C7CC}
+.ph[data-surface="lift"] .sc.best{box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/10%)}
+.ph .said{border-radius:var(--r);background:var(--tint);padding:10px 12px;font-size:14px;line-height:1.35}
+.ph .said b{font-weight:700}
+.ph .t{font-size:17px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.ph .t.lg{font-size:19px}
+.ph .sum{font-size:13.5px;color:var(--muted);line-height:1.4}
+.ph .meta{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.ph .meta b{color:var(--ink);font-weight:600}
+.ph .bm{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.ph .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ph .grid2 .sc{min-height:84px;align-content:start}
+.ph .list{display:grid;gap:8px}
+.ph .compact{padding:10px 14px}
+.ph .compact .t{font-size:15px}
+.ph .cards>*{opacity:0}
+.stage.play .ph .cards>*{animation:mx-in calc(var(--mx-t)*.36s) var(--mx-ease) both}
+.stage.play .ph .cards>:nth-child(2){animation-delay:calc(var(--mx-t)*.06s)}
+.stage.play .ph .cards>:nth-child(3){animation-delay:calc(var(--mx-t)*.12s)}
+.stage.play .ph .cards>:nth-child(4){animation-delay:calc(var(--mx-t)*.18s)}
+.ph .ph-bars{display:grid;gap:9px}
+.ph .ph-bars i{display:block;height:10px;border-radius:5px;background:#EDEEF1}
+.ph .ph-bars i:nth-child(1){width:36%;height:9px}.ph .ph-bars i:nth-child(2){width:86%;height:16px}.ph .ph-bars i:nth-child(3){width:70%}
+.ph .mx-bolt{--mx-edge-w:3px;--mx-edge-glow:8px;--mx-bolt-tail:250deg}
+.ph .spin{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:600}
+.ph .spin .mx-spinner{color:var(--mx-light);width:20px;height:20px}
+
+/* Buttons */
+.ph .btn{height:52px;border-radius:var(--rb);display:grid;place-items:center;font-size:16px;font-weight:700;background:var(--act);color:#fff}
+
+/* Confirm */
+.ph .yn{display:grid;gap:10px}
+.ph .yn[data-l="squares"]{grid-template-columns:1fr 1fr}
+.ph .ch{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--r);background:var(--tint);display:flex;align-items:center;gap:12px;font-size:17px;font-weight:700;padding:0 16px;min-height:64px}
+.ph .yn[data-l="squares"] .ch{flex-direction:column;justify-content:center;min-height:150px;padding:0}
+.ph .yn[data-l="buttons"] .ch{min-height:52px;justify-content:center;border-radius:var(--rb)}
+.ph .yn[data-l="buttons"] .ch.no{background:#fff;box-shadow:inset 0 0 0 2px #C7C7CC}
+.ph .ch>*{position:relative;z-index:1}
+.ph .disc{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.ph .yn[data-l="squares"] .disc{width:56px;height:56px}
+.ph .yn[data-l="buttons"] .disc{width:26px;height:26px;background:none!important}
+.ph .yn[data-l="buttons"] .ch.yes{background:var(--yes);color:#fff}
+.ph .yn[data-l="buttons"] .ch.no .disc{color:var(--no)}
+.ph .ch.yes .disc{background:var(--yes)}.ph .ch.no .disc{background:var(--no)}
+.ph .ch .fill{position:absolute;z-index:0;border-radius:50%;background:var(--yes);width:620px;height:620px;left:70%;top:45%;transform:translate(-50%,-50%) scale(0)}
+.ph .ch .tap{position:absolute;z-index:2;width:30px;height:30px;margin:-15px;border-radius:50%;background:rgb(0 0 0/18%);left:70%;top:45%;opacity:0}
+.stage.play .ph .ch .tap{animation:s-tap calc(var(--mx-t)*.5s) ease-out calc(var(--mx-t)*.7s) both}
+.stage.play .ph .ch .fill{animation:s-fill calc(var(--mx-t)*.46s) var(--mx-draw) calc(var(--mx-t)*.8s) both}
+.stage.play .ph .ch.yes>span{animation:s-white .01s linear calc(var(--mx-t)*.84s) both}
+.stage.play .ph .ch.yes .disc{animation:s-disc .01s linear calc(var(--mx-t)*.84s) both}
+.stage.play .ph .ch.no{animation:s-dim calc(var(--mx-t)*.3s) var(--mx-draw) calc(var(--mx-t)*.85s) both}
+@keyframes s-tap{0%{opacity:0;transform:scale(.6)}30%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+@keyframes s-fill{to{transform:translate(-50%,-50%) scale(1)}}
+@keyframes s-white{to{color:#fff}}
+@keyframes s-disc{to{background:rgb(255 255 255/22%)}}
+@keyframes s-dim{to{opacity:.4}}
+
+/* Done */
+.ph .done{display:grid;justify-items:center;text-align:center;gap:12px;padding-top:40px}
+.stage:not(.play) .ph .mx-mark *{animation:none!important}
