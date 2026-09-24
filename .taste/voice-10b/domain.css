@@ -1,0 +1,141 @@
+/* Suara lab, round 2. Round 1's clear picks are held fixed; the three "none of these"
+   decisions get new options sourced from ElevenLabs UI and Airbnb's live site. */
+.stage{min-height:600px;padding:14px}
+[data-tab="compare"]{display:none}
+.ph{--ink:#222222;--muted:#6C6C6C;--line:#DDDDDD;--div:#EBEBEB;--skel:#EBEBEB;
+  --blue:#007AFF;--act:#222222;--rb:var(--s-rb,12px);
+  width:300px;height:570px;border-radius:30px;background:var(--page,#fff);box-shadow:0 0 0 1px #E5E5EA,0 12px 30px -18px rgb(0 0 0/35%);
+  overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:12px 18px 18px;text-align:left;color:var(--ink);position:relative;
+  font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif}
+.ph *{box-sizing:border-box;margin:0}
+.ph .grow{flex:1}
+.ph h1{font-size:var(--h-size,26px);font-weight:var(--h-weight,600);letter-spacing:var(--h-ls,-.02em);line-height:1.15}
+.ph .lead{font-size:14px;color:var(--muted);line-height:1.45}
+.ph .small{font-size:12.5px;color:var(--muted)}
+.ph .center{text-align:center}
+
+/* Headers */
+.ph .bar{display:flex;align-items:center;gap:8px;min-height:36px}
+.ph .mark{width:28px;height:28px;border-radius:8px;background:#222;display:grid;place-items:center;color:#fff}
+.ph .brand{font-weight:700;font-size:16px;margin-right:auto;letter-spacing:-.02em}
+.ph .pill{height:32px;padding:0 12px;border-radius:999px;background:#F4F5F7;display:grid;place-items:center;font-size:12.5px;font-weight:600}
+.ph .ask{flex:1;height:44px;border-radius:40px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 20px rgb(0 0 0/10%);
+  display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;font-weight:600}
+.ph .globe{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:11px;font-weight:700}
+
+/* Buttons */
+.ph .btn{height:var(--b-h,48px);border-radius:var(--rb);background:var(--act);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:600;flex:none}
+.ph .link{font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-align:center;padding:10px}
+.ph .quiet{height:44px;border-radius:var(--rb);background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:14px;font-weight:600}
+
+/* Topic entry */
+.ph .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.ph .chip{height:34px;padding:0 12px;border-radius:24px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:6px;font-size:12.5px}
+
+/* Mic button (home) */
+.ph .mz{display:grid;justify-items:center;gap:12px;padding-top:30px}
+.ph .mic{width:140px;height:140px;border-radius:50%;background:var(--act);color:#fff;display:grid;place-items:center}
+.ph .mic svg{width:40%;height:40%}
+.ph .miclbl{font-size:16px;font-weight:600}
+
+/* ── ElevenLabs-style orb, redrawn lag-free: blurred blobs on layers that only rotate. ── */
+.orb{--o:160px;position:relative;width:var(--o);height:var(--o);border-radius:50%;overflow:hidden;isolation:isolate;
+  background:radial-gradient(circle at 50% 42%,var(--c0) 0%,var(--c1) 48%,var(--c2) 100%);
+  box-shadow:0 18px 50px -18px var(--c2),inset 0 -10px 30px rgb(255 255 255/35%);transform:translateZ(0)}
+.orb i{position:absolute;inset:-20%;will-change:transform}
+.orb i::before{content:'';position:absolute;border-radius:50%;filter:blur(calc(var(--o)*.1))}
+.orb .o1::before{left:18%;top:14%;width:52%;height:40%;background:var(--b1);opacity:.95}
+.orb .o2::before{left:40%;top:44%;width:48%;height:44%;background:var(--b2);opacity:.85}
+.orb .o3::before{left:22%;top:52%;width:34%;height:30%;background:#fff;opacity:.8}
+.stage.play .orb .o1{animation:mx-spin var(--s1,6s) linear infinite}
+.stage.play .orb .o2{animation:mx-spin var(--s2,9s) linear infinite reverse}
+.stage.play .orb .o3{animation:mx-spin var(--s3,4.5s) linear infinite}
+.orb::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgb(255 255 255/.55),transparent 42%);z-index:2}
+.orb-wrap{display:grid;place-items:center;will-change:transform}
+.stage.play .orb-wrap[data-s="listen"]{animation:s-talk 3s linear infinite}
+.stage.play .orb-wrap[data-s="think"]{animation:s-breathe 2.4s ease-in-out infinite}
+.orb-wrap[data-s="listen"] .orb{--s1:2.6s;--s2:3.8s;--s3:2s}
+.orb-wrap[data-s="think"] .orb{--s1:3.5s;--s2:5s;--s3:2.8s}
+@keyframes s-talk{0%,100%{transform:scale(1)}8%{transform:scale(1.07)}16%{transform:scale(1.01)}24%{transform:scale(1.09)}34%{transform:scale(1.02)}44%{transform:scale(1.06)}56%{transform:scale(1.03)}64%{transform:scale(1.08)}76%,94%{transform:scale(1)}}
+@keyframes s-breathe{50%{transform:scale(.93)}}
+
+/* ElevenLabs voice button: a pill with a live waveform inside */
+.vbtn{width:250px;height:76px;border-radius:40px;background:color-mix(in srgb,var(--c2) 16%,#fff);display:flex;align-items:center;gap:12px;padding:0 18px}
+.vbtn .stop{width:44px;height:44px;border-radius:50%;background:#222;display:grid;place-items:center;color:#fff;flex:none}
+.vbtn .bars{flex:1;display:flex;align-items:center;justify-content:center;gap:2px;height:44px;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
+.vbtn .bars i{width:3px;height:30px;border-radius:1.5px;background:var(--bar);transform:scaleY(.15);will-change:transform}
+.stage.play .vbtn .bars i{animation:s-bar 1.1s ease-in-out infinite alternate}
+
+/* ElevenLabs bar visualiser: 15 round bars in a soft box; the lit layer only changes opacity */
+.bviz{width:250px;height:128px;border-radius:16px;background:#F4F5F7;display:flex;align-items:center;justify-content:center;gap:6px;padding:16px}
+.bviz i{position:relative;width:10px;height:92px;border-radius:999px;transform:scaleY(.25);will-change:transform}
+.bviz i::before,.bviz i::after{content:'';position:absolute;inset:0;border-radius:inherit}
+.bviz i::before{background:#DDDDDD}
+.bviz i::after{background:var(--bar);opacity:0}
+.stage.play .bviz i{animation:s-bar 1.2s ease-in-out infinite alternate}
+.stage.play .bviz i::after{animation:s-lit 1.5s steps(1) infinite}
+@keyframes s-bar{0%{transform:scaleY(.18)}100%{transform:scaleY(1)}}
+@keyframes s-lit{0%,40%{opacity:1}41%,100%{opacity:0}}
+
+/* Thinking: ElevenLabs shimmering text, redrawn with transforms (a moving window, the text held still) */
+.shim{position:relative;display:inline-block;white-space:nowrap}
+.shim .base{color:#B0B0B5}
+.shim .win{position:absolute;left:0;top:0;height:100%;width:40%;overflow:hidden;will-change:transform;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent)}
+.shim .hi{position:absolute;left:0;top:0;color:#222;will-change:transform}
+.stage.play .shim .win{animation:s-win 2.5s linear infinite}
+.stage.play .shim .hi{animation:s-hi 2.5s linear infinite}
+@keyframes s-win{0%{transform:translateX(-100%)}80%,100%{transform:translateX(250%)}}
+@keyframes s-hi{0%{transform:translateX(40%)}80%,100%{transform:translateX(-100%)}}
+.skel{display:grid;gap:9px;padding:16px;border-radius:var(--card-r,20px);background:#fff;box-shadow:var(--card-sh)}
+.skel i{display:block;height:11px;border-radius:4px;background:var(--skel)}
+.skel i:nth-child(1){width:34%}.skel i:nth-child(2){width:86%;height:16px}.skel i:nth-child(3){width:66%}
+.stage.play .skel.pulse i{animation:s-pulse 1.4s ease-in-out infinite}
+@keyframes s-pulse{50%{opacity:.45}}
+.dots{display:flex;gap:8px;justify-content:center}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--bar)}
+.stage.play .dots i{animation:s-dot 1.2s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes s-dot{0%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+/* Answer cards */
+.ph .sc{border-radius:var(--card-r,20px);background:#fff;box-shadow:var(--card-sh);padding:14px 16px;display:grid;gap:5px}
+.ph[data-card="rows"] .sc{box-shadow:none;border-radius:0;padding:12px 0;border-bottom:1px solid var(--div)}
+.ph .sc .t{font-size:16px;font-weight:600;line-height:1.25}
+.ph .sc .t.lg{font-size:18px}
+.ph .sc .sum{font-size:13px;color:var(--muted);line-height:1.4}
+.ph .sc .meta{font-size:12.5px;color:var(--muted)}
+.ph .bm{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600}
+.ph .said{font-size:13px;color:var(--muted)}
+.ph .said b{color:var(--ink);font-weight:600}
+
+/* Yes / no, three Airbnb-sourced ways */
+.ph .sheet-bg{position:absolute;inset:0;background:rgb(0 0 0/28%)}
+.ph .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:32px 32px 0 0;box-shadow:0 8px 28px rgb(0 0 0/28%);
+  padding:26px 20px 20px;display:grid;gap:12px;text-align:center}
+.ph .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ph .tile{position:relative;height:120px;border-radius:16px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;align-content:center;gap:8px;font-size:15px;font-weight:600}
+.ph .tile svg{width:30px;height:30px}
+.ph .tile .ring{position:absolute;inset:-1px;border-radius:16px;box-shadow:inset 0 0 0 2px #222;opacity:0}
+.stage.play .ph .tile.s-pick .ring{animation:s-show .2s ease-out .9s both}
+.stage.play .ph .tile.s-pick{animation:s-press .25s ease-out .75s both}
+.ph .lcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ph .lc{position:relative;border-radius:20px;background:#fff;box-shadow:0 2px 4px rgb(0 0 0/18%),0 0 0 1px rgb(0 0 0/8%);padding:12px;display:grid;gap:10px}
+.ph .lc .art{height:92px;border-radius:14px;display:grid;place-items:center}
+.ph .lc .art svg{width:40px;height:40px}
+.ph .lc.y .art{background:linear-gradient(160deg,#E9F6EC,#D3EEDB);color:#1F7A36}
+.ph .lc.n .art{background:linear-gradient(160deg,#FBECEE,#F6D9DD);color:#B3122A}
+.ph .lc b{font-size:14.5px;font-weight:600;text-align:center}
+.ph .lc .ring{position:absolute;inset:0;border-radius:20px;box-shadow:inset 0 0 0 2px #222;opacity:0}
+.stage.play .ph .lc.s-pick .ring{animation:s-show .2s ease-out .9s both}
+.stage.play .ph .lc.s-pick{animation:s-press .25s ease-out .75s both}
+.stage.play .ph .btn.pressme{animation:s-press .25s ease-out .75s both}
+@keyframes s-show{to{opacity:1}}
+@keyframes s-press{50%{transform:scale(.96)}}
+.ph .done{display:grid;justify-items:center;gap:12px;text-align:center;padding-top:40px}
+.stage:not(.play) .ph .mx-mark *{animation:none!important}
+/* Long source captions must truncate, not widen the card (found on the yes/no screen). */
+#board .card{min-width:0}
+#board .card>.stage,#board .card>.cap{max-width:100%;min-width:0}
+#board .card .cap a,#board .card .cap i{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
