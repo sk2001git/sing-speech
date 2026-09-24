@@ -41,6 +41,13 @@ h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.03e
 .link { background: none; border: 0; font-size: 19px; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; padding: 12px; }
 .note { display: flex; gap: 12px; padding: 16px 18px; border-radius: var(--r); background: #fff8e6; border: 1px solid #f0d9a0; font-size: 17px; line-height: 1.45; color: #5c3d00; }
 .note svg { flex: none; width: 22px; height: 22px; margin-top: 2px; }
+/* Good to know: a quiet row until opened; the marked note appears only when expanded. */
+.more { border-radius: var(--r); border: 1px solid var(--line); background: #fff; }
+.more > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; font-size: 18px; font-weight: 600; cursor: pointer; }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary small { font-size: 16px; font-weight: 400; color: var(--muted); }
+.more[open] > summary svg { transform: rotate(180deg); }
+.more > .note { margin: 0 12px 12px; }
 .sources { display: grid; gap: 0; border-radius: var(--r); border: 1px solid var(--line); overflow: hidden; }
 .sources .h { padding: 12px 18px; font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: .02em; background: var(--subtle); }
 .src { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); }
@@ -109,6 +116,10 @@ const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt
 const siteOf = (u) => (Object.values(FX).flatMap((f) => f.guide.sources).find((s) => s.url === u) || { site: new URL(u).hostname });
 const sitesLine = (g) => [...new Set(g.sources.map((s) => s.site))].join(', ');
 
+let OPEN = false; // only the '-open' state renders Good to know expanded
+/** Collapsed by default: a plain row with a short summary; the marked note shows only when opened. */
+const goodToKnow = (summary, lines, open) => `<details class="more"${open ? ' open' : ''}><summary><span>Good to know <small>· ${esc(summary)}</small></span>${I.chev}</summary>
+  <div class="note">${I.info}<div style="display:grid;gap:8px">${lines.map((c) => `<span>${esc(c)}</span>`).join('')}</div></div></details>`;
 function searching(stage) {
   const st = (i) => (i < stage ? 'done' : i === stage ? 'now' : 'todo');
   return `<div class="said">You said <b>${esc(FX.tripcom.question)}</b></div>
@@ -131,7 +142,7 @@ function result(key) {
       <p class="meta"><b>${g.steps.length} steps</b> · ${esc(sitesLine(g))}</p>
       <button class="btn">Start guide</button>
     </article>
-    ${g.cautions.length ? `<div class="note">${I.info}<div style="display:grid;gap:8px">${g.cautions.slice(0, 3).map((c) => `<span>${esc(c)}</span>`).join('')}</div></div>` : ''}
+    ${g.cautions.length ? goodToKnow(`${g.cautions.length} ${g.cautions.length === 1 ? 'thing' : 'things'} to check`, g.cautions.slice(0, 3), OPEN) : ''}
     <div class="sources"><div class="h">WHERE THIS IS FROM · ${g.sources.length} PAGES</div>
       ${g.sources.map((s) => `<div class="src"><b>${esc(s.site)}</b><span>${esc(s.title)}</span></div>`).join('')}</div>
     <p class="small">Found on the web, not an official government answer. Check the page before you pay or sign up.</p>`;
@@ -163,7 +174,7 @@ function partial() {
     <article class="card"><span class="badge">${I.globe}From the web</span><p class="title">Set up Singpass on a new phone</p>
       <p class="sum">Download the app, sign in, then move your Singpass from your old phone.</p><p class="meta"><b>1 step</b> · ask.gov.sg</p>
       <button class="btn">Start guide</button></article>
-    <div class="note">${I.info}<span>I could only check 1 of the 4 steps against the pages I found, so I have left the other 3 out. Ask again, or look on ask.gov.sg.</span></div>`;
+    ${goodToKnow('3 steps left out', ['I could only check 1 of the 4 steps against the pages I found, so I have left the other 3 out. Ask again, or look on ask.gov.sg.'], OPEN)}`;
 }
 function none() {
   return `<div class="said">You said <b>How do I get free hotel upgrades with my senior card?</b></div>
@@ -183,6 +194,7 @@ const SCREENS = {
   'step-ibkr-2': () => steps('ibkr', 1),
   'result-coinbase': () => result('coinbase'),
   'step-coinbase-2': () => steps('coinbase', 1),
+  'result-ibkr-open': () => { OPEN = true; const html = result('ibkr'); OPEN = false; return html; },
   'partial': partial,
   'none': none,
 };
