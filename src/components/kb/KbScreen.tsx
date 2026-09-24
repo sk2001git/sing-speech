@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { ProgressFill, SuccessMark } from '../motion/motion';
-import Waveform from './Waveform';
+import SpectreWave from './SpectreWave';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
 import JourneyView from './JourneyView';
@@ -28,8 +28,10 @@ export interface KbScreenProps {
 	onLanguage: (setting: ReplySetting) => void;
 	/** Which vendor route heard the request, shown small at the foot. */
 	routeLabel?: string;
-	/** Microphone loudness, 0 to 1, for the live waveform. */
+	/** Microphone loudness, 0 to 1. */
 	level?: number;
+	/** The open microphone's analyser, for the listening wave. */
+	analyser?: AnalyserNode | null;
 	/** Find: typing a few letters instead of speaking. */
 	finding?: boolean;
 	onFind?: () => void;
@@ -363,7 +365,8 @@ function Chip({ tone, text }: { tone: 'ready' | 'live' | 'busy' | 'alert'; text:
 /**
  * Home, arming, listening and searching: the owner's picks from the taste lab (vault plan
  * suara-2026-09-25-feature-apply-taste-lab-picks). Home is the microphone and nothing else,
- * with the topics one tap away; listening is a voice pill; searching is a grey outline.
+ * with the topics one tap away; listening is a spectral wave (plan
+ * suara-2026-09-25-feature-spectre-listening-wave); searching is a grey outline.
  */
 function Talk(p: BodyProps) {
 	const s = p.state;
@@ -387,22 +390,21 @@ function Talk(p: BodyProps) {
 			</>
 		);
 	}
+	// Listening: a spectral wave that follows the voice, and one big stop button at the bottom.
 	if (s.phase === 'listening') {
 		return (
-			<>
+			<section className="k-listen">
 				<h1 className="k-h1">{p.w.imListening}</h1>
-				<section className="k-voice-zone">
-					<div className="k-voice">
-						<button className="k-voice-stop" type="button" onClick={p.onSpeak} aria-label={p.w.tapDone}>
-							<StopIcon />
-						</button>
-						<Waveform active level={p.level ?? 0} />
-					</div>
+				<SpectreWave active analyser={p.analyser} />
+				<div className="k-listen-foot">
+					<button className="k-stop" type="button" aria-label={p.w.tapDone} onClick={p.onSpeak}>
+						<StopIcon />
+					</button>
 					<p className="k-orb-label" aria-live="polite">
 						{p.w.tapDone}
 					</p>
-				</section>
-			</>
+				</div>
+			</section>
 		);
 	}
 	const heading = waiting ? p.w.gettingReady : greeting ? p.w.hello : p.w.whatNeed;

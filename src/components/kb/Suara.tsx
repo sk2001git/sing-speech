@@ -60,14 +60,18 @@ async function routeSay(text: string, language: EntryLanguage, route: string): P
 	}
 }
 
-/** Loudness readings from the open microphone, about ten a second. */
-function watchLevel(stream: MediaStream, onLevel: (level: number, now: number) => void): () => void {
+/**
+ * Loudness readings from the open microphone, about ten a second. The analyser is also handed
+ * to the listening screen, which reads its frequency bands every frame to draw the wave.
+ */
+function watchLevel(stream: MediaStream, onLevel: (level: number, now: number) => void, onAnalyser?: (a: AnalyserNode | null) => void): () => void {
 	const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 	if (!Ctx) return () => {};
 	const ctx = new Ctx();
 	const analyser = ctx.createAnalyser();
 	analyser.fftSize = 1024;
 	ctx.createMediaStreamSource(stream).connect(analyser);
+	onAnalyser?.(analyser);
 	const buf = new Float32Array(analyser.fftSize);
 	const timer = setInterval(() => {
 		analyser.getFloatTimeDomainData(buf);
@@ -75,6 +79,7 @@ function watchLevel(stream: MediaStream, onLevel: (level: number, now: number) =
 	}, 100);
 	return () => {
 		clearInterval(timer);
+		onAnalyser?.(null);
 		void ctx.close();
 	};
 }
@@ -119,6 +124,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const [loadingMore, setLoadingMore] = useState(false);
 	/** Loudness for the waveform: only while the microphone is open, ten times a second. */
 	const [level, setLevel] = useState(0);
+	const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 	const [finding, setFinding] = useState(false);
 	const recording = useRef<Recording | null>(null);
 	const live = useRef<LiveLink | null>(null);
@@ -325,7 +331,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 					ended = true;
 					finishRef.current(verdict);
 				}
-			});
+			}, setAnalyser);
 			recording.current = { rec, stream, mimeType, chunks, stopWatching, heardSpeech: () => gate.heardSpeech };
 			rec.start();
 			dispatch({ type: 'GRANTED' });
@@ -411,6 +417,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onLanguage={onLanguage}
 			routeLabel={routeLabel}
 			level={level}
+			analyser={analyser}
 			finding={finding}
 			onFind={() => setFinding(true)}
 			onFindClose={() => setFinding(false)}
