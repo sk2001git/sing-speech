@@ -2,17 +2,20 @@
   "tripcom": {
     "question": "How do I book a hotel on Trip.com and earn its rewards?",
     "model": "gpt-6-luna",
-    "ms": 14218,
+    "ms": 17422,
     "searches": 2,
     "guide": {
-      "fit": "good",
+      "kind": "steps",
       "title_short": "Book & earn",
-      "title_full": "Book a Trip.com hotel and earn Trip Coins",
-      "summary": "Search and book your stay while signed in; eligible hotel bookings earn Trip Coins after you check out.",
+      "title_full": "Book a Trip.com hotel and earn rewards",
+      "summary": "Sign in or join Trip.com, book an eligible hotel on its site or app, then complete your stay to earn Trip Coins.",
+      "answer": "",
+      "answer_urls": [],
+      "prerequisites": "You need a Trip.com account and your hotel dates, destination, and guest details.",
       "steps": [
         {
           "name": "Sign in or join",
-          "text": "Open Trip.com and sign in to your account, or join as a member. Members can earn Trip Coins from eligible hotel bookings made on Trip.com.",
+          "text": "Open Trip.com and sign in, or create an account. Members can earn Trip Coins from eligible hotel bookings.",
           "confirm_label": "I’m signed in",
           "source_urls": [
             "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"
@@ -20,48 +23,55 @@
         },
         {
           "name": "Search for a hotel",
-          "text": "Choose Hotels & Homes. Enter your destination, check-in and check-out dates, and the number of guests, then search.",
-          "confirm_label": "I see hotels",
+          "text": "Choose Hotels, enter your destination, check-in and check-out dates, and number of guests, then search. Compare the room price and details.",
+          "confirm_label": "I’ve searched",
           "source_urls": [
-            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"
+            "https://www.trip.com/hotels/"
           ]
         },
         {
-          "name": "Choose a room",
-          "text": "Select a hotel and room. Check the room’s price, payment terms, and cancellation rules before you continue.",
-          "confirm_label": "I chose a room",
+          "name": "Check the room conditions",
+          "text": "Before choosing a room, check its cancellation and change rules, what is included, and whether payment is due now or later. The booking is also subject to the hotel’s terms.",
+          "confirm_label": "I’ve checked",
           "source_urls": [
-            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html",
             "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"
           ]
         },
         {
-          "name": "Enter details and book",
-          "text": "Enter the guest details requested, choose a payment method, and complete the booking. Check the confirmation for your booking details.",
-          "confirm_label": "Booking confirmed",
+          "name": "Book and pay",
+          "text": "Select the room, enter the requested guest details, review the total and policies, then complete the booking on Trip.com. Keep the confirmation for your records.",
+          "confirm_label": "I’ve booked",
           "source_urls": [
-            "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html"
+            "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"
           ]
         },
         {
           "name": "Complete your stay",
-          "text": "Stay at the hotel to qualify for booking Trip Coins. The amount depends on your final payment and member tier; Trip.com says hotel booking coins usually arrive 2–6 weeks after your stay.",
-          "confirm_label": "I’ve checked out",
+          "text": "Trip.com’s stated hotel earning rate is 50 Trip Coins per US$100 (or equivalent) spent, before any applicable tier bonus. Coins are based on eligible final payment; the exact award is shown after booking. A fully cancelled hotel booking earns no coins, and previously awarded coins may be deducted.",
+          "confirm_label": "I understand",
           "source_urls": [
-            "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions",
-            "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us"
+            "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"
+          ]
+        },
+        {
+          "name": "Check your rewards",
+          "text": "After the stay, check your Trip Coins balance in your Trip.com account. You can use coins toward eligible prepaid bookings; Trip.com says 100 Trip Coins is approximately US$1 in savings.",
+          "confirm_label": "I’ll check my account",
+          "source_urls": [
+            "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"
           ]
         }
       ],
+      "legal": {
+        "applies": false,
+        "text": "",
+        "source_urls": []
+      },
+      "disclaimer": "Trip.com reward rates, eligibility, booking conditions, and exchange values can change; check the booking page and current rewards terms before paying.",
       "sources": [
         {
-          "url": "https://www.trip.com/ask/travel-question/how-can-i-book-a-hotel-through-trip.com%3F.html",
-          "title": "How can I book a hotel through Trip.com?",
-          "site": "Trip.com"
-        },
-        {
-          "url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions",
-          "title": "Trip.com loyalty program",
+          "url": "https://www.trip.com/hotels/",
+          "title": "Hotels & Homes",
           "site": "Trip.com"
         },
         {
@@ -70,170 +80,90 @@
           "site": "Trip.com"
         },
         {
-          "url": "https://www.trip.com/customer/loyalty/?curr=AUD&locale=en-us",
-          "title": "Trip.com loyalty program",
+          "url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions",
+          "title": "Trip.com loyalty program FAQs",
           "site": "Trip.com"
         }
       ],
       "cautions": [
-        "Trip Coins are not guaranteed for every booking. Trip.com says the exact reward is shown after payment, and some bookings, promotions, or fully cancelled stays may not earn coins."
-      ]
-    }
-  },
-  "paynow": {
-    "question": "How do I set up PayNow on DBS digibank and send money?",
-    "model": "gpt-6-luna",
-    "ms": 12806,
-    "searches": 1,
-    "guide": {
-      "fit": "good",
-      "title_short": "Set up PayNow",
-      "title_full": "Set up PayNow and send money in DBS digibank",
-      "summary": "Register your mobile number to receive PayNow, then use the recipient’s mobile number to send money.",
-      "steps": [
-        {
-          "name": "Open PayNow",
-          "text": "Log in to the DBS digibank app, tap Pay & Transfer at the bottom, then tap PayNow.",
-          "confirm_label": "PayNow is open",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
-          ]
-        },
-        {
-          "name": "Start registration",
-          "text": "Tap PayNow Profile, then tap Register your mobile number.",
-          "confirm_label": "Registration started",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
-          ]
-        },
-        {
-          "name": "Choose your account",
-          "text": "Select the DBS/POSB account you want linked to your mobile number, then tap Next.",
-          "confirm_label": "Account selected",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
-          ]
-        },
-        {
-          "name": "Finish registration",
-          "text": "Check the details shown and tap Register now to complete registration.",
-          "confirm_label": "PayNow registered",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html"
-          ]
-        },
-        {
-          "name": "Choose mobile transfer",
-          "text": "In PayNow, select the option to send to a mobile number. If asked to log in, sign in with Face ID, Touch ID, or your digibank User ID and PIN.",
-          "confirm_label": "Mobile transfer selected",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
-            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
-          ]
-        },
-        {
-          "name": "Enter their number",
-          "text": "Enter the recipient’s mobile number, then tap Next.",
-          "confirm_label": "Number entered",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow"
-          ]
-        },
-        {
-          "name": "Enter the amount",
-          "text": "Enter the amount to send, then tap Next.",
-          "confirm_label": "Amount entered",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
-            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
-          ]
-        },
-        {
-          "name": "Check and send",
-          "text": "Check the recipient and transfer details carefully. If they are correct, tap Transfer now.",
-          "confirm_label": "Transfer sent",
-          "source_urls": [
-            "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
-            "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html"
-          ]
-        }
-      ],
-      "sources": [
-        {
-          "url": "https://www.dbs.com.sg/personal/support/bank-ssb-paynow-register-profile.html",
-          "title": "Apply for PayNow",
-          "site": "DBS Singapore"
-        },
-        {
-          "url": "https://www.dbs.com.sg/personal/deposits/pay-with-ease/paynow",
-          "title": "PayNow with DBS",
-          "site": "DBS Singapore"
-        },
-        {
-          "url": "https://www.dbs.com.sg/personal/support/bank-local-funds-transfer-paynow-transfer.html",
-          "title": "Transfer Funds using PayNow",
-          "site": "DBS Singapore"
-        }
-      ],
-      "cautions": [
-        "The recipient must have registered that mobile number for PayNow. The app may show only selected letters of the recipient’s name, so check carefully that it is the right person before sending."
+        "Promotions or special booking types may be excluded from Trip Coins; check the offer’s terms.",
+        "Cancellation may reduce or remove rewards, so check the room’s cancellation policy before booking."
       ]
     }
   },
   "ibkr": {
     "question": "How do I deposit money to IBKR from my Singapore bank account?",
     "model": "gpt-6-luna",
-    "ms": 13044,
-    "searches": 3,
+    "ms": 17111,
+    "searches": 2,
     "guide": {
-      "fit": "good",
+      "kind": "steps",
       "title_short": "Deposit to IBKR",
       "title_full": "Deposit money from a Singapore bank to IBKR",
-      "summary": "Create a deposit notification in IBKR, then send the money from your bank using the exact instructions IBKR gives you.",
+      "summary": "Create a deposit notification in IBKR, then use the instructions it gives you to send the money from your bank.",
+      "answer": "",
+      "answer_urls": [],
+      "prerequisites": "You need an open IBKR account and access to Client Portal.",
       "steps": [
         {
-          "name": "Start a deposit in IBKR",
-          "text": "Sign in to Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.",
-          "confirm_label": "I opened deposits",
+          "name": "Start a deposit",
+          "text": "Sign in to IBKR Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.",
+          "confirm_label": "I have selected my account",
           "source_urls": [
-            "https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm"
+            "https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm"
           ]
         },
         {
-          "name": "Choose bank wire and currency",
-          "text": "Choose a new deposit method, select Bank Wire, and select the currency you want to send, such as SGD if available for your account.",
-          "confirm_label": "I chose wire",
+          "name": "Choose the bank method",
+          "text": "Select the deposit currency and a method available to you. For a bank wire, select Bank Wire and enter your Singapore bank as the sending institution and the amount. The options shown may vary by account and currency.",
+          "confirm_label": "I have chosen a method",
           "source_urls": [
-            "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm",
+            "https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm",
+            "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm"
+          ]
+        },
+        {
+          "name": "Get IBKR's instructions",
+          "text": "Submit the deposit notification and open the instructions IBKR provides. For a wire, use the routing details for that specific currency exactly as shown; IBKR says routing instructions vary by currency.",
+          "confirm_label": "I have the instructions",
+          "source_urls": [
+            "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm",
             "https://www.interactivebrokers.com.sg/en/index.php?f=48276"
           ]
         },
         {
-          "name": "Enter the deposit details",
-          "text": "Enter your bank’s name and the amount you plan to send. Select Get Wire Instructions and keep the instructions shown for this deposit.",
-          "confirm_label": "I have instructions",
+          "name": "Send the money from your bank",
+          "text": "In your Singapore bank's app or online banking, arrange the transfer using IBKR's instructions. A notification alone does not move money. Check your bank's fees and make sure the sending account is in your name; IBKR generally discourages and may reject third-party deposits.",
+          "confirm_label": "I have arranged transfer",
           "source_urls": [
-            "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm"
+            "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm",
+            "https://www.interactivebrokers.com.sg/en/index.php?f=48276"
           ]
         },
         {
-          "name": "Make the bank transfer",
-          "text": "Use your Singapore bank’s app or website, or contact your bank, to send the money using IBKR’s instructions. Match the currency and include any reference details IBKR provides.",
-          "confirm_label": "I sent the money",
+          "name": "Check deposit status",
+          "text": "Return to Client Portal and check Transfer & Pay or transaction history for the deposit status. Credit timing depends on the method and the bank transfer.",
+          "confirm_label": "I have checked status",
           "source_urls": [
+            "https://www.ibkrguides.com/clientportal/transferandpay/transfer.htm",
             "https://www.interactivebrokers.com.sg/en/index.php?f=48276"
           ]
         }
       ],
+      "legal": {
+        "applies": false,
+        "text": "",
+        "source_urls": []
+      },
+      "disclaimer": "Funding methods, processing times and bank charges can change; check the instructions and fees shown by IBKR and your bank before sending.",
       "sources": [
         {
-          "url": "https://www.ibkrguides.com/brokerportal/transferandpay/deposit.htm",
+          "url": "https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm",
           "title": "Deposit Funds",
           "site": "IBKR Guides"
         },
         {
-          "url": "https://www.ibkrguides.com/advisorportal/ug/enterdeposits.htm",
+          "url": "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm",
           "title": "Enter Wire Deposit",
           "site": "IBKR Guides"
         },
@@ -244,40 +174,60 @@
         }
       ],
       "cautions": [
-        "The deposit notification only tells IBKR to expect the money; it does not move money by itself.",
-        "IBKR’s bank details depend on the currency and account. Always use the instructions generated in your own Client Portal; do not reuse old details. Your bank may charge a transfer fee.",
-        "Send from a bank account in your own name. IBKR says third-party deposits are generally discouraged and may be rejected."
+        "Use the exact bank details IBKR provides for your chosen currency; do not rely on old instructions or details from someone else.",
+        "Ask your bank about transfer and intermediary-bank charges."
       ]
     }
   },
   "coinbase": {
     "question": "How can I buy bitcoin on Coinbase?",
     "model": "gpt-6-luna",
-    "ms": 7314,
-    "searches": 1,
+    "ms": 14767,
+    "searches": 2,
     "guide": {
-      "fit": "good",
+      "kind": "steps",
       "title_short": "Buy Bitcoin",
-      "title_full": "Buy Bitcoin on Coinbase",
-      "summary": "In the Coinbase app, choose Bitcoin, enter an amount, review the order and confirm the purchase.",
+      "title_full": "How to buy Bitcoin on Coinbase",
+      "summary": "Verify your Coinbase account, add an eligible payment method, then review and confirm a Bitcoin purchase.",
+      "answer": "",
+      "answer_urls": [],
+      "prerequisites": "You need a verified Coinbase account and an eligible payment method linked to it.",
       "steps": [
         {
-          "name": "Choose Bitcoin",
-          "text": "Open the Coinbase app, tap “Buy & sell,” then “Buy,” and select Bitcoin (BTC).",
+          "name": "Add a payment method",
+          "text": "Sign in to Coinbase. Open Settings (or Profile & Settings in the app), choose Payment methods, then Add a payment method and follow the prompts. In Singapore, a debit card can be used to buy crypto; a bank account is for depositing or withdrawing cash.",
+          "confirm_label": "Payment method added",
+          "source_urls": [
+            "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac"
+          ]
+        },
+        {
+          "name": "Start a Bitcoin purchase",
+          "text": "On the website, select Buy. In the app, select Buy & sell, then Buy. Choose Bitcoin and enter how much you want to spend.",
           "confirm_label": "Bitcoin selected",
           "source_urls": [
             "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"
           ]
         },
         {
-          "name": "Review and buy",
-          "text": "Enter the amount, tap “Review order,” check the purchase details and payment method, then tap “Buy now” to complete the purchase.",
-          "confirm_label": "Purchase complete",
+          "name": "Review and confirm",
+          "text": "Choose or confirm your payment method, then select Review order. Check the total and any fees shown. If everything looks right, select Buy now.",
+          "confirm_label": "Order reviewed",
           "source_urls": [
             "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"
           ]
         }
       ],
+      "legal": {
+        "applies": true,
+        "text": "Coinbase says retail customers in Singapore cannot use Singapore-issued credit or charge cards to buy crypto; its Singapore payment options list debit cards for purchases. Coinbase Singapore is listed by MAS as a Major Payment Institution providing digital payment token services.",
+        "source_urls": [
+          "https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy",
+          "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac",
+          "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service"
+        ]
+      },
+      "disclaimer": "Bitcoin prices can rise or fall sharply; this is general information, not financial advice.",
       "sources": [
         {
           "url": "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency",
@@ -288,11 +238,102 @@
           "url": "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac",
           "title": "Add and verify a payment method - APAC",
           "site": "Coinbase Help"
+        },
+        {
+          "url": "https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy",
+          "title": "Credit cards for Coinbase Singapore Customers",
+          "site": "Coinbase Help"
+        },
+        {
+          "url": "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service",
+          "title": "Financial Institutions Directory",
+          "site": "Monetary Authority of Singapore"
         }
       ],
       "cautions": [
-        "You need a verified payment method. Coinbase lists debit cards as available for purchases by Singapore customers; Singapore-issued credit or charge cards are limited to verified accredited investors. Check the order preview for the payment method and purchase details before confirming."
+        "Check the order preview for the final price and fees before confirming; minimum purchase amounts may vary.",
+        "Use only Coinbase’s official app or website, and never share your password or verification codes."
       ]
+    }
+  },
+  "scooter": {
+    "question": "Can I ride my e-scooter on the footpath in Singapore?",
+    "model": "gpt-6-luna",
+    "ms": 6646,
+    "searches": 1,
+    "guide": {
+      "kind": "answer",
+      "title_short": "E-scooter rules",
+      "title_full": "Can you ride an e-scooter on Singapore footpaths?",
+      "summary": "No. E-scooters are banned from footpaths; ride only on cycling paths.",
+      "answer": "No. In Singapore, e-scooters may be ridden only on cycling paths—not footpaths or roads. Riding on a footpath can lead to regulatory action, with a fine of up to S$2,000 and/or imprisonment of up to 3 months if convicted.",
+      "answer_urls": [
+        "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"
+      ],
+      "prerequisites": "",
+      "steps": [],
+      "legal": {
+        "applies": true,
+        "text": "The law prohibits riding an e-scooter on a footpath. If convicted, the penalty can be a fine of up to S$2,000 and/or imprisonment of up to 3 months.",
+        "source_urls": [
+          "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"
+        ]
+      },
+      "disclaimer": "Rules and penalties may change; check LTA’s current guidance before riding.",
+      "sources": [
+        {
+          "url": "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html",
+          "title": "E-Scooters",
+          "site": "Land Transport Authority"
+        }
+      ],
+      "cautions": [
+        "Check that the path is designated as a cycling path; e-scooters are not allowed on roads either."
+      ]
+    }
+  },
+  "cpf": {
+    "question": "What is the difference between my CPF Ordinary Account and Special Account?",
+    "model": "gpt-6-luna",
+    "ms": 10152,
+    "searches": 2,
+    "guide": {
+      "kind": "answer",
+      "title_short": "OA vs SA",
+      "title_full": "Difference between your CPF OA and SA",
+      "summary": "The OA is mainly for housing and other eligible uses; the SA was for retirement savings and earned higher interest. Age 55 changes the SA rules.",
+      "answer": "Your Ordinary Account (OA) is mainly for housing, and can also be used for certain insurance, education and investments. Your Special Account (SA) was meant for retirement savings and generally earned a higher interest rate. For 1 October to 31 December 2026, CPF lists the basic rates as 2.5% for OA and 4% for SA. Rates are reviewed regularly, and extra interest may apply. Important if you are 55 or older: CPF closed the SA from 19 January 2025. Savings were transferred to your Retirement Account (up to the applicable Full Retirement Sum); any remaining SA savings went to your OA. If you are under 55, you can still have an SA.",
+      "answer_urls": [
+        "https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates",
+        "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about",
+        "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa"
+      ],
+      "prerequisites": "",
+      "steps": [],
+      "legal": {
+        "applies": false,
+        "text": "",
+        "source_urls": []
+      },
+      "disclaimer": "CPF rates and account rules can change; check your CPF account or contact CPF Board for details about your own balances.",
+      "sources": [
+        {
+          "url": "https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates",
+          "title": "What are the CPF interest rates?",
+          "site": "CPF Board"
+        },
+        {
+          "url": "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about",
+          "title": "What is the closure of Special Account for members aged 55 and above about?",
+          "site": "CPF Board"
+        },
+        {
+          "url": "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa",
+          "title": "3 simple steps to make a CPF transfer from your OA to SA",
+          "site": "CPF Board"
+        }
+      ],
+      "cautions": []
     }
   }
 }

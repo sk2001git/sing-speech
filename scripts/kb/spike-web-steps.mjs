@@ -19,29 +19,45 @@ const model = process.env.MODEL || 'gpt-6-luna'; // half gpt-5.6-luna's price, s
 const tool = process.env.TOOL || 'web_search';
 const effort = process.env.EFFORT || 'low';
 
-const SYSTEM = `You help an older person in Singapore do one practical thing, step by step.
-Search the web, read the pages that are most authoritative for this (the company's own help
-pages first), then write a short guide.
+const SYSTEM = `You help an older person in Singapore. Search the web, read the most
+authoritative pages (the organisation's own help pages and official sources first), then answer.
+Decide the kind:
+- "steps" when they want to DO something: a short guide, as many steps as the task needs
+  (2 for a simple thing, up to 10 for a long one), one action per step.
+- "answer" when they want to KNOW something: a direct answer in plain words, no steps.
+- "none" when you cannot find a reliable answer.
 Rules:
-- Only steps the pages support. Every step cites the URL(s) it came from, copied exactly.
-- As many steps as the task needs, no more: 2 for a simple thing, up to 10 for a long one.
-- Plain words, one action per step. Step name at most 40 characters, text at most 300,
-  confirm_label is what they tap when the step is done, at most 24 characters ("I have signed in").
-- If the pages disagree or something may have changed, say so in cautions.
-- If you cannot find a reliable answer, set fit to "none" and give no steps.`;
+- Only what the pages support. Every step, and the answer, cites the URL(s) it came from, copied exactly.
+- prerequisites: what they must already have before starting, in ONE short plain sentence
+  ("You need a verified Coinbase account and a Singapore debit card."). Empty string if nothing.
+- legal: if Singapore law touches this at all (licences, regulated activities, tax, contracts,
+  age limits, penalties, rules on where or how something may be done), set applies true and say
+  plainly what the law means for them, citing the source. Otherwise applies false and empty text.
+- disclaimer: one fine-print sentence fitting this topic (e.g. not financial, legal or medical
+  advice; prices and rules change). Always give one.
+- cautions: other things worth checking (fees, delays, scams). Short.
+- Step name at most 40 characters, text at most 300, confirm_label at most 24 ("I have signed in").
+- Plain text only in every field: no URLs, no markdown (no ** or links), no citation brackets.
+  URLs go only in answer_urls, source_urls and sources.`;
 
 const schema = {
   type: 'object', additionalProperties: false,
-  required: ['fit', 'title_short', 'title_full', 'summary', 'steps', 'sources', 'cautions'],
+  required: ['kind', 'title_short', 'title_full', 'summary', 'answer', 'answer_urls', 'prerequisites', 'steps', 'legal', 'disclaimer', 'sources', 'cautions'],
   properties: {
-    fit: { type: 'string', enum: ['good', 'partial', 'none'] },
+    kind: { type: 'string', enum: ['steps', 'answer', 'none'] },
     title_short: { type: 'string', description: 'At most 16 characters' },
     title_full: { type: 'string', description: 'At most 60 characters' },
     summary: { type: 'string', description: 'One sentence, at most 140 characters' },
+    answer: { type: 'string', description: 'For kind answer: at most 600 characters, plain words. Empty otherwise.' },
+    answer_urls: { type: 'array', items: { type: 'string' } },
+    prerequisites: { type: 'string', description: 'One short sentence, or empty' },
     steps: { type: 'array', maxItems: 12, items: {
       type: 'object', additionalProperties: false, required: ['name', 'text', 'confirm_label', 'source_urls'],
       properties: { name: { type: 'string' }, text: { type: 'string' }, confirm_label: { type: 'string' },
         source_urls: { type: 'array', items: { type: 'string' } } } } },
+    legal: { type: 'object', additionalProperties: false, required: ['applies', 'text', 'source_urls'],
+      properties: { applies: { type: 'boolean' }, text: { type: 'string' }, source_urls: { type: 'array', items: { type: 'string' } } } },
+    disclaimer: { type: 'string' },
     sources: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['url', 'title', 'site'],
       properties: { url: { type: 'string' }, title: { type: 'string' }, site: { type: 'string' } } } },
     cautions: { type: 'array', items: { type: 'string' } },
@@ -73,14 +89,35 @@ const actions = calls.map((c) => c.action?.type);
 const cited = new Set((json.output ?? []).flatMap((o) => (o.content ?? []).flatMap((c) => (c.annotations ?? []).filter((a) => a.type === 'url_citation').map((a) => a.url))));
 const text = json.output_text ?? (json.output ?? []).flatMap((o) => (o.content ?? []).map((c) => c.text ?? '')).join('');
 let guide = null; try { guide = JSON.parse(text); } catch { /* reported below */ }
+// The search tool appends its own citation markup to text even when told not to:
+// "([site](url))", markdown links, bare URLs, **bold**. Strip it; URLs live in the url fields.
+let stripped = 0;
+const clean = (t) => t
+  .replace(/\s*\(\[[^\]]*\]\([^)]*\)\)/g, () => (stripped++, ''))
+  .replace(/\[([^\]]+)\]\([^)]*\)/g, (_, label) => (stripped++, label))
+  .replace(/\s*(?:See:?\s*)?https?:\/\/\S+(?:\s*[;,])?/g, () => (stripped++, ''))
+  .replace(/\s+([.;,])/g, '$1')
+  .replace(/\*\*([^*]+)\*\*/g, (_, x) => (stripped++, x))
+  .replace(/\s{2,}/g, ' ').trim();
+if (guide) {
+  for (const k of ['title_short', 'title_full', 'summary', 'answer', 'prerequisites', 'disclaimer']) guide[k] = clean(guide[k]);
+  guide.legal.text = clean(guide.legal.text);
+  guide.cautions = guide.cautions.map(clean);
+  for (const st of guide.steps) { st.name = clean(st.name); st.text = clean(st.text); st.confirm_label = clean(st.confirm_label); }
+}
 const norm = (u) => { try { const x = new URL(u); x.hash = ''; return x.origin + x.pathname.replace(/\/$/, ''); } catch { return u; } };
 const foundN = new Set([...found].map(norm));
-const grounding = guide?.steps?.map((s, i) => ({ step: i + 1, urls: s.source_urls.length, inSearchResults: s.source_urls.filter((u) => foundN.has(norm(u))).length }));
+const seen = (urls) => ({ urls: urls.length, inSearchResults: urls.filter((u) => foundN.has(norm(u))).length });
+const grounding = guide && [
+  ...guide.steps.map((s, i) => ({ part: `step ${i + 1}`, ...seen(s.source_urls) })),
+  ...(guide.kind === 'answer' ? [{ part: 'answer', ...seen(guide.answer_urls) }] : []),
+  ...(guide.legal.applies ? [{ part: 'legal', ...seen(guide.legal.source_urls) }] : []),
+];
 
 console.log(JSON.stringify({
   model: json.model, tool, effort, ms, status: json.status,
   usage: json.usage, searches: calls.length, actions, queries: calls.map((c) => c.action?.query).filter(Boolean),
   pagesReturnedBySearch: found.size, urlCitations: cited.size,
-  parsed: !!guide, fit: guide?.fit, steps: guide?.steps?.length, grounding,
+  parsed: !!guide, strippedMarkup: stripped, kind: guide?.kind, steps: guide?.steps?.length, legal: guide?.legal?.applies, grounding,
 }, null, 2));
 console.log('\n--- guide ---\n' + (guide ? JSON.stringify(guide, null, 2) : text.slice(0, 2000)));
