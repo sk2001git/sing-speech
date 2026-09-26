@@ -7,6 +7,8 @@ import { runtimeEnv } from '../../lib/env';
 import { OpenAi } from '../../lib/providers/openai';
 import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
 import { writerFor } from '../../lib/routes/write';
+import { openaiJudge } from '../../lib/kb/judge';
+import { webAllowed } from '../../lib/kb/web-answer';
 
 export const prerender = false;
 
@@ -41,7 +43,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const env = await runtimeEnv();
 		if (!env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
 		const openai = new OpenAi({ apiKey: env.OPENAI_API_KEY });
-		const chain = buildRoutes(resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE), env);
+		const route = resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE);
+		const chain = buildRoutes(route, env);
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
 		const writer = writerFor({
@@ -69,6 +72,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			// The crawl is a static asset, fetched on the first request that needs it.
 			raw: () => loadRaw(() => crawledQuestions(request, locals)),
 			...(writer ? { write: writer } : {}),
+			// Near is not answered: the six nearest are read, and the web is next if none answers.
+			// Only where there is a web to go to.
+			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL) } : {}),
 			thresholds: THRESHOLDS,
 			translateBudgetMs: 4000,
 			now: () => new Date().toISOString(),

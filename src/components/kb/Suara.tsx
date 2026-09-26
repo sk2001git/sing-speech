@@ -294,9 +294,11 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 						const reply = await post({ kind: 'text', query: said, heard });
 						if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
 						// Nothing in Suara: GPT-Live waits while the web is searched, then says the one line.
-						if (reply.kind === 'nothing' && canWeb) {
-							const found = await searchTheWeb(reply.heard, reply.language, { spoken: true });
-							answer(found ? webLine(found) : reply.language === 'zh-Hans' ? NOT_ON_WEB['zh-Hans'] : 'That is not in Suara, and I could not find a reliable answer on the web.');
+						if ((reply.kind === 'nothing' || (reply.kind === 'results' && reply.webFirst)) && canWeb) {
+							if (reply.kind === 'results') dispatch({ type: 'RESULTS', result: reply.result });
+							const asked = reply.kind === 'results' ? reply.result : reply;
+							const found = await searchTheWeb(asked.heard, asked.language, { spoken: true, fromClosest: reply.kind === 'results' });
+							answer(found ? webLine(found) : asked.language === 'zh-Hans' ? NOT_ON_WEB['zh-Hans'] : 'That is not in Suara, and I could not find a reliable answer on the web.');
 							return;
 						}
 						show(reply, { spoken: true });
@@ -382,6 +384,11 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 		setEnglishIds(reply.englishIds);
 		dispatch({ type: 'RESULTS', result: reply.result });
+		// None of these answers it: they stay as the closest, one Back away, and the web is searched.
+		if (reply.webFirst && opts.asked && canWeb) {
+			void searchTheWeb(reply.result.heard, reply.result.language, { ...opts, fromClosest: true });
+			return;
+		}
 		const top = reply.result.cards[0];
 		if (!top) return;
 		const zh = reply.result.language === 'zh-Hans';

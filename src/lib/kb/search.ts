@@ -11,6 +11,7 @@ import { NothingHeard, replyLanguage, type Hearing } from './hearing';
 import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/places';
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 import { searchRaw, type RawIndex } from './raw-store';
+import type { Judge } from './judge';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
 const Offset = z.number().int().min(0).max(1000).default(0);
@@ -38,8 +39,11 @@ export type SearchResponse =
 	/** A life event rather than a question: what to do now, what waits, and how it ends. */
 	| { kind: 'journey'; heard: Heard; journey: Journey; cards: Entry[]; language: EntryLanguage }
 	| { kind: 'nothing'; heard: Heard; language: EntryLanguage }
-	/** `englishIds`: cards shown in English although the reader's language is not English. */
-	| { kind: 'results'; result: SearchResult; englishIds: string[] };
+	/**
+	 * `englishIds`: cards shown in English although the reader's language is not English.
+	 * `webFirst`: none of these answers the question; they are the closest, and the web is next.
+	 */
+	| { kind: 'results'; result: SearchResult; englishIds: string[]; webFirst?: true };
 
 export interface Corpus {
 	/** Only grounded originals. */
@@ -116,6 +120,8 @@ export interface SearchDeps {
 	write?: Writer;
 	/** Keeps what was composed beyond this isolate, where a store is configured. */
 	remember?: (entry: Entry) => void;
+	/** Whether the nearest cards answer the question. Absent means similarity alone decides. */
+	judge?: Judge;
 }
 
 export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<SearchResponse> {
@@ -189,11 +195,21 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	 * strong fit also asks Tier B, and a composed card that passes its grounding checks
 	 * goes first, with the weak entries kept behind it.
 	 */
-	if (ranked.fit !== 'strong' && offset === 0) {
+	/*
+	 * Near is not the same as answered: six CPF cards are near "how can I invest my CPF" and
+	 * none says how. The judge reads them; when none answers, an official page is tried as for
+	 * a weak fit, and failing that the cards are shown as the closest with the web next.
+	 */
+	const answered = offset === 0 && ranked.fit !== 'none' && deps.judge && cards.length > 0 ? await deps.judge(query, cards.slice(0, PAGE_SIZE)) : null;
+	if ((ranked.fit !== 'strong' || answered === false) && offset === 0) {
 		const composed = await onDemand(query, heard, language, deps, cards);
 		if (composed) return composed;
 	}
 	if (ranked.fit === 'none') return { kind: 'nothing', heard, language };
+	if (answered === false) {
+		const closest = await results(cards, { heard, fit: 'weak', nextOffset: ranked.nextOffset, query, language }, deps);
+		return closest.kind === 'results' ? { ...closest, webFirst: true } : closest;
+	}
 
 	return results(cards, { heard, fit: ranked.fit, nextOffset: ranked.nextOffset, query, language }, deps);
 }
