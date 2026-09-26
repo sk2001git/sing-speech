@@ -1,9 +1,10 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import type { Area } from '../../lib/kb/areas';
 import type { EntryLanguage } from '../../lib/kb/entry';
-import { canSpeak, initial, next, type View } from '../../lib/kb/flow';
+import { canSpeak, initial, next, type Heard, type View } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
 import type { SearchResponse } from '../../lib/kb/search';
+import { webAllowed, type WebAnswer, type WebStage } from '../../lib/kb/web-answer';
 import { connectLive, LiveUnavailable, type LiveLink } from '../../lib/live-client';
 import { micFailure } from '../../lib/mic';
 import { commentaryFor } from '../../lib/routes/live';
@@ -101,7 +102,48 @@ function store(key: string, value: string): void {
 	}
 }
 
-type LastQuery = { kind: 'text'; query: string; heard: { short: string; sentence: string } } | { kind: 'topic'; area: Area };
+const NOT_IN: Record<EntryLanguage, string> = { en: 'That is not in Suara yet.', 'zh-Hans': 'Suara 还没有这个答案。' };
+const NOT_ON_WEB: Record<EntryLanguage, string> = {
+	en: 'I could not find a reliable answer on the web either.',
+	'zh-Hans': '我在网上也找不到可靠的答案。',
+};
+
+/** What is said aloud when a web answer arrives: one sentence, then the screen carries the rest. */
+function webLine(a: WebAnswer): string {
+	return a.kind === 'steps' ? `${a.title_full}. ${a.summary}` : a.summary;
+}
+
+/** `/api/web`: one JSON object per line, a stage at a time, then the answer or an error. */
+async function fetchWeb(question: string, language: EntryLanguage, route: string, onStage: (s: WebStage) => void, signal: AbortSignal): Promise<WebAnswer | null> {
+	const res = await fetch('/api/web', {
+		method: 'POST',
+		headers: { 'content-type': 'application/json' },
+		body: JSON.stringify({ question, language, route }),
+		signal,
+	});
+	if (!res.ok || !res.body) throw new Error(String(res.status));
+	const reader = res.body.getReader();
+	const decoder = new TextDecoder();
+	let buf = '';
+	for (;;) {
+		const { value, done } = await reader.read();
+		if (value) buf += decoder.decode(value, { stream: true });
+		let cut: number;
+		while ((cut = buf.indexOf('\n')) >= 0) {
+			const line = buf.slice(0, cut).trim();
+			buf = buf.slice(cut + 1);
+			if (!line) continue;
+			const msg = JSON.parse(line) as { type: 'stage' } & WebStage | { type: 'answer'; answer: WebAnswer } | { type: 'error' };
+			if (msg.type === 'answer') return msg.answer;
+			if (msg.type === 'error') throw new Error('web search failed');
+			const { type: _t, ...stage } = msg;
+			onStage(stage as WebStage);
+		}
+		if (done) throw new Error('the web search ended without an answer');
+	}
+}
+
+type LastQuery ={ kind: 'text'; query: string; heard: { short: string; sentence: string } } | { kind: 'topic'; area: Area };
 
 interface Recording {
 	rec: MediaRecorder;
@@ -129,6 +171,9 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const recording = useRef<Recording | null>(null);
 	const live = useRef<LiveLink | null>(null);
 	const isLive = route === 'openai-live';
+	/** The web search in flight; a new question cancels it. */
+	const web = useRef<AbortController | null>(null);
+	const canWeb = webAllowed(route);
 	const last = useRef<LastQuery | null>(null);
 	const say = (text: string, language: EntryLanguage) => void routeSay(text, language, route);
 	/** The latest finish function, so the silence timer never calls a stale closure. */
@@ -142,9 +187,15 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 
 	useEffect(() => store('suara.view', state.view), [state.view]);
 
-	// Read the open step aloud as it arrives.
-	const stepKey = state.phase === 'steps' ? `${state.entry.id}:${state.index}` : '';
+	// Read the open step aloud as it arrives, from Suara or from the web.
+	const stepKey =
+		state.phase === 'steps' ? `${state.entry.id}:${state.index}` : state.phase === 'web-steps' ? `web:${state.back.result.answer.title_full}:${state.index}` : '';
 	useEffect(() => {
+		if (state.phase === 'web-steps') {
+			const step = state.back.result.answer.steps[state.index];
+			if (step) say(`${step.name}. ${step.text}`, state.back.result.language);
+			return;
+		}
 		if (state.phase !== 'steps') return;
 		const step = state.entry.steps?.[state.index];
 		if (step) say(`${step.name}. ${step.text}`, state.entry.language);
@@ -155,10 +206,43 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			recording.current?.stopWatching();
 			recording.current?.stream.getTracks().forEach((t) => t.stop());
 			live.current?.close();
+			web.current?.abort();
 			silence();
 		},
 		[],
 	);
+
+	// Leaving the search screen (Home, a topic, a new question) cancels the search, so a late
+	// answer is never read aloud over whatever they moved on to.
+	useEffect(() => {
+		if (state.phase !== 'web-searching') web.current?.abort();
+	}, [state.phase]);
+
+	/**
+	 * Nothing in Suara answered: search the web, showing each stage as it happens. Returns the
+	 * answer, or null when there was none or the search failed, which leaves "not in Suara".
+	 */
+	async function searchTheWeb(heard: Heard, language: EntryLanguage, opts: { spoken?: boolean } = {}): Promise<WebAnswer | null> {
+		web.current?.abort();
+		const controller = new AbortController();
+		web.current = controller;
+		dispatch({ type: 'WEB_SEARCH', heard, language });
+		try {
+			const answer = await fetchWeb(heard.said ?? heard.sentence, language, route, (stage) => dispatch({ type: 'WEB_STAGE', stage }), controller.signal);
+			if (controller.signal.aborted) return null;
+			if (!answer) throw new Error('no answer');
+			dispatch({ type: 'WEB_ANSWER', answer });
+			if (!opts.spoken) say(answer.kind === 'none' ? NOT_ON_WEB[language] : webLine(answer), language);
+			return answer.kind === 'none' ? null : answer;
+		} catch {
+			if (controller.signal.aborted) return null;
+			dispatch({ type: 'NOTHING', heard });
+			if (!opts.spoken) say(NOT_IN[language], language);
+			return null;
+		} finally {
+			if (web.current === controller) web.current = null;
+		}
+	}
 
 	/** End the recording: by a tap, after 3 s of quiet following speech, or with no speech at all. */
 	async function finish(how: 'done' | 'nothing' | 'tap'): Promise<void> {
@@ -180,7 +264,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			const type = current.rec.mimeType || current.mimeType || 'audio/webm';
 			const reply = await post({ kind: 'speech', audioBase64: await blobToBase64(new Blob(current.chunks, { type })), mimeType: type });
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
-			show(reply);
+			show(reply, { asked: true });
 		} catch {
 			dispatch({ type: 'FAIL' });
 		}
@@ -208,6 +292,12 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 						const heard = { short: said.slice(0, 40), sentence: said, said };
 						const reply = await post({ kind: 'text', query: said, heard });
 						if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
+						// Nothing in Suara: GPT-Live waits while the web is searched, then says the one line.
+						if (reply.kind === 'nothing' && canWeb) {
+							const found = await searchTheWeb(reply.heard, reply.language, { spoken: true });
+							answer(found ? webLine(found) : reply.language === 'zh-Hans' ? NOT_ON_WEB['zh-Hans'] : 'That is not in Suara, and I could not find a reliable answer on the web.');
+							return;
+						}
 						show(reply, { spoken: true });
 						answer(
 							reply.kind === 'results'
@@ -248,8 +338,11 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		return (await res.json()) as SearchResponse;
 	}
 
-	/** `spoken` means the route is already saying it aloud, so the phone stays quiet. */
-	function show(reply: SearchResponse, opts: { spoken?: boolean } = {}): void {
+	/**
+	 * `spoken` means the route is already saying it aloud, so the phone stays quiet. `asked`
+	 * means it was a question in their own words, which the web can take when Suara has nothing.
+	 */
+	function show(reply: SearchResponse, opts: { spoken?: boolean; asked?: boolean } = {}): void {
 		const tell = (text: string, language: EntryLanguage) => {
 			if (!opts.spoken) say(text, language);
 		};
@@ -278,8 +371,12 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			return;
 		}
 		if (reply.kind === 'nothing') {
+			if (opts.asked && canWeb) {
+				void searchTheWeb(reply.heard, reply.language, opts);
+				return;
+			}
 			dispatch({ type: 'NOTHING', heard: reply.heard });
-			tell(reply.language === 'zh-Hans' ? 'Suara 还没有这个答案。' : 'That is not in Suara yet.', reply.language);
+			tell(NOT_IN[reply.language], reply.language);
 			return;
 		}
 		setEnglishIds(reply.englishIds);
@@ -357,6 +454,20 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 	}
 
+	/** A typed question: the same search as a spoken one, and the web behind it. */
+	async function onAsk(text: string): Promise<void> {
+		silence();
+		const heard = { short: text.slice(0, 40), sentence: text };
+		dispatch({ type: 'ASKING' });
+		try {
+			const reply = await post({ kind: 'text', query: text, heard, offset: 0 });
+			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
+			show(reply, { asked: true });
+		} catch {
+			dispatch({ type: 'FAIL' });
+		}
+	}
+
 	async function onTopic(area: Area): Promise<void> {
 		silence();
 		dispatch({ type: 'TOPIC', area });
@@ -422,6 +533,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onFind={() => setFinding(true)}
 			onFindClose={() => setFinding(false)}
 			onFound={onFound}
+			onAsk={onAsk}
 		/>
 	);
 }

@@ -8,6 +8,7 @@ import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
+import type { WebAnswer, WebSource } from '../../lib/kb/web-answer';
 
 /**
  * Every knowledge-base screen, from a plain `FlowState`. No network, microphone or
@@ -37,6 +38,8 @@ export interface KbScreenProps {
 	onFind?: () => void;
 	onFindClose?: () => void;
 	onFound?: (id: string, label: string) => void;
+	/** A question typed on home, answered exactly as a spoken one. */
+	onAsk?: (text: string) => void;
 }
 
 const WORDS = {
@@ -116,6 +119,33 @@ const WORDS = {
 		placesFound: (n: number) => `${n} ${n === 1 ? 'place' : 'places'}`,
 		fromDataset: (name: string, agency: string) => `From ${name}, ${agency}, data.gov.sg`,
 		checkedOn: (date: string) => `checked ${date}`,
+		typeQuestion: 'Or type your question',
+		ask: 'Ask',
+		webSearching: 'Searching the web',
+		webFinding: 'Finding pages',
+		webReadingSome: 'Reading the pages',
+		webReading: (n: number) => `Reading ${n} ${n === 1 ? 'page' : 'pages'}`,
+		webWriting: 'Writing the answer',
+		webUsually: 'This usually takes about 15 seconds.',
+		fromWeb: 'From the web',
+		beforeStart: 'Before you start:',
+		legal: 'Legal',
+		goodToKnow: 'Good to know',
+		thingsToCheck: (n: number) => `${n} ${n === 1 ? 'thing' : 'things'} to check`,
+		leftOut: (n: number) => `${n} ${n === 1 ? 'step' : 'steps'} left out`,
+		checkedOnly: (kept: number, total: number, dropped: number) =>
+			`I could only check ${kept} ${kept === 1 ? 'step' : 'steps'} of ${total} against the pages I found, so I left ${dropped} out.`,
+		whereFrom: (n: number) => `Where this is from · ${n} ${n === 1 ? 'page' : 'pages'}`,
+		fineOfficial: 'From official government pages, found by web search.',
+		fineWeb: 'Found on the web, not an official answer.',
+		startWeb: (n: number) => `Start these ${n} ${n === 1 ? 'step' : 'steps'}?`,
+		confirmWeb: 'You confirm each one. You can stop at any time.',
+		answerBack: 'Answer',
+		moreSteps: (n: number) => `${n} more ${n === 1 ? 'step' : 'steps'}`,
+		stepsDone: (n: number) => `${n} steps done`,
+		fromSite: (site: string, title: string) => `From ${site}${title ? ` · ${title}` : ''}`,
+		noReliable: 'I could not find a reliable answer',
+		noReliableLead: 'I searched the web too. Try asking another way, or pick a topic.',
 	},
 	'zh-Hans': {
 		ready: '准备好了',
@@ -193,6 +223,32 @@ const WORDS = {
 		placesFound: (n: number) => `${n} 个地点`,
 		fromDataset: (name: string, agency: string) => `来自 ${name}，${agency}，data.gov.sg`,
 		checkedOn: (date: string) => `查询于 ${date}`,
+		typeQuestion: '或输入您的问题',
+		ask: '提问',
+		webSearching: '正在网上搜索',
+		webFinding: '查找网页',
+		webReadingSome: '阅读网页',
+		webReading: (n: number) => `阅读 ${n} 个网页`,
+		webWriting: '撰写答案',
+		webUsually: '通常需要约 15 秒。',
+		fromWeb: '来自网络',
+		beforeStart: '开始之前：',
+		legal: '法律',
+		goodToKnow: '须知',
+		thingsToCheck: (n: number) => `${n} 项要注意`,
+		leftOut: (n: number) => `略去 ${n} 步`,
+		checkedOnly: (kept: number, total: number, dropped: number) => `我只能用找到的网页核对 ${total} 步中的 ${kept} 步，所以略去了 ${dropped} 步。`,
+		whereFrom: (n: number) => `资料来源 · ${n} 个网页`,
+		fineOfficial: '来自政府官方网页，由网络搜索找到。',
+		fineWeb: '来自网络，不是官方答案。',
+		startWeb: (n: number) => `开始这 ${n} 个步骤？`,
+		confirmWeb: '每一步由您确认，随时可以停下。',
+		answerBack: '答案',
+		moreSteps: (n: number) => `还有 ${n} 步`,
+		stepsDone: (n: number) => `已完成 ${n} 步`,
+		fromSite: (site: string, title: string) => `来自 ${site}${title ? ` · ${title}` : ''}`,
+		noReliable: '找不到可靠的答案',
+		noReliableLead: '我也在网上找过了。请换个方式再问，或选一个主题。',
 	},
 };
 
@@ -204,7 +260,8 @@ const NEXT_SETTING: Record<ReplySetting, ReplySetting> = { en: 'zh-Hans', 'zh-Ha
 /** The interface language: the chosen one, or on Automatic the language of the last answer. */
 function uiLanguage(state: FlowState, setting: ReplySetting): EntryLanguage {
 	if (setting !== 'auto') return setting;
-	if (state.phase === 'results') return state.result.language;
+	if (state.phase === 'results' || state.phase === 'web') return state.result.language;
+	if (state.phase === 'web-searching') return state.language;
 	if ('back' in state) return state.back.result.language;
 	return 'en';
 }
@@ -304,6 +361,26 @@ function Body(p: BodyProps) {
 					onUndo={(id) => p.dispatch({ type: 'STAGE_UNDONE', id })}
 				/>
 			);
+		case 'web-searching':
+			return <WebSearching {...p} state={s} />;
+		case 'web':
+			return <WebView {...p} state={s} />;
+		case 'web-confirm':
+			return <WebConfirm {...p} state={s} />;
+		case 'web-steps':
+			return <WebSteps {...p} state={s} />;
+		case 'web-done':
+			return (
+				<>
+					<BackRow {...p} label={p.w.answerBack} />
+					<div className="k-done-mark">
+						<SuccessMark size={80} stroke={4.5} flourish="ripple" label={null} />
+					</div>
+					<h1 className="k-h1">{p.w.allDone}</h1>
+					<p className="k-lead">{s.back.result.answer.title_full}</p>
+					<AskButton {...p} label={p.w.askElse} primary />
+				</>
+			);
 		case 'confirm':
 			return <Confirm {...p} state={s} />;
 		case 'steps':
@@ -325,8 +402,8 @@ function Body(p: BodyProps) {
 				<>
 					{s.heard.said && <Said w={p.w} said={s.heard.said} />}
 					<HeardRow w={p.w} short={s.heard.short} />
-					<h1 className="k-h1">{p.w.notIn}</h1>
-					<p className="k-lead">{p.w.tryTopic}</p>
+					<h1 className="k-h1">{s.web ? p.w.noReliable : p.w.notIn}</h1>
+					<p className="k-lead">{s.web ? p.w.noReliableLead : p.w.tryTopic}</p>
 					<Topics {...p} />
 					<AskButton {...p} label={p.w.askAgain} primary />
 				</>
@@ -420,6 +497,7 @@ function Talk(p: BodyProps) {
 					{waiting ? p.w.busy : p.w.tapSpeak}
 				</p>
 			</section>
+			{s.phase === 'home' && p.onAsk && <AskText {...p} />}
 			{s.phase === 'home' && (
 				<details className="k-more">
 					<summary className="k-btn k-btn-quiet">
@@ -430,6 +508,29 @@ function Talk(p: BodyProps) {
 				</details>
 			)}
 		</>
+	);
+}
+
+/** Typing, for when speaking is not possible. The microphone stays the first way in. */
+function AskText(p: BodyProps) {
+	return (
+		<form
+			className="k-ask"
+			role="search"
+			onSubmit={(event) => {
+				event.preventDefault();
+				const input = event.currentTarget.elements.namedItem('q') as HTMLInputElement | null;
+				const text = input?.value.trim() ?? '';
+				if (!input || !text || !p.onAsk) return;
+				p.onAsk(text);
+				input.value = '';
+			}}
+		>
+			<input name="q" type="text" autoComplete="off" enterKeyHint="send" maxLength={300} placeholder={p.w.typeQuestion} aria-label={p.w.typeQuestion} />
+			<button type="submit" aria-label={p.w.ask}>
+				<ArrowIcon />
+			</button>
+		</form>
 	);
 }
 
@@ -446,10 +547,10 @@ function Topics(p: BodyProps) {
 }
 
 /** Their own words, always open, so they can see Suara heard them before reading answers. */
-function Said({ w, said }: { w: Words; said: string }) {
+function Said({ w, said, label }: { w: Words; said: string; label?: string }) {
 	return (
 		<div className="k-said">
-			<span className="k-heard-label">{w.youSaid}</span>
+			<span className="k-heard-label">{label ?? w.youSaid}</span>
 			<p>&ldquo;{said}&rdquo;</p>
 		</div>
 	);
@@ -651,11 +752,11 @@ function Places(p: BodyProps & { state: Extract<FlowState, { phase: 'places' }> 
 /** "bedok north" as a person would see it on a card. */
 const titleWords = (text: string) => text.replace(/\b[a-z]/g, (c) => c.toUpperCase());
 
-function BackRow(p: BodyProps) {
+function BackRow(p: BodyProps & { label?: string }) {
 	return (
 		<button className="k-back" type="button" onClick={() => p.dispatch({ type: 'BACK' })}>
 			<BackIcon />
-			{p.w.back}
+			{p.label ?? p.w.back}
 		</button>
 	);
 }
@@ -751,6 +852,263 @@ function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> })
 	);
 }
 
+/*
+ * Answers from the web, when nothing in Suara had one: ported from the mockup the owner
+ * approved (design/web-steps/web-steps.html; vault plan suara-2026-09-25-feature-web-steps).
+ * Always marked as from the web; the law shown open when it applies; the cautions folded;
+ * every page named; fine print always.
+ */
+
+const WEB_STAGES = ['searching', 'reading', 'writing'] as const;
+
+function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-searching' }> }) {
+	const { heard, stage, pages } = p.state;
+	const at = stage ? WEB_STAGES.indexOf(stage.stage) : 0;
+	const mark = (i: number) => (i < at ? 'done' : i === at ? 'now' : 'todo');
+	const labels = [p.w.webFinding, pages > 0 ? p.w.webReading(pages) : p.w.webReadingSome, p.w.webWriting];
+	return (
+		<>
+			<Question w={p.w} heard={heard} />
+			<h1 className="k-h1" aria-live="polite">
+				{p.w.webSearching}
+			</h1>
+			<ol className="k-webstages">
+				{labels.map((label, i) => (
+					<li key={i} className="k-webstage" data-s={mark(i)}>
+						<i aria-hidden="true" />
+						{label}
+					</li>
+				))}
+			</ol>
+			<div className="k-skeleton" aria-hidden="true">
+				<i />
+				<i />
+				<i />
+			</div>
+			<p className="k-lead">{p.w.webUsually}</p>
+		</>
+	);
+}
+
+/** Their question in full, spoken or typed: the web answers exactly this. */
+function Question({ w, heard }: { w: Words; heard: { said?: string; sentence: string } }) {
+	return heard.said ? <Said w={w} said={heard.said} /> : <Said w={w} said={heard.sentence} label={w.youAsked} />;
+}
+
+/** A page, whatever tracking was added to its link. */
+function pageOf(u: string): string {
+	try {
+		const x = new URL(u);
+		return (x.origin + x.pathname).replace(/\/$/, '');
+	} catch {
+		return u;
+	}
+}
+
+function sourceFor(url: string, sources: WebSource[]): WebSource {
+	const found = sources.find((s) => pageOf(s.url) === pageOf(url));
+	if (found) return found;
+	try {
+		return { url, title: '', site: new URL(url).hostname.replace(/^www\./, '') };
+	} catch {
+		return { url, title: '', site: url };
+	}
+}
+
+const sitesOf = (a: WebAnswer) => [...new Set(a.sources.map((s) => s.site))].join(', ');
+
+function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> }) {
+	const { heard, answer: a, language } = p.state.result;
+	const steps = a.kind === 'steps';
+	// "You need..." reads on from "Before you start:"; Chinese has no capitals to lower.
+	const pre = language === 'en' ? a.prerequisites.replace(/^([A-Z])(?=[a-z])/, (c) => c.toLowerCase()) : a.prerequisites;
+	return (
+		<>
+			<Question w={p.w} heard={heard} />
+			<article className="k-card k-web-card">
+				<span className="k-badge">
+					<GlobeIcon />
+					{p.w.fromWeb}
+				</span>
+				<p className="k-web-title">{a.title_full}</p>
+				{steps ? <p className="k-card-sum">{a.summary}</p> : <p className="k-web-answer">{a.answer}</p>}
+				{steps && a.prerequisites && (
+					<p className="k-pre">
+						<b>{p.w.beforeStart}</b> {pre}
+					</p>
+				)}
+				<p className="k-web-meta">
+					{steps && <b>{p.w.steps(a.steps.length)}</b>}
+					{steps && ' · '}
+					{sitesOf(a)}
+				</p>
+				{steps && (
+					<button className="k-btn k-btn-primary" type="button" onClick={() => p.dispatch({ type: 'WEB_START' })}>
+						{p.w.startGuide}
+						<ArrowIcon />
+					</button>
+				)}
+				<button className="k-btn k-btn-quiet k-btn-mid" type="button" onClick={() => p.onSay(steps ? `${a.title_full}. ${a.summary}` : a.answer, language)}>
+					<SpeakerIcon />
+					{p.w.readAloud}
+				</button>
+			</article>
+			<WebTail w={p.w} answer={a} />
+			<AskButton {...p} label={p.w.askElse} />
+		</>
+	);
+}
+
+function WebTail({ w, answer: a }: { w: Words; answer: WebAnswer }) {
+	const kept = a.steps.length;
+	const notes = [...(a.dropped ? [w.checkedOnly(kept, kept + a.dropped, a.dropped)] : []), ...a.cautions].slice(0, 4);
+	return (
+		<>
+			{a.legal.applies && (
+				<section className="k-legal" aria-label={w.legal}>
+					<span className="k-legal-head">
+						<ScaleIcon />
+						{w.legal}
+					</span>
+					<p>{a.legal.text}</p>
+				</section>
+			)}
+			{notes.length > 0 && (
+				<details className="k-know">
+					<summary>
+						<span>
+							{w.goodToKnow} <small>· {a.dropped ? w.leftOut(a.dropped) : w.thingsToCheck(notes.length)}</small>
+						</span>
+						<ChevronIcon />
+					</summary>
+					<div className="k-note">
+						<InfoIcon />
+						<div>
+							{notes.map((n) => (
+								<p key={n}>{n}</p>
+							))}
+						</div>
+					</div>
+				</details>
+			)}
+			{a.sources.length > 0 && (
+				<div className="k-web-sources">
+					<p className="k-web-sources-head">{w.whereFrom(a.sources.length)}</p>
+					{a.sources.map((s) => (
+						<a key={s.url} className="k-src" href={s.url} target="_blank" rel="noopener noreferrer">
+							<b>{s.site}</b>
+							<span>{s.title}</span>
+						</a>
+					))}
+				</div>
+			)}
+			<p className="k-fine">{`${a.official ? w.fineOfficial : w.fineWeb}${a.disclaimer ? ` ${a.disclaimer}` : ''}`}</p>
+		</>
+	);
+}
+
+function WebConfirm(p: BodyProps & { state: Extract<FlowState, { phase: 'web-confirm' }> }) {
+	const a = p.state.back.result.answer;
+	return (
+		<>
+			<BackRow {...p} label={p.w.answerBack} />
+			<article className="k-card k-card-lead">
+				<p className="k-card-title k-card-title-lg">{a.title_full}</p>
+				<ol className="k-step-list">
+					{a.steps.map((st, i) => (
+						<li key={i}>{st.name}</li>
+					))}
+				</ol>
+			</article>
+			<div className="k-scrim" aria-hidden="true" onClick={() => p.dispatch({ type: 'NO' })} />
+			<section className="k-sheet" role="dialog" aria-modal="true" aria-labelledby="k-sheet-title">
+				<h2 className="k-sheet-title" id="k-sheet-title">
+					{p.w.startWeb(a.steps.length)}
+				</h2>
+				<p className="k-lead">{p.w.confirmWeb}</p>
+				<button className="k-btn k-btn-primary confirm-yes" type="button" onClick={() => p.dispatch({ type: 'YES' })}>
+					{p.w.yesStart}
+				</button>
+				<button className="k-link confirm-no" type="button" onClick={() => p.dispatch({ type: 'NO' })}>
+					{p.w.notThis}
+				</button>
+			</section>
+		</>
+	);
+}
+
+/** Any number of steps: the done ones fold into one row, the next two show, the rest fold. */
+function WebSteps(p: BodyProps & { state: Extract<FlowState, { phase: 'web-steps' }> }) {
+	const { index } = p.state;
+	const { answer: a, language } = p.state.back.result;
+	const n = a.steps.length;
+	const current = a.steps[index]!;
+	const from = current.source_urls[0] ? sourceFor(current.source_urls[0], a.sources) : null;
+	const soon = a.steps.slice(index + 1, index + 3);
+	const rest = a.steps.slice(index + 3);
+	const later = (name: string, at: number) => (
+		<li key={at} className="k-step" data-state="later">
+			<span className="k-step-dot" data-state="later">
+				{at + 1}
+			</span>
+			<span className="k-step-name">{name}</span>
+		</li>
+	);
+	return (
+		<>
+			<BackRow {...p} label={p.w.answerBack} />
+			<div className="k-guide-head">
+				<p className="k-label">{p.w.stepOf(index + 1, n)}</p>
+				<ProgressFill value={(index + 1) / n} label={p.w.stepOf(index + 1, n)} className="k-progress" />
+				<h1 className="k-h1">{a.title_short}</h1>
+			</div>
+			<ol className="k-steps">
+				{index > 0 && (
+					<li className="k-step" data-state="done">
+						<span className="k-step-dot" data-state="done">
+							<CheckIcon />
+						</span>
+						<span className="k-step-name">{index === 1 ? a.steps[0]!.name : p.w.stepsDone(index)}</span>
+					</li>
+				)}
+				<li className="k-step k-step-now">
+					<div className="k-step-row">
+						<span className="k-step-dot" data-state="now">
+							{index + 1}
+						</span>
+						<span className="k-step-name">{current.name}</span>
+					</div>
+					<p className="k-step-text">{current.text}</p>
+					{from && (
+						<a className="k-web-from" href={from.url} target="_blank" rel="noopener noreferrer">
+							{p.w.fromSite(from.site, from.title)}
+						</a>
+					)}
+					<button className="k-btn k-btn-yes" type="button" onClick={() => p.dispatch({ type: 'STEP_DONE' })}>
+						<CheckIcon />
+						{current.confirm_label}
+					</button>
+					<button className="k-btn k-btn-quiet k-btn-mid" type="button" onClick={() => p.onSay(`${current.name}. ${current.text}`, language)}>
+						<SpeakerIcon />
+						{p.w.readAgain}
+					</button>
+				</li>
+				{soon.map((st, j) => later(st.name, index + 1 + j))}
+			</ol>
+			{rest.length > 0 && (
+				<details className="k-later">
+					<summary>
+						<span>{p.w.moreSteps(rest.length)}</span>
+						<ChevronIcon />
+					</summary>
+					<ol className="k-steps">{rest.map((st, j) => later(st.name, index + 3 + j))}</ol>
+				</details>
+			)}
+			<AskButton {...p} label={p.w.askElse} />
+		</>
+	);
+}
+
 function AskButton(p: BodyProps & { label: string; primary?: boolean }) {
 	return (
 		<button className={`k-btn ${p.primary ? 'k-btn-primary' : 'k-btn-plain'}`} type="button" onClick={p.onSpeak} disabled={!canSpeak(p.state)}>
@@ -822,6 +1180,17 @@ const InfoIcon = () => (
 	<Svg>
 		<circle cx="12" cy="12" r="9" />
 		<path d="M12 11v5.5M12 7.5v.01" />
+	</Svg>
+);
+const GlobeIcon = () => (
+	<Svg>
+		<circle cx="12" cy="12" r="9" />
+		<path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+	</Svg>
+);
+const ScaleIcon = () => (
+	<Svg>
+		<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z" />
 	</Svg>
 );
 const PhoneIcon = () => (

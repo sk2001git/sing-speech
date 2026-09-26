@@ -1,6 +1,7 @@
 import type { Entry, EntryLanguage } from './entry';
 import type { Journey } from './journey';
 import type { Place, PlaceKind } from '../places/places';
+import type { WebAnswer, WebStage } from './web-answer';
 
 /**
  * The knowledge-base screens as one value, following the approved UX flows
@@ -70,6 +71,19 @@ export interface PlacesResult {
 	language: EntryLanguage;
 }
 
+/**
+ * An answer from the web, when nothing in Suara had one (vault plan
+ * suara-2026-09-25-feature-web-steps). Shaped like the other results, with `language`, so the
+ * screens behind it can find the reader's language the same way.
+ */
+export interface WebResult {
+	heard: Heard;
+	answer: WebAnswer;
+	language: EntryLanguage;
+}
+
+type WebPhase = { view: View; phase: 'web'; result: WebResult };
+
 export type FlowState =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
@@ -81,7 +95,13 @@ export type FlowState =
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
 	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
 	| { view: View; phase: 'done'; entry: Entry; back: Results }
-	| { view: View; phase: 'notfound'; heard: Heard }
+	| { view: View; phase: 'web-searching'; heard: Heard; language: EntryLanguage; stage: WebStage | null; pages: number }
+	| WebPhase
+	| { view: View; phase: 'web-confirm'; back: WebPhase }
+	| { view: View; phase: 'web-steps'; index: number; back: WebPhase }
+	| { view: View; phase: 'web-done'; back: WebPhase }
+	/** `web`: the web was searched too, and had no reliable answer either. */
+	| { view: View; phase: 'notfound'; heard: Heard; web?: true }
 	| { view: View; phase: 'denied'; reason: MicFailure }
 	| { view: View; phase: 'offline' };
 
@@ -115,14 +135,19 @@ export type FlowEvent =
 	| { type: 'NO' }
 	| { type: 'STEP_DONE' }
 	| { type: 'BACK' }
-	| { type: 'HOME' };
+	| { type: 'HOME' }
+	/** Nothing in Suara: search the web instead (OpenAI routes only; the driver decides). */
+	| { type: 'WEB_SEARCH'; heard: Heard; language: EntryLanguage }
+	| { type: 'WEB_STAGE'; stage: WebStage }
+	| { type: 'WEB_ANSWER'; answer: WebAnswer }
+	| { type: 'WEB_START' };
 
 export function initial(view: View = 'grid'): FlowState {
 	return { view, phase: 'home', greeting: false };
 }
 
-const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'denied', 'offline', 'steps']);
-const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'offline']);
+const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'denied', 'offline', 'steps', 'web', 'web-steps', 'web-done']);
+const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'offline', 'web', 'web-done']);
 
 export function canSpeak(state: FlowState): boolean {
 	return CAN_SPEAK.has(state.phase);
@@ -182,7 +207,22 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 		case 'PLACES':
 			return state.phase === 'searching' ? { view, phase: 'places', result: event.result } : state;
 		case 'NOTHING':
-			return state.phase === 'searching' ? { view, phase: 'notfound', heard: event.heard } : state;
+			return state.phase === 'searching' || state.phase === 'web-searching' ? { view, phase: 'notfound', heard: event.heard } : state;
+		case 'WEB_SEARCH':
+			return state.phase === 'searching' ? { view, phase: 'web-searching', heard: event.heard, language: event.language, stage: null, pages: 0 } : state;
+		case 'WEB_STAGE':
+			if (state.phase !== 'web-searching') return state;
+			// The page count stays shown once writing starts.
+			return { ...state, stage: event.stage, pages: event.stage.stage === 'reading' ? event.stage.pages : state.pages };
+		case 'WEB_ANSWER':
+			if (state.phase !== 'web-searching') return state;
+			return event.answer.kind === 'none'
+				? { view, phase: 'notfound', heard: state.heard, web: true }
+				: { view, phase: 'web', result: { heard: state.heard, answer: event.answer, language: state.language } };
+		case 'WEB_START':
+			return state.phase === 'web' && state.result.answer.kind === 'steps' && state.result.answer.steps.length > 0
+				? { view, phase: 'web-confirm', back: state }
+				: state;
 		case 'TOPIC':
 			return CAN_PICK_TOPIC.has(state.phase) ? { view, phase: 'searching', topic: event.area } : state;
 		case 'OPEN':
@@ -201,10 +241,15 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			return entry?.kind === 'process' && entry.steps?.length ? { view, phase: 'confirm', entry, back: state } : state;
 		}
 		case 'YES':
+			if (state.phase === 'web-confirm') return { view, phase: 'web-steps', index: 0, back: state.back };
 			return state.phase === 'confirm' ? { view, phase: 'steps', entry: state.entry, index: 0, back: state.back } : state;
 		case 'NO':
-			return state.phase === 'confirm' ? state.back : state;
+			return state.phase === 'confirm' || state.phase === 'web-confirm' ? state.back : state;
 		case 'STEP_DONE': {
+			if (state.phase === 'web-steps') {
+				const last = state.back.result.answer.steps.length - 1;
+				return state.index < last ? { ...state, index: state.index + 1 } : { view, phase: 'web-done', back: state.back };
+			}
 			if (state.phase !== 'steps') return state;
 			const last = (state.entry.steps?.length ?? 0) - 1;
 			return state.index < last
@@ -212,7 +257,9 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 				: { view, phase: 'done', entry: state.entry, back: state.back };
 		}
 		case 'BACK':
-			return state.phase === 'confirm' || state.phase === 'steps' || state.phase === 'done' ? state.back : state;
+			return state.phase === 'confirm' || state.phase === 'steps' || state.phase === 'done' || state.phase === 'web-confirm' || state.phase === 'web-steps' || state.phase === 'web-done'
+				? state.back
+				: state;
 		case 'HOME':
 			return { view, phase: 'home', greeting: false };
 	}
