@@ -80,6 +80,8 @@ export interface WebResult {
 	heard: Heard;
 	answer: WebAnswer;
 	language: EntryLanguage;
+	/** Kept from an earlier search: when the web found it. */
+	foundAt?: string;
 }
 
 /** `from`: the closest answers they chose to look past, so Back returns to them. */
@@ -140,7 +142,7 @@ export type FlowEvent =
 	/** Nothing in Suara: search the web instead (OpenAI routes only; the driver decides). */
 	| { type: 'WEB_SEARCH'; heard: Heard; language: EntryLanguage }
 	| { type: 'WEB_STAGE'; stage: WebStage }
-	| { type: 'WEB_ANSWER'; answer: WebAnswer }
+	| { type: 'WEB_ANSWER'; answer: WebAnswer; foundAt?: string }
 	| { type: 'WEB_START' };
 
 export function initial(view: View = 'grid'): FlowState {
@@ -225,7 +227,7 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 			if (event.answer.kind === 'none' && state.from) return state.from;
 			return event.answer.kind === 'none'
 				? { view, phase: 'notfound', heard: state.heard, web: true }
-				: { view, phase: 'web', result: { heard: state.heard, answer: event.answer, language: state.language }, ...(state.from ? { from: state.from } : {}) };
+				: { view, phase: 'web', result: { heard: state.heard, answer: event.answer, language: state.language, ...(event.foundAt ? { foundAt: event.foundAt } : {}) }, ...(state.from ? { from: state.from } : {}) };
 		case 'WEB_START':
 			return state.phase === 'web' && state.result.answer.kind === 'steps' && state.result.answer.steps.length > 0
 				? { view, phase: 'web-confirm', back: state }

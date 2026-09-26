@@ -12,6 +12,8 @@ import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/p
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 import { searchRaw, type RawIndex } from './raw-store';
 import type { Judge } from './judge';
+import type { GuideFinder } from './web-guides';
+import type { WebAnswer } from './web-answer';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
 const Offset = z.number().int().min(0).max(1000).default(0);
@@ -38,7 +40,13 @@ export type SearchResponse =
 	| { kind: 'places'; heard: Heard; places: Place[]; what: PlaceKind; area: string; source: PlaceSource; language: EntryLanguage }
 	/** A life event rather than a question: what to do now, what waits, and how it ends. */
 	| { kind: 'journey'; heard: Heard; journey: Journey; cards: Entry[]; language: EntryLanguage }
-	| { kind: 'nothing'; heard: Heard; language: EntryLanguage }
+	/** `query`: the English meaning searched, so a web answer found next can be kept under it. */
+	| { kind: 'nothing'; heard: Heard; language: EntryLanguage; query?: string }
+	/**
+	 * A guide found on the web for an earlier question like this one, and kept. `closest`: the
+	 * cards that were near but did not answer, one Back away.
+	 */
+	| { kind: 'web'; heard: Heard; language: EntryLanguage; answer: WebAnswer; foundAt: string; closest?: SearchResult }
 	/**
 	 * `englishIds`: cards shown in English although the reader's language is not English.
 	 * `webFirst`: none of these answers the question; they are the closest, and the web is next.
@@ -122,6 +130,8 @@ export interface SearchDeps {
 	remember?: (entry: Entry) => void;
 	/** Whether the nearest cards answer the question. Absent means similarity alone decides. */
 	judge?: Judge;
+	/** Web answers kept from earlier questions. Absent means every such question searches the web. */
+	guides?: GuideFinder;
 }
 
 export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<SearchResponse> {
@@ -182,7 +192,7 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	} catch (err) {
 		console.error('embedding failed, falling back to the word search:', err instanceof Error ? err.message.slice(0, 120) : err);
 	}
-	if (!vector) return (await onDemand(query, heard, language, deps)) ?? { kind: 'nothing', heard, language };
+	if (!vector) return (await onDemand(query, heard, language, deps)) ?? { kind: 'nothing', heard, language, query };
 
 	const ranked = rank(bestPerEntry(nearest(vector, deps.corpus.vectors)), deps.thresholds, offset);
 	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
@@ -201,14 +211,27 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	 * a weak fit, and failing that the cards are shown as the closest with the web next.
 	 */
 	const answered = offset === 0 && ranked.fit !== 'none' && deps.judge && cards.length > 0 ? await deps.judge(query, cards.slice(0, PAGE_SIZE)) : null;
+	const unanswered = offset === 0 && (ranked.fit === 'none' || answered === false);
+
+	// A guide the web found for an earlier question like this one: instant, and no search.
+	const kept = unanswered ? (deps.guides?.find(vector, language, deps.thresholds.strong) ?? null) : null;
+	const closestOf = async () => {
+		const r = await results(cards, { heard, fit: 'weak', nextOffset: ranked.nextOffset, query, language }, deps);
+		return r.kind === 'results' ? r : null;
+	};
+	if (kept) {
+		const closest = ranked.fit === 'none' ? null : await closestOf();
+		return { kind: 'web', heard, language, answer: kept.answer, foundAt: kept.foundAt, ...(closest ? { closest: closest.result } : {}) };
+	}
+
 	if ((ranked.fit !== 'strong' || answered === false) && offset === 0) {
 		const composed = await onDemand(query, heard, language, deps, cards);
 		if (composed) return composed;
 	}
-	if (ranked.fit === 'none') return { kind: 'nothing', heard, language };
+	if (ranked.fit === 'none') return { kind: 'nothing', heard, language, query };
 	if (answered === false) {
-		const closest = await results(cards, { heard, fit: 'weak', nextOffset: ranked.nextOffset, query, language }, deps);
-		return closest.kind === 'results' ? { ...closest, webFirst: true } : closest;
+		const closest = await closestOf();
+		return closest ? { ...closest, webFirst: true } : { kind: 'nothing', heard, language, query };
 	}
 
 	return results(cards, { heard, fit: ranked.fit, nextOffset: ranked.nextOffset, query, language }, deps);

@@ -115,11 +115,12 @@ function webLine(a: WebAnswer): string {
 }
 
 /** `/api/web`: one JSON object per line, a stage at a time, then the answer or an error. */
-async function fetchWeb(question: string, language: EntryLanguage, route: string, onStage: (s: WebStage) => void, signal: AbortSignal): Promise<WebAnswer | null> {
+async function fetchWeb(question: string, query: string | undefined, language: EntryLanguage, route: string, onStage: (s: WebStage) => void, signal: AbortSignal): Promise<WebAnswer | null> {
 	const res = await fetch('/api/web', {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
-		body: JSON.stringify({ question, language, route }),
+		// `query`: the English meaning Suara searched, which the answer is kept under for next time.
+		body: JSON.stringify({ question, language, route, ...(query ? { query } : {}) }),
 		signal,
 	});
 	if (!res.ok || !res.body) throw new Error(String(res.status));
@@ -223,13 +224,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	 * Nothing in Suara answered: search the web, showing each stage as it happens. Returns the
 	 * answer, or null when there was none or the search failed, which leaves "not in Suara".
 	 */
-	async function searchTheWeb(heard: Heard, language: EntryLanguage, opts: { spoken?: boolean; fromClosest?: boolean } = {}): Promise<WebAnswer | null> {
+	async function searchTheWeb(heard: Heard, language: EntryLanguage, opts: { spoken?: boolean; fromClosest?: boolean; query?: string } = {}): Promise<WebAnswer | null> {
 		web.current?.abort();
 		const controller = new AbortController();
 		web.current = controller;
 		dispatch({ type: 'WEB_SEARCH', heard, language });
 		try {
-			const answer = await fetchWeb(heard.said ?? heard.sentence, language, route, (stage) => dispatch({ type: 'WEB_STAGE', stage }), controller.signal);
+			const answer = await fetchWeb(heard.said ?? heard.sentence, opts.query, language, route, (stage) => dispatch({ type: 'WEB_STAGE', stage }), controller.signal);
 			if (controller.signal.aborted) return null;
 			if (!answer) throw new Error('no answer');
 			dispatch({ type: 'WEB_ANSWER', answer });
@@ -297,13 +298,15 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 						if ((reply.kind === 'nothing' || (reply.kind === 'results' && reply.webFirst)) && canWeb) {
 							if (reply.kind === 'results') dispatch({ type: 'RESULTS', result: reply.result });
 							const asked = reply.kind === 'results' ? reply.result : reply;
-							const found = await searchTheWeb(asked.heard, asked.language, { spoken: true, fromClosest: reply.kind === 'results' });
+							const found = await searchTheWeb(asked.heard, asked.language, { spoken: true, fromClosest: reply.kind === 'results', ...(asked.query ? { query: asked.query } : {}) });
 							answer(found ? webLine(found) : asked.language === 'zh-Hans' ? NOT_ON_WEB['zh-Hans'] : 'That is not in Suara, and I could not find a reliable answer on the web.');
 							return;
 						}
 						show(reply, { spoken: true });
 						answer(
-							reply.kind === 'results'
+							reply.kind === 'web'
+								? webLine(reply.answer)
+								: reply.kind === 'results'
 								? commentaryFor(reply.result, reply.result.language)
 								: reply.kind === 'greeting'
 									? 'Hello. Ask me about health costs, CPF or your Singpass.'
@@ -375,18 +378,29 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 		if (reply.kind === 'nothing') {
 			if (opts.asked && canWeb) {
-				void searchTheWeb(reply.heard, reply.language, opts);
+				void searchTheWeb(reply.heard, reply.language, { ...opts, ...(reply.query ? { query: reply.query } : {}) });
 				return;
 			}
 			dispatch({ type: 'NOTHING', heard: reply.heard });
 			tell(NOT_IN[reply.language], reply.language);
 			return;
 		}
+		// A guide the web found for an earlier question like this one: shown at once.
+		if (reply.kind === 'web') {
+			if (reply.closest) {
+				setEnglishIds([]);
+				dispatch({ type: 'RESULTS', result: reply.closest });
+			}
+			dispatch({ type: 'WEB_SEARCH', heard: reply.heard, language: reply.language });
+			dispatch({ type: 'WEB_ANSWER', answer: reply.answer, foundAt: reply.foundAt });
+			tell(webLine(reply.answer), reply.language);
+			return;
+		}
 		setEnglishIds(reply.englishIds);
 		dispatch({ type: 'RESULTS', result: reply.result });
 		// None of these answers it: they stay as the closest, one Back away, and the web is searched.
 		if (reply.webFirst && opts.asked && canWeb) {
-			void searchTheWeb(reply.result.heard, reply.result.language, { ...opts, fromClosest: true });
+			void searchTheWeb(reply.result.heard, reply.result.language, { ...opts, fromClosest: true, query: reply.result.query });
 			return;
 		}
 		const top = reply.result.cards[0];
@@ -466,7 +480,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	function onWebSearch(): void {
 		if (state.phase !== 'results' || state.result.fit !== 'weak') return;
 		silence();
-		void searchTheWeb(state.result.heard, state.result.language, { fromClosest: true });
+		void searchTheWeb(state.result.heard, state.result.language, { fromClosest: true, query: state.result.query });
 	}
 
 	/** A typed question: the same search as a spoken one, and the web behind it. */

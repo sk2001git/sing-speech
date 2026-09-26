@@ -128,3 +128,40 @@ describe('runSearch, judging the six nearest', () => {
 		expect(judge).not.toHaveBeenCalled();
 	});
 });
+
+describe('runSearch, guides kept from the web', () => {
+	const kept = {
+		id: 'g1',
+		question: 'can I use my medisave to pay my father hospital bill',
+		answer: { kind: 'steps', title_full: 'Kept guide' } as unknown as import('./web-answer').WebAnswer,
+		language: 'en' as const,
+		foundAt: '2026-09-20T00:00:00.000Z',
+	};
+
+	it('answers from a kept guide when no card answers, instead of searching the web again', async () => {
+		const find = vi.fn(() => kept);
+		const r = await runSearch(speech, deps({ judge: async () => false, guides: { find } }));
+		expect(r).toMatchObject({ kind: 'web', answer: { title_full: 'Kept guide' }, foundAt: kept.foundAt, closest: { fit: 'weak' } });
+		expect(find).toHaveBeenCalledWith([1, 0], 'en', T.strong);
+	});
+
+	it('answers from a kept guide when nothing is near at all', async () => {
+		const r = await runSearch(speech, deps({ embed: async () => [-1, 0], guides: { find: () => kept } }));
+		expect(r).toMatchObject({ kind: 'web', answer: { title_full: 'Kept guide' } });
+		expect(r).not.toHaveProperty('closest');
+	});
+
+	it('leaves a card that answers alone, whatever was kept', async () => {
+		const find = vi.fn(() => kept);
+		const r = await runSearch(speech, deps({ judge: async () => true, guides: { find } }));
+		expect(r.kind).toBe('results');
+		expect(find).not.toHaveBeenCalled();
+	});
+
+	it('carries the English meaning it searched when nothing answers, so the web answer can be kept under it', async () => {
+		const r = await runSearch(speech, deps({ judge: async () => false }));
+		expect(r).toMatchObject({ webFirst: true, result: { query: 'can I use my medisave to pay my father hospital bill' } });
+		const none = await runSearch(speech, deps({ embed: async () => [-1, 0] }));
+		expect(none).toMatchObject({ kind: 'nothing', query: 'can I use my medisave to pay my father hospital bill' });
+	});
+});

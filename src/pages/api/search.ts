@@ -9,6 +9,7 @@ import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
 import { writerFor } from '../../lib/routes/write';
 import { openaiJudge } from '../../lib/kb/judge';
 import { webAllowed } from '../../lib/kb/web-answer';
+import { guides } from '../../lib/kb/web-guides';
 
 export const prerender = false;
 
@@ -74,7 +75,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			...(writer ? { write: writer } : {}),
 			// Near is not answered: the six nearest are read, and the web is next if none answers.
 			// Only where there is a web to go to.
-			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL) } : {}),
+			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), guides } : {}),
 			thresholds: THRESHOLDS,
 			translateBudgetMs: 4000,
 			now: () => new Date().toISOString(),

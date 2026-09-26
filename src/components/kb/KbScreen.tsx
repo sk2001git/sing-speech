@@ -141,6 +141,8 @@ const WORDS = {
 		whereFrom: (n: number) => `Where this is from · ${n} ${n === 1 ? 'page' : 'pages'}`,
 		fineOfficial: 'From official government pages, found by web search.',
 		fineWeb: 'Found on the web, not an official answer.',
+		fineOfficialOn: (date: string) => `From official government pages, found by web search on ${date}.`,
+		fineWebOn: (date: string) => `Found on the web on ${date}, not an official answer.`,
 		startWeb: (n: number) => `Start these ${n} ${n === 1 ? 'step' : 'steps'}?`,
 		confirmWeb: 'You confirm each one. You can stop at any time.',
 		answerBack: 'Answer',
@@ -245,6 +247,8 @@ const WORDS = {
 		whereFrom: (n: number) => `资料来源 · ${n} 个网页`,
 		fineOfficial: '来自政府官方网页，由网络搜索找到。',
 		fineWeb: '来自网络，不是官方答案。',
+		fineOfficialOn: (date: string) => `来自政府官方网页，于 ${date} 由网络搜索找到。`,
+		fineWebOn: (date: string) => `于 ${date} 在网上找到，不是官方答案。`,
 		startWeb: (n: number) => `开始这 ${n} 个步骤？`,
 		confirmWeb: '每一步由您确认，随时可以停下。',
 		answerBack: '答案',
@@ -963,13 +967,15 @@ function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> })
 					{p.w.readAloud}
 				</button>
 			</article>
-			<WebTail w={p.w} answer={a} />
+			<WebTail w={p.w} answer={a} lang={language} {...(p.state.result.foundAt ? { foundAt: p.state.result.foundAt } : {})} />
 			<AskButton {...p} label={p.w.askElse} />
 		</>
 	);
 }
 
-function WebTail({ w, answer: a }: { w: Words; answer: WebAnswer }) {
+function WebTail({ w, answer: a, lang, foundAt }: { w: Words; answer: WebAnswer; lang: EntryLanguage; foundAt?: string }) {
+	const on = foundAt ? new Date(foundAt).toLocaleDateString(lang === 'zh-Hans' ? 'zh-SG' : 'en-SG', { day: 'numeric', month: 'short', year: 'numeric' }) : null;
+	const where = on ? (a.official ? w.fineOfficialOn(on) : w.fineWebOn(on)) : a.official ? w.fineOfficial : w.fineWeb;
 	const kept = a.steps.length;
 	const notes = [...(a.dropped ? [w.checkedOnly(kept, kept + a.dropped, a.dropped)] : []), ...a.cautions].slice(0, 4);
 	return (
@@ -1012,7 +1018,7 @@ function WebTail({ w, answer: a }: { w: Words; answer: WebAnswer }) {
 					))}
 				</div>
 			)}
-			<p className="k-fine">{`${a.official ? w.fineOfficial : w.fineWeb}${a.disclaimer ? ` ${a.disclaimer}` : ''}`}</p>
+			<p className="k-fine">{`${where}${a.disclaimer ? ` ${a.disclaimer}` : ''}`}</p>
 		</>
 	);
 }

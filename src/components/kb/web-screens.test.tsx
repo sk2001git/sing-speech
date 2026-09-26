@@ -216,3 +216,10 @@ describe('The closest answers', () => {
 		expect(render(strong, { onWebSearch: noop })).not.toContain('Search the web instead');
 	});
 });
+
+describe('A guide kept from an earlier web search', () => {
+	it('says in the fine print when it was found', () => {
+		const html = render({ view: 'single', phase: 'web', result: { heard, answer: scooter(), language: 'en', foundAt: '2026-09-20T03:00:00.000Z' } });
+		expect(html).toMatch(/class="k-fine">From official government pages, found by web search on 20 Sept? 2026\. Rules may change\./);
+	});
+});

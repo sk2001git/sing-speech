@@ -142,3 +142,10 @@ describe('the web, from a weak match', () => {
 		expect(next(strong, { type: 'WEB_SEARCH', heard, language: 'en' })).toBe(strong);
 	});
 });
+
+describe('a kept guide', () => {
+	it('carries the date it was found onto the screen', () => {
+		const s = run([...toWebSearch, { type: 'WEB_ANSWER', answer: guide(), foundAt: '2026-09-20T00:00:00.000Z' }]);
+		expect(s).toMatchObject({ phase: 'web', result: { foundAt: '2026-09-20T00:00:00.000Z' } });
+	});
+});

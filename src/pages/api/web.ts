@@ -4,6 +4,10 @@ import { EntryLanguage } from '../../lib/kb/entry';
 import { searchWeb, webAllowed, type WebStage } from '../../lib/kb/web-answer';
 import { runtimeEnv } from '../../lib/env';
 import { resolveRoute } from '../../lib/routes';
+import { EMBEDDING } from '../../lib/kb/corpus';
+import { queryText } from '../../lib/kb/embed';
+import { guides, keepAs } from '../../lib/kb/web-guides';
+import { OpenAi } from '../../lib/providers/openai';
 
 export const prerender = false;
 
@@ -11,6 +15,8 @@ const WebRequest = z.object({
 	question: z.string().trim().min(1).max(300),
 	language: EntryLanguage,
 	route: z.string().optional(),
+	/** The English meaning Suara searched. Given, the answer is kept under it for the next person. */
+	query: z.string().trim().min(1).max(240).optional(),
 });
 
 /**
@@ -45,6 +51,16 @@ export const POST: APIRoute = async ({ request }) => {
 					signal: request.signal,
 				});
 				send({ type: 'answer', answer });
+				// Kept for next time, after they already have it: official pages straight in, the
+				// rest held for the owner (vault dec-suara-0024).
+				if (parsed.query && keepAs(answer)) {
+					try {
+						const [vector] = await new OpenAi({ apiKey }).embed(EMBEDDING.model, [queryText(parsed.query)], EMBEDDING.dimensions);
+						if (vector) guides.save({ question: parsed.query, vector, answer, language: parsed.language });
+					} catch (err) {
+						console.error('web guide not kept:', err instanceof Error ? err.message.slice(0, 120) : err);
+					}
+				}
 			} catch (err) {
 				// Nothing about the person reaches the log: no question, no reply body.
 				console.error('web search failed:', err instanceof Error ? err.message.slice(0, 200) : err);
