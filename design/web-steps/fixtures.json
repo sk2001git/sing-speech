@@ -335,5 +335,83 @@
       ],
       "cautions": []
     }
+  },
+  "singpass": {
+    "question": "How do I set up the Singpass app on my new phone?",
+    "model": "gpt-6-luna",
+    "ms": 10595,
+    "searches": 3,
+    "dropped": 3,
+    "guide": {
+      "kind": "steps",
+      "title_short": "Set up Singpass",
+      "title_full": "Set up Singpass on your new phone",
+      "summary": "If you still have your old phone, use Singpass’s Bluetooth and QR-code transfer. Otherwise, choose the alternative setup method.",
+      "answer": "",
+      "answer_urls": [],
+      "prerequisites": "",
+      "steps": [
+        {
+          "name": "Install Singpass",
+          "text": "On your new phone, install Singpass from its official app store. Check that the app developer is Government Technology Agency.",
+          "confirm_label": "App installed",
+          "source_urls": [
+            "https://ask.gov.sg/singpass/questions/cm1k4osvs0016y0mql9hqjwxr",
+            "https://app.singpass.gov.sg/"
+          ]
+        }
+      ],
+      "legal": {
+        "applies": false,
+        "text": "",
+        "source_urls": []
+      },
+      "disclaimer": "",
+      "sources": [
+        {
+          "url": "https://ask.gov.sg/singpass/questions/cmejfoi320083g92995ozj7yz",
+          "title": "How to set up Singpass app with your previous device?",
+          "site": "Singpass / AskGov"
+        },
+        {
+          "url": "https://ask.gov.sg/singpass/questions/cm1k4osvs0016y0mql9hqjwxr",
+          "title": "What are the requirements to set up Singpass app?",
+          "site": "Singpass / AskGov"
+        },
+        {
+          "url": "https://app.singpass.gov.sg/",
+          "title": "Singpass app",
+          "site": "Singpass"
+        }
+      ],
+      "cautions": [
+        "Once setup succeeds on your new phone, Singpass is automatically deactivated on your old phone.",
+        "If you no longer have your old phone, choose “Use an alternative method” in the app; setup may require SMS OTP and Singpass Face Verification."
+      ]
+    }
+  },
+  "none": {
+    "question": "How do I get free hotel upgrades with my senior card?",
+    "model": "example, not a real run",
+    "ms": 0,
+    "searches": 0,
+    "guide": {
+      "kind": "none",
+      "title_short": "",
+      "title_full": "",
+      "summary": "The pages I found did not agree, so I will not guess. Try asking the hotel directly.",
+      "answer": "",
+      "answer_urls": [],
+      "prerequisites": "",
+      "steps": [],
+      "legal": {
+        "applies": false,
+        "text": "",
+        "source_urls": []
+      },
+      "disclaimer": "",
+      "sources": [],
+      "cautions": []
+    }
   }
 }

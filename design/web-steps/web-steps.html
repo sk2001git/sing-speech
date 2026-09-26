@@ -3,71 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Suara — steps from the web (mockup)</title>
+<meta name="theme-color" content="#ffffff">
+<title>Suara — answers from the web (clickable mockup)</title>
 <!--
-  Screens-first mockup for vault plan suara-2026-09-25-feature-web-steps. Not wired to anything.
-  The guides are real: gpt-6-luna with web_search, run by scripts/kb/spike-web-steps.mjs
-  (fixtures.json, inlined below). Styled to the live app (taste-lab rounds 1 and 2).
-    web-steps.html?state=<name>     one state (see STATES)
-    web-steps.html?canvas=1         all states side by side
+  Mobile-first, clickable mockup for vault plan suara-2026-09-25-feature-web-steps.
+  No backend: the answers are real gpt-6-luna web_search runs (fixtures.json, inlined below),
+  and the search wait is shortened. Serve the suara/ folder and open /design/web-steps/web-steps.html
+    ?q=<key>&v=result|step|done     open straight at a screen (keys: see FX)
+    ?canvas=1                       every screen side by side, at phone width
 -->
 <style>
 @font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
-:root { --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7; --surface: #fff; --light: #007aff; --skeleton: #ebebeb;
-  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%); --r: 1.25rem; }
+:root {
+  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7; --surface: #fff;
+  --light: #007aff; --yes: #1f7a36; --skeleton: #ebebeb;
+  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
+  --r: 20px; --pad: clamp(16px, 5vw, 28px); --col: 560px;
+  --t-h1: clamp(1.75rem, 1.2rem + 2.6vw, 2.25rem); --t-title: clamp(1.4rem, 1.05rem + 1.8vw, 1.75rem);
+  --t-body: clamp(1.0625rem, 1rem + .35vw, 1.25rem); --t-small: 1rem; --t-fine: .875rem;
+}
 * { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
 body { font-family: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
-button { font: inherit; color: inherit; }
-.app { width: 390px; min-height: 844px; position: relative; overflow: hidden; background: #fff; }
-.bar { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
-.mk { width: 44px; height: 44px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
-.nm { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-right: auto; }
-.pill { height: 48px; padding: 0 16px; border-radius: 999px; background: var(--subtle); border: 1px solid var(--line); display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; }
-.page { padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 16px; }
-h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.03em; text-wrap: balance; }
-.lead { font-size: 19px; color: var(--muted); line-height: 1.45; }
-.said { font-size: 17px; color: var(--muted); padding: 14px 18px; border-radius: var(--r); border: 1px solid var(--line); }
-.said b { color: var(--ink); font-weight: 600; }
-.card { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 10px; }
-.badge { display: inline-flex; align-items: center; gap: 7px; align-self: start; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--subtle); font-size: 15px; font-weight: 700; color: var(--ink); width: max-content; }
-.badge svg { width: 18px; height: 18px; }
-.title { font-size: 26px; font-weight: 700; letter-spacing: -.02em; line-height: 1.18; }
-.sum { font-size: 18px; color: var(--muted); line-height: 1.45; }
-.meta { font-size: 16px; color: var(--muted); }
-.meta b { color: var(--ink); font-weight: 600; }
-.btn { height: 72px; border-radius: 999px; border: 0; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 21px; font-weight: 600; width: 100%; }
-.btn.quiet { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line-strong); height: 60px; font-size: 19px; }
-.btn.yes { background: #1f7a36; }
-.link { background: none; border: 0; font-size: 19px; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; padding: 12px; }
-.note { display: flex; gap: 12px; padding: 16px 18px; border-radius: var(--r); background: #fff8e6; border: 1px solid #f0d9a0; font-size: 17px; line-height: 1.45; color: #5c3d00; }
-.note svg { flex: none; width: 22px; height: 22px; margin-top: 2px; }
-/* Before you start: one short line, not steps (owner, 2026-09-25). */
-.pre { font-size: 17px; line-height: 1.45; color: var(--ink); padding: 12px 14px; border-radius: 14px; background: var(--subtle); }
-.pre b { font-weight: 700; }
-/* Legal: always shown when it applies, clearly marked, never folded. */
-.legal { display: grid; gap: 8px; padding: 16px 18px; border-radius: var(--r); border: 2px solid var(--ink); background: #fff; }
-.legal .lh { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-.legal .lh svg { width: 20px; height: 20px; }
-.legal p { font-size: 18px; line-height: 1.45; }
-/* Disclaimer: always, in fine print, in a bubble. */
-.fine { align-self: start; max-width: 100%; padding: 10px 14px; border-radius: 16px 16px 16px 4px; background: var(--subtle); font-size: 13.5px; line-height: 1.45; color: var(--muted); }
-.answer { font-size: 20px; line-height: 1.5; }
-/* Good to know: a quiet row until opened; the marked note appears only when expanded. */
-.more { border-radius: var(--r); border: 1px solid var(--line); background: #fff; }
-.more > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; font-size: 18px; font-weight: 600; cursor: pointer; }
-.more > summary::-webkit-details-marker { display: none; }
-.more > summary small { font-size: 16px; font-weight: 400; color: var(--muted); }
-.more[open] > summary svg { transform: rotate(180deg); }
-.more > .note { margin: 0 12px 12px; }
-.sources { display: grid; gap: 0; border-radius: var(--r); border: 1px solid var(--line); overflow: hidden; }
-.sources .h { padding: 12px 18px; font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: .02em; background: var(--subtle); }
-.src { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); }
-.src b { font-size: 16px; font-weight: 600; }
-.src span { font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+svg { display: block; flex: none; }
 
-/* searching the web: what is happening, not a blank wait */
-.stages { display: grid; gap: 14px; padding: 4px 2px; }
-.stage { display: flex; align-items: center; gap: 12px; font-size: 19px; color: var(--muted); }
+/* One readable column on any screen; on a wide screen it sits as a card on grey. */
+.app { width: 100%; max-width: var(--col); margin: 0 auto; min-height: 100svh; display: flex; flex-direction: column; background: #fff; }
+@media (min-width: 720px) {
+  body { background: var(--subtle); }
+  .app { margin: 24px auto; min-height: calc(100svh - 48px); border-radius: 28px; box-shadow: 0 0 0 1px var(--line), 0 24px 60px -30px rgb(0 0 0 / 25%); overflow: hidden; }
+}
+.bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: max(12px, env(safe-area-inset-top)) var(--pad) 12px; background: rgb(255 255 255 / 92%); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.mk { width: 40px; height: 40px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
+.nm { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; margin-right: auto; border: 0; background: none; padding: 0; }
+.pill { min-height: 48px; padding: 0 16px; border-radius: 999px; background: var(--subtle); border: 1px solid var(--line); display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 600; }
+@media (max-width: 370px) { .pill .tx { display: none; } .pill { padding: 0 13px; } }
+.page { flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px var(--pad) calc(32px + env(safe-area-inset-bottom)); }
+.page > * { animation: rise .32s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+
+h1 { font-size: var(--t-h1); line-height: 1.12; font-weight: 700; letter-spacing: -.03em; text-wrap: balance; }
+.lead { font-size: var(--t-body); color: var(--muted); line-height: 1.45; text-wrap: pretty; }
+.small { font-size: var(--t-small); color: var(--muted); line-height: 1.45; }
+.said { font-size: var(--t-small); color: var(--muted); padding: 14px 18px; border-radius: var(--r); border: 1px solid var(--line); line-height: 1.4; }
+.said b { color: var(--ink); font-weight: 600; }
+
+/* Home: the questions the real search answered */
+.qs { display: grid; gap: 10px; }
+.q { display: grid; gap: 4px; text-align: left; width: 100%; min-height: 64px; padding: 16px 18px; border-radius: var(--r); border: 0; background: var(--surface); box-shadow: var(--shadow); }
+.q:active { transform: scale(.99); }
+.q b { font-size: var(--t-body); font-weight: 600; line-height: 1.3; }
+.q span { font-size: var(--t-small); color: var(--muted); }
+
+.card { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 12px; }
+.badge { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--subtle); font-size: .95rem; font-weight: 700; width: max-content; max-width: 100%; }
+.title { font-size: var(--t-title); font-weight: 700; letter-spacing: -.02em; line-height: 1.18; text-wrap: balance; }
+.sum, .answer { font-size: var(--t-body); line-height: 1.5; }
+.sum { color: var(--muted); }
+.meta { font-size: var(--t-small); color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 600; }
+.pre { font-size: var(--t-small); line-height: 1.45; padding: 12px 14px; border-radius: 14px; background: var(--subtle); }
+.pre b { font-weight: 700; }
+
+.btn { min-height: 64px; width: 100%; border-radius: 999px; border: 0; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 20px; font-size: 1.2rem; font-weight: 600; text-align: center; transition: transform .12s ease-out; }
+.btn:active { transform: scale(.98); }
+.btn.quiet { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--line-strong); min-height: 56px; font-size: 1.1rem; }
+.btn.yes { background: var(--yes); }
+.link { background: none; border: 0; min-height: 48px; font-size: 1.1rem; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; }
+.back { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; background: none; border: 0; font-size: 1.1rem; font-weight: 600; align-self: flex-start; padding: 0; }
+
+/* Legal: always open when it applies, clearly marked */
+.legal { display: grid; gap: 8px; padding: 16px 18px; border-radius: var(--r); border: 2px solid var(--ink); background: #fff; }
+.legal .lh { display: flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.legal p { font-size: var(--t-body); line-height: 1.45; }
+/* Good to know: folded until tapped; the marked note only shows when open */
+.more { border-radius: var(--r); border: 1px solid var(--line); background: #fff; }
+.more > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 12px 18px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary small { font-size: var(--t-small); font-weight: 400; color: var(--muted); }
+.more[open] > summary svg { transform: rotate(180deg); }
+.note { display: flex; gap: 12px; margin: 0 12px 12px; padding: 14px 16px; border-radius: 16px; background: #fff8e6; border: 1px solid #f0d9a0; font-size: var(--t-small); line-height: 1.45; color: #5c3d00; }
+.note .ln { display: grid; gap: 8px; }
+.sources { border-radius: var(--r); border: 1px solid var(--line); overflow: hidden; }
+.sources .h { padding: 12px 18px; font-size: .9rem; font-weight: 700; color: var(--muted); letter-spacing: .04em; background: var(--subtle); }
+.src { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); color: inherit; text-decoration: none; }
+.src b { font-size: var(--t-small); font-weight: 600; }
+.src span { font-size: .9rem; color: var(--muted); overflow-wrap: anywhere; }
+/* Fine print, always, in a bubble */
+.fine { align-self: flex-start; padding: 10px 14px; border-radius: 16px 16px 16px 4px; background: var(--subtle); font-size: var(--t-fine); line-height: 1.45; color: var(--muted); }
+
+/* Searching: what is happening, not a blank wait */
+.stages { display: grid; gap: 14px; }
+.stage { display: flex; align-items: center; gap: 12px; font-size: var(--t-body); color: var(--muted); transition: color .2s; }
 .stage i { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; box-shadow: inset 0 0 0 2px var(--line-strong); }
 .stage[data-s="done"] { color: var(--ink); }
 .stage[data-s="done"] i { background: var(--light); box-shadow: none; }
@@ -79,162 +107,181 @@ h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.03e
 .skel i { display: block; height: 14px; border-radius: 4px; background: var(--skeleton); animation: pulse 1.4s ease-in-out infinite; }
 .skel i:nth-child(1) { width: 34%; } .skel i:nth-child(2) { width: 86%; height: 22px; } .skel i:nth-child(3) { width: 64%; }
 @keyframes pulse { 50% { opacity: .45; } }
-.small { font-size: 16px; color: var(--muted); }
 
-/* steps: any number, the current one open, the rest compact */
+/* Steps: any number; done ones fold, the current one opens, the rest fold */
 .prog { display: grid; gap: 10px; }
-.prog .lbl { font-size: 16px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.prog .lbl { font-size: .95rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
-.track i { display: block; height: 100%; background: var(--light); border-radius: 3px; }
-.row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--r); background: #fff; border: 1px solid var(--line); font-size: 18px; color: var(--muted); }
-.row .n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--subtle); font-weight: 700; font-size: 16px; color: var(--ink); }
+.track i { display: block; height: 100%; background: var(--light); border-radius: 3px; transform-origin: left; transition: transform .45s cubic-bezier(.2, .8, .2, 1); }
+.row { display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 10px 18px; border-radius: var(--r); background: #fff; border: 1px solid var(--line); font-size: var(--t-small); color: var(--muted); }
+.row .n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--subtle); font-weight: 700; font-size: .95rem; color: var(--ink); }
 .row.done .n { background: var(--light); color: #fff; }
-.row.more { justify-content: space-between; font-weight: 600; color: var(--ink); background: var(--subtle); border-color: transparent; }
+.later > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; min-height: 56px; padding: 10px 18px; border-radius: var(--r); background: var(--subtle); font-size: var(--t-small); font-weight: 600; cursor: pointer; }
+.later > summary::-webkit-details-marker { display: none; }
+.later[open] > summary svg { transform: rotate(180deg); }
+.later .rows { display: grid; gap: 10px; margin-top: 10px; }
 .now { border: 2px solid var(--ink); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; background: #fff; }
 .now .hd { display: flex; align-items: center; gap: 14px; }
-.now .n { width: 40px; height: 40px; border-radius: 50%; background: #000; color: #fff; display: grid; place-items: center; font-weight: 700; }
-.now .nm2 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
-.now p { font-size: 20px; line-height: 1.5; }
-.now .from { font-size: 15px; color: var(--muted); text-decoration: underline; text-underline-offset: .2em; }
+.now .n { width: 40px; height: 40px; border-radius: 50%; background: #000; color: #fff; display: grid; place-items: center; font-weight: 700; flex: none; }
+.now .nm2 { font-size: 1.3rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+.now p { font-size: var(--t-body); line-height: 1.5; }
+.now .from { font-size: .9rem; color: var(--muted); text-decoration: underline; text-underline-offset: .2em; overflow-wrap: anywhere; }
 
-/* confirm sheet */
-.scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 32%); }
-.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 32px 32px 0 0; padding: 30px 24px 26px; display: grid; gap: 12px; text-align: center; box-shadow: 0 8px 28px rgb(0 0 0 / 28%); }
-.sheet h2 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+/* Done */
+.fin { display: grid; justify-items: center; text-align: center; gap: 14px; padding: 40px 0 8px; }
+.tick { width: 88px; height: 88px; border-radius: 50%; background: var(--light); display: grid; place-items: center; color: #fff; animation: pop .45s cubic-bezier(.34, 1.4, .5, 1) both; }
+.tick svg { width: 46px; height: 46px; stroke-dasharray: 30; stroke-dashoffset: 30; animation: draw .35s ease-out .25s forwards; }
+@keyframes pop { from { transform: scale(0); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
 
-/* canvas */
-.canvas { display: flex; flex-wrap: wrap; gap: 28px; padding: 28px; background: #dcdde3; width: max-content; max-width: 2100px; }
+/* Confirm sheet, pinned to the real viewport */
+.scrim { position: fixed; inset: 0; z-index: 20; background: rgb(0 0 0 / 32%); animation: fade .25s ease-out both; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; width: 100%; max-width: var(--col); margin: 0 auto; background: #fff; border-radius: 32px 32px 0 0;
+  padding: 28px var(--pad) calc(22px + env(safe-area-inset-bottom)); display: grid; gap: 12px; text-align: center; box-shadow: 0 8px 28px rgb(0 0 0 / 28%); animation: up .36s cubic-bezier(.2, .8, .2, 1) both; }
+.sheet h2 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.02em; }
+@keyframes up { from { transform: translateY(100%); } }
+@keyframes fade { from { opacity: 0; } }
+
+.demo { font-size: var(--t-fine); color: var(--muted); text-align: center; }
+
+/* Canvas: every screen at phone width */
+.canvas { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; background: #dcdde3; }
 .art { display: grid; gap: 8px; }
-.art > span { font: 600 15px system-ui; color: #3a3a3c; }
-.art .frame { width: 390px; height: 844px; overflow: hidden; border-radius: 28px; box-shadow: 0 0 0 6px #0d0d10; background: #fff; }
+.art > span { font: 600 14px system-ui; color: #3a3a3c; }
+.art iframe { width: 390px; height: 844px; border: 0; border-radius: 28px; box-shadow: 0 0 0 6px #0d0d10; background: #fff; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 </style>
 </head>
 <body>
 <div id="root"></div>
-<script>const FX = {"tripcom": {"question": "How do I book a hotel on Trip.com and earn its rewards?", "model": "gpt-6-luna", "ms": 17422, "searches": 2, "guide": {"kind": "steps", "title_short": "Book & earn", "title_full": "Book a Trip.com hotel and earn rewards", "summary": "Sign in or join Trip.com, book an eligible hotel on its site or app, then complete your stay to earn Trip Coins.", "answer": "", "answer_urls": [], "prerequisites": "You need a Trip.com account and your hotel dates, destination, and guest details.", "steps": [{"name": "Sign in or join", "text": "Open Trip.com and sign in, or create an account. Members can earn Trip Coins from eligible hotel bookings.", "confirm_label": "I’m signed in", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}, {"name": "Search for a hotel", "text": "Choose Hotels, enter your destination, check-in and check-out dates, and number of guests, then search. Compare the room price and details.", "confirm_label": "I’ve searched", "source_urls": ["https://www.trip.com/hotels/"]}, {"name": "Check the room conditions", "text": "Before choosing a room, check its cancellation and change rules, what is included, and whether payment is due now or later. The booking is also subject to the hotel’s terms.", "confirm_label": "I’ve checked", "source_urls": ["https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"]}, {"name": "Book and pay", "text": "Select the room, enter the requested guest details, review the total and policies, then complete the booking on Trip.com. Keep the confirmation for your records.", "confirm_label": "I’ve booked", "source_urls": ["https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"]}, {"name": "Complete your stay", "text": "Trip.com’s stated hotel earning rate is 50 Trip Coins per US$100 (or equivalent) spent, before any applicable tier bonus. Coins are based on eligible final payment; the exact award is shown after booking. A fully cancelled hotel booking earns no coins, and previously awarded coins may be deducted.", "confirm_label": "I understand", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}, {"name": "Check your rewards", "text": "After the stay, check your Trip Coins balance in your Trip.com account. You can use coins toward eligible prepaid bookings; Trip.com says 100 Trip Coins is approximately US$1 in savings.", "confirm_label": "I’ll check my account", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "Trip.com reward rates, eligibility, booking conditions, and exchange values can change; check the booking page and current rewards terms before paying.", "sources": [{"url": "https://www.trip.com/hotels/", "title": "Hotels & Homes", "site": "Trip.com"}, {"url": "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG", "title": "Trip.com Terms and Conditions", "site": "Trip.com"}, {"url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions", "title": "Trip.com loyalty program FAQs", "site": "Trip.com"}], "cautions": ["Promotions or special booking types may be excluded from Trip Coins; check the offer’s terms.", "Cancellation may reduce or remove rewards, so check the room’s cancellation policy before booking."]}}, "ibkr": {"question": "How do I deposit money to IBKR from my Singapore bank account?", "model": "gpt-6-luna", "ms": 17111, "searches": 2, "guide": {"kind": "steps", "title_short": "Deposit to IBKR", "title_full": "Deposit money from a Singapore bank to IBKR", "summary": "Create a deposit notification in IBKR, then use the instructions it gives you to send the money from your bank.", "answer": "", "answer_urls": [], "prerequisites": "You need an open IBKR account and access to Client Portal.", "steps": [{"name": "Start a deposit", "text": "Sign in to IBKR Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.", "confirm_label": "I have selected my account", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm"]}, {"name": "Choose the bank method", "text": "Select the deposit currency and a method available to you. For a bank wire, select Bank Wire and enter your Singapore bank as the sending institution and the amount. The options shown may vary by account and currency.", "confirm_label": "I have chosen a method", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm", "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm"]}, {"name": "Get IBKR's instructions", "text": "Submit the deposit notification and open the instructions IBKR provides. For a wire, use the routing details for that specific currency exactly as shown; IBKR says routing instructions vary by currency.", "confirm_label": "I have the instructions", "source_urls": ["https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}, {"name": "Send the money from your bank", "text": "In your Singapore bank's app or online banking, arrange the transfer using IBKR's instructions. A notification alone does not move money. Check your bank's fees and make sure the sending account is in your name; IBKR generally discourages and may reject third-party deposits.", "confirm_label": "I have arranged transfer", "source_urls": ["https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}, {"name": "Check deposit status", "text": "Return to Client Portal and check Transfer & Pay or transaction history for the deposit status. Credit timing depends on the method and the bank transfer.", "confirm_label": "I have checked status", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/transfer.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "Funding methods, processing times and bank charges can change; check the instructions and fees shown by IBKR and your bank before sending.", "sources": [{"url": "https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm", "title": "Deposit Funds", "site": "IBKR Guides"}, {"url": "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "title": "Enter Wire Deposit", "site": "IBKR Guides"}, {"url": "https://www.interactivebrokers.com.sg/en/index.php?f=48276", "title": "Fund Your Account", "site": "Interactive Brokers Singapore"}], "cautions": ["Use the exact bank details IBKR provides for your chosen currency; do not rely on old instructions or details from someone else.", "Ask your bank about transfer and intermediary-bank charges."]}}, "coinbase": {"question": "How can I buy bitcoin on Coinbase?", "model": "gpt-6-luna", "ms": 14767, "searches": 2, "guide": {"kind": "steps", "title_short": "Buy Bitcoin", "title_full": "How to buy Bitcoin on Coinbase", "summary": "Verify your Coinbase account, add an eligible payment method, then review and confirm a Bitcoin purchase.", "answer": "", "answer_urls": [], "prerequisites": "You need a verified Coinbase account and an eligible payment method linked to it.", "steps": [{"name": "Add a payment method", "text": "Sign in to Coinbase. Open Settings (or Profile & Settings in the app), choose Payment methods, then Add a payment method and follow the prompts. In Singapore, a debit card can be used to buy crypto; a bank account is for depositing or withdrawing cash.", "confirm_label": "Payment method added", "source_urls": ["https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac"]}, {"name": "Start a Bitcoin purchase", "text": "On the website, select Buy. In the app, select Buy & sell, then Buy. Choose Bitcoin and enter how much you want to spend.", "confirm_label": "Bitcoin selected", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}, {"name": "Review and confirm", "text": "Choose or confirm your payment method, then select Review order. Check the total and any fees shown. If everything looks right, select Buy now.", "confirm_label": "Order reviewed", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}], "legal": {"applies": true, "text": "Coinbase says retail customers in Singapore cannot use Singapore-issued credit or charge cards to buy crypto; its Singapore payment options list debit cards for purchases. Coinbase Singapore is listed by MAS as a Major Payment Institution providing digital payment token services.", "source_urls": ["https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy", "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac", "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service"]}, "disclaimer": "Bitcoin prices can rise or fall sharply; this is general information, not financial advice.", "sources": [{"url": "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency", "title": "How do I buy cryptocurrency?", "site": "Coinbase Help"}, {"url": "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac", "title": "Add and verify a payment method - APAC", "site": "Coinbase Help"}, {"url": "https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy", "title": "Credit cards for Coinbase Singapore Customers", "site": "Coinbase Help"}, {"url": "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service", "title": "Financial Institutions Directory", "site": "Monetary Authority of Singapore"}], "cautions": ["Check the order preview for the final price and fees before confirming; minimum purchase amounts may vary.", "Use only Coinbase’s official app or website, and never share your password or verification codes."]}}, "scooter": {"question": "Can I ride my e-scooter on the footpath in Singapore?", "model": "gpt-6-luna", "ms": 6646, "searches": 1, "guide": {"kind": "answer", "title_short": "E-scooter rules", "title_full": "Can you ride an e-scooter on Singapore footpaths?", "summary": "No. E-scooters are banned from footpaths; ride only on cycling paths.", "answer": "No. In Singapore, e-scooters may be ridden only on cycling paths—not footpaths or roads. Riding on a footpath can lead to regulatory action, with a fine of up to S$2,000 and/or imprisonment of up to 3 months if convicted.", "answer_urls": ["https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"], "prerequisites": "", "steps": [], "legal": {"applies": true, "text": "The law prohibits riding an e-scooter on a footpath. If convicted, the penalty can be a fine of up to S$2,000 and/or imprisonment of up to 3 months.", "source_urls": ["https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"]}, "disclaimer": "Rules and penalties may change; check LTA’s current guidance before riding.", "sources": [{"url": "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html", "title": "E-Scooters", "site": "Land Transport Authority"}], "cautions": ["Check that the path is designated as a cycling path; e-scooters are not allowed on roads either."]}}, "cpf": {"question": "What is the difference between my CPF Ordinary Account and Special Account?", "model": "gpt-6-luna", "ms": 10152, "searches": 2, "guide": {"kind": "answer", "title_short": "OA vs SA", "title_full": "Difference between your CPF OA and SA", "summary": "The OA is mainly for housing and other eligible uses; the SA was for retirement savings and earned higher interest. Age 55 changes the SA rules.", "answer": "Your Ordinary Account (OA) is mainly for housing, and can also be used for certain insurance, education and investments. Your Special Account (SA) was meant for retirement savings and generally earned a higher interest rate. For 1 October to 31 December 2026, CPF lists the basic rates as 2.5% for OA and 4% for SA. Rates are reviewed regularly, and extra interest may apply. Important if you are 55 or older: CPF closed the SA from 19 January 2025. Savings were transferred to your Retirement Account (up to the applicable Full Retirement Sum); any remaining SA savings went to your OA. If you are under 55, you can still have an SA.", "answer_urls": ["https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates", "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about", "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa"], "prerequisites": "", "steps": [], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "CPF rates and account rules can change; check your CPF account or contact CPF Board for details about your own balances.", "sources": [{"url": "https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates", "title": "What are the CPF interest rates?", "site": "CPF Board"}, {"url": "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about", "title": "What is the closure of Special Account for members aged 55 and above about?", "site": "CPF Board"}, {"url": "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa", "title": "3 simple steps to make a CPF transfer from your OA to SA", "site": "CPF Board"}], "cautions": []}}};</script>
+<script>const FX = {"tripcom": {"question": "How do I book a hotel on Trip.com and earn its rewards?", "model": "gpt-6-luna", "ms": 17422, "searches": 2, "guide": {"kind": "steps", "title_short": "Book & earn", "title_full": "Book a Trip.com hotel and earn rewards", "summary": "Sign in or join Trip.com, book an eligible hotel on its site or app, then complete your stay to earn Trip Coins.", "answer": "", "answer_urls": [], "prerequisites": "You need a Trip.com account and your hotel dates, destination, and guest details.", "steps": [{"name": "Sign in or join", "text": "Open Trip.com and sign in, or create an account. Members can earn Trip Coins from eligible hotel bookings.", "confirm_label": "I’m signed in", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}, {"name": "Search for a hotel", "text": "Choose Hotels, enter your destination, check-in and check-out dates, and number of guests, then search. Compare the room price and details.", "confirm_label": "I’ve searched", "source_urls": ["https://www.trip.com/hotels/"]}, {"name": "Check the room conditions", "text": "Before choosing a room, check its cancellation and change rules, what is included, and whether payment is due now or later. The booking is also subject to the hotel’s terms.", "confirm_label": "I’ve checked", "source_urls": ["https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"]}, {"name": "Book and pay", "text": "Select the room, enter the requested guest details, review the total and policies, then complete the booking on Trip.com. Keep the confirmation for your records.", "confirm_label": "I’ve booked", "source_urls": ["https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG"]}, {"name": "Complete your stay", "text": "Trip.com’s stated hotel earning rate is 50 Trip Coins per US$100 (or equivalent) spent, before any applicable tier bonus. Coins are based on eligible final payment; the exact award is shown after booking. A fully cancelled hotel booking earns no coins, and previously awarded coins may be deducted.", "confirm_label": "I understand", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}, {"name": "Check your rewards", "text": "After the stay, check your Trip Coins balance in your Trip.com account. You can use coins toward eligible prepaid bookings; Trip.com says 100 Trip Coins is approximately US$1 in savings.", "confirm_label": "I’ll check my account", "source_urls": ["https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions"]}], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "Trip.com reward rates, eligibility, booking conditions, and exchange values can change; check the booking page and current rewards terms before paying.", "sources": [{"url": "https://www.trip.com/hotels/", "title": "Hotels & Homes", "site": "Trip.com"}, {"url": "https://sg.trip.com/contents/service-guideline/terms.html?locale=en-SG", "title": "Trip.com Terms and Conditions", "site": "Trip.com"}, {"url": "https://sg.trip.com/customer/loyalty/faq-new?locale=en-SG&tab=conditions", "title": "Trip.com loyalty program FAQs", "site": "Trip.com"}], "cautions": ["Promotions or special booking types may be excluded from Trip Coins; check the offer’s terms.", "Cancellation may reduce or remove rewards, so check the room’s cancellation policy before booking."]}}, "ibkr": {"question": "How do I deposit money to IBKR from my Singapore bank account?", "model": "gpt-6-luna", "ms": 17111, "searches": 2, "guide": {"kind": "steps", "title_short": "Deposit to IBKR", "title_full": "Deposit money from a Singapore bank to IBKR", "summary": "Create a deposit notification in IBKR, then use the instructions it gives you to send the money from your bank.", "answer": "", "answer_urls": [], "prerequisites": "You need an open IBKR account and access to Client Portal.", "steps": [{"name": "Start a deposit", "text": "Sign in to IBKR Client Portal. Choose Transfer & Pay > Transfer Funds > Make a Deposit, then select the account you want to fund.", "confirm_label": "I have selected my account", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm"]}, {"name": "Choose the bank method", "text": "Select the deposit currency and a method available to you. For a bank wire, select Bank Wire and enter your Singapore bank as the sending institution and the amount. The options shown may vary by account and currency.", "confirm_label": "I have chosen a method", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm", "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm"]}, {"name": "Get IBKR's instructions", "text": "Submit the deposit notification and open the instructions IBKR provides. For a wire, use the routing details for that specific currency exactly as shown; IBKR says routing instructions vary by currency.", "confirm_label": "I have the instructions", "source_urls": ["https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}, {"name": "Send the money from your bank", "text": "In your Singapore bank's app or online banking, arrange the transfer using IBKR's instructions. A notification alone does not move money. Check your bank's fees and make sure the sending account is in your name; IBKR generally discourages and may reject third-party deposits.", "confirm_label": "I have arranged transfer", "source_urls": ["https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}, {"name": "Check deposit status", "text": "Return to Client Portal and check Transfer & Pay or transaction history for the deposit status. Credit timing depends on the method and the bank transfer.", "confirm_label": "I have checked status", "source_urls": ["https://www.ibkrguides.com/clientportal/transferandpay/transfer.htm", "https://www.interactivebrokers.com.sg/en/index.php?f=48276"]}], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "Funding methods, processing times and bank charges can change; check the instructions and fees shown by IBKR and your bank before sending.", "sources": [{"url": "https://www.ibkrguides.com/clientportal/transferandpay/deposit.htm", "title": "Deposit Funds", "site": "IBKR Guides"}, {"url": "https://www.ibkrguides.com/brokerportal/transferandpay/enterdeposits.htm", "title": "Enter Wire Deposit", "site": "IBKR Guides"}, {"url": "https://www.interactivebrokers.com.sg/en/index.php?f=48276", "title": "Fund Your Account", "site": "Interactive Brokers Singapore"}], "cautions": ["Use the exact bank details IBKR provides for your chosen currency; do not rely on old instructions or details from someone else.", "Ask your bank about transfer and intermediary-bank charges."]}}, "coinbase": {"question": "How can I buy bitcoin on Coinbase?", "model": "gpt-6-luna", "ms": 14767, "searches": 2, "guide": {"kind": "steps", "title_short": "Buy Bitcoin", "title_full": "How to buy Bitcoin on Coinbase", "summary": "Verify your Coinbase account, add an eligible payment method, then review and confirm a Bitcoin purchase.", "answer": "", "answer_urls": [], "prerequisites": "You need a verified Coinbase account and an eligible payment method linked to it.", "steps": [{"name": "Add a payment method", "text": "Sign in to Coinbase. Open Settings (or Profile & Settings in the app), choose Payment methods, then Add a payment method and follow the prompts. In Singapore, a debit card can be used to buy crypto; a bank account is for depositing or withdrawing cash.", "confirm_label": "Payment method added", "source_urls": ["https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac"]}, {"name": "Start a Bitcoin purchase", "text": "On the website, select Buy. In the app, select Buy & sell, then Buy. Choose Bitcoin and enter how much you want to spend.", "confirm_label": "Bitcoin selected", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}, {"name": "Review and confirm", "text": "Choose or confirm your payment method, then select Review order. Check the total and any fees shown. If everything looks right, select Buy now.", "confirm_label": "Order reviewed", "source_urls": ["https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency"]}], "legal": {"applies": true, "text": "Coinbase says retail customers in Singapore cannot use Singapore-issued credit or charge cards to buy crypto; its Singapore payment options list debit cards for purchases. Coinbase Singapore is listed by MAS as a Major Payment Institution providing digital payment token services.", "source_urls": ["https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy", "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac", "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service"]}, "disclaimer": "Bitcoin prices can rise or fall sharply; this is general information, not financial advice.", "sources": [{"url": "https://help.coinbase.com/en/coinbase/trading-and-funding/buying-selling-or-converting-crypto/how-do-i-buy-digital-currency", "title": "How do I buy cryptocurrency?", "site": "Coinbase Help"}, {"url": "https://help.coinbase.com/en/coinbase/getting-started/add-a-payment-method/eligible-payment-methods-apac", "title": "Add and verify a payment method - APAC", "site": "Coinbase Help"}, {"url": "https://help.coinbase.com/en/coinbase/add-payment-method/sg-credit-card-policy", "title": "Credit cards for Coinbase Singapore Customers", "site": "Coinbase Help"}, {"url": "https://eservices.mas.gov.sg/fid/institution?activity=Digital+Payment+Token+Service", "title": "Financial Institutions Directory", "site": "Monetary Authority of Singapore"}], "cautions": ["Check the order preview for the final price and fees before confirming; minimum purchase amounts may vary.", "Use only Coinbase’s official app or website, and never share your password or verification codes."]}}, "scooter": {"question": "Can I ride my e-scooter on the footpath in Singapore?", "model": "gpt-6-luna", "ms": 6646, "searches": 1, "guide": {"kind": "answer", "title_short": "E-scooter rules", "title_full": "Can you ride an e-scooter on Singapore footpaths?", "summary": "No. E-scooters are banned from footpaths; ride only on cycling paths.", "answer": "No. In Singapore, e-scooters may be ridden only on cycling paths—not footpaths or roads. Riding on a footpath can lead to regulatory action, with a fine of up to S$2,000 and/or imprisonment of up to 3 months if convicted.", "answer_urls": ["https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"], "prerequisites": "", "steps": [], "legal": {"applies": true, "text": "The law prohibits riding an e-scooter on a footpath. If convicted, the penalty can be a fine of up to S$2,000 and/or imprisonment of up to 3 months.", "source_urls": ["https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html"]}, "disclaimer": "Rules and penalties may change; check LTA’s current guidance before riding.", "sources": [{"url": "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/vehicle-types-and-registrations/active-mobility-devices/E-Scooters.html", "title": "E-Scooters", "site": "Land Transport Authority"}], "cautions": ["Check that the path is designated as a cycling path; e-scooters are not allowed on roads either."]}}, "cpf": {"question": "What is the difference between my CPF Ordinary Account and Special Account?", "model": "gpt-6-luna", "ms": 10152, "searches": 2, "guide": {"kind": "answer", "title_short": "OA vs SA", "title_full": "Difference between your CPF OA and SA", "summary": "The OA is mainly for housing and other eligible uses; the SA was for retirement savings and earned higher interest. Age 55 changes the SA rules.", "answer": "Your Ordinary Account (OA) is mainly for housing, and can also be used for certain insurance, education and investments. Your Special Account (SA) was meant for retirement savings and generally earned a higher interest rate. For 1 October to 31 December 2026, CPF lists the basic rates as 2.5% for OA and 4% for SA. Rates are reviewed regularly, and extra interest may apply. Important if you are 55 or older: CPF closed the SA from 19 January 2025. Savings were transferred to your Retirement Account (up to the applicable Full Retirement Sum); any remaining SA savings went to your OA. If you are under 55, you can still have an SA.", "answer_urls": ["https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates", "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about", "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa"], "prerequisites": "", "steps": [], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "CPF rates and account rules can change; check your CPF account or contact CPF Board for details about your own balances.", "sources": [{"url": "https://www.cpf.gov.sg/service/article/what-are-the-cpf-interest-rates", "title": "What are the CPF interest rates?", "site": "CPF Board"}, {"url": "https://www.cpf.gov.sg/service/article/what-is-the-closure-of-special-account-for-members-aged-55-and-above-about", "title": "What is the closure of Special Account for members aged 55 and above about?", "site": "CPF Board"}, {"url": "https://www.cpf.gov.sg/member/infohub/educational-resources/simple-steps-to-make-a-cpf-transfer-from-your-oa-to-sa", "title": "3 simple steps to make a CPF transfer from your OA to SA", "site": "CPF Board"}], "cautions": []}}, "singpass": {"question": "How do I set up the Singpass app on my new phone?", "model": "gpt-6-luna", "ms": 10595, "searches": 3, "dropped": 3, "guide": {"kind": "steps", "title_short": "Set up Singpass", "title_full": "Set up Singpass on your new phone", "summary": "If you still have your old phone, use Singpass’s Bluetooth and QR-code transfer. Otherwise, choose the alternative setup method.", "answer": "", "answer_urls": [], "prerequisites": "", "steps": [{"name": "Install Singpass", "text": "On your new phone, install Singpass from its official app store. Check that the app developer is Government Technology Agency.", "confirm_label": "App installed", "source_urls": ["https://ask.gov.sg/singpass/questions/cm1k4osvs0016y0mql9hqjwxr", "https://app.singpass.gov.sg/"]}], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "", "sources": [{"url": "https://ask.gov.sg/singpass/questions/cmejfoi320083g92995ozj7yz", "title": "How to set up Singpass app with your previous device?", "site": "Singpass / AskGov"}, {"url": "https://ask.gov.sg/singpass/questions/cm1k4osvs0016y0mql9hqjwxr", "title": "What are the requirements to set up Singpass app?", "site": "Singpass / AskGov"}, {"url": "https://app.singpass.gov.sg/", "title": "Singpass app", "site": "Singpass"}], "cautions": ["Once setup succeeds on your new phone, Singpass is automatically deactivated on your old phone.", "If you no longer have your old phone, choose “Use an alternative method” in the app; setup may require SMS OTP and Singpass Face Verification."]}}, "none": {"question": "How do I get free hotel upgrades with my senior card?", "model": "example, not a real run", "ms": 0, "searches": 0, "guide": {"kind": "none", "title_short": "", "title_full": "", "summary": "The pages I found did not agree, so I will not guess. Try asking the hotel directly.", "answer": "", "answer_urls": [], "prerequisites": "", "steps": [], "legal": {"applies": false, "text": "", "source_urls": []}, "disclaimer": "", "sources": [], "cautions": []}}};</script>
 <script>
 const I = {
-  wave: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/></svg>',
+  wave: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/></svg>',
   find: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
-  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>',
-  scale: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
+  globe: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  info: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>',
+  scale: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
   chev: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
   back: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
-  tick: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  tick: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
 };
-const bar = `<header class="bar"><span class="mk">${I.wave}</span><span class="nm">Suara</span><span class="pill">${I.find}Find</span><span class="pill">English</span></header>`;
-const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-const siteOf = (u) => (Object.values(FX).flatMap((f) => f.guide.sources).find((s) => s.url === u) || { site: new URL(u).hostname });
+const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const sitesLine = (g) => [...new Set(g.sources.map((s) => s.site))].join(', ');
+const siteOf = (u) => Object.values(FX).flatMap((f) => f.guide.sources).find((s) => s.url === u) || { site: (() => { try { return new URL(u).hostname; } catch { return u; } })(), title: '' };
+const official = (g) => g.sources.length > 0 && g.sources.every((s) => { try { return new URL(s.url).hostname.endsWith('.gov.sg'); } catch { return false; } });
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const kindLine = (f) => { const g = f.guide; if (g.kind === 'none') return 'No reliable answer (example)'; if (g.kind === 'answer') return 'An answer' + (g.legal.applies ? ' · with a legal note' : '');
+  return plural(g.steps.length, 'step', 'steps') + (f.dropped ? ` · ${f.dropped} left out` : '') + (g.legal.applies ? ' · with a legal note' : ''); };
 
-let OPEN = false; // only the '-open' state renders Good to know expanded
-/** Collapsed by default: a plain row with a short summary; the marked note shows only when opened. */
-const goodToKnow = (summary, lines, open) => `<details class="more"${open ? ' open' : ''}><summary><span>Good to know <small>· ${esc(summary)}</small></span>${I.chev}</summary>
-  <div class="note">${I.info}<div style="display:grid;gap:8px">${lines.map((c) => `<span>${esc(c)}</span>`).join('')}</div></div></details>`;
-function searching(stage) {
+/* ── screens ── */
+function home() {
+  return `<h1>Ask anything</h1>
+    <p class="lead">Tap a question. Each one was answered by the real Luna web search.</p>
+    <div class="qs">${Object.entries(FX).map(([k, f]) => `<button class="q" data-go="search" data-q="${k}"><b>${esc(f.question)}</b><span>${esc(kindLine(f))}</span></button>`).join('')}</div>
+    <p class="demo">Clickable mockup. Searches are shortened from about 15 seconds to 3.</p>`;
+}
+function searching(k, stage) {
   const st = (i) => (i < stage ? 'done' : i === stage ? 'now' : 'todo');
-  return `<div class="said">You said <b>${esc(FX.tripcom.question)}</b></div>
+  const f = FX[k], site = f.guide.sources[0] ? new URL(f.guide.sources[0].url).hostname.replace(/^www\./, '') : 'the web';
+  return `<div class="said">You said <b>${esc(f.question)}</b></div>
     <h1>Searching the web</h1>
     <div class="stages">
-      <div class="stage" data-s="${st(0)}"><i></i>Searching trip.com</div>
-      <div class="stage" data-s="${st(1)}"><i></i>Reading 4 pages</div>
-      <div class="stage" data-s="${st(2)}"><i></i>Writing your steps</div>
+      <div class="stage" data-s="${st(0)}"><i></i>Searching ${esc(site)}</div>
+      <div class="stage" data-s="${st(1)}"><i></i>Reading ${plural(f.guide.sources.length || 3, 'page', 'pages')}</div>
+      <div class="stage" data-s="${st(2)}"><i></i>${f.guide.kind === 'answer' ? 'Writing your answer' : 'Writing your steps'}</div>
     </div>
     <div class="skel"><i></i><i></i><i></i></div>
     <p class="small">This usually takes about 15 seconds.</p>`;
 }
-/** True only when every page is a Singapore government site; then the fine print may say so. */
-const official = (g) => g.sources.length > 0 && g.sources.every((s) => { try { return new URL(s.url).hostname.endsWith('.gov.sg'); } catch { return false; } });
-/** Parts every web result carries: legal (open, when it applies), cautions (folded), sources, fine print. */
-function tail(g) {
+const goodToKnow = (summary, lines) => `<details class="more"><summary><span>Good to know <small>· ${esc(summary)}</small></span>${I.chev}</summary>
+  <div class="note">${I.info}<div class="ln">${lines.map((c) => `<span>${esc(c)}</span>`).join('')}</div></div></details>`;
+function tail(f) {
+  const g = f.guide, cautions = [...(f.dropped ? [`I could only check ${plural(g.steps.length, 'step', 'steps')} of ${g.steps.length + f.dropped} against the pages I found, so I left ${f.dropped} out.`] : []), ...g.cautions];
   return `${g.legal.applies ? `<section class="legal"><span class="lh">${I.scale}Legal</span><p>${esc(g.legal.text)}</p></section>` : ''}
-    ${g.cautions.length ? goodToKnow(`${g.cautions.length} ${g.cautions.length === 1 ? 'thing' : 'things'} to check`, g.cautions.slice(0, 3), OPEN) : ''}
-    <div class="sources"><div class="h">WHERE THIS IS FROM · ${g.sources.length} ${g.sources.length === 1 ? 'PAGE' : 'PAGES'}</div>
-      ${g.sources.map((s) => `<div class="src"><b>${esc(s.site)}</b><span>${esc(s.title)}</span></div>`).join('')}</div>
-    <p class="fine">${official(g) ? 'From official government pages, found by web search.' : 'Found on the web, not an official answer.'} ${esc(g.disclaimer)}</p>`;
+    ${cautions.length ? goodToKnow(f.dropped ? `${f.dropped} steps left out` : plural(cautions.length, 'thing to check', 'things to check'), cautions.slice(0, 4)) : ''}
+    ${g.sources.length ? `<div class="sources"><div class="h">WHERE THIS IS FROM · ${plural(g.sources.length, 'PAGE', 'PAGES')}</div>
+      ${g.sources.map((s) => `<a class="src" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.site)}</b><span>${esc(s.title)}</span></a>`).join('')}</div>` : ''}
+    <p class="fine">${official(g) ? 'From official government pages, found by web search.' : 'Found on the web, not an official answer.'}${g.disclaimer ? ' ' + esc(g.disclaimer) : ''}</p>`;
 }
-function result(key) {
-  const f = FX[key], g = f.guide;
-  if (g.kind === 'answer') {
-    return `<div class="said">You said <b>${esc(f.question)}</b></div>
-    <article class="card">
-      <span class="badge">${I.globe}From the web</span>
-      <p class="title">${esc(g.title_full)}</p>
-      <p class="answer">${esc(g.answer)}</p>
-      <p class="meta">${esc(sitesLine(g))}</p>
-    </article>
-    ${tail(g)}`;
-  }
-  return `<div class="said">You said <b>${esc(f.question)}</b></div>
-    <article class="card">
-      <span class="badge">${I.globe}From the web</span>
-      <p class="title">${esc(g.title_full)}</p>
-      <p class="sum">${esc(g.summary)}</p>
+function result(k) {
+  const f = FX[k], g = f.guide;
+  const said = `<div class="said">You said <b>${esc(f.question)}</b></div>`;
+  if (g.kind === 'none') return `${said}<h1>I could not find a reliable answer</h1><p class="lead">${esc(g.summary)}</p><button class="btn" data-go="home">Ask again</button>`;
+  if (g.kind === 'answer') return `${said}<article class="card"><span class="badge">${I.globe}From the web</span><p class="title">${esc(g.title_full)}</p>
+      <p class="answer">${esc(g.answer)}</p><p class="meta">${esc(sitesLine(g))}</p></article>${tail(f)}
+      <button class="btn quiet" data-go="home">Ask something else</button>`;
+  return `${said}<article class="card"><span class="badge">${I.globe}From the web</span><p class="title">${esc(g.title_full)}</p><p class="sum">${esc(g.summary)}</p>
       ${g.prerequisites ? `<p class="pre"><b>Before you start:</b> ${esc(g.prerequisites.replace(/^You need /, 'you need '))}</p>` : ''}
-      <p class="meta"><b>${g.steps.length} steps</b> · ${esc(sitesLine(g))}</p>
-      <button class="btn">Start guide</button>
-    </article>
-    ${tail(g)}`;
+      <p class="meta"><b>${plural(g.steps.length, 'step', 'steps')}</b> · ${esc(sitesLine(g))}</p>
+      <button class="btn" data-go="confirm" data-q="${k}">Start guide</button></article>${tail(f)}`;
 }
-function confirm(key) {
-  const f = FX[key], g = f.guide;
-  return result(key) + `<div class="scrim"></div><section class="sheet"><h2>Start these ${g.steps.length} steps?</h2>
-    <p class="lead">You confirm each one. You can stop at any time.</p><button class="btn">Yes, start</button><button class="link">Not this</button></section>`;
-}
-function steps(key, i) {
-  const g = FX[key].guide, n = g.steps.length, s = g.steps[i];
-  const doneRow = i ? `<div class="row done"><span class="n">${I.tick}</span>${i === 1 ? esc(g.steps[0].name) : `${i} steps done`}</div>` : '';
-  const upcoming = g.steps.slice(i + 1, i + 3).map((x, k) => `<div class="row"><span class="n">${i + 2 + k}</span>${esc(x.name)}</div>`).join('');
-  const rest = n - (i + 3);
-  const src = siteOf(s.source_urls[0]);
-  return `<button class="link" style="justify-self:start;padding:0;text-decoration:none;display:flex;gap:6px;align-items:center">${I.back}Answer</button>
-    <div class="prog"><span class="lbl">Step ${i + 1} of ${n}</span><div class="track"><i style="width:${((i + 1) / n) * 100}%"></i></div></div>
-    <h1 style="font-size:30px">${esc(g.title_short)}</h1>
-    ${doneRow}
+function step(k, i) {
+  const g = FX[k].guide, n = g.steps.length, s = g.steps[i], src = siteOf(s.source_urls[0]);
+  const done = i ? `<div class="row done"><span class="n">${I.tick}</span>${i === 1 ? esc(g.steps[0].name) : `${i} steps done`}</div>` : '';
+  const next = g.steps.slice(i + 1, i + 3).map((x, j) => `<div class="row"><span class="n">${i + 2 + j}</span>${esc(x.name)}</div>`).join('');
+  const rest = g.steps.slice(i + 3);
+  return `<button class="back" data-go="result" data-q="${k}">${I.back}Answer</button>
+    <div class="prog"><span class="lbl">Step ${i + 1} of ${n}</span><div class="track"><i style="transform:scaleX(${(i + 1) / n})"></i></div></div>
+    <h1>${esc(g.title_short)}</h1>
+    ${done}
     <div class="now"><div class="hd"><span class="n">${i + 1}</span><span class="nm2">${esc(s.name)}</span></div>
-      <p>${esc(s.text)}</p><span class="from">From ${esc(src.site)} · ${esc(src.title || '')}</span>
-      <button class="btn yes">${I.tick}${esc(s.confirm_label)}</button><button class="btn quiet">Read again</button></div>
-    ${upcoming}
-    ${rest > 0 ? `<div class="row more"><span>${rest} more ${rest === 1 ? 'step' : 'steps'}</span>${I.chev}</div>` : ''}`;
+      <p>${esc(s.text)}</p><a class="from" href="${esc(s.source_urls[0])}" target="_blank" rel="noopener">From ${esc(src.site)}${src.title ? ' · ' + esc(src.title) : ''}</a>
+      <button class="btn yes" data-go="${i + 1 < n ? 'step' : 'done'}" data-q="${k}" data-i="${i + 1}">${I.tick}${esc(s.confirm_label)}</button>
+      <button class="btn quiet" data-go="read">Read again</button></div>
+    ${next}
+    ${rest.length ? `<details class="later"><summary><span>${plural(rest.length, 'more step', 'more steps')}</span>${I.chev}</summary><div class="rows">${rest.map((x, j) => `<div class="row"><span class="n">${i + 4 + j}</span>${esc(x.name)}</div>`).join('')}</div></details>` : ''}`;
 }
-function partial() {
+function done(k) {
+  const g = FX[k].guide;
+  return `<div class="fin"><span class="tick">${I.tick}</span><h1>That is every step</h1><p class="lead">${esc(g.title_full)}</p></div>
+    <button class="btn" data-go="home">Ask something else</button>`;
+}
+const sheet = (k) => { const g = FX[k].guide; return `<div class="scrim" data-go="close"></div><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh">
+  <h2 id="sh">Start these ${plural(g.steps.length, 'step', 'steps')}?</h2><p class="lead">You confirm each one. You can stop at any time.</p>
+  <button class="btn" data-go="step" data-q="${k}" data-i="0">Yes, start</button><button class="link" data-go="close">Not this</button></section>`; };
 
-  return `<div class="said">You said <b>How do I set up the Singpass app on my new phone?</b></div>
-    <article class="card"><span class="badge">${I.globe}From the web</span><p class="title">Set up Singpass on a new phone</p>
-      <p class="sum">Download the app, sign in, then move your Singpass from your old phone.</p><p class="meta"><b>1 step</b> · ask.gov.sg</p>
-      <button class="btn">Start guide</button></article>
-    ${goodToKnow('3 steps left out', ['I could only check 1 of the 4 steps against the pages I found, so I have left the other 3 out. Ask again, or look on ask.gov.sg.'], OPEN)}`;
+/* ── driver: one state, the browser's Back button works ── */
+const q0 = new URLSearchParams(location.search);
+const bar = `<header class="bar"><span class="mk">${I.wave}</span><button class="nm" data-go="home">Suara</button><span class="pill">${I.find}<span class="tx">Find</span></span><span class="pill">English</span></header>`;
+let S = { v: 'home' }, timers = [];
+function paint() {
+  timers.forEach(clearTimeout); timers = [];
+  const main = document.getElementById('main'), over = document.getElementById('over');
+  const v = S.v === 'confirm' ? 'result' : S.v;
+  main.innerHTML = v === 'home' ? home() : v === 'search' ? searching(S.q, 0) : v === 'result' ? result(S.q) : v === 'step' ? step(S.q, S.i || 0) : done(S.q);
+  over.innerHTML = S.v === 'confirm' ? sheet(S.q) : '';
+  if (S.v !== 'confirm') window.scrollTo({ top: 0 });
+  if (S.v === 'search') {
+    [900, 1900].forEach((t, n) => timers.push(setTimeout(() => { main.innerHTML = searching(S.q, n + 1); }, t)));
+    timers.push(setTimeout(() => go({ v: 'result', q: S.q }, true), 3100));
+  }
 }
-function none() {
-  return `<div class="said">You said <b>How do I get free hotel upgrades with my senior card?</b></div>
-    <h1>I could not find a reliable answer</h1>
-    <p class="lead">The pages I found did not agree, so I will not guess.</p>
-    <button class="btn">Ask again</button>`;
+function go(next, replace) {
+  S = next;
+  const url = `?q=${S.q || ''}&v=${S.v}${S.i ? '&i=' + S.i : ''}`;
+  replace ? history.replaceState(S, '', url) : history.pushState(S, '', url);
+  paint();
 }
-const SCREENS = {
-  'searching-1': () => searching(1),
-  'result-tripcom': () => result('tripcom'),
-  'result-ibkr': () => result('ibkr'),
-  'result-ibkr-open': () => { OPEN = true; const html = result('ibkr'); OPEN = false; return html; },
-  'result-coinbase-legal': () => result('coinbase'),
-  'answer-scooter-legal': () => result('scooter'),
-  'answer-cpf': () => result('cpf'),
-  'confirm-tripcom': () => confirm('tripcom'),
-  'step-tripcom-1': () => steps('tripcom', 0),
-  'step-tripcom-4': () => steps('tripcom', 3),
-  'step-ibkr-5': () => steps('ibkr', 4),
-  'step-coinbase-2': () => steps('coinbase', 1),
-  'partial': partial,
-  'none': none,
-};
-window.STATES = Object.keys(SCREENS);
-const q = new URLSearchParams(location.search);
-const app = (name) => `<div class="app">${bar}<main class="page">${SCREENS[name]()}</main></div>`;
-if (q.get('canvas')) {
-  document.getElementById('root').innerHTML = `<div class="canvas">${window.STATES.map((s) => `<div class="art"><span>${s}</span><div class="frame">${app(s)}</div></div>`).join('')}</div>`;
+window.addEventListener('popstate', (e) => { S = e.state || { v: 'home' }; paint(); });
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-go]'); if (!t) return;
+  const to = t.dataset.go, k = t.dataset.q || S.q;
+  if (to === 'read') return;
+  if (to === 'close') return history.back();
+  go({ v: to, q: k, i: t.dataset.i ? +t.dataset.i : 0 });
+});
+
+if (q0.get('canvas')) {
+  const shots = [['home'], ['search', 'tripcom'], ['result', 'tripcom'], ['confirm', 'tripcom'], ['step', 'tripcom', 0], ['step', 'tripcom', 3], ['result', 'coinbase'], ['result', 'scooter'], ['result', 'cpf'], ['result', 'ibkr'], ['step', 'ibkr', 4], ['result', 'singpass'], ['result', 'none'], ['done', 'tripcom']];
+  document.getElementById('root').innerHTML = `<div class="canvas">${shots.map(([v, k, i]) => `<div class="art"><span>${v}${k ? ' · ' + k : ''}${i != null ? ' · step ' + (i + 1) : ''}</span><iframe loading="lazy" src="?v=${v}&q=${k || ''}${i != null ? '&i=' + i : ''}&still=1"></iframe></div>`).join('')}</div>`;
 } else {
-  document.getElementById('root').innerHTML = app(q.get('state') || 'result-tripcom');
+  document.getElementById('root').innerHTML = `<div class="app">${bar}<main class="page" id="main"></main></div><div id="over"></div>`;
+  const v = q0.get('v') || 'home', k = q0.get('q');
+  S = v === 'home' || !FX[k] ? { v: 'home' } : { v, q: k, i: +(q0.get('i') || 0) };
+  if (q0.get('still') && S.v === 'search') { history.replaceState(S, '', location.search); document.getElementById('main').innerHTML = searching(k, 1); }
+  else { history.replaceState(S, '', location.search); paint(); }
 }
 </script>
 </body>
