@@ -222,9 +222,9 @@ describe('Motion and state', () => {
 		expect(html.match(/data-topic=/g)).toHaveLength(6);
 	});
 
-	it('listens with a spectral wave above one big stop button at the bottom', () => {
+	it('listens with a live waveform above one big stop button at the bottom', () => {
 		const html = render({ phase: 'listening', view: 'single' }, { level: 0.5 });
-		expect(html).toMatch(/class="k-listen"[\s\S]*class="k-spectre"[\s\S]*class="k-stop" type="button" aria-label="Tap when done"/);
+		expect(html).toMatch(/class="k-listen"[\s\S]*class="k-livewave"[^>]*role="img" aria-label="Live audio waveform"[\s\S]*class="k-stop" type="button" aria-label="Tap when done"/);
 		expect(html).not.toContain('k-voice');
 		expect(html).not.toContain('class="k-orb"');
 	});

@@ -192,3 +192,27 @@ describe('A typed question', () => {
 		expect(html).not.toContain('You said');
 	});
 });
+
+describe('The closest answers', () => {
+	const weak: FlowState = {
+		view: 'single',
+		phase: 'results',
+		openId: null,
+		result: { heard, fit: 'weak', cards: [], nextOffset: null, query: 'buy bitcoin', language: 'en' },
+	};
+
+	it('stay on screen, with the web one tap away', () => {
+		const html = render(weak, { onWebSearch: noop });
+		expect(html).toContain('Closest I have, not a sure match');
+		expect(html).toMatch(/<button class="k-btn k-btn-quiet k-btn-mid k-web-go" type="button">.*Search the web instead/);
+	});
+
+	it('offer no web search where the route has none', () => {
+		expect(render(weak)).not.toContain('Search the web instead');
+	});
+
+	it('offer no web search over a sure match', () => {
+		const strong = { ...weak, result: { ...(weak as Extract<FlowState, { phase: 'results' }>).result, fit: 'strong' as const } };
+		expect(render(strong, { onWebSearch: noop })).not.toContain('Search the web instead');
+	});
+});

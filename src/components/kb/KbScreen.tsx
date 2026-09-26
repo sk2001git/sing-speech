@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { ProgressFill, SuccessMark } from '../motion/motion';
-import SpectreWave from './SpectreWave';
+import LiveWaveform from './LiveWaveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
 import JourneyView from './JourneyView';
@@ -40,6 +40,8 @@ export interface KbScreenProps {
 	onFound?: (id: string, label: string) => void;
 	/** A question typed on home, answered exactly as a spoken one. */
 	onAsk?: (text: string) => void;
+	/** Look past a weak match on the web. Only given on routes that have web search. */
+	onWebSearch?: () => void;
 }
 
 const WORDS = {
@@ -120,6 +122,7 @@ const WORDS = {
 		fromDataset: (name: string, agency: string) => `From ${name}, ${agency}, data.gov.sg`,
 		checkedOn: (date: string) => `checked ${date}`,
 		typeQuestion: 'Or type your question',
+		webInstead: 'Search the web instead',
 		ask: 'Ask',
 		webSearching: 'Searching the web',
 		webFinding: 'Finding pages',
@@ -224,6 +227,7 @@ const WORDS = {
 		fromDataset: (name: string, agency: string) => `来自 ${name}，${agency}，data.gov.sg`,
 		checkedOn: (date: string) => `查询于 ${date}`,
 		typeQuestion: '或输入您的问题',
+		webInstead: '改在网上搜索',
 		ask: '提问',
 		webSearching: '正在网上搜索',
 		webFinding: '查找网页',
@@ -442,8 +446,7 @@ function Chip({ tone, text }: { tone: 'ready' | 'live' | 'busy' | 'alert'; text:
 /**
  * Home, arming, listening and searching: the owner's picks from the taste lab (vault plan
  * suara-2026-09-25-feature-apply-taste-lab-picks). Home is the microphone and nothing else,
- * with the topics one tap away; listening is a spectral wave (plan
- * suara-2026-09-25-feature-spectre-listening-wave); searching is a grey outline.
+ * with the topics one tap away; listening is ElevenLabs' live waveform (owner, 2026-09-27); searching is a grey outline.
  */
 function Talk(p: BodyProps) {
 	const s = p.state;
@@ -467,12 +470,12 @@ function Talk(p: BodyProps) {
 			</>
 		);
 	}
-	// Listening: a spectral wave that follows the voice, and one big stop button at the bottom.
+	// Listening: a live waveform that follows the voice, and one big stop button at the bottom.
 	if (s.phase === 'listening') {
 		return (
 			<section className="k-listen">
 				<h1 className="k-h1">{p.w.imListening}</h1>
-				<SpectreWave active analyser={p.analyser} />
+				<LiveWaveform active analyser={p.analyser} />
 				<div className="k-listen-foot">
 					<button className="k-stop" type="button" aria-label={p.w.tapDone} onClick={p.onSpeak}>
 						<StopIcon />
@@ -599,6 +602,12 @@ function Results(p: BodyProps & { state: ResultsState }) {
 					<InfoIcon />
 					<span>{p.w.closest}</span>
 				</p>
+			)}
+			{result.fit === 'weak' && p.onWebSearch && (
+				<button className="k-btn k-btn-quiet k-btn-mid k-web-go" type="button" onClick={p.onWebSearch}>
+					<GlobeIcon />
+					{p.w.webInstead}
+				</button>
 			)}
 			<div className="k-results-head">
 				<span className="k-count">{p.w.answers(result.cards.length)}</span>
@@ -924,6 +933,7 @@ function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> })
 	const pre = language === 'en' ? a.prerequisites.replace(/^([A-Z])(?=[a-z])/, (c) => c.toLowerCase()) : a.prerequisites;
 	return (
 		<>
+			{p.state.from && <BackRow {...p} />}
 			<Question w={p.w} heard={heard} />
 			<article className="k-card k-web-card">
 				<span className="k-badge">

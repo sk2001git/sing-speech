@@ -103,6 +103,7 @@ function store(key: string, value: string): void {
 }
 
 const NOT_IN: Record<EntryLanguage, string> = { en: 'That is not in Suara yet.', 'zh-Hans': 'Suara 还没有这个答案。' };
+const NO_WEB: Record<EntryLanguage, string> = { en: 'I could not reach the web just now.', 'zh-Hans': '现在连不上网络。' };
 const NOT_ON_WEB: Record<EntryLanguage, string> = {
 	en: 'I could not find a reliable answer on the web either.',
 	'zh-Hans': '我在网上也找不到可靠的答案。',
@@ -222,7 +223,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	 * Nothing in Suara answered: search the web, showing each stage as it happens. Returns the
 	 * answer, or null when there was none or the search failed, which leaves "not in Suara".
 	 */
-	async function searchTheWeb(heard: Heard, language: EntryLanguage, opts: { spoken?: boolean } = {}): Promise<WebAnswer | null> {
+	async function searchTheWeb(heard: Heard, language: EntryLanguage, opts: { spoken?: boolean; fromClosest?: boolean } = {}): Promise<WebAnswer | null> {
 		web.current?.abort();
 		const controller = new AbortController();
 		web.current = controller;
@@ -237,7 +238,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		} catch {
 			if (controller.signal.aborted) return null;
 			dispatch({ type: 'NOTHING', heard });
-			if (!opts.spoken) say(NOT_IN[language], language);
+			if (!opts.spoken) say(opts.fromClosest ? NO_WEB[language] : NOT_IN[language], language);
 			return null;
 		} finally {
 			if (web.current === controller) web.current = null;
@@ -454,6 +455,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 	}
 
+	/** From the closest answers: look past a weak match on the web. They come back with Back. */
+	function onWebSearch(): void {
+		if (state.phase !== 'results' || state.result.fit !== 'weak') return;
+		silence();
+		void searchTheWeb(state.result.heard, state.result.language, { fromClosest: true });
+	}
+
 	/** A typed question: the same search as a spoken one, and the web behind it. */
 	async function onAsk(text: string): Promise<void> {
 		silence();
@@ -534,6 +542,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onFindClose={() => setFinding(false)}
 			onFound={onFound}
 			onAsk={onAsk}
+			{...(canWeb ? { onWebSearch } : {})}
 		/>
 	);
 }

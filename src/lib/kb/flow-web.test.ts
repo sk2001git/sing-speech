@@ -107,3 +107,38 @@ describe('web steps', () => {
 		expect(next(shown(), { type: 'TOPIC', area: 'health' }).phase).toBe('searching');
 	});
 });
+
+describe('the web, from a weak match', () => {
+	const weak: FlowState = {
+		view: 'single',
+		phase: 'results',
+		openId: null,
+		result: { heard, fit: 'weak', cards: [], nextOffset: null, query: 'buy bitcoin', language: 'en' },
+	};
+
+	it('searches the web when they ask for it from the closest answers', () => {
+		expect(next(weak, { type: 'WEB_SEARCH', heard, language: 'en' })).toMatchObject({ phase: 'web-searching', heard });
+	});
+
+	it('comes back to the closest answers from the web answer', () => {
+		const answer = run([{ type: 'WEB_SEARCH', heard, language: 'en' }, { type: 'WEB_ANSWER', answer: guide() }], weak);
+		expect(answer.phase).toBe('web');
+		expect(next(answer, { type: 'BACK' })).toBe(weak);
+	});
+
+	it('has no Back from a web answer that came straight from a search', () => {
+		const answer = run([...toWebSearch, { type: 'WEB_ANSWER', answer: guide() }]);
+		expect(next(answer, { type: 'BACK' })).toBe(answer);
+	});
+
+	it('returns to the closest answers when the web has nothing better, or fails', () => {
+		const searching = next(weak, { type: 'WEB_SEARCH', heard, language: 'en' });
+		expect(next(searching, { type: 'WEB_ANSWER', answer: guide({ kind: 'none', steps: [] }) })).toBe(weak);
+		expect(next(searching, { type: 'NOTHING', heard })).toBe(weak);
+	});
+
+	it('does not offer it over a strong match', () => {
+		const strong = { ...weak, result: { ...(weak as Extract<FlowState, { phase: 'results' }>).result, fit: 'strong' as const } };
+		expect(next(strong, { type: 'WEB_SEARCH', heard, language: 'en' })).toBe(strong);
+	});
+});

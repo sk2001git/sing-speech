@@ -82,7 +82,8 @@ export interface WebResult {
 	language: EntryLanguage;
 }
 
-type WebPhase = { view: View; phase: 'web'; result: WebResult };
+/** `from`: the closest answers they chose to look past, so Back returns to them. */
+type WebPhase = { view: View; phase: 'web'; result: WebResult; from?: Results };
 
 export type FlowState =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
@@ -95,7 +96,7 @@ export type FlowState =
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
 	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
 	| { view: View; phase: 'done'; entry: Entry; back: Results }
-	| { view: View; phase: 'web-searching'; heard: Heard; language: EntryLanguage; stage: WebStage | null; pages: number }
+	| { view: View; phase: 'web-searching'; heard: Heard; language: EntryLanguage; stage: WebStage | null; pages: number; from?: Results }
 	| WebPhase
 	| { view: View; phase: 'web-confirm'; back: WebPhase }
 	| { view: View; phase: 'web-steps'; index: number; back: WebPhase }
@@ -207,18 +208,24 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 		case 'PLACES':
 			return state.phase === 'searching' ? { view, phase: 'places', result: event.result } : state;
 		case 'NOTHING':
+			if (state.phase === 'web-searching' && state.from) return state.from;
 			return state.phase === 'searching' || state.phase === 'web-searching' ? { view, phase: 'notfound', heard: event.heard } : state;
 		case 'WEB_SEARCH':
-			return state.phase === 'searching' ? { view, phase: 'web-searching', heard: event.heard, language: event.language, stage: null, pages: 0 } : state;
+			if (state.phase === 'searching') return { view, phase: 'web-searching', heard: event.heard, language: event.language, stage: null, pages: 0 };
+			// From the closest answers, when they ask for more than a weak match.
+			return state.phase === 'results' && state.result.fit === 'weak'
+				? { view, phase: 'web-searching', heard: event.heard, language: event.language, stage: null, pages: 0, from: state }
+				: state;
 		case 'WEB_STAGE':
 			if (state.phase !== 'web-searching') return state;
 			// The page count stays shown once writing starts.
 			return { ...state, stage: event.stage, pages: event.stage.stage === 'reading' ? event.stage.pages : state.pages };
 		case 'WEB_ANSWER':
 			if (state.phase !== 'web-searching') return state;
+			if (event.answer.kind === 'none' && state.from) return state.from;
 			return event.answer.kind === 'none'
 				? { view, phase: 'notfound', heard: state.heard, web: true }
-				: { view, phase: 'web', result: { heard: state.heard, answer: event.answer, language: state.language } };
+				: { view, phase: 'web', result: { heard: state.heard, answer: event.answer, language: state.language }, ...(state.from ? { from: state.from } : {}) };
 		case 'WEB_START':
 			return state.phase === 'web' && state.result.answer.kind === 'steps' && state.result.answer.steps.length > 0
 				? { view, phase: 'web-confirm', back: state }
@@ -257,6 +264,7 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 				: { view, phase: 'done', entry: state.entry, back: state.back };
 		}
 		case 'BACK':
+			if (state.phase === 'web') return state.from ?? state;
 			return state.phase === 'confirm' || state.phase === 'steps' || state.phase === 'done' || state.phase === 'web-confirm' || state.phase === 'web-steps' || state.phase === 'web-done'
 				? state.back
 				: state;
