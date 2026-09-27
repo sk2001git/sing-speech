@@ -23,6 +23,8 @@ export interface Heard {
 	sentence: string;
 	/** What they said, word for word, when the route has it. Shown open. */
 	said?: string;
+	/** The question was corrected: `sentence` is the corrected question, from the whole thread. */
+	corrected?: true;
 }
 
 export interface SearchResult {
@@ -162,7 +164,8 @@ export function initial(view: View = 'grid'): FlowState {
 	return { view, phase: 'home', greeting: false };
 }
 
-const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'chart', 'notfound', 'done', 'denied', 'offline', 'steps', 'web', 'web-steps', 'web-done']);
+// 'web-searching': a mishearing can be corrected by voice while the web search runs (it is cancelled).
+const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'chart', 'notfound', 'done', 'denied', 'offline', 'steps', 'web', 'web-searching', 'web-steps', 'web-done']);
 const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'chart', 'notfound', 'done', 'offline', 'web', 'web-done']);
 
 export function canSpeak(state: FlowState): boolean {

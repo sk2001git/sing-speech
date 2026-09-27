@@ -8,6 +8,11 @@ import type { Heard } from './flow';
  * correct it on the screen before relying on the answer.
  */
 export function readBack(heard: Heard | undefined, language: EntryLanguage, line: string): string {
+	// A corrected question is read back as Suara now understands it, not as the fragment typed.
+	if (heard?.corrected && heard.sentence.trim()) {
+		const sentence = heard.sentence.trim();
+		return language === 'zh-Hans' ? `已更正。${/[。？！]$/.test(sentence) ? sentence : `${sentence}。`}${line}` : `Corrected. ${/[.?!]$/.test(sentence) ? sentence : `${sentence}.`} ${line}`;
+	}
 	const asked = (heard?.said ?? heard?.sentence ?? '').trim();
 	if (!asked) return line;
 	if (language === 'zh-Hans') return `您问：${asked.replace(/[。？！?.!]+$/, '')}。${line}`;

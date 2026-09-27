@@ -100,7 +100,8 @@ describe('web steps', () => {
 		expect(canSpeak(answer)).toBe(true);
 		expect(canSpeak(run([{ type: 'WEB_START' }, { type: 'YES' }], answer))).toBe(true);
 		expect(canSpeak(run([{ type: 'WEB_START' }, { type: 'YES' }, { type: 'STEP_DONE' }, { type: 'STEP_DONE' }], answer))).toBe(true);
-		expect(canSpeak(run(toWebSearch))).toBe(false);
+		// And while the web is searched, to correct a mishearing (owner, 2026-09-27).
+		expect(canSpeak(run(toWebSearch))).toBe(true);
 	});
 
 	it('lets them pick a topic from the answer', () => {

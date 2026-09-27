@@ -42,6 +42,9 @@ export interface KbScreenProps {
 	onFound?: (id: string, label: string) => void;
 	/** A question typed on home, answered exactly as a spoken one. */
 	onAsk?: (text: string) => void;
+	/** A correction of the question on screen, typed or spoken, sent with what it corrects. */
+	onCorrect?: (text: string) => void;
+	onCorrectBySpeech?: () => void;
 	/** Look past a weak match on the web. Only given on routes that have web search. */
 	onWebSearch?: () => void;
 }
@@ -60,6 +63,7 @@ const WORDS = {
 		finding: 'Finding answers',
 		orTopic: 'Or pick a topic',
 		youAsked: 'You asked',
+		youAskedCorrected: 'You asked (corrected)',
 		youSaid: 'You said',
 		nothingHeard: "I didn't hear you. Tap and try again.",
 		readAloud: 'Read aloud',
@@ -167,6 +171,7 @@ const WORDS = {
 		finding: '正在找答案',
 		orTopic: '或选一个主题',
 		youAsked: '您问',
+		youAskedCorrected: '您问（已更正）',
 		youSaid: '您说',
 		nothingHeard: '我没听到。请点一下再说。',
 		readAloud: '朗读',
@@ -348,11 +353,11 @@ function Body(p: BodyProps) {
 		case 'places':
 			return <Places {...p} state={s} />;
 		case 'chart':
-			return <ChartCard result={s.result} onSay={p.onSay} {...(p.onAsk ? { onAsk: p.onAsk } : {})} footer={<AskButton {...p} label={p.w.askElse} />} />;
+			return <ChartCard result={s.result} onSay={p.onSay} {...(p.onCorrect ?? p.onAsk ? { onAsk: (p.onCorrect ?? p.onAsk)! } : {})} {...(p.onCorrectBySpeech ? { onSpeak: p.onCorrectBySpeech } : {})} footer={<AskButton {...p} label={p.w.askElse} />} />;
 		case 'journey':
 			return (
 				<>
-				<Question w={p.w} heard={s.result.heard} lang={p.lang} onAsk={p.onAsk} />
+				<Question w={p.w} heard={s.result.heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 				<JourneyView
 					journey={s.result.journey}
 					done={s.done}
@@ -415,7 +420,7 @@ function Body(p: BodyProps) {
 		case 'notfound':
 			return (
 				<>
-					<Question w={p.w} heard={s.heard} lang={p.lang} onAsk={p.onAsk} />
+					<Question w={p.w} heard={s.heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 					<HeardRow w={p.w} short={s.heard.short} />
 					<h1 className="k-h1">{s.web ? p.w.noReliable : p.w.notIn}</h1>
 					<p className="k-lead">{s.web ? p.w.noReliableLead : p.w.tryTopic}</p>
@@ -561,8 +566,8 @@ function Topics(p: BodyProps) {
 }
 
 /** Their own words, always open, with a way to correct them by typing (components/kb/Said.tsx). */
-function Said({ w, said, label, lang, onAsk }: { w: Words; said: string; label?: string; lang: EntryLanguage; onAsk?: (text: string) => void }) {
-	return <SaidBox said={said} label={label ?? w.youSaid} lang={lang} {...(onAsk ? { onAsk } : {})} />;
+function Said({ w, said, label, lang, onAsk, onSpeak }: { w: Words; said: string; label?: string; lang: EntryLanguage; onAsk?: (text: string) => void; onSpeak?: () => void }) {
+	return <SaidBox said={said} label={label ?? w.youSaid} lang={lang} {...(onAsk ? { onAsk } : {})} {...(onSpeak ? { onSpeak } : {})} />;
 }
 
 function HeardRow({ w, short, sentence, onSay, lang }: { w: Words; short: string; sentence?: string; onSay?: BodyProps['onSay']; lang?: EntryLanguage }) {
@@ -601,7 +606,7 @@ function Results(p: BodyProps & { state: ResultsState }) {
 	const english = new Set(p.englishIds);
 	return (
 		<>
-			<Question w={p.w} heard={result.heard} lang={p.lang} onAsk={p.onAsk} />
+			<Question w={p.w} heard={result.heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 			<HeardRow w={p.w} short={result.heard.short} sentence={result.heard.sentence} onSay={p.onSay} lang={result.language} />
 			{result.fit === 'weak' && (
 				<p className="k-closest">
@@ -736,7 +741,7 @@ function Places(p: BodyProps & { state: Extract<FlowState, { phase: 'places' }> 
 	});
 	return (
 		<>
-			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 			<h1 className="k-h1">{p.w.placesNear(p.w.placeKind[what] ?? what, titleWords(area))}</h1>
 			<p className="k-count">{p.w.placesFound(places.length)}</p>
 			<div className="k-places">
@@ -883,7 +888,7 @@ function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-s
 	const labels = [p.w.webFinding, pages > 0 ? p.w.webReading(pages) : p.w.webReadingSome, p.w.webWriting];
 	return (
 		<>
-			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 			<h1 className="k-h1" aria-live="polite">
 				{p.w.webSearching}
 			</h1>
@@ -906,8 +911,10 @@ function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-s
 }
 
 /** Their question in full, spoken or typed: the web answers exactly this. */
-function Question({ w, heard, lang, onAsk }: { w: Words; heard: { said?: string; sentence: string }; lang: EntryLanguage; onAsk?: (text: string) => void }) {
-	const edit = onAsk ? { onAsk } : {};
+function Question({ w, heard, lang, onAsk, onSpeak }: { w: Words; heard: { said?: string; sentence: string; corrected?: true }; lang: EntryLanguage; onAsk?: (text: string) => void; onSpeak?: () => void }) {
+	const edit = { ...(onAsk ? { onAsk } : {}), ...(onSpeak ? { onSpeak } : {}) };
+	// A corrected question shows what Suara now understands, marked, not the correction's fragment.
+	if (heard.corrected) return <Said w={w} said={heard.sentence} label={w.youAskedCorrected} lang={lang} {...edit} />;
 	return heard.said ? <Said w={w} said={heard.said} lang={lang} {...edit} /> : <Said w={w} said={heard.sentence} label={w.youAsked} lang={lang} {...edit} />;
 }
 
@@ -941,7 +948,7 @@ function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> })
 	return (
 		<>
 			{p.state.from && <BackRow {...p} />}
-			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onCorrect ?? p.onAsk} onSpeak={p.onCorrectBySpeech} />
 			<article className="k-card k-web-card">
 				<span className="k-badge">
 					<GlobeIcon />

@@ -12,6 +12,7 @@ import { blobToBase64, pickMimeType } from '../../lib/record';
 import { createSilenceGate, rms } from '../../lib/silence';
 import { chartHeadline } from './ChartCard';
 import { readBack } from '../../lib/kb/readback';
+import type { Turn } from '../../lib/kb/thread';
 import KbScreen from './KbScreen';
 
 const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' };
@@ -179,6 +180,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const web = useRef<AbortController | null>(null);
 	const canWeb = webAllowed(route);
 	const last = useRef<LastQuery | null>(null);
+	/**
+	 * The question on screen and its corrections, oldest first (lib/kb/thread.ts). A new question
+	 * starts it again; a correction is sent with it and then joins it.
+	 */
+	const thread = useRef<Turn[]>([]);
+	/** The next recording is a spoken correction of the question on screen. */
+	const correcting = useRef(false);
 	const say = (text: string, language: EntryLanguage) => void routeSay(text, language, route);
 	/** The latest finish function, so the silence timer never calls a stale closure. */
 	const finishRef = useRef<(auto: 'done' | 'nothing' | 'tap') => void>(() => {});
@@ -266,7 +274,15 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		dispatch({ type: 'STOP' });
 		try {
 			const type = current.rec.mimeType || current.mimeType || 'audio/webm';
-			const reply = await post({ kind: 'speech', audioBase64: await blobToBase64(new Blob(current.chunks, { type })), mimeType: type });
+			const isCorrection = correcting.current && thread.current.length > 0;
+			correcting.current = false;
+			const reply = await post({
+				kind: 'speech',
+				audioBase64: await blobToBase64(new Blob(current.chunks, { type })),
+				mimeType: type,
+				...(isCorrection ? { thread: thread.current } : {}),
+			});
+			remember(reply, 'speech', isCorrection);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
 			show(reply, { asked: true });
 		} catch {
@@ -495,12 +511,44 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	}
 
 	/** A typed question: the same search as a spoken one, and the web behind it. */
+	/** Keep the thread: what was said or typed, as the server heard it, marked if it corrected. */
+	function remember(reply: SearchResponse, kind: Turn['kind'], isCorrection: boolean, typed?: string): void {
+		const heard = reply.kind === 'results' ? reply.result.heard : 'heard' in reply ? reply.heard : undefined;
+		const said = (typed ?? heard?.said ?? heard?.sentence ?? '').trim();
+		if (!said) return;
+		const turn: Turn = { role: 'user', kind, said, ...(isCorrection ? { correction: true as const } : {}) };
+		thread.current = isCorrection ? [...thread.current, turn].slice(-6) : [turn];
+	}
+
+	/** A typed correction of the question on screen, sent with what it corrects. */
+	async function onCorrect(text: string): Promise<void> {
+		if (thread.current.length === 0) return onAsk(text);
+		silence();
+		const heard = { short: text.slice(0, 40), sentence: text };
+		dispatch({ type: 'ASKING' });
+		try {
+			const reply = await post({ kind: 'text', query: text, heard, offset: 0, thread: thread.current });
+			remember(reply, 'text', true, text);
+			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
+			show(reply, { asked: true });
+		} catch {
+			dispatch({ type: 'FAIL' });
+		}
+	}
+
+	/** A spoken correction: the next recording goes with the thread. */
+	function onCorrectBySpeech(): void {
+		correcting.current = true;
+		void onSpeak();
+	}
+
 	async function onAsk(text: string): Promise<void> {
 		silence();
 		const heard = { short: text.slice(0, 40), sentence: text };
 		dispatch({ type: 'ASKING' });
 		try {
 			const reply = await post({ kind: 'text', query: text, heard, offset: 0 });
+			remember(reply, 'text', false, text);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
 			show(reply, { asked: true });
 		} catch {
@@ -510,6 +558,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 
 	async function onTopic(area: Area): Promise<void> {
 		silence();
+		// A topic is not a question: nothing to correct.
+		thread.current = [];
 		dispatch({ type: 'TOPIC', area });
 		try {
 			last.current = { kind: 'topic', area };
@@ -574,6 +624,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			onFindClose={() => setFinding(false)}
 			onFound={onFound}
 			onAsk={onAsk}
+			onCorrect={onCorrect}
+			onCorrectBySpeech={onCorrectBySpeech}
 			{...(canWeb ? { onWebSearch } : {})}
 		/>
 	);

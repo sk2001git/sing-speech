@@ -150,7 +150,7 @@ function Trend({ r, code }: { r: ChartResult; code: string }) {
 	);
 }
 
-export default function ChartCard({ result: r, onSay, onAsk, footer }: { result: ChartResult; onSay: (text: string, language: EntryLanguage) => void; onAsk?: (text: string) => void; footer?: ReactNode }) {
+export default function ChartCard({ result: r, onSay, onAsk, onSpeak, footer }: { result: ChartResult; onSay: (text: string, language: EntryLanguage) => void; onAsk?: (text: string) => void; onSpeak?: () => void; footer?: ReactNode }) {
 	const [tapped, setTapped] = useState<string | null>(null);
 	const w = W[r.language];
 	const lang = r.language;
@@ -160,7 +160,13 @@ export default function ChartCard({ result: r, onSay, onAsk, footer }: { result:
 	const headline = chartHeadline(r);
 	return (
 		<>
-			<Said said={r.heard.said ?? r.heard.sentence} label={r.heard.said ? (lang === 'zh-Hans' ? '您说' : 'You said') : lang === 'zh-Hans' ? '您问' : 'You asked'} lang={lang} {...(onAsk ? { onAsk } : {})} />
+			<Said
+				said={r.heard.corrected ? r.heard.sentence : (r.heard.said ?? r.heard.sentence)}
+				label={r.heard.corrected ? (lang === 'zh-Hans' ? '您问（已更正）' : 'You asked (corrected)') : r.heard.said ? (lang === 'zh-Hans' ? '您说' : 'You said') : lang === 'zh-Hans' ? '您问' : 'You asked'}
+				lang={lang}
+				{...(onAsk ? { onAsk } : {})}
+				{...(onSpeak ? { onSpeak } : {})}
+			/>
 			<article className="k-card k-chart">
 				<span className="k-badge">
 					<ChartIcon />

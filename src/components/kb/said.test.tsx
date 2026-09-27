@@ -29,6 +29,23 @@ describe('Said', () => {
 	});
 });
 
+describe('correcting', () => {
+	it('offers both: type the correction, or say it', () => {
+		const html = clean(renderToStaticMarkup(<Said said="How long do I wait at Tantok Seng" label="You said" lang="en" onAsk={noop} onSpeak={noop} startEditing />));
+		expect(html).toMatch(/<textarea[^>]*>How long do I wait at Tantok Seng<\/textarea>/);
+		expect(html).toMatch(/<button[^>]*class="k-said-mic"[^>]*aria-label="Say it instead"/);
+		expect(html).toContain('Search again');
+		expect(html).toContain('Cancel');
+	});
+
+	it('shows the corrected question, marked as corrected', () => {
+		const state = { view: 'single', phase: 'notfound', heard: { short: 's', sentence: 'You want to know the wait at Changi General A&E.', said: 'not Tan Tock Seng, Changi', corrected: true } } as FlowState;
+		const html = clean(renderToStaticMarkup(<KbScreen state={state} setting="en" englishIds={[]} loadingMore={false} dispatch={noop} onSpeak={noop} onMore={noop} onTopic={noop} onSay={noop} onLanguage={noop} onAsk={noop} />));
+		expect(html).toContain('You asked (corrected)');
+		expect(html).toContain('“You want to know the wait at Changi General A&E.”');
+	});
+});
+
 describe('every answer screen shows the question', () => {
 	const render = (state: FlowState, over: Partial<KbScreenProps> = {}) =>
 		clean(renderToStaticMarkup(<KbScreen state={state} setting="en" englishIds={[]} loadingMore={false} dispatch={noop} onSpeak={noop} onMore={noop} onTopic={noop} onSay={noop} onLanguage={noop} onAsk={noop} {...over} />));
@@ -65,6 +82,12 @@ describe('readBack', () => {
 
 	it('in Chinese', () => {
 		expect(readBack({ short: 's', sentence: 's', said: '急诊要等多久' }, 'zh-Hans', '上周…')).toBe('您问：急诊要等多久。上周…');
+	});
+
+	it('reads a corrected question back as corrected, in full, not the fragment typed', () => {
+		const heard = { short: 's', sentence: 'You want to know the wait at Changi A&E.', said: 'not Tan Tock Seng, Changi', corrected: true as const };
+		expect(readBack(heard, 'en', 'Last week at Changi General…')).toBe('Corrected. You want to know the wait at Changi A&E. Last week at Changi General…');
+		expect(readBack({ ...heard, sentence: '您想知道樟宜医院急诊要等多久。' }, 'zh-Hans', '上周…')).toBe('已更正。您想知道樟宜医院急诊要等多久。上周…');
 	});
 
 	it('says only the answer when there is no question to repeat', () => {

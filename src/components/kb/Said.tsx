@@ -7,12 +7,31 @@ import type { EntryLanguage } from '../../lib/kb/entry';
  * them, can type the correction and search again (owner, 2026-09-27).
  */
 const W = {
-	en: { edit: 'Not right? Change it', again: 'Search again', cancel: 'Cancel', field: 'Your question' },
-	'zh-Hans': { edit: '不对？修改', again: '重新搜索', cancel: '取消', field: '您的问题' },
+	en: { edit: 'Not right? Change it', again: 'Search again', cancel: 'Cancel', field: 'Type the right question, or say it', say: 'Say it instead' },
+	'zh-Hans': { edit: '不对？修改', again: '重新搜索', cancel: '取消', field: '输入正确的问题，或直接说', say: '改用说的' },
 };
 
-export default function Said({ said, label, lang, onAsk }: { said: string; label: string; lang: EntryLanguage; onAsk?: (text: string) => void }) {
-	const [editing, setEditing] = useState(false);
+/**
+ * `onAsk` takes the typed correction and `onSpeak` records a spoken one; both are sent as a
+ * correction of this question (lib/kb/thread.ts), so the model sees what they replace.
+ */
+export default function Said({
+	said,
+	label,
+	lang,
+	onAsk,
+	onSpeak,
+	startEditing = false,
+}: {
+	said: string;
+	label: string;
+	lang: EntryLanguage;
+	onAsk?: (text: string) => void;
+	onSpeak?: () => void;
+	/** Open in the editor: for tests, which render once. */
+	startEditing?: boolean;
+}) {
+	const [editing, setEditing] = useState(startEditing);
 	const w = W[lang];
 	if (editing && onAsk) {
 		const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -27,7 +46,25 @@ export default function Said({ said, label, lang, onAsk }: { said: string; label
 				<label className="k-heard-label" htmlFor="k-said-q">
 					{w.field}
 				</label>
-				<textarea id="k-said-q" name="q" defaultValue={said} rows={2} maxLength={300} autoFocus />
+				<div className="k-said-input">
+					<textarea id="k-said-q" name="q" defaultValue={said} rows={2} maxLength={300} autoFocus />
+					{onSpeak && (
+						<button
+							className="k-said-mic"
+							type="button"
+							aria-label={w.say}
+							onClick={() => {
+								setEditing(false);
+								onSpeak();
+							}}
+						>
+							<svg className="k-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+								<rect x="9" y="3" width="6" height="11" rx="3" />
+								<path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" />
+							</svg>
+						</button>
+					)}
+				</div>
 				<div className="k-said-actions">
 					<button className="k-btn k-btn-primary k-btn-mid" type="submit">
 						{w.again}

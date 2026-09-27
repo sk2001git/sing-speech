@@ -206,3 +206,29 @@ describe('runSearch, questions a government chart answers', () => {
 		expect(edWait).not.toHaveBeenCalled();
 	});
 });
+
+describe('runSearch, a correction', () => {
+	const said = { role: 'user' as const, kind: 'speech' as const, said: 'How long do I wait at Tantok Seng A and E?' };
+	const resolved = { greeting: false, said: 'not Tan Tock Seng, Changi', meaning_en: 'how can I use my medisave for my father', short: 'MediSave for father', sentence: 'You want to use MediSave for your father.', language: 'en' as const, confidence: 0.9 };
+
+	it('sends the thread with the typed correction marked, and searches the question it resolves to', async () => {
+		const resolve = vi.fn(async () => resolved);
+		const embed = vi.fn(async () => [1, 0]);
+		const r = await runSearch({ kind: 'text', query: 'not Tan Tock Seng, Changi', offset: 0, reply: 'en', thread: [said] }, deps({ resolve, embed }));
+		expect(resolve).toHaveBeenCalledWith([said, { role: 'user', kind: 'text', said: 'not Tan Tock Seng, Changi', correction: true }]);
+		expect(embed).toHaveBeenCalledWith('how can I use my medisave for my father', 'query');
+		expect(r).toMatchObject({ kind: 'results', result: { heard: { sentence: 'You want to use MediSave for your father.', corrected: true } } });
+	});
+
+	it('does the same for a spoken correction, with its transcript', async () => {
+		const resolve = vi.fn(async () => resolved);
+		await runSearch({ ...speech, thread: [said] }, deps({ resolve }));
+		expect(resolve).toHaveBeenCalledWith([said, { role: 'user', kind: 'speech', said: 'You want to pay your father’s hospital bill with MediSave.', correction: true }]);
+	});
+
+	it('is an ordinary question when there is no thread', async () => {
+		const resolve = vi.fn(async () => resolved);
+		await runSearch({ kind: 'text', query: 'how do I apply for CHAS', offset: 0, reply: 'en' }, deps({ resolve }));
+		expect(resolve).not.toHaveBeenCalled();
+	});
+});

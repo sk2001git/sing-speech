@@ -19,9 +19,18 @@ import type { EdWaitChart } from '../charts/ed-wait-source';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
 const Offset = z.number().int().min(0).max(1000).default(0);
+/**
+ * The earlier turns of this question, when the request is a correction of them (lib/kb/thread.ts).
+ * Absent means an ordinary question.
+ */
+const Thread = z
+	.array(z.object({ role: z.literal('user'), kind: z.enum(['speech', 'text']), said: z.string().min(1).max(1000), correction: z.literal(true).optional() }))
+	.min(1)
+	.max(6)
+	.optional();
 
 export const SearchRequest = z.discriminatedUnion('kind', [
-	z.object({ kind: z.literal('speech'), audioBase64: z.string().min(1), mimeType: z.string().max(100).optional(), reply: Reply }),
+	z.object({ kind: z.literal('speech'), audioBase64: z.string().min(1), mimeType: z.string().max(100).optional(), reply: Reply, thread: Thread }),
 	z.object({
 		kind: z.literal('text'),
 		query: z.string().min(1).max(240),
@@ -29,6 +38,7 @@ export const SearchRequest = z.discriminatedUnion('kind', [
 		heard: z.object({ short: z.string().max(40), sentence: z.string().max(240), said: z.string().max(1000).optional() }).optional(),
 		offset: Offset,
 		reply: Reply,
+		thread: Thread,
 	}),
 	z.object({ kind: z.literal('topic'), area: z.enum(AREAS), offset: Offset, reply: Reply }),
 ]);
@@ -145,6 +155,8 @@ export interface SearchDeps {
 	judge?: Judge;
 	/** Web answers kept from earlier questions. Absent means every such question searches the web. */
 	guides?: GuideFinder;
+	/** A correction's thread, resolved to the one question meant now (lib/kb/thread.ts). */
+	resolve?: (turns: import('./thread').Turn[]) => Promise<Hearing>;
 	/** MOH's A&E ward-bed waiting times, for the questions they answer. Absent means no chart. */
 	edWait?: () => Promise<EdWaitChart>;
 }
@@ -166,10 +178,26 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 			if (err instanceof NothingHeard) return { kind: 'silence', language: req.reply === 'zh-Hans' ? 'zh-Hans' : 'en' };
 			throw err;
 		}
-		language = replyLanguage(req.reply, h.language);
-		if (h.greeting) return { kind: 'greeting', language };
-		heard = { short: h.short, sentence: h.sentence, ...(h.said?.trim() ? { said: h.said.trim() } : {}) };
-		query = h.meaning_en;
+		if (h.greeting && !req.thread) return { kind: 'greeting', language: replyLanguage(req.reply, h.language) };
+		// A spoken correction: the thread and this transcript make the question meant now.
+		if (req.thread && deps.resolve) {
+			const corrected = await deps.resolve([...req.thread, { role: 'user', kind: 'speech', said: (h.said ?? h.sentence).trim(), correction: true }]);
+			language = replyLanguage(req.reply, corrected.language);
+			heard = { short: corrected.short, sentence: corrected.sentence, said: corrected.said ?? '', corrected: true };
+			query = corrected.meaning_en;
+		} else {
+			language = replyLanguage(req.reply, h.language);
+			if (h.greeting) return { kind: 'greeting', language };
+			heard = { short: h.short, sentence: h.sentence, ...(h.said?.trim() ? { said: h.said.trim() } : {}) };
+			query = h.meaning_en;
+		}
+	} else if (req.thread && deps.resolve) {
+		// A typed correction, perhaps a volunteer's: the thread makes the question meant now.
+		const corrected = await deps.resolve([...req.thread, { role: 'user', kind: 'text', said: req.query.trim(), correction: true }]);
+		language = req.reply === 'zh-Hans' ? 'zh-Hans' : req.reply === 'auto' ? replyLanguage('auto', corrected.language) : 'en';
+		heard = { short: corrected.short, sentence: corrected.sentence, said: req.query.trim(), corrected: true };
+		query = corrected.meaning_en;
+		offset = req.offset;
 	} else {
 		language = req.reply === 'zh-Hans' ? 'zh-Hans' : 'en';
 		heard = req.heard ?? { short: req.query.slice(0, 40), sentence: req.query };
