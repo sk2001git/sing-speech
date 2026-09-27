@@ -10,6 +10,7 @@ import { micFailure } from '../../lib/mic';
 import { commentaryFor } from '../../lib/routes/live';
 import { blobToBase64, pickMimeType } from '../../lib/record';
 import { createSilenceGate, rms } from '../../lib/silence';
+import { chartHeadline } from './ChartCard';
 import KbScreen from './KbScreen';
 
 const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' };
@@ -306,6 +307,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 						answer(
 							reply.kind === 'web'
 								? webLine(reply.answer)
+								: reply.kind === 'chart'
+								? chartHeadline({ chart: reply.chart, heard: reply.heard, data: reply.data, focus: reply.focus, language: reply.language })
 								: reply.kind === 'results'
 								? commentaryFor(reply.result, reply.result.language)
 								: reply.kind === 'greeting'
@@ -383,6 +386,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			}
 			dispatch({ type: 'NOTHING', heard: reply.heard });
 			tell(NOT_IN[reply.language], reply.language);
+			return;
+		}
+		// A chart drawn from government figures: the headline says the finding, so it is read aloud.
+		if (reply.kind === 'chart') {
+			const result = { chart: reply.chart, heard: reply.heard, data: reply.data, focus: reply.focus, language: reply.language };
+			dispatch({ type: 'CHART', result });
+			tell(chartHeadline(result), reply.language);
 			return;
 		}
 		// A guide the web found for an earlier question like this one: shown at once.

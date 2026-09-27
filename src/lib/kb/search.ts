@@ -14,6 +14,8 @@ import { searchRaw, type RawIndex } from './raw-store';
 import type { Judge } from './judge';
 import type { GuideFinder } from './web-guides';
 import type { WebAnswer } from './web-answer';
+import { edWaitAsked } from '../charts/ed-wait';
+import type { EdWaitChart } from '../charts/ed-wait-source';
 
 const Reply = z.enum(['en', 'zh-Hans', 'auto']).default('en');
 const Offset = z.number().int().min(0).max(1000).default(0);
@@ -47,6 +49,11 @@ export type SearchResponse =
 	 * cards that were near but did not answer, one Back away.
 	 */
 	| { kind: 'web'; heard: Heard; language: EntryLanguage; answer: WebAnswer; foundAt: string; closest?: SearchResult }
+	/**
+	 * A chart Suara draws from government figures (vault plan-suara-0017). `focus`: the hospital the
+	 * question named, highlighted; null for all of them.
+	 */
+	| { kind: 'chart'; chart: 'ed-wait'; heard: Heard; language: EntryLanguage; data: EdWaitChart; focus: string | null }
 	/**
 	 * `englishIds`: cards shown in English although the reader's language is not English.
 	 * `webFirst`: none of these answers the question; they are the closest, and the web is next.
@@ -138,6 +145,8 @@ export interface SearchDeps {
 	judge?: Judge;
 	/** Web answers kept from earlier questions. Absent means every such question searches the web. */
 	guides?: GuideFinder;
+	/** MOH's A&E ward-bed waiting times, for the questions they answer. Absent means no chart. */
+	edWait?: () => Promise<EdWaitChart>;
 }
 
 export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<SearchResponse> {
@@ -180,6 +189,18 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 			.map((id) => deps.corpus.entries.get(id))
 			.filter((e): e is Entry => e !== undefined);
 		return { kind: 'journey', heard, journey: event, cards, language };
+	}
+
+	// "How long is the wait at A&E" is answered from MOH's own figures, drawn as a chart. A fixed
+	// rule decides, on the meaning and on what they said, so a Chinese question counts too.
+	const asked = deps.edWait ? edWaitAsked(`${query} ${heard.said ?? ''}`) : null;
+	if (asked && deps.edWait) {
+		try {
+			return { kind: 'chart', chart: 'ed-wait', heard, language, data: await deps.edWait(), focus: asked.focus };
+		} catch (err) {
+			// No figures at all: the question goes on to the cards and the web like any other.
+			console.error('A&E chart unavailable:', err instanceof Error ? err.message.slice(0, 120) : err);
+		}
 	}
 
 	// "Where is a clinic in Bedok" is answered from the dataset, not from quoted pages. An

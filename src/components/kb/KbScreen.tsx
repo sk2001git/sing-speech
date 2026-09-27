@@ -3,6 +3,7 @@ import { ProgressFill, SuccessMark } from '../motion/motion';
 import LiveWaveform from './LiveWaveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
+import ChartCard from './ChartCard';
 import JourneyView from './JourneyView';
 import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
@@ -268,7 +269,7 @@ const NEXT_SETTING: Record<ReplySetting, ReplySetting> = { en: 'zh-Hans', 'zh-Ha
 /** The interface language: the chosen one, or on Automatic the language of the last answer. */
 function uiLanguage(state: FlowState, setting: ReplySetting): EntryLanguage {
 	if (setting !== 'auto') return setting;
-	if (state.phase === 'results' || state.phase === 'web') return state.result.language;
+	if (state.phase === 'results' || state.phase === 'web' || state.phase === 'chart') return state.result.language;
 	if (state.phase === 'web-searching') return state.language;
 	if ('back' in state) return state.back.result.language;
 	return 'en';
@@ -345,6 +346,8 @@ function Body(p: BodyProps) {
 			return <Results {...p} state={s} />;
 		case 'places':
 			return <Places {...p} state={s} />;
+		case 'chart':
+			return <ChartCard result={s.result} onSay={p.onSay} footer={<AskButton {...p} label={p.w.askElse} />} />;
 		case 'journey':
 			return (
 				<JourneyView

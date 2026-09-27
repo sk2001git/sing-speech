@@ -186,3 +186,23 @@ describe('runSearch, on a route that searches its own index', () => {
 		expect(r.kind === 'results' && r.result.cards.map((c) => c.id)).toEqual(['sg.cpf.e3']);
 	});
 });
+
+describe('runSearch, questions a government chart answers', () => {
+	const chart = { week: { from: '2026-09-13', to: '2026-09-19' }, latest: { TTSH: 3.75 }, weeks: [], first: '2023-01-01', fetchedAt: '2026-09-27T00:00:00.000Z', file: 'f.xlsx' };
+	const text = (query: string) => ({ kind: 'text' as const, query, offset: 0, reply: 'en' as const });
+
+	it('answers an A&E waiting question with the chart, before any card search', async () => {
+		const edWait = vi.fn(async () => chart);
+		const embed = vi.fn(async () => [1, 0]);
+		const r = await runSearch(text('how long do I wait at Tan Tock Seng A&E'), deps({ edWait, embed }));
+		expect(r).toMatchObject({ kind: 'chart', chart: 'ed-wait', focus: 'TTSH', data: chart, language: 'en' });
+		expect(embed).not.toHaveBeenCalled();
+	});
+
+	it('leaves every other question to the cards', async () => {
+		const edWait = vi.fn(async () => chart);
+		const r = await runSearch(text('how do I apply for CHAS'), deps({ edWait }));
+		expect(r.kind).not.toBe('chart');
+		expect(edWait).not.toHaveBeenCalled();
+	});
+});

@@ -2,6 +2,7 @@ import type { Entry, EntryLanguage } from './entry';
 import type { Journey } from './journey';
 import type { Place, PlaceKind } from '../places/places';
 import type { WebAnswer, WebStage } from './web-answer';
+import type { EdWaitChart } from '../charts/ed-wait-source';
 
 /**
  * The knowledge-base screens as one value, following the approved UX flows
@@ -87,6 +88,16 @@ export interface WebResult {
 /** `from`: the closest answers they chose to look past, so Back returns to them. */
 type WebPhase = { view: View; phase: 'web'; result: WebResult; from?: Results };
 
+/** A chart Suara draws from government figures (vault plan-suara-0017). */
+export interface ChartResult {
+	chart: 'ed-wait';
+	heard: Heard;
+	data: EdWaitChart;
+	/** The hospital the question named, highlighted; null for none. */
+	focus: string | null;
+	language: EntryLanguage;
+}
+
 export type FlowState =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
@@ -95,6 +106,7 @@ export type FlowState =
 	| Results
 	| JourneyPhase
 	| { view: View; phase: 'places'; result: PlacesResult }
+	| { view: View; phase: 'chart'; result: ChartResult }
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
 	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
 	| { view: View; phase: 'done'; entry: Entry; back: Results }
@@ -143,14 +155,15 @@ export type FlowEvent =
 	| { type: 'WEB_SEARCH'; heard: Heard; language: EntryLanguage }
 	| { type: 'WEB_STAGE'; stage: WebStage }
 	| { type: 'WEB_ANSWER'; answer: WebAnswer; foundAt?: string }
-	| { type: 'WEB_START' };
+	| { type: 'WEB_START' }
+	| { type: 'CHART'; result: ChartResult };
 
 export function initial(view: View = 'grid'): FlowState {
 	return { view, phase: 'home', greeting: false };
 }
 
-const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'denied', 'offline', 'steps', 'web', 'web-steps', 'web-done']);
-const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'notfound', 'done', 'offline', 'web', 'web-done']);
+const CAN_SPEAK = new Set<FlowState['phase']>(['home', 'results', 'places', 'chart', 'notfound', 'done', 'denied', 'offline', 'steps', 'web', 'web-steps', 'web-done']);
+const CAN_PICK_TOPIC = new Set<FlowState['phase']>(['home', 'results', 'places', 'chart', 'notfound', 'done', 'offline', 'web', 'web-done']);
 
 export function canSpeak(state: FlowState): boolean {
 	return CAN_SPEAK.has(state.phase);
@@ -209,6 +222,8 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 		}
 		case 'PLACES':
 			return state.phase === 'searching' ? { view, phase: 'places', result: event.result } : state;
+		case 'CHART':
+			return state.phase === 'searching' ? { view, phase: 'chart', result: event.result } : state;
 		case 'NOTHING':
 			if (state.phase === 'web-searching' && state.from) return state.from;
 			return state.phase === 'searching' || state.phase === 'web-searching' ? { view, phase: 'notfound', heard: event.heard } : state;
