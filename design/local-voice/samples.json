@@ -1,0 +1,72 @@
+[
+ {
+  "voice": "serena",
+  "language": "en",
+  "seconds": 11.8,
+  "took": 5.36,
+  "rtf": 0.45
+ },
+ {
+  "voice": "serena",
+  "language": "zh",
+  "seconds": 11.8,
+  "took": 5.35,
+  "rtf": 0.45
+ },
+ {
+  "voice": "vivian",
+  "language": "en",
+  "seconds": 13.0,
+  "took": 5.77,
+  "rtf": 0.45
+ },
+ {
+  "voice": "vivian",
+  "language": "zh",
+  "seconds": 13.8,
+  "took": 6.22,
+  "rtf": 0.45
+ },
+ {
+  "voice": "uncle_fu",
+  "language": "en",
+  "seconds": 13.8,
+  "took": 6.13,
+  "rtf": 0.44
+ },
+ {
+  "voice": "uncle_fu",
+  "language": "zh",
+  "seconds": 14.2,
+  "took": 6.26,
+  "rtf": 0.44
+ },
+ {
+  "voice": "ryan",
+  "language": "en",
+  "seconds": 9.9,
+  "took": 4.46,
+  "rtf": 0.45
+ },
+ {
+  "voice": "ryan",
+  "language": "zh",
+  "seconds": 13.8,
+  "took": 6.23,
+  "rtf": 0.45
+ },
+ {
+  "voice": "aiden",
+  "language": "en",
+  "seconds": 10.7,
+  "took": 4.8,
+  "rtf": 0.45
+ },
+ {
+  "voice": "aiden",
+  "language": "zh",
+  "seconds": 11.5,
+  "took": 5.16,
+  "rtf": 0.45
+ }
+]

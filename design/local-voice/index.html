@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suara · pick the local voice</title>
+<style>
+	:root { --ink: #111; --muted: #6a6a6a; --line: #e6e6e6; --accent: #007aff; }
+	* { box-sizing: border-box; }
+	body { margin: 0; font: 18px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--ink); background: #fff; }
+	main { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+	h1 { font-size: 32px; letter-spacing: -0.02em; margin: 0 0 8px; }
+	.lede { color: var(--muted); margin: 0 0 32px; }
+	.line { border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px; margin: 0 0 32px; font-size: 16px; }
+	.line p { margin: 4px 0; }
+	.line b { font-weight: 600; }
+	.voice { display: grid; grid-template-columns: 140px 1fr 1fr; gap: 12px 16px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+	.voice:last-of-type { border-bottom: 1px solid var(--line); }
+	.name { font-weight: 600; }
+	.name small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+	.lang { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+	audio { width: 100%; height: 40px; }
+	.current { background: #f7f7f7; border-radius: 12px; padding: 16px; border: 0; }
+	.note { color: var(--muted); font-size: 15px; margin-top: 32px; }
+	@media (max-width: 620px) { .voice { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+	<h1>Pick the local voice</h1>
+	<p class="lede">Qwen3-TTS 1.7B on this PC's graphics card. Same card, same instruction to each voice: slow, warm and clear for an older listener. Tell me one name.</p>
+
+	<div class="line">
+		<p><b>English:</b> GPFirst: paying less at the emergency department. Bring your doctor's original GPFirst form to a partner hospital's A&amp;E the same day.</p>
+		<p><b>Mandarin:</b> GPFirst：在急诊部少付一些钱。请带上医生开的GPFirst转介表格原件，当天到合作医院的急诊部。</p>
+	</div>
+
+	<div class="voice current">
+		<div class="name">marin <small>today, OpenAI</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="../../public/kb-audio/5476388cd4f59970ab98096f99ae0a34.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><small style="color:var(--muted)">not built</small></div>
+	</div>
+
+	<div class="voice">
+		<div class="name">serena <small>warm female</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="serena-en.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><audio controls preload="none" src="serena-zh.mp3"></audio></div>
+	</div>
+	<div class="voice">
+		<div class="name">vivian <small>young female</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="vivian-en.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><audio controls preload="none" src="vivian-zh.mp3"></audio></div>
+	</div>
+	<div class="voice">
+		<div class="name">uncle_fu <small>mature male</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="uncle_fu-en.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><audio controls preload="none" src="uncle_fu-zh.mp3"></audio></div>
+	</div>
+	<div class="voice">
+		<div class="name">ryan <small>energetic male</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="ryan-en.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><audio controls preload="none" src="ryan-zh.mp3"></audio></div>
+	</div>
+	<div class="voice">
+		<div class="name">aiden <small>cheerful male</small></div>
+		<div><div class="lang">English</div><audio controls preload="none" src="aiden-en.mp3"></audio></div>
+		<div><div class="lang">Mandarin</div><audio controls preload="none" src="aiden-zh.mp3"></audio></div>
+	</div>
+
+	<p class="note">Each clip took about 0.45 s per second of speech: a 12-second answer is ready in about 5.5 s. Every clip was transcribed back word for word by the local speech model.</p>
+</main>
+</body>
+</html>

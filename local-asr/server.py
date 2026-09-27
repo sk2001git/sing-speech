@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 RUNTIME = HERE / 'runtime'
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--size', choices=['1.7b', '0.6b'], default=os.environ.get('LOCAL_ASR_SIZE', '1.7b'))
+parser.add_argument('--model', default=os.environ.get('LOCAL_ASR_MODEL', 'polyglot-lion-1.7b'), help='a name from setup.py, e.g. qwen3-asr-1.7b')
 parser.add_argument('--device', default=os.environ.get('LOCAL_ASR_DEVICE', 'Vulkan0'), help='a llama.cpp device, e.g. Vulkan0; "none" for the CPU')
 parser.add_argument('--port', type=int, default=int(os.environ.get('LOCAL_ASR_PORT', '8791')))
 parser.add_argument('--llama-port', type=int, default=8792)
@@ -34,8 +34,8 @@ args = parser.parse_args()
 import imageio_ffmpeg  # noqa: E402
 
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
-MODEL = RUNTIME / 'models' / f'polyglot-lion-{args.size}-v1.5-Q8_0.gguf'
-MMPROJ = RUNTIME / 'models' / f'mmproj-polyglot-lion-{args.size}-v1.5-Q8_0.gguf'
+MODEL = RUNTIME / 'models' / f'{args.model}-Q8_0.gguf'
+MMPROJ = RUNTIME / 'models' / f'mmproj-{args.model}-Q8_0.gguf'
 LLAMA = RUNTIME / 'llama.cpp' / 'llama-server.exe'
 LLAMA_URL = f'http://127.0.0.1:{args.llama_port}'
 LANGUAGE = {'en': 'English', 'zh': 'Chinese'}
@@ -43,7 +43,7 @@ MAX_BYTES = 10 * 1024 * 1024
 
 for need in (LLAMA, MODEL, MMPROJ):
     if not need.exists():
-        sys.exit(f'missing {need}: run python local-asr/setup.py first')
+        sys.exit(f'missing {need}: run python local-asr/setup.py --model {args.model} first')
 
 # llama.cpp on the GPU, all layers offloaded; it lives and dies with this server.
 llama = subprocess.Popen(
