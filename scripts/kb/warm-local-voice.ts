@@ -25,7 +25,7 @@ function setting(name: string): string | undefined {
 }
 
 const base = (setting('SUARA_LOCAL_ASR_URL') ?? LOCAL_ASR_URL).replace(/\/$/, '');
-const voice = setting('SUARA_LOCAL_VOICE') ?? 'serena';
+const voice = setting('SUARA_LOCAL_VOICE') ?? 'aiden';
 const lines = (index.entries as unknown[]).flatMap((raw) => {
 	const parsed = parseEntry(raw);
 	if (!parsed.ok) throw new Error(parsed.errors.join('\n'));

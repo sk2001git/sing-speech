@@ -20,6 +20,8 @@ const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' }
 /** The route's own voice while it plays, so a new line or a tap can cut it off. */
 let playing: HTMLAudioElement | null = null;
 let speechTurn = 0;
+/** The line still being fetched: a voice that is slow to speak (the local route) is told to stop. */
+let fetching: AbortController | null = null;
 
 function phoneSay(text: string, language: EntryLanguage): void {
 	if (typeof speechSynthesis === 'undefined') return;
@@ -36,6 +38,8 @@ function silence(): void {
 	if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
 	playing?.pause();
 	playing = null;
+	fetching?.abort();
+	fetching = null;
 }
 
 /**
@@ -45,11 +49,14 @@ function silence(): void {
 async function routeSay(text: string, language: EntryLanguage, route: string): Promise<void> {
 	silence();
 	const turn = speechTurn;
+	const request = new AbortController();
+	fetching = request;
 	try {
 		const res = await fetch('/api/speak', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ text: text.slice(0, 1000), language, route }),
+			signal: request.signal,
 		});
 		if (turn !== speechTurn) return;
 		if (res.status !== 200) return phoneSay(text, language);

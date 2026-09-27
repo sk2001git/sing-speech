@@ -68,7 +68,7 @@ export class OpenAiVoice implements RouteVoice {
 export interface LocalVoiceOptions {
 	/** Where local-asr/server.py listens. */
 	url?: string;
-	/** A Qwen3-TTS preset; the owner picks by ear (design/local-voice). */
+	/** A Qwen3-TTS preset; the owner picked aiden by ear, 2026-09-28 (design/local-voice). */
 	voice?: string;
 	fetchImpl?: typeof fetch;
 }
@@ -84,7 +84,7 @@ export class LocalVoice implements RouteVoice {
 	private readonly base: string;
 
 	constructor(opts: LocalVoiceOptions = {}) {
-		this.voice = opts.voice ?? 'serena';
+		this.voice = opts.voice ?? 'aiden';
 		this.base = (opts.url ?? LOCAL_ASR_URL).replace(/\/$/, '');
 		this.doFetch = opts.fetchImpl ?? fetch.bind(globalThis);
 	}

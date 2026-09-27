@@ -4,10 +4,10 @@ Suara's local server (vault plan-suara-0018, obs-0054, obs-0071): hearing and sp
     python local-asr/setup.py            once: llama.cpp (Vulkan) and the models, into local-asr/runtime
     python local-asr/server.py           then: starts both on the GPU and listens on :8791
 
-    GET  /health                         {"ready": true, "model": "...", "device": "Vulkan0", "voice": "serena"}
+    GET  /health                         {"ready": true, "model": "...", "device": "Vulkan0", "voice": "aiden"}
     POST /transcribe?language=en|zh      body: the recording, any format the browser makes
                                          {"text": "...", "language": "English", "ms": 223}
-    POST /speak                          {"text": "...", "language": "en" | "zh-Hans", "voice": "serena"}
+    POST /speak                          {"text": "...", "language": "en" | "zh-Hans", "voice": "aiden"}
                                          audio/mpeg; 503 when the voice is off
 
 Hearing: native Qwen3-ASR 1.7B (Qwen, Apache-2.0) through llama.cpp's Vulkan build. On the 38
@@ -32,13 +32,13 @@ from urllib.parse import parse_qs, urlparse
 HERE = Path(__file__).resolve().parent
 RUNTIME = HERE / 'runtime'
 TTS = RUNTIME / 'qwen3-tts-gguf'
-# The nine presets; the owner picks by ear (design/local-voice).
+# The nine presets. The owner picked aiden by ear, 2026-09-28 (design/local-voice).
 VOICES = ['serena', 'vivian', 'uncle_fu', 'ryan', 'aiden', 'dylan', 'eric', 'ono_anna', 'sohee']
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', default=os.environ.get('LOCAL_ASR_MODEL', 'qwen3-asr-1.7b'), help='a name from setup.py, e.g. polyglot-lion-1.7b')
 parser.add_argument('--device', default=os.environ.get('LOCAL_ASR_DEVICE', 'Vulkan0'), help='a llama.cpp device, e.g. Vulkan0; "none" for the CPU')
-parser.add_argument('--voice', choices=[*VOICES, 'none'], default=os.environ.get('LOCAL_VOICE', 'serena'), help='when a request names none; the app names one (SUARA_LOCAL_VOICE). "none" for hearing only')
+parser.add_argument('--voice', choices=[*VOICES, 'none'], default=os.environ.get('LOCAL_VOICE', 'aiden'), help='when a request names none; the app names one (SUARA_LOCAL_VOICE). "none" for hearing only')
 parser.add_argument('--port', type=int, default=int(os.environ.get('LOCAL_ASR_PORT', '8791')))
 parser.add_argument('--llama-port', type=int, default=8792)
 args = parser.parse_args()
@@ -99,6 +99,10 @@ def transcribe(wav: bytes, hint: str | None) -> tuple[str, str]:
     return text.strip(), head.replace('language', '').strip()
 
 
+class Superseded(Exception):
+    """A newer line arrived while this one waited."""
+
+
 class Voice:
     """Qwen3-TTS, one line at a time: the engine holds one model context, so calls queue."""
 
@@ -134,7 +138,14 @@ class Voice:
             raise RuntimeError('the voice model did not load')
         # A fixed seed: the same line always comes out the same, so a cached copy matches a fresh one.
         self.config = TTSConfig(max_steps=1200, temperature=0.6, sub_temperature=0.6, seed=42, sub_seed=45, streaming=False)
-        self.lock = threading.Lock()
+        # One line at a time, newest first. A reader who has moved on no longer wants the line
+        # they left, so a waiting line is dropped when a newer one arrives; before this, abandoned
+        # lines queued up to 45 s and the phone's voice took over (2026-09-28). The warm-up
+        # (keep) yields to any reader.
+        self.turn = threading.Condition()
+        self.busy = False
+        self.latest = 0
+        self.readers_waiting = 0
         atexit.register(self.engine.shutdown)
 
     # Phone numbers read as figures come out wrong: "1800-650-6060" became "one eight o o six five
@@ -158,10 +169,31 @@ class Voice:
 
         return cls.PHONE.sub(spell, text)
 
-    def speak(self, text: str, language: str, name: str | None = None) -> bytes:
+    def speak(self, text: str, language: str, name: str | None = None, keep: bool = False) -> bytes:
         text = self.say_numbers(text, language)
-        with self.lock:
+        with self.turn:
+            if not keep:
+                self.latest += 1
+                mine = self.latest
+                self.readers_waiting += 1
+                self.turn.notify_all()  # an older waiting line can give up now
+            try:
+                while self.busy or (keep and self.readers_waiting):
+                    if not keep and mine != self.latest:
+                        raise Superseded
+                    self.turn.wait()
+                if not keep and mine != self.latest:
+                    raise Superseded
+                self.busy = True
+            finally:
+                if not keep:
+                    self.readers_waiting -= 1
+        try:
             result = self.stream.custom(text=text, speaker=name or self.name, language=self.SPOKEN[language], instruct=self.INSTRUCT[language], config=self.config)
+        finally:
+            with self.turn:
+                self.busy = False
+                self.turn.notify_all()
         if result is None or result.audio is None or len(result.audio) == 0:
             raise RuntimeError('no audio')
         pcm = result.audio.astype('float32').tobytes()
@@ -226,7 +258,7 @@ class Handler(BaseHTTPRequestHandler):
             if not text or len(text) > 1000 or language not in Voice.SPOKEN or name not in VOICES:
                 raise ValueError
         except (ValueError, KeyError, TypeError):
-            return self.reply(400, {'error': 'send {"text": "...", "language": "en" | "zh-Hans", "voice": "serena"}, text under 1000 characters'})
+            return self.reply(400, {'error': 'send {"text": "...", "language": "en" | "zh-Hans", "voice": "aiden"}, text under 1000 characters'})
         # Card and step lines are kept on disk when scripts/kb/build-audio.ts --local asks ("keep");
         # nothing else is, because a read-back carries the person's own question.
         kept = Voice.kept(text, name)
@@ -234,7 +266,9 @@ class Handler(BaseHTTPRequestHandler):
             audio = kept.read_bytes()
         else:
             try:
-                audio = voice.speak(text, language, name)
+                audio = voice.speak(text, language, name, keep=req.get('keep') is True)
+            except Superseded:
+                return self.reply(409, {'error': 'a newer line arrived first'})
             except Exception as err:  # the phone speaks instead; the words are not printed
                 print('speak failed:', str(err)[:120], flush=True)
                 return self.reply(500, {'error': 'speech failed'})

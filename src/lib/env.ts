@@ -31,7 +31,7 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_CARDS?: import('./kb/cf-search').VectorizeLike;
 	/** Where suara/local-asr/server.py listens, for the local route. Default http://127.0.0.1:8791. */
 	SUARA_LOCAL_ASR_URL?: string;
-	/** The local route's Qwen3-TTS voice (design/local-voice). Default serena. */
+	/** The local route's Qwen3-TTS voice (design/local-voice). Default aiden, the owner's pick. */
 	SUARA_LOCAL_VOICE?: string;
 	/** Secret. The owner's admin password; unset means nobody can sign in. */
 	SUARA_ADMIN_PASSWORD?: string;

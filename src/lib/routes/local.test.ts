@@ -61,10 +61,10 @@ describe('the local voice', () => {
 		return { fetchImpl, calls };
 	}
 
-	it('is the voice of the local route, serena unless set otherwise', () => {
+	it('is the voice of the local route, aiden unless set otherwise', () => {
 		const voice = voiceFor('local', {});
 		expect(voice).toBeInstanceOf(LocalVoice);
-		expect(voice).toMatchObject({ voice: 'serena', model: 'qwen3-tts-1.7b' });
+		expect(voice).toMatchObject({ voice: 'aiden', model: 'qwen3-tts-1.7b' });
 		expect(voiceFor('local', { SUARA_LOCAL_VOICE: 'uncle_fu' })).toMatchObject({ voice: 'uncle_fu' });
 	});
 
@@ -72,7 +72,7 @@ describe('the local voice', () => {
 		const { fetchImpl, calls } = speakFakes(() => new Response(new Uint8Array([7, 8]), { headers: { 'content-type': 'audio/mpeg' } }));
 		const audio = await new LocalVoice({ fetchImpl }).speak('您问：怎样查看我的公积金余额？', 'zh-Hans');
 		expect(calls[0]!.url).toBe(`${LOCAL_ASR_URL}/speak`);
-		expect(calls[0]!.body).toEqual({ text: '您问：怎样查看我的公积金余额？', language: 'zh-Hans', voice: 'serena' });
+		expect(calls[0]!.body).toEqual({ text: '您问：怎样查看我的公积金余额？', language: 'zh-Hans', voice: 'aiden' });
 		expect(audio.contentType).toBe('audio/mpeg');
 		expect(new Uint8Array(await new Response(audio.body).arrayBuffer())).toEqual(new Uint8Array([7, 8]));
 	});
