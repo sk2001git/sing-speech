@@ -7,7 +7,9 @@ import type { WebAnswer } from './web-answer';
  *
  * The owner's rule: a guide built only from Singapore government pages goes straight in; one
  * that cites any other site (Coinbase, IBKR, Trip.com) waits until the owner approves it.
- * Kept guides lapse after 30 days, so rules, fees and prices are searched again, not served stale.
+ * Kept guides stay until the owner takes them down (owner, 2026-09-27: "KV shouldn't self
+ * delete"). Freshness is shown rather than enforced: the fine print carries the date found, and
+ * the review list its age.
  *
  * Stored in Workers KV, one JSON value per guide (owner: "KV with json"), with status and
  * title in the key's metadata so the review list needs no reads. KV cannot search by
@@ -43,8 +45,6 @@ export interface GuideFinder {
 	find(vector: number[], language: EntryLanguage, min: number): Promise<KeptGuide | null>;
 }
 
-export const GUIDE_DAYS = 30;
-const LIFE_MS = GUIDE_DAYS * 86_400_000;
 const PREFIX = 'guide:';
 
 /** Where a web answer goes: served at once, held for review, or not kept. */
@@ -106,11 +106,10 @@ export class KvGuides implements GuideFinder {
 
 	async find(vector: number[], language: EntryLanguage, min: number): Promise<KeptGuide | null> {
 		const all = await this.load();
-		const fresh = this.now() - LIFE_MS;
 		let best: [string, Stored] | null = null;
 		let bestScore = min;
 		for (const [id, g] of all) {
-			if (g.status !== 'live' || g.language !== language || g.at < fresh) continue;
+			if (g.status !== 'live' || g.language !== language) continue;
 			const score = cosine(vector, g.vector);
 			if (score >= bestScore) {
 				best = [id, g];
@@ -161,8 +160,8 @@ export class KvGuides implements GuideFinder {
 			status: g.status,
 			foundAt: g.foundAt,
 		};
-		// KV lets the value go by itself when its 30 days are up (expiration is in seconds).
-		await this.kv.put(PREFIX + id, JSON.stringify(g), { expiration: Math.floor((g.at + LIFE_MS) / 1000), metadata });
+		// No expiration: a guide stays until the owner takes it down.
+		await this.kv.put(PREFIX + id, JSON.stringify(g), { metadata });
 		this.copy?.set(id, g);
 	}
 

@@ -174,7 +174,6 @@ const gov = (u) => { try { return new URL(u).hostname.endsWith('.gov.sg'); } cat
 const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
 const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
 const ago = (days) => (days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days} days ago`);
-const left = (days) => `Lapses in ${30 - days} days`;
 
 let S = { signedIn: new URLSearchParams(location.search).get('v') !== 'signin', tab: 'waiting', open: null, adding: null, toast: null, err: '' };
 let G = [];
@@ -228,7 +227,7 @@ function list() {
   return `<header class="bar"><span class="mk">${I.wave}</span><span class="nm">Suara <small>Web guides</small></span><span class="grow"></span>
       <button class="btn quiet icon-sm" data-act="out" aria-label="Sign out">${I.out}<span class="tx">Sign out</span></button></header>
     <main class="page">
-      <div><h1>Web guides</h1><p class="lead">Answers Suara found on the web and kept, so the next person is answered at once. Each lapses after 30 days.</p></div>
+      <div><h1>Web guides</h1><p class="lead">Answers Suara found on the web and kept, so the next person is answered at once. Each stays until you take it down.</p></div>
       <form class="add" data-f="add"><input name="q" placeholder="Add a guide: type a question" aria-label="Add a guide: type a question" autocomplete="off"><button class="btn" type="submit">${I.plus}<span class="tx">Find it</span></button></form>
       <div class="tabs" role="tablist">
         <button class="tab" role="tab" data-tab="waiting" aria-selected="${S.tab === 'waiting'}">Waiting <span class="count">${w}</span></button>
@@ -244,7 +243,7 @@ function evidence(x) {
   const others = [...new Set(g.sources.filter((s) => !gov(s.url)).map((s) => s.site))];
   const why = x.status === 'waiting'
     ? `<div class="why">${I.info}<span>Waiting because it cites ${others.length ? esc(others.join(', ')) : 'a site'}, not only government pages. Check the pages below say what the guide says.</span></div>`
-    : `<div class="why ok">${I.tick}<span>${x.official ? 'Live by itself: every page it cites is a government page.' : 'Live: you approved it.'} ${left(x.days)}.</span></div>`;
+    : `<div class="why ok">${I.tick}<span>${x.official ? 'Live by itself: every page it cites is a government page.' : 'Live: you approved it.'} Stays until you take it down.</span></div>`;
   const body = g.kind === 'steps'
     ? `<p class="gs">${esc(g.summary)}</p>${g.prerequisites ? `<p class="pre"><b>Before you start:</b> ${esc(g.prerequisites)}</p>` : ''}
        <ol class="steps">${g.steps.map((s) => `<li><b>${esc(s.name)}</b><span>${esc(s.text)}</span></li>`).join('')}</ol>`

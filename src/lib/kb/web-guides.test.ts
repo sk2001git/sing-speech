@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { WebAnswer } from './web-answer';
-import { GUIDE_DAYS, KvGuides, keepAs, memoryKv } from './web-guides';
+import { KvGuides, keepAs, memoryKv } from './web-guides';
 
 /**
  * Web answers kept as guides, so the next person is answered from Suara (owner, 2026-09-27:
@@ -96,13 +96,11 @@ describe('KvGuides', () => {
 		expect(await b.find([1, 0], 'en', 0.86)).not.toBeNull();
 	});
 
-	it(`lets a guide go after ${GUIDE_DAYS} days, so rules and prices do not go stale`, async () => {
+	it('keeps a guide until the owner takes it down, however old: the date found is shown instead', async () => {
 		const { store, tick } = setup();
 		await store().save(cpf);
-		tick(29 * DAY);
-		expect(await store().find([1, 0], 'en', 0.86)).not.toBeNull();
-		tick(2 * DAY);
-		expect(await store().find([1, 0], 'en', 0.86)).toBeNull();
+		tick(365 * DAY);
+		expect((await store().find([1, 0], 'en', 0.86))?.foundAt).toBe('2026-09-27T00:00:00.000Z');
 	});
 
 	it('replaces an older guide for the same question rather than piling up', async () => {
