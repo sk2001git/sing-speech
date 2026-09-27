@@ -1,5 +1,5 @@
 import { Hearing, HEARING_SCHEMA, hearingPrompt } from '../kb/hearing';
-import { RouteUnavailable, type HearingRoute } from './types';
+import { RouteUnavailable, type HearingHint, type HearingRoute } from './types';
 
 const API = 'https://api.openai.com/v1';
 const SOCKET_URL = 'wss://api.openai.com/v1/responses';
@@ -39,6 +39,16 @@ export interface OpenAiWsOptions {
 	fetchImpl?: typeof fetch;
 	connect?: Connect;
 	timeoutMs?: number;
+	/** Another route built on this one (the Cloudflare route): its own id, vendor and label. */
+	id?: string;
+	vendor?: string;
+	label?: string;
+	/** Hear with something other than OpenAI's transcription endpoint. */
+	transcribe?: (audio: ArrayBuffer, mimeType: string | undefined, hint: HearingHint | undefined) => Promise<string>;
+	/** false: straight to HTTP, for models the Responses WebSocket does not serve. */
+	socket?: boolean;
+	/** How hard the model thinks about what was meant. Default none. */
+	reasoning?: 'none' | 'low';
 }
 
 const EXTENSION: Record<string, string> = {
@@ -60,8 +70,8 @@ const STRICT_HEARING = { ...HEARING_SCHEMA, additionalProperties: false };
  * audio — for the same `Hearing` Gemini returns, over the Responses API WebSocket.
  */
 export class OpenAiWsRoute implements HearingRoute {
-	readonly id = ID;
-	readonly vendor = 'openai';
+	readonly id: string;
+	readonly vendor: string;
 	readonly label: string;
 	private readonly model: string;
 	private readonly transcribeModel: string;
@@ -70,26 +80,28 @@ export class OpenAiWsRoute implements HearingRoute {
 	private readonly timeoutMs: number;
 
 	constructor(private readonly opts: OpenAiWsOptions) {
+		this.id = opts.id ?? ID;
+		this.vendor = opts.vendor ?? 'openai';
 		this.model = opts.model ?? 'gpt-5.6-luna';
 		this.transcribeModel = opts.transcribeModel ?? 'gpt-transcribe';
-		this.label = `OpenAI · ${this.model} over WebSocket`;
+		this.label = opts.label ?? `OpenAI · ${this.model} over WebSocket`;
 		// Bound: workerd rejects a detached global fetch with "Illegal invocation".
 		this.doFetch = opts.fetchImpl ?? fetch.bind(globalThis);
 		this.connect = opts.connect ?? workersConnect;
 		this.timeoutMs = opts.timeoutMs ?? 20_000;
 	}
 
-	async hear(audio: ArrayBuffer, mimeType?: string): Promise<Hearing> {
+	async hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint): Promise<Hearing> {
 		const key = this.opts.apiKey;
-		if (!key) throw new RouteUnavailable(ID, 'missing-key', 'OPENAI_API_KEY is not set');
+		if (!key) throw new RouteUnavailable(this.id, 'missing-key', 'OPENAI_API_KEY is not set');
 
-		const transcript = await this.transcribe(key, audio, mimeType);
-		if (transcript.trim() === '') throw new RouteUnavailable(ID, 'nothing-heard', 'the transcript was empty');
+		const transcript = this.opts.transcribe ? await this.opts.transcribe(audio, mimeType, hint) : await this.transcribe(key, audio, mimeType);
+		if (transcript.trim() === '') throw new RouteUnavailable(this.id, 'nothing-heard', 'the transcript was empty');
 
 		const request = {
 			model: this.model,
 			store: false,
-			reasoning: { effort: 'none' },
+			reasoning: { effort: this.opts.reasoning ?? 'none' },
 			instructions: hearingPrompt('transcript'),
 			input: [{ type: 'message', role: 'user', content: [{ type: 'input_text', text: `Transcript:\n${transcript}` }] }],
 			text: { format: { type: 'json_schema', name: 'hearing', strict: true, schema: STRICT_HEARING } },
@@ -97,16 +109,17 @@ export class OpenAiWsRoute implements HearingRoute {
 
 		let text: string;
 		try {
+			if (this.opts.socket === false) throw new Error('HTTP only');
 			text = await this.overSocket(key, request);
 		} catch (err) {
 			if (err instanceof RouteUnavailable) throw err;
 			// The socket was refused (the Luna model page lists WebSocket as not supported):
 			// the same payload over HTTP, so the route still serves.
-			console.warn(`${ID}: websocket unavailable, using HTTP:`, err instanceof Error ? err.message : err);
+			if (this.opts.socket !== false) console.warn(`${this.id}: websocket unavailable, using HTTP:`, err instanceof Error ? err.message : err);
 			text = await this.overHttp(key, request);
 		}
 		const reply = JSON.parse(text) as { greeting?: boolean; meaning_en?: string };
-		if (!reply.greeting && !reply.meaning_en?.trim()) throw new RouteUnavailable(ID, 'nothing-heard', 'no request in the transcript');
+		if (!reply.greeting && !reply.meaning_en?.trim()) throw new RouteUnavailable(this.id, 'nothing-heard', 'no request in the transcript');
 		// What they said is the transcript itself, not the model's retelling of it.
 		return Hearing.parse({ ...reply, said: transcript.trim().slice(0, 1000) });
 	}
@@ -123,7 +136,7 @@ export class OpenAiWsRoute implements HearingRoute {
 			signal: AbortSignal.timeout(this.timeoutMs),
 		});
 		const json = (await res.json().catch(() => ({}))) as { text?: string; error?: { code?: string; message?: string } };
-		if (!res.ok) throw failure(res.status, json.error);
+		if (!res.ok) throw failure(res.status, json.error, this.id);
 		return json.text ?? '';
 	}
 
@@ -131,7 +144,7 @@ export class OpenAiWsRoute implements HearingRoute {
 		const socket = await this.connect(SOCKET_URL, { Authorization: `Bearer ${key}` });
 		try {
 			return await new Promise<string>((resolve, reject) => {
-				const timer = setTimeout(() => reject(new RouteUnavailable(ID, 'vendor-error', 'no response within the time limit')), this.timeoutMs);
+				const timer = setTimeout(() => reject(new RouteUnavailable(this.id, 'vendor-error', 'no response within the time limit')), this.timeoutMs);
 				socket.onMessage((data) => {
 					let event: any;
 					try {
@@ -142,11 +155,11 @@ export class OpenAiWsRoute implements HearingRoute {
 					if (event.type === 'response.completed') {
 						clearTimeout(timer);
 						const out = outputText(event.response);
-						out ? resolve(out) : reject(new RouteUnavailable(ID, 'vendor-error', 'response completed with no text'));
+						out ? resolve(out) : reject(new RouteUnavailable(this.id, 'vendor-error', 'response completed with no text'));
 					} else if (event.type === 'response.failed' || event.type === 'response.incomplete' || event.type === 'error') {
 						clearTimeout(timer);
 						const error = event.error ?? event.response?.error;
-						reject(error?.code ? failure(0, error) : new RouteUnavailable(ID, 'vendor-error', `response ${event.type.replace('response.', '')}: ${error?.message ?? 'no message'}`));
+						reject(error?.code ? failure(0, error, this.id) : new RouteUnavailable(this.id, 'vendor-error', `response ${event.type.replace('response.', '')}: ${error?.message ?? 'no message'}`));
 					}
 				});
 				socket.send(JSON.stringify({ type: 'response.create', ...request }));
@@ -164,9 +177,9 @@ export class OpenAiWsRoute implements HearingRoute {
 			signal: AbortSignal.timeout(this.timeoutMs),
 		});
 		const json = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
-		if (!res.ok) throw failure(res.status, json.error);
+		if (!res.ok) throw failure(res.status, json.error, this.id);
 		const out = outputText(json);
-		if (!out) throw new RouteUnavailable(ID, 'vendor-error', 'response had no text');
+		if (!out) throw new RouteUnavailable(this.id, 'vendor-error', 'response had no text');
 		return out;
 	}
 }
@@ -178,10 +191,10 @@ function outputText(response: any): string {
 	return '';
 }
 
-function failure(status: number, error?: { code?: string; message?: string }): RouteUnavailable {
+function failure(status: number, error?: { code?: string; message?: string }, id = ID): RouteUnavailable {
 	const code = error?.code ?? '';
-	if (status === 401 || code === 'invalid_api_key') return new RouteUnavailable(ID, 'bad-key', 'OPENAI_API_KEY was rejected');
-	if (code === 'insufficient_quota') return new RouteUnavailable(ID, 'needs-top-up', 'the OpenAI balance needs a top-up');
-	if (status === 429 || code === 'rate_limit_exceeded') return new RouteUnavailable(ID, 'rate-limited', 'rate limited');
-	return new RouteUnavailable(ID, 'vendor-error', `${status || 'error'}: ${error?.message ?? 'no message'}`);
+	if (status === 401 || code === 'invalid_api_key') return new RouteUnavailable(id, 'bad-key', 'OPENAI_API_KEY was rejected');
+	if (code === 'insufficient_quota') return new RouteUnavailable(id, 'needs-top-up', 'the OpenAI balance needs a top-up');
+	if (status === 429 || code === 'rate_limit_exceeded') return new RouteUnavailable(id, 'rate-limited', 'rate limited');
+	return new RouteUnavailable(id, 'vendor-error', `${status || 'error'}: ${error?.message ?? 'no message'}`);
 }

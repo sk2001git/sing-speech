@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { EMBEDDING, loadCorpus, loadJourneys, loadPlaces, loadRaw } from '../../lib/kb/corpus';
 import type { RawDoc } from '../../lib/kb/raw-store';
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
-import { DEFAULT_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
+import { DEFAULT_TRANSLATORS, LUNA_6_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
 import { runtimeEnv } from '../../lib/env';
 import { OpenAi } from '../../lib/providers/openai';
 import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
@@ -48,12 +48,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const chain = buildRoutes(route, env);
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
+		// The Cloudflare route writes and translates with gpt-6-luna alone (plan-suara-0016).
+		const lean = route === 'cloudflare';
 		const writer = writerFor({
 			openaiKey: env.OPENAI_API_KEY,
-			...(env.SUARA_WRITE_MODEL ? { model: env.SUARA_WRITE_MODEL } : {}),
+			...(lean ? { model: 'gpt-6-luna' } : env.SUARA_WRITE_MODEL ? { model: env.SUARA_WRITE_MODEL } : {}),
 			// Kept as a stand-in only: if the OpenAI account cannot be paid, a card is still
 			// better than an error. Nothing routes here by choice any more.
-			...(env.OPENROUTER_API_KEY ? { openrouterKey: env.OPENROUTER_API_KEY } : {}),
+			...(env.OPENROUTER_API_KEY && !lean ? { openrouterKey: env.OPENROUTER_API_KEY } : {}),
 		});
 
 		const deps: SearchDeps = {
@@ -61,12 +63,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			places: loadPlaces(),
 			journeys: loadJourneys(),
 			embed: async (text) => (await openai.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
-			hear: async (audio, mime) => {
-				const heard = await hearVia(chain, audio, mime);
+			hear: async (audio, mime, hint) => {
+				const heard = await hearVia(chain, audio, mime, hint);
 				served = heard.route;
 				return heard.hearing;
 			},
-			translate: (entry, language) => translateEntry(entry, language, DEFAULT_TRANSLATORS, openai.chatJson, new Date().toISOString()),
+			translate: (entry, language) => translateEntry(entry, language, lean ? LUNA_6_TRANSLATORS : DEFAULT_TRANSLATORS, openai.chatJson, new Date().toISOString()),
 			cache: translations,
 			// Tier B: a question no entry answers is looked up in the crawl and written into a
 			// card by the route's own model, then kept. Grounding decides whether it is shown.

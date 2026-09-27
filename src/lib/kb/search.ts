@@ -107,7 +107,8 @@ export interface SearchDeps {
 	places?: PlaceIndex;
 	/** Embed one query text, already carrying its instruction. */
 	embed: (text: string) => Promise<number[]>;
-	hear?: (audio: ArrayBuffer, mimeType?: string) => Promise<Hearing>;
+	/** `hint`: the language the reader chose, en or zh; none on Automatic (vault obs-0054). */
+	hear?: (audio: ArrayBuffer, mimeType?: string, hint?: 'en' | 'zh') => Promise<Hearing>;
 	translate?: (original: Entry, language: EntryLanguage) => Promise<Entry | null>;
 	cache: TranslationCache;
 	thresholds: Thresholds;
@@ -146,7 +147,7 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 		if (!deps.hear) throw new Error('no hearing provider configured');
 		let h: Hearing;
 		try {
-			h = await deps.hear(decodeBase64(req.audioBase64), req.mimeType);
+			h = await deps.hear(decodeBase64(req.audioBase64), req.mimeType, req.reply === 'en' ? 'en' : req.reply === 'zh-Hans' ? 'zh' : undefined);
 		} catch (err) {
 			if (err instanceof NothingHeard) return { kind: 'silence', language: req.reply === 'zh-Hans' ? 'zh-Hans' : 'en' };
 			throw err;

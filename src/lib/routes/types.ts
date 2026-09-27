@@ -10,8 +10,12 @@ export interface HearingRoute {
 	vendor: string;
 	/** Shown small at the foot of the page. */
 	label: string;
-	hear(audio: ArrayBuffer, mimeType?: string): Promise<Hearing>;
+	/** `hint`: the reader's language, when they chose one; Whisper guesses badly on short Singlish. */
+	hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint): Promise<Hearing>;
 }
+
+/** The language a recording is in, as far as the reader's setting says (vault obs-0054). */
+export type HearingHint = 'en' | 'zh';
 
 /**
  * Why a route could not serve. The first three are for the operator — add a key, fix a

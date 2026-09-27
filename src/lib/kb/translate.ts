@@ -35,6 +35,9 @@ export const DEFAULT_TRANSLATORS: Translator[] = [
 	{ model: 'gpt-5.4-mini', structured: true },
 ];
 
+/** The Cloudflare route: gpt-6-luna only (owner, 2026-09-27: "use openai luna 6 only"; plan-suara-0016). */
+export const LUNA_6_TRANSLATORS: Translator[] = [{ model: 'gpt-6-luna', structured: true }];
+
 export type ChatJson = (req: {
 	model: string;
 	system: string;

@@ -166,3 +166,13 @@ describe('runSearch, guides kept from the web', () => {
 		expect(none).toMatchObject({ kind: 'nothing', query: 'can I use my medisave to pay my father hospital bill' });
 	});
 });
+
+describe('runSearch, hearing with the language the reader chose', () => {
+	it('passes en or zh from the setting, and nothing on Automatic', async () => {
+		const hear = vi.fn(async () => hearing);
+		await runSearch({ ...speech, reply: 'en' }, deps({ hear }));
+		await runSearch({ ...speech, reply: 'zh-Hans' }, deps({ hear }));
+		await runSearch({ ...speech, reply: 'auto' as const }, deps({ hear }));
+		expect(hear.mock.calls.map((c) => (c as unknown[])[2])).toEqual(['en', 'zh', undefined]);
+	});
+});

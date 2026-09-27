@@ -256,7 +256,7 @@ function answerText(output: unknown[]): string {
 }
 
 /** Web answers run on the OpenAI routes only; Gemini has no web search here. */
-export const webAllowed = (route: string): boolean => route === 'openai-ws' || route === 'openai-live';
+export const webAllowed = (route: string): boolean => route === 'openai-ws' || route === 'openai-live' || route === 'cloudflare';
 
 export interface SearchWebOptions {
 	apiKey: string;
