@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { webAllowed } from '../kb/web-answer';
 import { buildRoutes, resolveRoute, ROUTE_LABEL } from './index';
 import { LOCAL_ASR_URL, localRoute } from './local';
-import { voiceFor } from './voice';
+import { LocalVoice, voiceFor } from './voice';
 
-/** The local route (vault plan-suara-0018): Polyglot-Lion on this PC hears, gpt-6-luna reads. */
+/** The local route (vault plan-suara-0018): Qwen3-ASR on this PC hears, gpt-6-luna reads. */
 const hearing = { greeting: false, meaning_en: 'How do I apply for CHAS?', short: 'Apply for CHAS', sentence: 'You want to apply for CHAS.', language: 'en', confidence: 0.9 };
 
 function fakes(local: { ok: boolean; text?: string }) {
@@ -24,7 +24,7 @@ const audio = new Uint8Array([1, 2, 3]).buffer;
 describe('the local route', () => {
 	it('is a route a page can be opened on', () => {
 		expect(resolveRoute('local', undefined)).toBe('local');
-		expect(ROUTE_LABEL.local).toBe('Local · Polyglot-Lion on this PC + gpt-6-luna');
+		expect(ROUTE_LABEL.local).toBe('Local · Qwen3-ASR and Qwen3-TTS on this PC + gpt-6-luna');
 	});
 
 	it('fails over to the Cloudflare route, then OpenAI, then Gemini', () => {
@@ -45,8 +45,51 @@ describe('the local route', () => {
 		expect(err).toMatchObject({ route: 'local', reason: 'vendor-error' });
 	});
 
-	it('answers from the web and speaks, as the Cloudflare route does', () => {
+	it('answers from the web, as the Cloudflare route does', () => {
 		expect(webAllowed('local')).toBe(true);
-		expect(voiceFor('local', { OPENAI_API_KEY: 'k' })).toBeDefined();
+	});
+});
+
+/** The local voice (vault obs-0071): Qwen3-TTS on this PC speaks, not OpenAI. */
+describe('the local voice', () => {
+	function speakFakes(res: () => Response) {
+		const calls: { url: string; body: any }[] = [];
+		const fetchImpl = (async (url: string, init: RequestInit) => {
+			calls.push({ url, body: JSON.parse(String(init.body)) });
+			return res();
+		}) as unknown as typeof fetch;
+		return { fetchImpl, calls };
+	}
+
+	it('is the voice of the local route, serena unless set otherwise', () => {
+		const voice = voiceFor('local', {});
+		expect(voice).toBeInstanceOf(LocalVoice);
+		expect(voice).toMatchObject({ voice: 'serena', model: 'qwen3-tts-1.7b' });
+		expect(voiceFor('local', { SUARA_LOCAL_VOICE: 'uncle_fu' })).toMatchObject({ voice: 'uncle_fu' });
+	});
+
+	it('sends the line, its language and the voice to the server on this PC, and returns mp3', async () => {
+		const { fetchImpl, calls } = speakFakes(() => new Response(new Uint8Array([7, 8]), { headers: { 'content-type': 'audio/mpeg' } }));
+		const audio = await new LocalVoice({ fetchImpl }).speak('您问：怎样查看我的公积金余额？', 'zh-Hans');
+		expect(calls[0]!.url).toBe(`${LOCAL_ASR_URL}/speak`);
+		expect(calls[0]!.body).toEqual({ text: '您问：怎样查看我的公积金余额？', language: 'zh-Hans', voice: 'serena' });
+		expect(audio.contentType).toBe('audio/mpeg');
+		expect(new Uint8Array(await new Response(audio.body).arrayBuffer())).toEqual(new Uint8Array([7, 8]));
+	});
+
+	it('steps aside, so the phone speaks, when the server is off or has no voice', async () => {
+		const off = speakFakes(() => {
+			throw new TypeError('fetch failed');
+		});
+		await expect(new LocalVoice({ fetchImpl: off.fetchImpl }).speak('x', 'en')).rejects.toMatchObject({ route: 'local', reason: 'vendor-error' });
+		const mute = speakFakes(() => new Response('{"error":"the voice is off"}', { status: 503 }));
+		await expect(new LocalVoice({ fetchImpl: mute.fetchImpl }).speak('x', 'en')).rejects.toMatchObject({ route: 'local', reason: 'vendor-error' });
+	});
+
+	it('keys its lines apart from the OpenAI voice, so a card never plays OpenAI’s recording', () => {
+		const local = voiceFor('local', {})!;
+		const openai = voiceFor('openai-ws', { OPENAI_API_KEY: 'k' })!;
+		expect(`${local.model}|${local.voice}`).not.toBe(`${openai.model}|${openai.voice}`);
+		expect(openai).toMatchObject({ voice: 'marin', model: 'gpt-4o-mini-tts' });
 	});
 });

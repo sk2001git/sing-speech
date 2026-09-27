@@ -14,7 +14,6 @@ const SpeakRequest = z.object({
 	route: z.string().max(40).optional(),
 });
 
-const MODEL = 'gpt-4o-mini-tts';
 const built = audio as Record<string, { text: string; voice: string; model: string }>;
 
 /**
@@ -36,8 +35,8 @@ export const POST: APIRoute = async ({ request }) => {
 	const voice = voiceFor(resolveRoute(req.route, env.SUARA_ROUTE), env);
 	if (!voice) return new Response(null, { status: 204 });
 
-	const voiceName = env.SUARA_OPENAI_VOICE ?? 'marin';
-	const key = await speechKey(req.text, voiceName, MODEL);
+	// Keyed by the route's own voice and model: the local route never plays OpenAI's recording.
+	const key = await speechKey(req.text, voice.voice, voice.model);
 
 	// Built at `npx tsx scripts/kb/build-audio.ts`: served as a static file, no vendor call.
 	if (built[key]) return Response.redirect(new URL(audioPath(key), request.url).toString(), 302);

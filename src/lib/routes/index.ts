@@ -29,7 +29,7 @@ export const ROUTE_LABEL: Record<RouteId, string> = {
 	gemini: 'Google · gemini-3.5-flash-lite',
 	'openai-live': 'OpenAI · gpt-live-1, continuous',
 	cloudflare: 'Cloudflare · whisper-large-v3-turbo + gpt-6-luna',
-	local: 'Local · Polyglot-Lion on this PC + gpt-6-luna',
+	local: 'Local · Qwen3-ASR and Qwen3-TTS on this PC + gpt-6-luna',
 };
 
 const isRoute = (v: unknown): v is RouteId => typeof v === 'string' && (ROUTE_IDS as readonly string[]).includes(v);

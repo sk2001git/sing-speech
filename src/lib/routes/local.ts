@@ -3,7 +3,7 @@ import { OpenAiWsRoute } from './openai-ws';
 import { RouteUnavailable, type HearingRoute } from './types';
 
 /**
- * The local route (vault plan-suara-0018): the recording goes to Polyglot-Lion running on this PC
+ * The local route (vault plan-suara-0018): the recording goes to Qwen3-ASR running on this PC
  * (suara/local-asr/server.py), then gpt-6-luna reads the transcript, as on the Cloudflare route.
  *
  * Only reachable where the server is: the dev server on this PC, or a Worker with a tunnel to it.
@@ -25,7 +25,7 @@ export function localRoute(opts: LocalRouteOptions): HearingRoute {
 	return new OpenAiWsRoute({
 		id: ID,
 		vendor: 'local',
-		label: `Local · Polyglot-Lion on this PC + ${CLOUDFLARE_TEXT_MODEL}`,
+		label: `Local · Qwen3-ASR and Qwen3-TTS on this PC + ${CLOUDFLARE_TEXT_MODEL}`,
 		apiKey: opts.apiKey,
 		model: CLOUDFLARE_TEXT_MODEL,
 		socket: false,

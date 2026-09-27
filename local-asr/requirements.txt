@@ -1,7 +1,18 @@
-# The local hearing server and its one-time setup (setup.py). The torch pieces are only for
-# converting the model; the running server needs imageio-ffmpeg alone.
+# The local server and its one-time setup (setup.py). torch, transformers, onnx, onnxscript,
+# accelerate and einops only convert the models; the running server needs the rest.
 torch
 transformers==4.57.6
+accelerate==1.12.0
+onnx
+onnxscript
+einops
 huggingface_hub
 sentencepiece
 imageio-ffmpeg
+# Qwen3-TTS at inference (vault obs-0071)
+onnxruntime-directml==1.24.4
+numpy
+scipy
+soundfile
+sounddevice
+tokenizers>=0.22
