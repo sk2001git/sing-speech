@@ -39,6 +39,24 @@ describe('createSilenceGate', () => {
 		expect(run(gate, quiet(31), 7000).verdict).toBe('done');
 	});
 
+	it('ends on time when the room keeps making small sounds after the person stops', () => {
+		// Owner, 2026-09-28: "it doesn't really sense when it ends". Replayed with a click every
+		// 1.5 s after the talking, 23 of 38 turns never ended: each lone click restarted the 3 s.
+		const gate = createSilenceGate();
+		// A click 1.3 s after the last word, then every 1.5 s.
+		const clicks = Array.from({ length: 80 }, (_, i) => (i % 15 === 12 ? 0.3 : 0.004));
+		const r = run(gate, [...quiet(5), ...speech(20), ...clicks]);
+		expect(r.verdict).toBe('done');
+		// Speech ends at 2400 ms; the clicks do not move the end.
+		expect(r.at).toBe(5400);
+	});
+
+	it('still hears soft speech whose loud moments come alone but close together', () => {
+		const gate = createSilenceGate();
+		const blips = Array.from({ length: 60 }, (_, i) => (i % 5 === 0 ? 0.03 : 0.004));
+		expect(run(gate, [...quiet(5), ...speech(5), ...blips]).verdict).toBe('listen');
+	});
+
 	it('waits longer before anyone has spoken, then reports nothing heard', () => {
 		const gate = createSilenceGate();
 		const r = run(gate, quiet(120));

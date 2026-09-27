@@ -19,6 +19,8 @@ export interface GateOptions {
 	maxMs?: number;
 	/** Loud readings in a row, at ~100 ms apart, that count as speech rather than a bump. */
 	speechFrames?: number;
+	/** Once talking, a lone loud reading counts only if another came within this long. */
+	clusterMs?: number;
 }
 
 export function createSilenceGate(opts: GateOptions = {}) {
@@ -26,12 +28,14 @@ export function createSilenceGate(opts: GateOptions = {}) {
 	const startMs = opts.startMs ?? 8000;
 	const maxMs = opts.maxMs ?? 60_000;
 	const speechFrames = opts.speechFrames ?? 3;
+	const clusterMs = opts.clusterMs ?? 1000;
 
 	let started: number | null = null;
 	let floor = Number.POSITIVE_INFINITY;
 	let loudRun = 0;
 	let heardSpeech = false;
 	let lastLoud = 0;
+	let previousLoud = Number.NEGATIVE_INFINITY;
 
 	return {
 		push(level: number, now: number): Verdict {
@@ -41,11 +45,14 @@ export function createSilenceGate(opts: GateOptions = {}) {
 			if (level >= threshold) {
 				loudRun += 1;
 				// Three loud readings in a row tell speech from a click, so they are what starts a
-				// turn. Once someone is talking, any loud reading means they still are: soft speech
-				// rises above the line one or two readings at a time, and demanding three in a row
-				// cut people off mid-sentence (owner, 2026-09-27; 17 of 38 soft turns in a replay).
+				// turn. Once someone is talking, loud readings close together mean they still are:
+				// soft speech rises above the line one or two readings at a time, and demanding three
+				// in a row cut people off mid-sentence (owner, 2026-09-27; 17 of 38 soft turns in a
+				// replay). A lone reading with none in the second before is the room, not the person:
+				// counting it, a click every 1.5 s kept 23 of 38 turns open for ever (owner, 2026-09-28).
 				if (loudRun >= speechFrames) heardSpeech = true;
-				if (heardSpeech) lastLoud = now;
+				if (heardSpeech && (loudRun >= 2 || now - previousLoud <= clusterMs)) lastLoud = now;
+				previousLoud = now;
 			} else {
 				loudRun = 0;
 				// Background noise is learned only from quiet moments, so speech never
