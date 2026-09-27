@@ -3,6 +3,7 @@ import { NothingHeard, type Hearing } from '../kb/hearing';
 export { NothingHeard } from '../kb/hearing';
 import { GeminiHearer } from '../providers/gemini-hear';
 import { cloudflareRoute, type AiLike } from './cloudflare';
+import { localRoute } from './local';
 import { OpenAiWsRoute } from './openai-ws';
 import { RouteUnavailable, type HearingHint, type HearingRoute, type UnavailableReason } from './types';
 
@@ -13,14 +14,14 @@ export { RouteUnavailable, type HearingHint, type HearingRoute, type Unavailable
  * Every route a page can be opened on. `openai-live` is a continuous voice session held by
  * the browser (see `live-client.ts`), so it never joins the recording chain below.
  */
-export const ROUTE_IDS = ['openai-ws', 'gemini', 'openai-live', 'cloudflare'] as const;
+export const ROUTE_IDS = ['openai-ws', 'gemini', 'openai-live', 'cloudflare', 'local'] as const;
 export type RouteId = (typeof ROUTE_IDS)[number];
 export const DEFAULT_ROUTE: RouteId = 'openai-ws';
 
 /** Routes that hear a finished recording. Registry order is failover order (dec-suara-0016). */
 export const HEARING_ROUTE_IDS = ['openai-ws', 'gemini'] as const;
 /** The economical route (plan-suara-0016) fails over to the others; it is nobody's failover. */
-type ChainRouteId = HearingRouteId | 'cloudflare';
+type ChainRouteId = HearingRouteId | 'cloudflare' | 'local';
 export type HearingRouteId = (typeof HEARING_ROUTE_IDS)[number];
 
 export const ROUTE_LABEL: Record<RouteId, string> = {
@@ -28,6 +29,7 @@ export const ROUTE_LABEL: Record<RouteId, string> = {
 	gemini: 'Google · gemini-3.5-flash-lite',
 	'openai-live': 'OpenAI · gpt-live-1, continuous',
 	cloudflare: 'Cloudflare · whisper-large-v3-turbo + gpt-6-luna',
+	local: 'Local · Polyglot-Lion on this PC + gpt-6-luna',
 };
 
 const isRoute = (v: unknown): v is RouteId => typeof v === 'string' && (ROUTE_IDS as readonly string[]).includes(v);
@@ -46,12 +48,16 @@ export interface RouteEnv {
 	SUARA_MODEL?: string;
 	/** Workers AI, for the Cloudflare route. */
 	AI?: AiLike;
+	/** Where suara/local-asr/server.py listens, for the local route. */
+	SUARA_LOCAL_ASR_URL?: string;
 	/** Trial setting: how hard gpt-6-luna reads a transcript on the Cloudflare route. */
 	SUARA_CF_REASONING?: string;
 }
 
 function build(id: ChainRouteId, env: RouteEnv): HearingRoute {
 	switch (id) {
+		case 'local':
+			return localRoute({ apiKey: env.OPENAI_API_KEY, ...(env.SUARA_LOCAL_ASR_URL ? { url: env.SUARA_LOCAL_ASR_URL } : {}) });
 		case 'cloudflare':
 			return cloudflareRoute({ ai: env.AI, apiKey: env.OPENAI_API_KEY, ...(env.SUARA_CF_REASONING === 'low' ? { reasoning: 'low' as const } : {}) });
 		case 'openai-ws':
@@ -76,6 +82,7 @@ function build(id: ChainRouteId, env: RouteEnv): HearingRoute {
  * back to a recording starts at the OpenAI recording route.
  */
 export function buildRoutes(primary: RouteId, env: RouteEnv): HearingRoute[] {
+	if (primary === 'local') return (['local', 'cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env));
 	if (primary === 'cloudflare') return (['cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env));
 	const first: HearingRouteId = primary === 'openai-live' ? 'openai-ws' : primary;
 	return [first, ...HEARING_ROUTE_IDS.filter((id) => id !== first)].map((id) => build(id, env));

@@ -29,6 +29,8 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_GUIDES?: import('./kb/web-guides').KvLike;
 	/** Vectorize: the Cloudflare route's card index, bge-m3 at 1024 (plan-suara-0016). */
 	SUARA_CARDS?: import('./kb/cf-search').VectorizeLike;
+	/** Where suara/local-asr/server.py listens, for the local route. Default http://127.0.0.1:8791. */
+	SUARA_LOCAL_ASR_URL?: string;
 	/** Secret. The owner's admin password; unset means nobody can sign in. */
 	SUARA_ADMIN_PASSWORD?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */

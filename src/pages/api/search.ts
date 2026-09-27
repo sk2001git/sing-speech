@@ -57,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
 		// The Cloudflare route writes and translates with gpt-6-luna alone (plan-suara-0016).
-		const lean = route === 'cloudflare';
+		const lean = route === 'cloudflare' || route === 'local';
 		const writer = writerFor({
 			openaiKey: env.OPENAI_API_KEY,
 			...(lean ? { model: 'gpt-6-luna' } : env.SUARA_WRITE_MODEL ? { model: env.SUARA_WRITE_MODEL } : {}),

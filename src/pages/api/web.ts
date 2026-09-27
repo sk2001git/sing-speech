@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
 	const route = resolveRoute(parsed.route, env.SUARA_ROUTE);
 	if (!webAllowed(route)) return json({ error: 'not on this route' }, 404);
 	// Kept under the embedding the route searches with, so the same route finds it again.
-	const cf = route === 'cloudflare' && env.AI && env.SUARA_CARDS ? cloudflareEmbed(env.AI) : null;
+	const cf = (route === 'cloudflare' || route === 'local') && env.AI && env.SUARA_CARDS ? cloudflareEmbed(env.AI) : null;
 	if (!env.OPENAI_API_KEY) return json({ error: 'web search is not set up' }, 503);
 	const apiKey = env.OPENAI_API_KEY;
 	const model = env.SUARA_WEB_MODEL;

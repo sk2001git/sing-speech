@@ -26,6 +26,14 @@ export default defineConfig({
 		optimizeDeps: {
 			include: ['zod'],
 		},
+		/*
+		 * local-asr/runtime holds a Python venv and llama.cpp's own source, web UI included:
+		 * tens of thousands of files that are not this site. Watching them slowed the dev server
+		 * past Astro's 30 s start limit.
+		 */
+		server: {
+			watch: { ignored: ['**/local-asr/**'] },
+		},
 		ssr: {
 			/*
 			 * The dev server kept dying with "The file does not exist at

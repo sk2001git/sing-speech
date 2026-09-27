@@ -59,5 +59,5 @@ export class OpenAiVoice implements RouteVoice {
 
 export function voiceFor(route: string, env: RouteEnv & { SUARA_OPENAI_VOICE?: string }): RouteVoice | undefined {
 	// The Cloudflare route speaks with OpenAI's voice until the owner picks a Workers AI one by ear.
-	return route === 'openai-ws' || route === 'cloudflare' ? new OpenAiVoice({ apiKey: env.OPENAI_API_KEY, voice: env.SUARA_OPENAI_VOICE }) : undefined;
+	return route === 'openai-ws' || route === 'cloudflare' || route === 'local' ? new OpenAiVoice({ apiKey: env.OPENAI_API_KEY, voice: env.SUARA_OPENAI_VOICE }) : undefined;
 }

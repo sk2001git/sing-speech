@@ -1,0 +1,7 @@
+# The local hearing server and its one-time setup (setup.py). The torch pieces are only for
+# converting the model; the running server needs imageio-ffmpeg alone.
+torch
+transformers==4.57.6
+huggingface_hub
+sentencepiece
+imageio-ffmpeg
