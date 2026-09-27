@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { WebAnswer } from './web-answer';
-import { keepAs, MemoryGuides } from './web-guides';
+import { GUIDE_DAYS, KvGuides, keepAs, memoryKv } from './web-guides';
 
 /**
  * Web answers kept as guides, so the next person is answered from Suara (owner, 2026-09-27:
  * "a self adjusting kb"). Official pages only go straight in; the rest wait for the owner.
+ * Kept in Workers KV, one JSON value per guide (owner: "KV with json").
  */
 const answer = (over: Partial<WebAnswer> = {}): WebAnswer => ({
 	kind: 'steps',
@@ -25,6 +26,15 @@ const answer = (over: Partial<WebAnswer> = {}): WebAnswer => ({
 });
 const DAY = 86_400_000;
 const T0 = Date.parse('2026-09-27T00:00:00Z');
+const cpf = { question: 'how can I invest my CPF', vector: [1, 0], answer: answer(), language: 'en' as const };
+const coin = { question: 'how do I buy bitcoin', vector: [0, 1], answer: answer({ official: false, title_full: 'Buy Bitcoin' }), language: 'en' as const };
+
+function setup(start = T0) {
+	let now = start;
+	const kv = memoryKv(() => now);
+	const store = (refreshMs = 60_000) => new KvGuides(kv, () => now, refreshMs);
+	return { kv, store, tick: (ms: number) => (now += ms) };
+}
 
 describe('keepAs', () => {
 	it('puts a guide from official pages straight in, and holds the rest for review', () => {
@@ -37,57 +47,77 @@ describe('keepAs', () => {
 	});
 });
 
-describe('MemoryGuides', () => {
-	it('serves a live guide to a question near the one that found it', () => {
-		const store = new MemoryGuides(() => T0);
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer(), language: 'en' });
-		const found = store.find([0.99, Math.sqrt(1 - 0.99 ** 2)], 'en', 0.86);
+describe('KvGuides', () => {
+	it('serves a live guide to a question near the one that found it', async () => {
+		const s = setup().store();
+		await s.save(cpf);
+		const found = await s.find([0.99, Math.sqrt(1 - 0.99 ** 2)], 'en', 0.86);
 		expect(found?.answer.title_full).toBe('How to invest your CPF savings');
 		expect(found?.foundAt).toBe('2026-09-27T00:00:00.000Z');
 	});
 
-	it('does not serve a guide to a question that is not near', () => {
-		const store = new MemoryGuides(() => T0);
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer(), language: 'en' });
-		expect(store.find([0.5, Math.sqrt(0.75)], 'en', 0.86)).toBeNull();
+	it('does not serve a guide to a question that is not near, or in another language', async () => {
+		const s = setup().store();
+		await s.save(cpf);
+		expect(await s.find([0.5, Math.sqrt(0.75)], 'en', 0.86)).toBeNull();
+		expect(await s.find([1, 0], 'zh-Hans', 0.86)).toBeNull();
 	});
 
-	it('never serves a guide waiting for review, but lists it', () => {
-		const store = new MemoryGuides(() => T0);
-		store.save({ question: 'how do I buy bitcoin', vector: [1, 0], answer: answer({ official: false }), language: 'en' });
-		expect(store.find([1, 0], 'en', 0.86)).toBeNull();
-		expect(store.pending().map((g) => g.question)).toEqual(['how do I buy bitcoin']);
+	it('never serves a guide waiting for review, but lists it for the owner', async () => {
+		const s = setup().store();
+		await s.save(coin);
+		expect(await s.find([0, 1], 'en', 0.86)).toBeNull();
+		expect((await s.list()).map((g) => [g.title, g.status])).toEqual([['Buy Bitcoin', 'pending']]);
 	});
 
-	it('serves a reviewed guide once approved', () => {
-		const store = new MemoryGuides(() => T0);
-		const kept = store.save({ question: 'how do I buy bitcoin', vector: [1, 0], answer: answer({ official: false }), language: 'en' });
-		expect(store.approve(kept!.id)).toBe(true);
-		expect(store.find([1, 0], 'en', 0.86)).not.toBeNull();
-		expect(store.pending()).toEqual([]);
+	it('serves a reviewed guide once approved, and forgets a discarded one', async () => {
+		const s = setup().store();
+		const kept = await s.save(coin);
+		expect(await s.approve(kept!.id)).toBe(true);
+		expect(await s.find([0, 1], 'en', 0.86)).not.toBeNull();
+		expect(await s.remove(kept!.id)).toBe(true);
+		expect(await s.find([0, 1], 'en', 0.86)).toBeNull();
+		expect(await s.list()).toEqual([]);
 	});
 
-	it('keeps each language apart', () => {
-		const store = new MemoryGuides(() => T0);
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer(), language: 'en' });
-		expect(store.find([1, 0], 'zh-Hans', 0.86)).toBeNull();
+	it('keeps guides across isolates: a fresh store over the same KV finds them', async () => {
+		const { store } = setup();
+		await store().save(cpf);
+		expect(await store().find([1, 0], 'en', 0.86)).not.toBeNull();
 	});
 
-	it('lets a guide go after 30 days, so rules and prices do not go stale', () => {
-		let now = T0;
-		const store = new MemoryGuides(() => now);
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer(), language: 'en' });
-		now = T0 + 29 * DAY;
-		expect(store.find([1, 0], 'en', 0.86)).not.toBeNull();
-		now = T0 + 31 * DAY;
-		expect(store.find([1, 0], 'en', 0.86)).toBeNull();
+	it('sees another isolate\'s new guide once its copy is refreshed', async () => {
+		const { store, tick } = setup();
+		const a = store(), b = store();
+		expect(await b.find([1, 0], 'en', 0.86)).toBeNull(); // b loads, empty
+		await a.save(cpf);
+		expect(await b.find([1, 0], 'en', 0.86)).toBeNull(); // b's copy is still fresh
+		tick(61_000);
+		expect(await b.find([1, 0], 'en', 0.86)).not.toBeNull();
 	});
 
-	it('replaces an older guide for the same question rather than piling up', () => {
-		const store = new MemoryGuides(() => T0);
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer({ title_full: 'Old' }), language: 'en' });
-		store.save({ question: 'how can I invest my CPF', vector: [1, 0], answer: answer({ title_full: 'New' }), language: 'en' });
-		expect(store.find([1, 0], 'en', 0.86)?.answer.title_full).toBe('New');
-		expect(store.size()).toBe(1);
+	it(`lets a guide go after ${GUIDE_DAYS} days, so rules and prices do not go stale`, async () => {
+		const { store, tick } = setup();
+		await store().save(cpf);
+		tick(29 * DAY);
+		expect(await store().find([1, 0], 'en', 0.86)).not.toBeNull();
+		tick(2 * DAY);
+		expect(await store().find([1, 0], 'en', 0.86)).toBeNull();
+	});
+
+	it('replaces an older guide for the same question rather than piling up', async () => {
+		const s = setup().store();
+		await s.save({ ...cpf, answer: answer({ title_full: 'Old' }) });
+		await s.save({ ...cpf, answer: answer({ title_full: 'New' }) });
+		expect((await s.find([1, 0], 'en', 0.86))?.answer.title_full).toBe('New');
+		expect(await s.list()).toHaveLength(1);
+	});
+
+	it('sends new wording from other sites back to review: the approval was for the old one', async () => {
+		const s = setup().store();
+		const kept = await s.save(coin);
+		await s.approve(kept!.id);
+		await s.save({ ...coin, answer: answer({ official: false, title_full: 'Buy Bitcoin, reworded' }) });
+		expect(await s.get(kept!.id)).toMatchObject({ status: 'pending', answer: { title_full: 'Buy Bitcoin, reworded' } });
 	});
 });

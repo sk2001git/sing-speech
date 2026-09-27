@@ -6,7 +6,7 @@ import { runtimeEnv } from '../../lib/env';
 import { resolveRoute } from '../../lib/routes';
 import { EMBEDDING } from '../../lib/kb/corpus';
 import { queryText } from '../../lib/kb/embed';
-import { guides, keepAs } from '../../lib/kb/web-guides';
+import { guidesFor, keepAs } from '../../lib/kb/web-guides';
 import { OpenAi } from '../../lib/providers/openai';
 
 export const prerender = false;
@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
 				if (parsed.query && keepAs(answer)) {
 					try {
 						const [vector] = await new OpenAi({ apiKey }).embed(EMBEDDING.model, [queryText(parsed.query)], EMBEDDING.dimensions);
-						if (vector) guides.save({ question: parsed.query, vector, answer, language: parsed.language });
+						if (vector) await guidesFor(env.SUARA_GUIDES).save({ question: parsed.query, vector, answer, language: parsed.language });
 					} catch (err) {
 						console.error('web guide not kept:', err instanceof Error ? err.message.slice(0, 120) : err);
 					}

@@ -25,6 +25,10 @@
 	"observability": {
 		"enabled": true
 	},
+	// Guides kept from web answers (vault dec-suara-0024), one JSON value per guide, lapsing
+	// after 30 days. Created 2026-09-27 with `npx wrangler kv namespace create SUARA_GUIDES`.
+	// The dev server uses a local copy of it, never this one.
+	"kv_namespaces": [{ "binding": "SUARA_GUIDES", "id": "b6379e6d90654c0aa3d7fa04ec7013d7" }],
 	// OPENAI_API_KEY is also a secret, needed only when SUARA_MODE is "openai":
 	//   npx wrangler secret put OPENAI_API_KEY
 	"vars": {

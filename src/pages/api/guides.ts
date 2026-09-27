@@ -1,42 +1,46 @@
 import type { APIRoute } from 'astro';
 import { z } from 'zod';
+import { readSession } from '../../lib/admin-auth';
 import { runtimeEnv } from '../../lib/env';
-import { guides } from '../../lib/kb/web-guides';
+import { guidesFor } from '../../lib/kb/web-guides';
 
 export const prerender = false;
 
 /**
- * Web guides waiting for the owner: guides that cite any page outside .gov.sg are kept but not
- * served until approved (vault dec-suara-0024). GET lists them; POST {"id"} approves one.
+ * The owner's review of kept web guides (vault dec-suara-0024). Signed-in only.
  *
- * Dev and demo builds only: there is no sign-in yet, and approving puts a guide in front of
- * everyone. The review screen will be designed and shown before it is built.
+ *   GET                              every kept guide, newest first; ?id= for one in full
+ *   POST {"id","action":"approve"}   a guide waiting for review goes live
+ *   POST {"id","action":"discard"}   a guide is forgotten
  */
-const Approve = z.object({ id: z.string().min(1).max(400) });
+const Act = z.object({ id: z.string().min(1).max(100), action: z.enum(['approve', 'discard']) });
 
-async function allowed(): Promise<boolean> {
+export const GET: APIRoute = async ({ request, url }) => {
 	const env = await runtimeEnv();
-	return import.meta.env.DEV || env.SUARA_DEMO === 'true';
-}
-
-export const GET: APIRoute = async () => {
-	if (!(await allowed())) return json({ error: 'not here' }, 404);
-	return json({
-		pending: guides.pending().map((g) => ({ id: g.id, question: g.question, title: g.answer.title_full, sites: [...new Set(g.answer.sources.map((s) => s.site))], foundAt: g.foundAt })),
-	});
+	if (!(await readSession(request.headers.get('cookie'), env.SUARA_ADMIN_PASSWORD))) return json({ error: 'sign in first' }, 401);
+	const store = guidesFor(env.SUARA_GUIDES);
+	const id = url.searchParams.get('id');
+	if (id) {
+		const g = await store.get(id);
+		return g ? json({ guide: g }) : json({ error: 'no such guide' }, 404);
+	}
+	return json({ guides: await store.list() });
 };
 
 export const POST: APIRoute = async ({ request }) => {
-	if (!(await allowed())) return json({ error: 'not here' }, 404);
-	let id: string;
+	const env = await runtimeEnv();
+	if (!(await readSession(request.headers.get('cookie'), env.SUARA_ADMIN_PASSWORD))) return json({ error: 'sign in first' }, 401);
+	let act: z.infer<typeof Act>;
 	try {
-		id = Approve.parse(await request.json()).id;
+		act = Act.parse(await request.json());
 	} catch {
 		return json({ error: 'bad request' }, 400);
 	}
-	return guides.approve(id) ? json({ approved: id }) : json({ error: 'no such guide waiting' }, 404);
+	const store = guidesFor(env.SUARA_GUIDES);
+	const done = act.action === 'approve' ? await store.approve(act.id) : await store.remove(act.id);
+	return done ? json({ ok: true, ...act }) : json({ error: act.action === 'approve' ? 'no such guide waiting' : 'no such guide' }, 404);
 };
 
 function json(body: unknown, status = 200): Response {
-	return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+	return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 }

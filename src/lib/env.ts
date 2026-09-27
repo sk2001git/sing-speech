@@ -25,6 +25,10 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_WRITE_MODEL?: string;
 	/** Model that searches the web when nothing in Suara answers. Default gpt-6-luna. */
 	SUARA_WEB_MODEL?: string;
+	/** Workers KV: guides kept from web answers (vault dec-suara-0024). Absent means kept in memory. */
+	SUARA_GUIDES?: import('./kb/web-guides').KvLike;
+	/** Secret. The owner's admin password; unset means nobody can sign in. */
+	SUARA_ADMIN_PASSWORD?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */
 	SUARA_MODE?: string;
 	/** `true` shows unverified sample flows outside the dev server. */

@@ -214,7 +214,7 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	const unanswered = offset === 0 && (ranked.fit === 'none' || answered === false);
 
 	// A guide the web found for an earlier question like this one: instant, and no search.
-	const kept = unanswered ? (deps.guides?.find(vector, language, deps.thresholds.strong) ?? null) : null;
+	const kept = unanswered && deps.guides ? await deps.guides.find(vector, language, deps.thresholds.strong) : null;
 	const closestOf = async () => {
 		const r = await results(cards, { heard, fit: 'weak', nextOffset: ranked.nextOffset, query, language }, deps);
 		return r.kind === 'results' ? r : null;
