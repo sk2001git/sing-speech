@@ -16,6 +16,16 @@ export default defineConfig({
 	integrations: [react()],
 	vite: {
 		plugins: [tailwindcss()],
+		/*
+		 * The same trap on the browser side (2026-09-27): zod reaches the page only through
+		 * JourneyView -> lib/kb/journey.ts, so Vite discovered it after the first page load and
+		 * re-bundled it under a new hash that was never written. The import 404'd, React never
+		 * hydrated, and every button on the page was inert until .vite/deps was deleted by hand.
+		 * Bundled at startup instead, it is never discovered late.
+		 */
+		optimizeDeps: {
+			include: ['zod'],
+		},
 		ssr: {
 			/*
 			 * The dev server kept dying with "The file does not exist at
