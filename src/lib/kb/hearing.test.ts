@@ -34,8 +34,12 @@ describe('Hearing', () => {
 });
 
 describe('replyLanguage', () => {
-	it('keeps English when English is chosen, even if Chinese was heard', () => {
-		expect(replyLanguage('en', 'zh')).toBe('en');
+	it('follows Chinese when Chinese is heard, even with English chosen', () => {
+		// Owner, 2026-09-28: "use chinese as the display its okay if internally we change to
+		// english for matching". Reverses dec-suara-0007's per-turn rule for Chinese.
+		expect(replyLanguage('en', 'zh')).toBe('zh-Hans');
+		expect(replyLanguage('en', 'en')).toBe('en');
+		expect(replyLanguage('en', 'other')).toBe('en');
 	});
 
 	it('uses Chinese when Chinese is chosen', () => {

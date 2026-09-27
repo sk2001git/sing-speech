@@ -7,7 +7,7 @@ import { documentTexts, nearest, type StoredVector } from './embed';
 import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
 import { needsTranslation } from './grounding';
-import { NothingHeard, replyLanguage, type Hearing } from './hearing';
+import { NothingHeard, replyLanguage, typedLanguage, type Hearing } from './hearing';
 import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/places';
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 import { searchRaw, type RawIndex } from './raw-store';
@@ -194,12 +194,12 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	} else if (req.thread && deps.resolve) {
 		// A typed correction, perhaps a volunteer's: the thread makes the question meant now.
 		const corrected = await deps.resolve([...req.thread, { role: 'user', kind: 'text', said: req.query.trim(), correction: true }]);
-		language = req.reply === 'zh-Hans' ? 'zh-Hans' : req.reply === 'auto' ? replyLanguage('auto', corrected.language) : 'en';
+		language = replyLanguage(req.reply, corrected.language);
 		heard = { short: corrected.short, sentence: corrected.sentence, said: req.query.trim(), corrected: true };
 		query = corrected.meaning_en;
 		offset = req.offset;
 	} else {
-		language = req.reply === 'zh-Hans' ? 'zh-Hans' : 'en';
+		language = replyLanguage(req.reply, typedLanguage(req.query));
 		heard = req.heard ?? { short: req.query.slice(0, 40), sentence: req.query };
 		query = req.query;
 		offset = req.offset;

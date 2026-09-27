@@ -39,9 +39,19 @@ export type Hearing = z.infer<typeof Hearing>;
 /** The language setting: chosen once, visible on every screen (vault dec-suara-0007). */
 export type ReplySetting = 'en' | 'zh-Hans' | 'auto';
 
+/**
+ * 中文 chosen: Chinese. Otherwise the reply follows what was said: a Mandarin question gets
+ * Chinese screens and voice, while the search still matches in English (owner, 2026-09-28:
+ * "use chinese as the display its okay if internally we change to english for matching").
+ */
 export function replyLanguage(setting: ReplySetting, heard: Hearing['language']): EntryLanguage {
-	if (setting === 'auto') return heard === 'zh' ? 'zh-Hans' : 'en';
-	return setting;
+	if (setting === 'zh-Hans') return 'zh-Hans';
+	return heard === 'zh' ? 'zh-Hans' : 'en';
+}
+
+/** The language of typed words: Chinese characters make it Chinese. */
+export function typedLanguage(text: string): Hearing['language'] {
+	return /\p{Script=Han}/u.test(text) ? 'zh' : 'en';
 }
 
 export const HEARING_SCHEMA = {

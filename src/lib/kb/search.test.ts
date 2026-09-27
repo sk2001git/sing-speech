@@ -183,10 +183,23 @@ describe('runSearch, Chinese on need', () => {
 		expect(r.kind === 'results' && r.result.language).toBe('zh-Hans');
 	});
 
-	it('stays English when English is chosen, even if Chinese is heard', async () => {
+	it('shows Chinese when Chinese is heard, even with English chosen, and matches in English', async () => {
+		// Owner, 2026-09-28: "use chinese as the display its okay if internally we change to english for matching".
+		const embed = vi.fn(async (_text: string) => [1, 0]);
+		const r = await runSearch(speech('en'), deps({ hear: async () => heard({ language: 'zh' }), translate: chinese, embed }));
+		expect(r.kind === 'results' && r.result.language).toBe('zh-Hans');
+		expect(embed.mock.calls[0]![0]).toBe(heard().meaning_en);
+	});
+
+	it('stays English when English is chosen and English is heard', async () => {
 		const translate = vi.fn(chinese);
-		const r = await runSearch(speech('en'), deps({ hear: async () => heard({ language: 'zh' }), translate }));
+		const r = await runSearch(speech('en'), deps({ hear: async () => heard({ language: 'en' }), translate }));
 		expect(r.kind === 'results' && r.result.language).toBe('en');
 		expect(translate).not.toHaveBeenCalled();
+	});
+
+	it('shows Chinese for a question typed in Chinese', async () => {
+		const r = await runSearch({ kind: 'text', query: '怎样申请CHAS卡？', offset: 0, reply: 'en' }, deps({ translate: chinese }));
+		expect(r.kind === 'results' && r.result.language).toBe('zh-Hans');
 	});
 });
