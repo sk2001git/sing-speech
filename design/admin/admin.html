@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara admin · web guides (mockup)</title>
+<!--
+  Mockup for the owner's review of kept web guides (vault dec-suara-0024). Clickable, no backend:
+  the guides are real answers from this week's runs (../web-steps/fixtures.json).
+
+  References (design-references skill):
+  - Linear Triage (linear.app/docs/triage): Accept / Decline on the item itself, one key each,
+    and the queue moves on. Taken: A approve, D discard, the next guide opens by itself.
+  - Stripe Radar reviews (docs.stripe.com/radar/reviews): a list to scan, a detail view with the
+    evidence, Previous / Next with J / K, and reviewed items leave the queue. Taken: the detail
+    shows the guide exactly as a person would see it, with every source openable.
+  - shadcn/ui dashboard data table (apps/v4 examples/dashboard): tabs with count badges, outline
+    status badges, a drawer from the right on desktop and from the bottom on a phone. Taken.
+  Not taken: Linear's dark density and number keys; Stripe's risk-score columns (there is no
+  score here); shadcn's drag handles and editable cells (guides are not ordered or edited).
+-->
+<style>
+@font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+:root {
+  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7; --surface: #fff;
+  --light: #007aff; --ready: #1f7a36; --wait-ink: #7a5200; --wait-bg: #fff6de; --wait-line: #f0d9a0;
+  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
+  --r: 16px; --pad: clamp(16px, 4vw, 32px);
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--ink); background: var(--subtle); -webkit-font-smoothing: antialiased; font-size: 16px; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+svg { display: block; flex: none; }
+a { color: inherit; }
+
+/* Bar */
+.bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: max(12px, env(safe-area-inset-top)) var(--pad) 12px; background: rgb(255 255 255 / 92%); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.mk { width: 36px; height: 36px; border-radius: 10px; background: #000; display: grid; place-items: center; color: #fff; }
+.nm { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; }
+.nm small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+.grow { flex: 1; }
+.btn { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 0; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; transition: transform .12s ease-out; white-space: nowrap; }
+.btn:active { transform: scale(.98); }
+.btn.quiet { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.btn.big { min-height: 52px; font-size: 1.05rem; }
+.btn.danger { background: #fff; color: #b3261e; box-shadow: inset 0 0 0 1.5px #f2c2be; }
+.link { background: none; border: 0; padding: 0 4px; min-height: 44px; font-weight: 600; color: var(--muted); }
+@media (max-width: 560px) { .btn .tx { display: none; } .btn.icon-sm { width: 44px; padding: 0; } }
+
+.page { max-width: 1040px; margin: 0 auto; padding: 24px var(--pad) 48px; display: grid; gap: 20px; }
+h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2rem); letter-spacing: -.03em; line-height: 1.15; }
+.lead { color: var(--muted); line-height: 1.45; }
+
+/* Tabs with counts (shadcn) */
+.tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); width: max-content; }
+.tab { min-height: 40px; padding: 0 16px; border-radius: 999px; border: 0; background: none; font-weight: 600; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+.tab[aria-selected="true"] { background: #000; color: #fff; }
+.count { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--subtle); color: var(--ink); font-size: .8rem; display: grid; place-items: center; }
+.tab[aria-selected="true"] .count { background: rgb(255 255 255 / 22%); color: #fff; }
+
+/* The list */
+.list { background: #fff; border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; width: 100%; text-align: left; padding: 16px 20px; border: 0; background: none; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.row:hover { background: var(--subtle); }
+.row[aria-current="true"] { background: #eef5ff; }
+.row .t { font-weight: 700; font-size: 1.05rem; line-height: 1.3; min-width: 0; }
+.row .q { color: var(--muted); font-size: .95rem; grid-column: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .m { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .9rem; color: var(--muted); }
+.row .side { grid-row: 1 / span 2; grid-column: 2; display: grid; justify-items: end; gap: 6px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; font-size: .85rem; font-weight: 700; border: 1px solid var(--line); white-space: nowrap; }
+.badge.wait { background: var(--wait-bg); border-color: var(--wait-line); color: var(--wait-ink); }
+.badge.live { color: var(--ready); }
+.badge.gov { color: var(--ink); background: var(--subtle); border-color: transparent; }
+.age { font-size: .85rem; color: var(--muted); }
+.empty { padding: 48px 24px; text-align: center; display: grid; gap: 8px; justify-items: center; color: var(--muted); }
+.empty b { color: var(--ink); font-size: 1.1rem; }
+
+/* Drawer: right on desktop, bottom on a phone (shadcn) */
+.scrim { position: fixed; inset: 0; z-index: 20; background: rgb(0 0 0 / 28%); animation: fade .2s ease-out both; }
+.drawer { position: fixed; z-index: 21; background: #fff; display: flex; flex-direction: column; box-shadow: 0 8px 40px rgb(0 0 0 / 25%);
+  left: 0; right: 0; bottom: 0; max-height: 92svh; border-radius: 24px 24px 0 0; animation: up .3s cubic-bezier(.2, .8, .2, 1) both; }
+@media (min-width: 900px) { .drawer { left: auto; top: 0; bottom: 0; width: 600px; max-height: none; border-radius: 0; animation-name: in; } }
+.dh { display: flex; align-items: center; gap: 8px; padding: 14px 16px 10px 20px; border-bottom: 1px solid var(--line); }
+.dh .pos { font-size: .9rem; color: var(--muted); }
+.ib { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--subtle); display: grid; place-items: center; }
+.ib:disabled { opacity: .35; cursor: default; }
+.db { overflow-y: auto; padding: 20px; display: grid; gap: 14px; }
+.df { display: flex; gap: 10px; padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: #fff; }
+.df .btn { flex: 1; }
+.keys { font-size: .8rem; color: var(--muted); text-align: center; padding: 0 20px 10px; }
+@media (pointer: coarse) { .keys { display: none; } }
+kbd { font: inherit; font-size: .75rem; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line-strong); background: var(--subtle); }
+@keyframes up { from { transform: translateY(100%); } }
+@keyframes in { from { transform: translateX(100%); } }
+@keyframes fade { from { opacity: 0; } }
+
+/* Evidence: the guide as a person sees it, then where it came from */
+.why { display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--wait-bg); border: 1px solid var(--wait-line); color: var(--wait-ink); font-size: .95rem; line-height: 1.4; }
+.why.ok { background: #eaf6ec; border-color: #bfe3c6; color: #1f5a2c; }
+.asked { font-size: .95rem; color: var(--muted); }
+.asked b { color: var(--ink); }
+.phone { border-radius: 20px; box-shadow: inset 0 0 0 1px var(--line); padding: 18px; display: grid; gap: 12px; }
+.webb { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: var(--subtle); font-size: .85rem; font-weight: 700; width: max-content; }
+.gt { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.gs { color: var(--muted); line-height: 1.45; }
+.pre { font-size: .95rem; padding: 10px 12px; border-radius: 12px; background: var(--subtle); line-height: 1.4; }
+.steps { display: grid; gap: 8px; padding: 0; list-style: none; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 2px 10px; counter-increment: s; }
+.steps li::before { content: counter(s); grid-row: 1 / span 2; width: 28px; height: 28px; border-radius: 50%; background: var(--subtle); display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
+.steps b { font-size: 1rem; }
+.steps span { font-size: .95rem; color: var(--muted); line-height: 1.45; }
+.legal { display: grid; gap: 6px; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--ink); font-size: .95rem; line-height: 1.45; }
+.legal .lh { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; gap: 6px; align-items: center; }
+.srcs { border-radius: 14px; border: 1px solid var(--line); overflow: hidden; }
+.srcs .h { padding: 10px 14px; font-size: .85rem; font-weight: 700; color: var(--muted); background: var(--subtle); display: flex; justify-content: space-between; }
+.src { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); text-decoration: none; }
+.src div { display: grid; gap: 2px; min-width: 0; }
+.src b { font-size: .95rem; }
+.src span { font-size: .85rem; color: var(--muted); overflow-wrap: anywhere; }
+.fine { font-size: .85rem; color: var(--muted); padding: 10px 12px; border-radius: 12px 12px 12px 4px; background: var(--subtle); line-height: 1.4; }
+
+/* Add a guide */
+.add { display: flex; gap: 8px; padding: 6px 6px 6px 18px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.add:focus-within { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.add input { flex: 1; min-width: 0; border: 0; outline: none; background: none; font-size: 1rem; }
+.stages { display: grid; gap: 10px; }
+.stage { display: flex; gap: 10px; align-items: center; color: var(--muted); }
+.stage i { width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--line-strong); display: grid; place-items: center; }
+.stage[data-s="done"] { color: var(--ink); }
+.stage[data-s="done"] i { background: var(--light); box-shadow: none; }
+.stage[data-s="done"] i::after { content: ''; width: 8px; height: 5px; border: solid #fff; border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); }
+.stage[data-s="now"] { color: var(--ink); font-weight: 600; }
+.stage[data-s="now"] i { box-shadow: inset 0 0 0 2px var(--ink); }
+.stage[data-s="now"] i::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .4; } }
+
+/* Sign in */
+.signin { min-height: 100svh; display: grid; place-items: center; padding: 24px; }
+.card { width: 100%; max-width: 400px; background: #fff; border-radius: 24px; box-shadow: var(--shadow); padding: 32px 28px; display: grid; gap: 16px; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: .95rem; }
+.field input { min-height: 52px; padding: 0 16px; border-radius: 12px; border: 1.5px solid var(--line-strong); outline: none; font-size: 1rem; }
+.field input:focus { border-color: var(--ink); }
+.err { color: #b3261e; font-size: .95rem; }
+
+/* Toast with Undo, instead of an "are you sure" */
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; display: flex; gap: 16px; align-items: center; padding: 12px 12px 12px 20px; border-radius: 999px; background: #1d1d1f; color: #fff; box-shadow: 0 8px 24px rgb(0 0 0 / 25%); animation: rise .25s ease-out both; white-space: nowrap; }
+.toast button { background: none; border: 0; color: #7ab8ff; font-weight: 700; min-height: 36px; padding: 0 10px; }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 12px); } }
+.demo { font-size: .85rem; color: var(--muted); text-align: center; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const I = {
+  wave: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/></svg>',
+  globe: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  scale: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
+  plus: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  up: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>',
+  down: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  tick: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  ext: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+  info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>',
+  out: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 16l-4-4 4-4M6 12h10"/></svg>',
+};
+const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const gov = (u) => { try { return new URL(u).hostname.endsWith('.gov.sg'); } catch { return false; } };
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
+const ago = (days) => (days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days} days ago`);
+const left = (days) => `Lapses in ${30 - days} days`;
+
+let S = { signedIn: new URLSearchParams(location.search).get('v') !== 'signin', tab: 'waiting', open: null, adding: null, toast: null, err: '' };
+let G = [];
+
+async function load() {
+  const fx = await (await fetch('../web-steps/fixtures.json')).json();
+  const age = { coinbase: 0, ibkr: 1, tripcom: 3, scooter: 2, cpf: 6 };
+  G = Object.entries(fx).filter(([k, f]) => f.guide.kind !== 'none' && k !== 'singpass').map(([k, f]) => {
+    const official = f.guide.sources.length > 0 && f.guide.sources.every((s) => gov(s.url));
+    return { id: k, question: f.question, g: f.guide, official, status: official ? 'live' : 'waiting', days: age[k] ?? 4 };
+  });
+  const v = new URLSearchParams(location.search).get('v');
+  if (v === 'detail') S.open = 'coinbase';
+  if (v === 'live') S.tab = 'live';
+  if (v === 'empty') G.forEach((x) => (x.status = 'live'));
+  paint();
+}
+
+// Newest first, as the store lists them.
+const shown = () => G.filter((x) => x.status === S.tab).sort((a, b) => a.days - b.days);
+
+function signin() {
+  return `<main class="signin"><form class="card" data-f="signin">
+    <span class="mk">${I.wave}</span>
+    <h1>Suara admin</h1>
+    <p class="lead">Review the guides Suara found on the web before anyone else sees them.</p>
+    <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" autofocus></div>
+    ${S.err ? `<p class="err">${esc(S.err)}</p>` : ''}
+    <button class="btn big" type="submit">Sign in</button>
+    <p class="demo">Mockup: any password but "wrong" signs in.</p>
+  </form></main>`;
+}
+
+function row(x) {
+  const sites = [...new Set(x.g.sources.map((s) => s.site))];
+  const n = x.g.kind === 'steps' ? plural(x.g.steps.length, 'step', 'steps') : 'An answer';
+  return `<button class="row" data-open="${x.id}" ${S.open === x.id ? 'aria-current="true"' : ''}>
+    <span class="t">${esc(x.g.title_full)}</span>
+    <span class="side">${x.status === 'waiting' ? `<span class="badge wait">Waiting</span>` : `<span class="badge live">${I.tick}Live</span>`}<span class="age">${ago(x.days)}</span></span>
+    <span class="q">&ldquo;${esc(x.question)}&rdquo;</span>
+    <span class="m"><span>${n}${x.g.legal.applies ? ' · legal note' : ''}</span><span>${esc(sites.join(', '))}</span>${x.official ? `<span class="badge gov">Government pages only</span>` : ''}</span>
+  </button>`;
+}
+
+function list() {
+  const w = G.filter((x) => x.status === 'waiting').length, l = G.filter((x) => x.status === 'live').length;
+  const rows = shown();
+  const empty = S.tab === 'waiting'
+    ? `<div class="empty"><b>Nothing waiting</b><span>A guide that cites any site other than government pages lands here before anyone sees it.</span></div>`
+    : `<div class="empty"><b>No live guides yet</b><span>Guides from government pages go live by themselves. Approved ones join them.</span></div>`;
+  return `<header class="bar"><span class="mk">${I.wave}</span><span class="nm">Suara <small>Web guides</small></span><span class="grow"></span>
+      <button class="btn quiet icon-sm" data-act="out" aria-label="Sign out">${I.out}<span class="tx">Sign out</span></button></header>
+    <main class="page">
+      <div><h1>Web guides</h1><p class="lead">Answers Suara found on the web and kept, so the next person is answered at once. Each lapses after 30 days.</p></div>
+      <form class="add" data-f="add"><input name="q" placeholder="Add a guide: type a question" aria-label="Add a guide: type a question" autocomplete="off"><button class="btn" type="submit">${I.plus}<span class="tx">Find it</span></button></form>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="waiting" aria-selected="${S.tab === 'waiting'}">Waiting <span class="count">${w}</span></button>
+        <button class="tab" role="tab" data-tab="live" aria-selected="${S.tab === 'live'}">Live <span class="count">${l}</span></button>
+      </div>
+      <div class="list">${rows.length ? rows.map(row).join('') : empty}</div>
+      <p class="demo">Clickable mockup with this week's real web answers. Nothing is saved.</p>
+    </main>`;
+}
+
+function evidence(x) {
+  const g = x.g;
+  const others = [...new Set(g.sources.filter((s) => !gov(s.url)).map((s) => s.site))];
+  const why = x.status === 'waiting'
+    ? `<div class="why">${I.info}<span>Waiting because it cites ${others.length ? esc(others.join(', ')) : 'a site'}, not only government pages. Check the pages below say what the guide says.</span></div>`
+    : `<div class="why ok">${I.tick}<span>${x.official ? 'Live by itself: every page it cites is a government page.' : 'Live: you approved it.'} ${left(x.days)}.</span></div>`;
+  const body = g.kind === 'steps'
+    ? `<p class="gs">${esc(g.summary)}</p>${g.prerequisites ? `<p class="pre"><b>Before you start:</b> ${esc(g.prerequisites)}</p>` : ''}
+       <ol class="steps">${g.steps.map((s) => `<li><b>${esc(s.name)}</b><span>${esc(s.text)}</span></li>`).join('')}</ol>`
+    : `<p class="gs" style="color:var(--ink)">${esc(g.answer)}</p>`;
+  return `${why}
+    <p class="asked">Asked: <b>&ldquo;${esc(x.question)}&rdquo;</b> · ${ago(x.days)}</p>
+    <section class="phone"><span class="webb">${I.globe}From the web</span><p class="gt">${esc(g.title_full)}</p>${body}
+      ${g.legal.applies ? `<div class="legal"><span class="lh">${I.scale}Legal</span>${esc(g.legal.text)}</div>` : ''}
+      <p class="fine">${x.official ? 'From official government pages, found by web search.' : 'Found on the web, not an official answer.'} ${esc(g.disclaimer)}</p>
+    </section>
+    <div class="srcs"><div class="h"><span>WHERE THIS IS FROM</span><span>${plural(g.sources.length, 'page', 'pages')}</span></div>
+      ${g.sources.map((s) => `<a class="src" href="${esc(s.url)}" target="_blank" rel="noopener"><div><b>${esc(s.site)}${gov(s.url) ? ' · gov' : ''}</b><span>${esc(s.title)}</span></div>${I.ext}</a>`).join('')}</div>`;
+}
+
+function drawer() {
+  const rows = shown(), i = rows.findIndex((x) => x.id === S.open), x = rows[i];
+  if (!x) return '';
+  return `<div class="scrim" data-act="close"></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-label="${esc(x.g.title_full)}">
+      <div class="dh"><span class="pos">${i + 1} of ${rows.length} ${S.tab === 'waiting' ? 'waiting' : 'live'}</span><span class="grow"></span>
+        <button class="ib" data-act="prev" aria-label="Previous" ${i === 0 ? 'disabled' : ''}>${I.up}</button>
+        <button class="ib" data-act="next" aria-label="Next" ${i === rows.length - 1 ? 'disabled' : ''}>${I.down}</button>
+        <button class="ib" data-act="close" aria-label="Close">${I.x}</button></div>
+      <div class="db">${evidence(x)}</div>
+      <div class="df">${x.status === 'waiting'
+        ? `<button class="btn danger big" data-act="discard">Discard</button><button class="btn big" data-act="approve">${I.tick}Approve</button>`
+        : `<button class="btn danger big" data-act="discard">Take down</button>`}</div>
+      <p class="keys"><kbd>A</kbd> approve · <kbd>D</kbd> discard · <kbd>J</kbd> <kbd>K</kbd> next and previous · <kbd>Esc</kbd> close</p>
+    </aside>`;
+}
+
+function adding() {
+  const st = S.adding.stage, mark = (i) => (i < st ? 'done' : i === st ? 'now' : 'todo');
+  return `<div class="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Finding a guide">
+    <div class="dh"><span class="pos">Adding a guide</span><span class="grow"></span></div>
+    <div class="db"><p class="asked">Question: <b>&ldquo;${esc(S.adding.q)}&rdquo;</b></p><h1 style="font-size:1.4rem">Searching the web</h1>
+      <div class="stages"><div class="stage" data-s="${mark(0)}"><i></i>Finding pages</div><div class="stage" data-s="${mark(1)}"><i></i>Reading 16 pages</div><div class="stage" data-s="${mark(2)}"><i></i>Writing the guide</div></div>
+      <p class="lead">It lands in Waiting for you to check, whichever pages it uses.</p></div></aside>`;
+}
+
+function paint() {
+  const app = document.getElementById('app');
+  if (!S.signedIn) { app.innerHTML = signin(); return; }
+  app.innerHTML = list() + (S.adding ? adding() : S.open ? drawer() : '') +
+    (S.toast ? `<div class="toast" role="status"><span>${esc(S.toast.text)}</span>${S.toast.undo ? '<button data-act="undo">Undo</button>' : ''}</div>` : '');
+}
+
+let toastTimer;
+function toast(text, undo) { S.toast = { text, undo }; clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = null; paint(); }, 5000); }
+
+function act(a) {
+  const rows = shown(), i = rows.findIndex((x) => x.id === S.open), x = rows[i];
+  if (a === 'close') S.open = null;
+  if (a === 'prev' && i > 0) S.open = rows[i - 1].id;
+  if (a === 'next' && i < rows.length - 1) S.open = rows[i + 1].id;
+  if ((a === 'approve' || a === 'discard') && x) {
+    const before = { id: x.id, status: x.status, at: G.indexOf(x) };
+    const nextOne = rows[i + 1] ?? rows[i - 1];
+    if (a === 'approve') { if (x.status !== 'waiting') return; x.status = 'live'; }
+    else G.splice(G.indexOf(x), 1);
+    // Like Linear's triage: the next one opens, so a queue is cleared without going back to the list.
+    S.open = nextOne ? nextOne.id : null;
+    toast(a === 'approve' ? 'Approved. It is live now.' : x.status === 'live' && before.status === 'live' ? 'Taken down.' : 'Discarded.', () => {
+      if (a === 'approve') x.status = before.status; else G.splice(before.at, 0, x);
+      S.open = x.id;
+    });
+  }
+  if (a === 'undo' && S.toast?.undo) { S.toast.undo(); S.toast = null; }
+  if (a === 'out') { S.signedIn = false; S.open = null; }
+  paint();
+}
+
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-open],[data-tab],[data-act]');
+  if (!t) return;
+  if (t.dataset.open) { S.open = t.dataset.open; paint(); }
+  else if (t.dataset.tab) { S.tab = t.dataset.tab; S.open = null; paint(); }
+  else act(t.dataset.act);
+});
+document.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.dataset.f === 'signin') {
+    const pw = f.querySelector('input').value;
+    if (!pw || pw === 'wrong') { S.err = 'That is not the password.'; paint(); return; }
+    S.signedIn = true; S.err = ''; paint();
+  }
+  if (f.dataset.f === 'add') {
+    const q = f.q.value.trim(); if (!q) return;
+    S.adding = { q, stage: 0 }; paint();
+    [900, 1800].forEach((t, n) => setTimeout(() => { S.adding.stage = n + 1; paint(); }, t));
+    setTimeout(() => {
+      const base = G.find((x) => x.id === 'ibkr') ?? G[0];
+      const id = 'added-' + Date.now();
+      G.unshift({ ...base, id, question: q, status: 'waiting', days: 0 });
+      S.adding = null; S.tab = 'waiting'; S.open = id; paint();
+    }, 2800);
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (!S.open || e.target.closest('input')) return;
+  const k = e.key.toLowerCase();
+  if (k === 'a') act('approve'); else if (k === 'd') act('discard'); else if (k === 'j') act('next'); else if (k === 'k') act('prev'); else if (k === 'escape') act('close');
+});
+load();
+</script>
+</body>
+</html>
