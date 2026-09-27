@@ -28,6 +28,17 @@ describe('createSilenceGate', () => {
 		expect(run(gate, [...quiet(5), ...speech(10), ...quiet(25), ...speech(10), ...quiet(5)]).verdict).toBe('listen');
 	});
 
+	it('keeps listening to soft speech, whose loud moments come one or two at a time', () => {
+		// Owner, 2026-09-27: "premature closing of the speech... I was still talking and it closed."
+		// Replayed 12 dB softer, 17 of 38 turns were cut off: in the last 3 s before each cut there
+		// were 6-9 loud readings, but never three in a row, so the talking stopped counting.
+		const gate = createSilenceGate();
+		const soft = Array.from({ length: 60 }, (_, i) => (i % 3 === 0 ? 0.03 : i % 3 === 1 ? 0.025 : 0.012));
+		expect(run(gate, [...quiet(5), ...speech(5), ...soft]).verdict).toBe('listen');
+		// It still ends once they really stop.
+		expect(run(gate, quiet(31), 7000).verdict).toBe('done');
+	});
+
 	it('waits longer before anyone has spoken, then reports nothing heard', () => {
 		const gate = createSilenceGate();
 		const r = run(gate, quiet(120));

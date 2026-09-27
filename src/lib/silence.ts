@@ -40,10 +40,12 @@ export function createSilenceGate(opts: GateOptions = {}) {
 
 			if (level >= threshold) {
 				loudRun += 1;
-				if (loudRun >= speechFrames) {
-					heardSpeech = true;
-					lastLoud = now;
-				}
+				// Three loud readings in a row tell speech from a click, so they are what starts a
+				// turn. Once someone is talking, any loud reading means they still are: soft speech
+				// rises above the line one or two readings at a time, and demanding three in a row
+				// cut people off mid-sentence (owner, 2026-09-27; 17 of 38 soft turns in a replay).
+				if (loudRun >= speechFrames) heardSpeech = true;
+				if (heardSpeech) lastLoud = now;
 			} else {
 				loudRun = 0;
 				// Background noise is learned only from quiet moments, so speech never
