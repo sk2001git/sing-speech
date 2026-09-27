@@ -10,6 +10,7 @@
  *
  * Measured in the spike (obs-0049): 2-8 steps or an answer, 7-19 s, 1-3 cents a question.
  */
+import { HOSPITALS } from '../charts/ed-wait';
 import type { EntryLanguage } from './entry';
 
 export const DEFAULT_WEB_MODEL = 'gpt-6-luna';
@@ -25,6 +26,30 @@ export interface WebSource {
 	title: string;
 	site: string;
 }
+/** One figure for one place, e.g. a ward bill at one hospital. */
+export interface WebFigure {
+	label: string;
+	/** The place's English name, whatever language the answer is in: checked against known names. */
+	label_en: string;
+	detail: string;
+	/** As the page shows it: "$2,406". */
+	value: string;
+	/** The same, as a number, for ordering. */
+	number: number;
+	source_urls: string[];
+}
+/**
+ * One measure compared across places, drawn as a table rather than written as a paragraph
+ * (owner, 2026-09-28: "diagram being the first ... form a table with each hospital").
+ */
+export interface WebFigures {
+	caption: string;
+	label_heading: string;
+	value_heading: string;
+	/** Which end is better for the person; the best row is marked only when one is. */
+	better: 'lower' | 'higher' | 'neither';
+	rows: WebFigure[];
+}
 /** The model's reply, before grounding. */
 export interface RawWebAnswer {
 	kind: 'steps' | 'answer' | 'none';
@@ -39,9 +64,12 @@ export interface RawWebAnswer {
 	disclaimer: string;
 	sources: WebSource[];
 	cautions: string[];
+	figures: WebFigures;
 }
 /** What the phone shows: grounded, cleaned, and honest about what was left out. */
-export interface WebAnswer extends RawWebAnswer {
+export interface WebAnswer extends Omit<RawWebAnswer, 'figures'> {
+	/** Three or more grounded rows, best first; absent otherwise, and on guides kept before it. */
+	figures?: WebFigures;
 	/** Steps dropped because their pages were not among those the search saw. */
 	dropped: number;
 	/** Every kept page is a Singapore government site. */
@@ -68,6 +96,16 @@ Rules:
 - disclaimer: one fine-print sentence fitting this topic (e.g. not financial, legal or medical
   advice; prices and rules change). Always give one.
 - cautions: other things worth checking (fees, delays, scams). Short.
+- figures: when the answer compares ONE measure across three or more places, plans or groups
+  (a bill at each hospital, a wait at each clinic), give each as a row: label is the place
+  written out in full, never an abbreviation ("Changi General Hospital", not "CGH"); label_en is
+  its official English name, even when writing in Chinese; detail is
+  what distinguishes the row ("C ward"), or empty; value as the page shows it ("$2,406");
+  number is the same as a plain number (2406); source_urls as for steps. caption says exactly
+  what is measured, in one line. better says whether a lower or a higher figure is better for
+  the person, or neither. When there are rows, the answer gives the range and what the figures
+  mean; it does not list them again. Otherwise rows is empty and the other fields empty strings,
+  with better "neither".
 - Step name at most 40 characters, text at most 300, confirm_label at most 24 ("I have signed in").
 - Plain text only in every field: no URLs, no markdown, no citation brackets.
   URLs go only in answer_urls, source_urls and sources.`;
@@ -82,7 +120,7 @@ const urls = { type: 'array', items: str } as const;
 const SCHEMA = {
 	type: 'object',
 	additionalProperties: false,
-	required: ['kind', 'title_short', 'title_full', 'summary', 'answer', 'answer_urls', 'prerequisites', 'steps', 'legal', 'disclaimer', 'sources', 'cautions'],
+	required: ['kind', 'title_short', 'title_full', 'summary', 'answer', 'answer_urls', 'prerequisites', 'steps', 'legal', 'disclaimer', 'sources', 'cautions', 'figures'],
 	properties: {
 		kind: { type: 'string', enum: ['steps', 'answer', 'none'] },
 		title_short: { type: 'string', description: 'At most 16 characters' },
@@ -113,6 +151,27 @@ const SCHEMA = {
 			items: { type: 'object', additionalProperties: false, required: ['url', 'title', 'site'], properties: { url: str, title: str, site: str } },
 		},
 		cautions: { type: 'array', items: str },
+		figures: {
+			type: 'object',
+			additionalProperties: false,
+			required: ['caption', 'label_heading', 'value_heading', 'better', 'rows'],
+			properties: {
+				caption: str,
+				label_heading: { type: 'string', description: 'e.g. "Hospital"' },
+				value_heading: { type: 'string', description: 'e.g. "Bill"' },
+				better: { type: 'string', enum: ['lower', 'higher', 'neither'] },
+				rows: {
+					type: 'array',
+					maxItems: 12,
+					items: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['label', 'label_en', 'detail', 'value', 'number', 'source_urls'],
+						properties: { label: str, label_en: { type: 'string', description: 'The official English name, always' }, detail: str, value: str, number: { type: 'number' }, source_urls: urls },
+					},
+				},
+			},
+		},
 	},
 } as const;
 
@@ -177,6 +236,16 @@ const isGov = (u: string) => {
 	}
 };
 
+/**
+ * A public hospital's Chinese name from Suara's checked list, not the model's: live, it wrote
+ * Ng Teng Fong General Hospital (黄廷方综合医院) as 恩颂纪念医院. Other places keep the model's name.
+ */
+function placeName(r: WebFigure): string {
+	const label = cleanText(r.label);
+	if (!/\p{Script=Han}/u.test(label)) return label;
+	return Object.values(HOSPITALS).find((h) => h.match.test(r.label_en ?? ''))?.zh ?? label;
+}
+
 /** Keep only what the search saw; clean the words; say what was left out. */
 export function groundAnswer(raw: RawWebAnswer, seen: Set<string>): WebAnswer {
 	const pages = new Set([...seen].map(page));
@@ -187,7 +256,22 @@ export function groundAnswer(raw: RawWebAnswer, seen: Set<string>): WebAnswer {
 	const kind: WebAnswer['kind'] = raw.kind === 'steps' ? (steps.length ? 'steps' : 'none') : raw.kind === 'answer' ? (answerOk ? 'answer' : 'none') : 'none';
 	const legal = raw.legal.applies && known(raw.legal.source_urls) ? { ...raw.legal, text: cleanText(raw.legal.text) } : { applies: false, text: '', source_urls: [] };
 	const sources = raw.sources.filter((s) => pages.has(page(s.url)));
+	// Figures, like steps, must cite pages the search saw; fewer than three is no comparison.
+	const f = raw.figures;
+	const rows = kind === 'answer' && f ? f.rows.filter((r) => known(r.source_urls) && Number.isFinite(r.number) && r.value.trim() !== '') : [];
+	rows.sort((x, y) => (f?.better === 'higher' ? y.number - x.number : x.number - y.number));
+	const figures: WebFigures | undefined =
+		f && rows.length >= 3
+			? {
+					caption: cleanText(f.caption),
+					label_heading: cleanText(f.label_heading),
+					value_heading: cleanText(f.value_heading),
+					better: f.better,
+					rows: rows.map((r) => ({ ...r, label: placeName(r), detail: cleanText(r.detail), value: cleanText(r.value) })),
+				}
+			: undefined;
 	return {
+		...(figures ? { figures } : {}),
 		kind,
 		title_short: cleanText(raw.title_short),
 		title_full: cleanText(raw.title_full),

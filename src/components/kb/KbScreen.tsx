@@ -940,6 +940,36 @@ function sourceFor(url: string, sources: WebSource[]): WebSource {
 
 const sitesOf = (a: WebAnswer) => [...new Set(a.sources.map((s) => s.site))].join(', ');
 
+/**
+ * One measure across places, as a table before the words (owner, 2026-09-28: "diagram being
+ * the first"; layout A of design/web-tables). Rows arrive best first; the best is marked only
+ * when lower or higher is plainly better.
+ */
+export function FiguresTable({ figures: f }: { figures: NonNullable<WebAnswer['figures']> }) {
+	return (
+		<table className="k-fig">
+			{f.caption && <caption>{f.caption}</caption>}
+			<thead>
+				<tr>
+					<th scope="col">{f.label_heading}</th>
+					<th scope="col">{f.value_heading}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{f.rows.map((r, i) => (
+					<tr key={`${r.label}|${r.detail}`} {...(i === 0 && f.better !== 'neither' ? { className: 'k-fig-best' } : {})}>
+						<td>
+							<b>{r.label}</b>
+							{r.detail && <small>{r.detail}</small>}
+						</td>
+						<td className="k-fig-num">{r.value}</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+	);
+}
+
 function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> }) {
 	const { heard, answer: a, language } = p.state.result;
 	const steps = a.kind === 'steps';
@@ -955,6 +985,7 @@ function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> })
 					{p.w.fromWeb}
 				</span>
 				<p className="k-web-title">{a.title_full}</p>
+				{!steps && a.figures && <FiguresTable figures={a.figures} />}
 				{steps ? <p className="k-card-sum">{a.summary}</p> : <p className="k-web-answer">{a.answer}</p>}
 				{steps && a.prerequisites && (
 					<p className="k-pre">

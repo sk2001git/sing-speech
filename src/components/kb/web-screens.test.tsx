@@ -96,6 +96,44 @@ describe('Searching the web', () => {
 	});
 });
 
+describe('Figures from the web, as a table (design/web-tables, layout A)', () => {
+	const MOH = 'https://www.moh.gov.sg/bills';
+	const bills = (better: 'lower' | 'neither' = 'lower') =>
+		guide({
+			kind: 'answer',
+			title_full: 'Pulmonary oedema: hospital bill estimates',
+			answer: 'A subsidised ward bill is usually $2,400 to $4,300.',
+			answer_urls: [MOH],
+			steps: [],
+			legal: { applies: false, text: '', source_urls: [] },
+			sources: [{ url: MOH, title: 'Bill amounts', site: 'Ministry of Health' }],
+			figures: {
+				caption: 'Typical bill after subsidy, before MediSave',
+				label_heading: 'Hospital',
+				value_heading: 'Bill',
+				better,
+				rows: [
+					{ label: 'Changi General Hospital', label_en: 'Changi General Hospital', detail: 'C ward', value: '$2,406', number: 2406, source_urls: [MOH] },
+					{ label: 'Ng Teng Fong General Hospital', label_en: 'Ng Teng Fong General Hospital', detail: 'C ward', value: '$2,911', number: 2911, source_urls: [MOH] },
+					{ label: 'Singapore General Hospital', label_en: 'Singapore General Hospital', detail: 'B2 ward', value: '$4,320', number: 4320, source_urls: [MOH] },
+				],
+			},
+		});
+
+	it('draws one row per place before the words, the best in blue', () => {
+		const html = render(web(bills()));
+		expect(html).toMatch(/<table class="k-fig"><caption>Typical bill after subsidy, before MediSave<\/caption>/);
+		expect(html.match(/<tr[ >]/g)).toHaveLength(4);
+		expect(html).toMatch(/<tr class="k-fig-best"><td><b>Changi General Hospital<\/b><small>C ward<\/small><\/td><td class="k-fig-num">\$2,406<\/td><\/tr>/);
+		expect(html.indexOf('k-fig')).toBeLessThan(html.indexOf('k-web-answer'));
+	});
+
+	it('marks no row when neither end is better, and draws no table without figures', () => {
+		expect(render(web(bills('neither')))).not.toMatch(/k-fig-best/);
+		expect(render(web(scooter()))).not.toMatch(/k-fig/);
+	});
+});
+
 describe('A guide from the web', () => {
 	it('says it is from the web and leads with the title, summary and what they need first', () => {
 		const html = render(web());

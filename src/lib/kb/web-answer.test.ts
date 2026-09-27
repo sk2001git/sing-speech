@@ -24,6 +24,7 @@ const raw = (over: Partial<RawWebAnswer> = {}): RawWebAnswer => ({
 		{ url: 'https://eservices.mas.gov.sg/fid/institution', title: 'Financial Institutions Directory', site: 'MAS' },
 	],
 	cautions: ['Prices move.'],
+	figures: { caption: '', label_heading: '', value_heading: '', better: 'neither', rows: [] },
 	...over,
 });
 const SEEN = new Set(['https://help.coinbase.com/en/pay', 'https://help.coinbase.com/en/buy', 'https://eservices.mas.gov.sg/fid/institution']);
@@ -66,6 +67,74 @@ describe('groundAnswer', () => {
 		const a = raw({ kind: 'answer', answer: 'No, not on footpaths.', answer_urls: ['https://www.lta.gov.sg/x'], steps: [] });
 		expect(groundAnswer(a, new Set()).kind).toBe('none');
 		expect(groundAnswer(a, new Set(['https://www.lta.gov.sg/x'])).kind).toBe('answer');
+	});
+
+	describe('figures', () => {
+		// The owner's example, 2026-09-28: MOH bill estimates for five hospitals, written as a paragraph.
+		const MOH = 'https://www.moh.gov.sg/cost-financing/fee-benchmarks-and-bill-amount-information';
+		const row = (label: string, detail: string, value: string, number: number, source_urls = [MOH]) => ({ label, label_en: label, detail, value, number, source_urls });
+		const bills = (rows: ReturnType<typeof row>[]) =>
+			raw({
+				kind: 'answer',
+				answer: 'A subsidised ward bill is usually $2,400 to $4,300.',
+				answer_urls: [MOH],
+				steps: [],
+				sources: [{ url: MOH, title: 'Bill amount information', site: 'Ministry of Health' }],
+				figures: { caption: 'Typical bill after subsidy, before MediSave', label_heading: 'Hospital', value_heading: 'Bill', better: 'lower', rows },
+			});
+		const five = [
+			row('Singapore General Hospital', 'B2 ward', '$4,320', 4320),
+			row('Changi General Hospital', 'C ward', '$2,406', 2406),
+			row('Sengkang General Hospital', 'C ward', '$3,690', 3690),
+			row('Ng Teng Fong General Hospital', 'C ward', '$2,911', 2911),
+			row('Singapore General Hospital', 'C ward', '$4,208', 4208),
+		];
+
+		it('keeps a comparison of three or more places as rows, best first', () => {
+			const a = groundAnswer(bills(five), new Set([MOH]));
+			expect(a.figures?.rows.map((r) => r.value)).toEqual(['$2,406', '$2,911', '$3,690', '$4,208', '$4,320']);
+			expect(a.figures).toMatchObject({ caption: 'Typical bill after subsidy, before MediSave', better: 'lower' });
+		});
+
+		it('puts the highest first when higher is better', () => {
+			const a = groundAnswer(bills(five.map((r) => ({ ...r }))), new Set([MOH]));
+			const higher = groundAnswer({ ...bills(five), figures: { ...bills(five).figures, better: 'higher' } }, new Set([MOH]));
+			expect(higher.figures?.rows[0]!.value).toBe('$4,320');
+			expect(a.figures?.rows[0]!.value).toBe('$2,406');
+		});
+
+		it('drops a row whose page the search never saw, and the table when fewer than three remain', () => {
+			const made = [...five.slice(0, 2), row('Made-up Hospital', 'C ward', '$999', 999, ['https://example.com/x'])];
+			expect(groundAnswer(bills(made), new Set([MOH])).figures).toBeUndefined();
+			const kept = groundAnswer(bills([...five, row('Made-up Hospital', 'C ward', '$999', 999, ['https://example.com/x'])]), new Set([MOH]));
+			expect(kept.figures?.rows.map((r) => r.label)).not.toContain('Made-up Hospital');
+			expect(kept.figures?.rows).toHaveLength(5);
+		});
+
+		it('uses the checked Chinese name of a public hospital, not the model’s guess', () => {
+			// Live, 2026-09-28: the model wrote Ng Teng Fong General Hospital as 恩颂纪念医院.
+			const zh = [
+				{ ...row('樟宜综合医院', 'C级病房', '$2,406', 2406), label_en: 'Changi General Hospital' },
+				{ ...row('恩颂纪念医院', 'C级病房', '$2,911', 2911), label_en: 'Ng Teng Fong General Hospital' },
+				{ ...row('某社区医院', 'C级病房', '$3,000', 3000), label_en: 'Some Community Hospital' },
+			];
+			const a = groundAnswer(bills(zh), new Set([MOH]));
+			expect(a.figures?.rows.map((r) => r.label)).toEqual(['樟宜综合医院', '黄廷方综合医院', '某社区医院']);
+			// English labels stay as the model wrote them in full.
+			expect(groundAnswer(bills(five), new Set([MOH])).figures?.rows[0]!.label).toBe('Changi General Hospital');
+		});
+
+		it('shows no table for steps, or for an answer with no rows', () => {
+			expect(groundAnswer(raw(), SEEN).figures).toBeUndefined();
+			expect(groundAnswer(bills([]), new Set([MOH])).figures).toBeUndefined();
+		});
+
+		it('asks the model for the figures, with names written out', () => {
+			const body = webRequestBody('How much is the bill for pulmonary oedema?', 'en');
+			expect(body.text.format.schema.required).toContain('figures');
+			expect(body.input[0]!.content).toMatch(/figures/);
+			expect(body.input[0]!.content).toMatch(/written out|in full/i);
+		});
 	});
 
 	it('says official only when every kept page is a Singapore government site', () => {
