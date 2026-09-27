@@ -4,6 +4,7 @@ import LiveWaveform from './LiveWaveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
 import ChartCard from './ChartCard';
+import SaidBox from './Said';
 import JourneyView from './JourneyView';
 import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
@@ -347,9 +348,11 @@ function Body(p: BodyProps) {
 		case 'places':
 			return <Places {...p} state={s} />;
 		case 'chart':
-			return <ChartCard result={s.result} onSay={p.onSay} footer={<AskButton {...p} label={p.w.askElse} />} />;
+			return <ChartCard result={s.result} onSay={p.onSay} {...(p.onAsk ? { onAsk: p.onAsk } : {})} footer={<AskButton {...p} label={p.w.askElse} />} />;
 		case 'journey':
 			return (
+				<>
+				<Question w={p.w} heard={s.result.heard} lang={p.lang} onAsk={p.onAsk} />
 				<JourneyView
 					journey={s.result.journey}
 					done={s.done}
@@ -371,6 +374,7 @@ function Body(p: BodyProps) {
 					onDone={(id) => p.dispatch({ type: 'STAGE_DONE', id })}
 					onUndo={(id) => p.dispatch({ type: 'STAGE_UNDONE', id })}
 				/>
+				</>
 			);
 		case 'web-searching':
 			return <WebSearching {...p} state={s} />;
@@ -411,7 +415,7 @@ function Body(p: BodyProps) {
 		case 'notfound':
 			return (
 				<>
-					{s.heard.said && <Said w={p.w} said={s.heard.said} />}
+					<Question w={p.w} heard={s.heard} lang={p.lang} onAsk={p.onAsk} />
 					<HeardRow w={p.w} short={s.heard.short} />
 					<h1 className="k-h1">{s.web ? p.w.noReliable : p.w.notIn}</h1>
 					<p className="k-lead">{s.web ? p.w.noReliableLead : p.w.tryTopic}</p>
@@ -556,14 +560,9 @@ function Topics(p: BodyProps) {
 	);
 }
 
-/** Their own words, always open, so they can see Suara heard them before reading answers. */
-function Said({ w, said, label }: { w: Words; said: string; label?: string }) {
-	return (
-		<div className="k-said">
-			<span className="k-heard-label">{label ?? w.youSaid}</span>
-			<p>&ldquo;{said}&rdquo;</p>
-		</div>
-	);
+/** Their own words, always open, with a way to correct them by typing (components/kb/Said.tsx). */
+function Said({ w, said, label, lang, onAsk }: { w: Words; said: string; label?: string; lang: EntryLanguage; onAsk?: (text: string) => void }) {
+	return <SaidBox said={said} label={label ?? w.youSaid} lang={lang} {...(onAsk ? { onAsk } : {})} />;
 }
 
 function HeardRow({ w, short, sentence, onSay, lang }: { w: Words; short: string; sentence?: string; onSay?: BodyProps['onSay']; lang?: EntryLanguage }) {
@@ -602,7 +601,7 @@ function Results(p: BodyProps & { state: ResultsState }) {
 	const english = new Set(p.englishIds);
 	return (
 		<>
-			{result.heard.said && <Said w={p.w} said={result.heard.said} />}
+			<Question w={p.w} heard={result.heard} lang={p.lang} onAsk={p.onAsk} />
 			<HeardRow w={p.w} short={result.heard.short} sentence={result.heard.sentence} onSay={p.onSay} lang={result.language} />
 			{result.fit === 'weak' && (
 				<p className="k-closest">
@@ -737,7 +736,7 @@ function Places(p: BodyProps & { state: Extract<FlowState, { phase: 'places' }> 
 	});
 	return (
 		<>
-			{heard.said && <Said w={p.w} said={heard.said} />}
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
 			<h1 className="k-h1">{p.w.placesNear(p.w.placeKind[what] ?? what, titleWords(area))}</h1>
 			<p className="k-count">{p.w.placesFound(places.length)}</p>
 			<div className="k-places">
@@ -884,7 +883,7 @@ function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-s
 	const labels = [p.w.webFinding, pages > 0 ? p.w.webReading(pages) : p.w.webReadingSome, p.w.webWriting];
 	return (
 		<>
-			<Question w={p.w} heard={heard} />
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
 			<h1 className="k-h1" aria-live="polite">
 				{p.w.webSearching}
 			</h1>
@@ -907,8 +906,9 @@ function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-s
 }
 
 /** Their question in full, spoken or typed: the web answers exactly this. */
-function Question({ w, heard }: { w: Words; heard: { said?: string; sentence: string } }) {
-	return heard.said ? <Said w={w} said={heard.said} /> : <Said w={w} said={heard.sentence} label={w.youAsked} />;
+function Question({ w, heard, lang, onAsk }: { w: Words; heard: { said?: string; sentence: string }; lang: EntryLanguage; onAsk?: (text: string) => void }) {
+	const edit = onAsk ? { onAsk } : {};
+	return heard.said ? <Said w={w} said={heard.said} lang={lang} {...edit} /> : <Said w={w} said={heard.sentence} label={w.youAsked} lang={lang} {...edit} />;
 }
 
 /** A page, whatever tracking was added to its link. */
@@ -941,7 +941,7 @@ function WebView(p: BodyProps & { state: Extract<FlowState, { phase: 'web' }> })
 	return (
 		<>
 			{p.state.from && <BackRow {...p} />}
-			<Question w={p.w} heard={heard} />
+			<Question w={p.w} heard={heard} lang={p.lang} onAsk={p.onAsk} />
 			<article className="k-card k-web-card">
 				<span className="k-badge">
 					<GlobeIcon />

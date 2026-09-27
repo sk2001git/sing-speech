@@ -11,6 +11,7 @@ import { commentaryFor } from '../../lib/routes/live';
 import { blobToBase64, pickMimeType } from '../../lib/record';
 import { createSilenceGate, rms } from '../../lib/silence';
 import { chartHeadline } from './ChartCard';
+import { readBack } from '../../lib/kb/readback';
 import KbScreen from './KbScreen';
 
 const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' };
@@ -235,12 +236,12 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			if (controller.signal.aborted) return null;
 			if (!answer) throw new Error('no answer');
 			dispatch({ type: 'WEB_ANSWER', answer });
-			if (!opts.spoken) say(answer.kind === 'none' ? NOT_ON_WEB[language] : webLine(answer), language);
+			if (!opts.spoken) say(readBack(heard, language, answer.kind === 'none' ? NOT_ON_WEB[language] : webLine(answer)), language);
 			return answer.kind === 'none' ? null : answer;
 		} catch {
 			if (controller.signal.aborted) return null;
 			dispatch({ type: 'NOTHING', heard });
-			if (!opts.spoken) say(opts.fromClosest ? NO_WEB[language] : NOT_IN[language], language);
+			if (!opts.spoken) say(readBack(heard, language, opts.fromClosest ? NO_WEB[language] : NOT_IN[language]), language);
 			return null;
 		} finally {
 			if (web.current === controller) web.current = null;
@@ -362,7 +363,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 		if (reply.kind === 'journey') {
 			dispatch({ type: 'JOURNEY', result: reply });
-			tell(`${reply.journey.title.full}. ${reply.journey.summary}`, reply.language);
+			tell(readBack(reply.heard, reply.language, `${reply.journey.title.full}. ${reply.journey.summary}`), reply.language);
 			return;
 		}
 		if (reply.kind === 'places') {
@@ -370,7 +371,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			const first = reply.places[0];
 			if (first) {
 				const zh = reply.language === 'zh-Hans';
-				tell(zh ? `最近的是${first.name}。` : `The nearest one is ${first.name}.`, reply.language);
+				tell(readBack(reply.heard, reply.language, zh ? `最近的是${first.name}。` : `The nearest one is ${first.name}.`), reply.language);
 			}
 			return;
 		}
@@ -385,14 +386,14 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 				return;
 			}
 			dispatch({ type: 'NOTHING', heard: reply.heard });
-			tell(NOT_IN[reply.language], reply.language);
+			tell(readBack(reply.heard, reply.language, NOT_IN[reply.language]), reply.language);
 			return;
 		}
 		// A chart drawn from government figures: the headline says the finding, so it is read aloud.
 		if (reply.kind === 'chart') {
 			const result = { chart: reply.chart, heard: reply.heard, data: reply.data, focus: reply.focus, language: reply.language };
 			dispatch({ type: 'CHART', result });
-			tell(chartHeadline(result), reply.language);
+			tell(readBack(reply.heard, reply.language, chartHeadline(result)), reply.language);
 			return;
 		}
 		// A guide the web found for an earlier question like this one: shown at once.
@@ -403,7 +404,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			}
 			dispatch({ type: 'WEB_SEARCH', heard: reply.heard, language: reply.language });
 			dispatch({ type: 'WEB_ANSWER', answer: reply.answer, foundAt: reply.foundAt });
-			tell(webLine(reply.answer), reply.language);
+			tell(readBack(reply.heard, reply.language, webLine(reply.answer)), reply.language);
 			return;
 		}
 		setEnglishIds(reply.englishIds);
@@ -420,7 +421,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			reply.result.fit === 'weak'
 				? zh ? '最接近的答案是' : 'The closest I have is'
 				: zh ? '最符合的是' : 'Best match:';
-		tell(`${lead} ${top.title.full}. ${top.summary.text}`, top.language);
+		tell(readBack(reply.result.heard, reply.result.language, `${lead} ${top.title.full}. ${top.summary.text}`), top.language);
 	}
 
 	async function onSpeak(): Promise<void> {

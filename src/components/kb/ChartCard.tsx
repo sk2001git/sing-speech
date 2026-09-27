@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { ED_WAIT_PAGE, HOSPITALS, OPEN_DATA_LICENCE } from '../../lib/charts/ed-wait';
 import type { EntryLanguage } from '../../lib/kb/entry';
 import type { ChartResult } from '../../lib/kb/flow';
+import Said from './Said';
 
 /**
  * MOH's A&E ward-bed waiting times, drawn by Suara (vault plan-suara-0017, dec-suara-0025), as
@@ -149,7 +150,7 @@ function Trend({ r, code }: { r: ChartResult; code: string }) {
 	);
 }
 
-export default function ChartCard({ result: r, onSay, footer }: { result: ChartResult; onSay: (text: string, language: EntryLanguage) => void; footer?: ReactNode }) {
+export default function ChartCard({ result: r, onSay, onAsk, footer }: { result: ChartResult; onSay: (text: string, language: EntryLanguage) => void; onAsk?: (text: string) => void; footer?: ReactNode }) {
 	const [tapped, setTapped] = useState<string | null>(null);
 	const w = W[r.language];
 	const lang = r.language;
@@ -159,12 +160,7 @@ export default function ChartCard({ result: r, onSay, footer }: { result: ChartR
 	const headline = chartHeadline(r);
 	return (
 		<>
-			{r.heard.said && (
-				<div className="k-said">
-					<span className="k-heard-label">{lang === 'zh-Hans' ? '您说' : 'You said'}</span>
-					<p>&ldquo;{r.heard.said}&rdquo;</p>
-				</div>
-			)}
+			<Said said={r.heard.said ?? r.heard.sentence} label={r.heard.said ? (lang === 'zh-Hans' ? '您说' : 'You said') : lang === 'zh-Hans' ? '您问' : 'You asked'} lang={lang} {...(onAsk ? { onAsk } : {})} />
 			<article className="k-card k-chart">
 				<span className="k-badge">
 					<ChartIcon />
