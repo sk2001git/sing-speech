@@ -103,6 +103,13 @@ describe('KvGuides', () => {
 		expect((await store().find([1, 0], 'en', 0.86))?.foundAt).toBe('2026-09-27T00:00:00.000Z');
 	});
 
+	it('holds a guide the owner added for review, even from government pages', async () => {
+		const s = setup().store();
+		const kept = await s.save(cpf, { status: 'pending' });
+		expect(kept?.status).toBe('pending');
+		expect(await s.find([1, 0], 'en', 0.86)).toBeNull();
+	});
+
 	it('replaces an older guide for the same question rather than piling up', async () => {
 		const s = setup().store();
 		await s.save({ ...cpf, answer: answer({ title_full: 'Old' }) });

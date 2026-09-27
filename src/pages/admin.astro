@@ -1,0 +1,15 @@
+---
+import Admin from '../components/admin/Admin.tsx';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/admin.css';
+
+/**
+ * The owner's review of web guides (vault dec-suara-0024, approved mockup design/admin/admin.html).
+ * Server-rendered so it is never cached as a static file; sign-in is checked by every API it calls.
+ */
+export const prerender = false;
+---
+
+<BaseLayout title="Suara admin" noindex>
+	<Admin client:load />
+</BaseLayout>

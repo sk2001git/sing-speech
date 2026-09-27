@@ -38,6 +38,8 @@ export interface GuideListing {
 	language: EntryLanguage;
 	status: GuideStatus;
 	foundAt: string;
+	/** Every page it cites is a Singapore government page. */
+	official: boolean;
 }
 
 export interface GuideFinder {
@@ -94,9 +96,11 @@ export class KvGuides implements GuideFinder {
 	) {}
 
 	/** Keep an answer under the question that found it, after the person already has it. */
-	async save(g: { question: string; vector: number[]; answer: WebAnswer; language: EntryLanguage }): Promise<KeptGuide | null> {
-		const status = keepAs(g.answer);
-		if (!status) return null;
+	async save(g: { question: string; vector: number[]; answer: WebAnswer; language: EntryLanguage }, opts: { status?: GuideStatus } = {}): Promise<KeptGuide | null> {
+		const kept = keepAs(g.answer);
+		if (!kept) return null;
+		// The owner's own additions wait for them, whatever pages they cite (approved mockup).
+		const status = opts.status ?? kept;
 		const id = idFor(g.language, g.question);
 		const at = this.now();
 		const stored: Stored = { question: g.question, answer: g.answer, language: g.language, vector: g.vector, status, at, foundAt: new Date(at).toISOString() };
@@ -159,6 +163,7 @@ export class KvGuides implements GuideFinder {
 			language: g.language,
 			status: g.status,
 			foundAt: g.foundAt,
+			official: g.answer.official,
 		};
 		// No expiration: a guide stays until the owner takes it down.
 		await this.kv.put(PREFIX + id, JSON.stringify(g), { metadata });
