@@ -12,6 +12,7 @@ const row = (id: string, status: GuideListing['status'], foundAt = '2026-09-27T0
 	status,
 	foundAt,
 	official: false,
+	space: 'openai',
 });
 const loaded = (): AdminState =>
 	run([{ type: 'SIGNED_IN' }, { type: 'LOADED', guides: [row('a', 'pending'), row('b', 'pending'), row('c', 'pending'), row('l', 'live')] }], adminStart());

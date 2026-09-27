@@ -137,6 +137,7 @@ describe('runSearch, guides kept from the web', () => {
 		language: 'en' as const,
 		foundAt: '2026-09-20T00:00:00.000Z',
 		status: 'live' as const,
+		space: 'openai' as const,
 	};
 
 	it('answers from a kept guide when no card answers, instead of searching the web again', async () => {
@@ -174,5 +175,14 @@ describe('runSearch, hearing with the language the reader chose', () => {
 		await runSearch({ ...speech, reply: 'zh-Hans' }, deps({ hear }));
 		await runSearch({ ...speech, reply: 'auto' as const }, deps({ hear }));
 		expect(hear.mock.calls.map((c) => (c as unknown[])[2])).toEqual(['en', 'zh', undefined]);
+	});
+});
+
+describe('runSearch, on a route that searches its own index', () => {
+	it('asks that index for the nearest cards instead of the in-memory one', async () => {
+		const nearest = vi.fn(async () => [{ entryId: 'sg.cpf.e3', score: 0.95 }]);
+		const r = await runSearch(speech, deps({ nearest }));
+		expect(nearest).toHaveBeenCalledWith([1, 0]);
+		expect(r.kind === 'results' && r.result.cards.map((c) => c.id)).toEqual(['sg.cpf.e3']);
 	});
 });

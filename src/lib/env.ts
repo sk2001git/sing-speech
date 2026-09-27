@@ -27,6 +27,8 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_WEB_MODEL?: string;
 	/** Workers KV: guides kept from web answers (vault dec-suara-0024). Absent means kept in memory. */
 	SUARA_GUIDES?: import('./kb/web-guides').KvLike;
+	/** Vectorize: the Cloudflare route's card index, bge-m3 at 1024 (plan-suara-0016). */
+	SUARA_CARDS?: import('./kb/cf-search').VectorizeLike;
 	/** Secret. The owner's admin password; unset means nobody can sign in. */
 	SUARA_ADMIN_PASSWORD?: string;
 	/** `gemini` or `openai`. `?mode=` overrides it per page load. */

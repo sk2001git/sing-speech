@@ -6,6 +6,7 @@ import { runtimeEnv } from '../../lib/env';
 import { resolveRoute } from '../../lib/routes';
 import { EMBEDDING } from '../../lib/kb/corpus';
 import { queryText } from '../../lib/kb/embed';
+import { cloudflareEmbed } from '../../lib/kb/cf-search';
 import { guidesFor, keepAs } from '../../lib/kb/web-guides';
 import { OpenAi } from '../../lib/providers/openai';
 
@@ -34,7 +35,10 @@ export const POST: APIRoute = async ({ request }) => {
 		return json({ error: 'bad request' }, 400);
 	}
 	const env = await runtimeEnv();
-	if (!webAllowed(resolveRoute(parsed.route, env.SUARA_ROUTE))) return json({ error: 'not on this route' }, 404);
+	const route = resolveRoute(parsed.route, env.SUARA_ROUTE);
+	if (!webAllowed(route)) return json({ error: 'not on this route' }, 404);
+	// Kept under the embedding the route searches with, so the same route finds it again.
+	const cf = route === 'cloudflare' && env.AI && env.SUARA_CARDS ? cloudflareEmbed(env.AI) : null;
 	if (!env.OPENAI_API_KEY) return json({ error: 'web search is not set up' }, 503);
 	const apiKey = env.OPENAI_API_KEY;
 	const model = env.SUARA_WEB_MODEL;
@@ -55,8 +59,8 @@ export const POST: APIRoute = async ({ request }) => {
 				// rest held for the owner (vault dec-suara-0024).
 				if (parsed.query && keepAs(answer)) {
 					try {
-						const [vector] = await new OpenAi({ apiKey }).embed(EMBEDDING.model, [queryText(parsed.query)], EMBEDDING.dimensions);
-						if (vector) await guidesFor(env.SUARA_GUIDES).save({ question: parsed.query, vector, answer, language: parsed.language });
+						const vector = cf ? await cf(parsed.query, 'query') : (await new OpenAi({ apiKey }).embed(EMBEDDING.model, [queryText(parsed.query)], EMBEDDING.dimensions))[0];
+						if (vector) await guidesFor(env.SUARA_GUIDES, cf ? 'cloudflare' : 'openai').save({ question: parsed.query, vector, answer, language: parsed.language });
 					} catch (err) {
 						console.error('web guide not kept:', err instanceof Error ? err.message.slice(0, 120) : err);
 					}

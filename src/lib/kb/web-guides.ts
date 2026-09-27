@@ -18,6 +18,11 @@ import type { WebAnswer } from './web-answer';
  * hundreds, to be revisited in the thousands.
  */
 export type GuideStatus = 'live' | 'pending';
+/**
+ * Which embedding a guide was kept under. A question is only ever matched against guides of its
+ * own route's embedding: OpenAI's 768-d vectors and qwen3's 1024-d ones are not comparable.
+ */
+export type GuideSpace = 'openai' | 'cloudflare';
 
 export interface KeptGuide {
 	id: string;
@@ -27,6 +32,7 @@ export interface KeptGuide {
 	language: EntryLanguage;
 	foundAt: string;
 	status: GuideStatus;
+	space: GuideSpace;
 }
 
 /** A row in the review list, from key metadata alone. */
@@ -40,6 +46,7 @@ export interface GuideListing {
 	foundAt: string;
 	/** Every page it cites is a Singapore government page. */
 	official: boolean;
+	space: GuideSpace;
 }
 
 export interface GuideFinder {
@@ -63,7 +70,8 @@ export interface KvLike {
 	list(opts: { prefix: string; cursor?: string }): Promise<{ keys: { name: string; metadata?: unknown }[]; list_complete: boolean; cursor?: string }>;
 }
 
-type Stored = Omit<KeptGuide, 'id'> & { vector: number[]; at: number };
+/** `space` is absent on guides kept before there were two routes: they are OpenAI's. */
+type Stored = Omit<KeptGuide, 'id' | 'space'> & { vector: number[]; at: number; space?: GuideSpace };
 
 const cosine = (a: number[], b: number[]) => {
 	let dot = 0,
@@ -93,6 +101,7 @@ export class KvGuides implements GuideFinder {
 		private readonly kv: KvLike,
 		private readonly now: () => number = Date.now,
 		private readonly refreshMs = 60_000,
+		private readonly space: GuideSpace = 'openai',
 	) {}
 
 	/** Keep an answer under the question that found it, after the person already has it. */
@@ -101,9 +110,9 @@ export class KvGuides implements GuideFinder {
 		if (!kept) return null;
 		// The owner's own additions wait for them, whatever pages they cite (approved mockup).
 		const status = opts.status ?? kept;
-		const id = idFor(g.language, g.question);
+		const id = `${this.space === 'openai' ? '' : `${this.space}-`}${idFor(g.language, g.question)}`;
 		const at = this.now();
-		const stored: Stored = { question: g.question, answer: g.answer, language: g.language, vector: g.vector, status, at, foundAt: new Date(at).toISOString() };
+		const stored: Stored = { question: g.question, answer: g.answer, language: g.language, vector: g.vector, status, at, foundAt: new Date(at).toISOString(), space: this.space };
 		await this.write(id, stored);
 		return view(id, stored);
 	}
@@ -113,7 +122,7 @@ export class KvGuides implements GuideFinder {
 		let best: [string, Stored] | null = null;
 		let bestScore = min;
 		for (const [id, g] of all) {
-			if (g.status !== 'live' || g.language !== language) continue;
+			if (g.status !== 'live' || g.language !== language || (g.space ?? 'openai') !== this.space) continue;
 			const score = cosine(vector, g.vector);
 			if (score >= bestScore) {
 				best = [id, g];
@@ -129,7 +138,11 @@ export class KvGuides implements GuideFinder {
 		let cursor: string | undefined;
 		do {
 			const page = await this.kv.list({ prefix: PREFIX, ...(cursor ? { cursor } : {}) });
-			for (const k of page.keys) if (k.metadata) rows.push({ id: k.name.slice(PREFIX.length), ...(k.metadata as Omit<GuideListing, 'id'>) });
+			for (const k of page.keys) {
+				if (!k.metadata) continue;
+				const meta = k.metadata as Omit<GuideListing, 'id' | 'space'> & { space?: GuideSpace };
+				rows.push({ id: k.name.slice(PREFIX.length), ...meta, space: meta.space ?? 'openai' });
+			}
 			cursor = page.list_complete ? undefined : page.cursor;
 		} while (cursor);
 		return rows.sort((a, b) => b.foundAt.localeCompare(a.foundAt));
@@ -164,6 +177,7 @@ export class KvGuides implements GuideFinder {
 			status: g.status,
 			foundAt: g.foundAt,
 			official: g.answer.official,
+			space: g.space ?? 'openai',
 		};
 		// No expiration: a guide stays until the owner takes it down.
 		await this.kv.put(PREFIX + id, JSON.stringify(g), { metadata });
@@ -180,7 +194,7 @@ export class KvGuides implements GuideFinder {
 	}
 }
 
-const view = (id: string, { question, answer, language, foundAt, status }: Stored): KeptGuide => ({ id, question, answer, language, foundAt, status });
+const view = (id: string, { question, answer, language, foundAt, status, space }: Stored): KeptGuide => ({ id, question, answer, language, foundAt, status, space: space ?? 'openai' });
 
 /**
  * KV in memory, honouring expiry: for tests, and for a server with no SUARA_GUIDES binding,
@@ -218,10 +232,13 @@ export function memoryKv(now: () => number = Date.now): KvLike {
  * The store for this isolate: KV when the Worker has the SUARA_GUIDES binding, memory when it
  * does not. One per binding, so the minute-long copy is shared by every request.
  */
-let shared: { kv: KvLike; store: KvGuides } | null = null;
-export function guidesFor(kv: KvLike | undefined): KvGuides {
+const shared = new Map<GuideSpace, { kv: KvLike; store: KvGuides }>();
+export function guidesFor(kv: KvLike | undefined, space: GuideSpace = 'openai'): KvGuides {
 	const backing = kv ?? fallback;
-	if (!shared || shared.kv !== backing) shared = { kv: backing, store: new KvGuides(backing) };
-	return shared.store;
+	const held = shared.get(space);
+	if (held && held.kv === backing) return held.store;
+	const store = new KvGuides(backing, Date.now, 60_000, space);
+	shared.set(space, { kv: backing, store });
+	return store;
 }
 const fallback = memoryKv();

@@ -3,7 +3,7 @@ import { AREA_LABEL, AREAS } from './areas';
 import { compose, type Writer } from './compose';
 import type { Journey } from './journey';
 import { journeyFor } from './journey-match';
-import { documentTexts, nearest, queryText, type StoredVector } from './embed';
+import { documentTexts, nearest, type StoredVector } from './embed';
 import { TRANSLATABLE, type Entry, type EntryLanguage } from './entry';
 import type { Heard, SearchResult } from './flow';
 import { needsTranslation } from './grounding';
@@ -105,8 +105,13 @@ export interface SearchDeps {
 	journeys?: Journey[];
 	/** Open-data addresses. Absent means "where is…" questions fall through to the entries. */
 	places?: PlaceIndex;
-	/** Embed one query text, already carrying its instruction. */
-	embed: (text: string) => Promise<number[]>;
+	/** Embed a question (a query) or a card (a document); each embedder adds its own instruction. */
+	embed: (text: string, kind: 'query' | 'document') => Promise<number[]>;
+	/**
+	 * Scores for the nearest vectors, where a route keeps its own index (the Cloudflare route's
+	 * Vectorize). Absent means every vector in `corpus` is scored in memory.
+	 */
+	nearest?: (vector: number[]) => Promise<{ entryId: string; score: number }[]>;
 	/** `hint`: the language the reader chose, en or zh; none on Automatic (vault obs-0054). */
 	hear?: (audio: ArrayBuffer, mimeType?: string, hint?: 'en' | 'zh') => Promise<Hearing>;
 	translate?: (original: Entry, language: EntryLanguage) => Promise<Entry | null>;
@@ -189,13 +194,14 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 	 */
 	let vector: number[] | null = null;
 	try {
-		vector = await deps.embed(queryText(query));
+		vector = await deps.embed(query, 'query');
 	} catch (err) {
 		console.error('embedding failed, falling back to the word search:', err instanceof Error ? err.message.slice(0, 120) : err);
 	}
 	if (!vector) return (await onDemand(query, heard, language, deps)) ?? { kind: 'nothing', heard, language, query };
 
-	const ranked = rank(bestPerEntry(nearest(vector, deps.corpus.vectors)), deps.thresholds, offset);
+	const scored = deps.nearest ? await deps.nearest(vector) : nearest(vector, deps.corpus.vectors);
+	const ranked = rank(bestPerEntry(scored), deps.thresholds, offset);
 	const cards = ranked.ids.map((id) => deps.corpus.entries.get(id)).filter((e): e is Entry => e !== undefined);
 
 	/*
@@ -289,7 +295,7 @@ async function onDemand(
 	deps.corpus.entries.set(entry.id, entry);
 	try {
 		// One embedding, of the card itself: enough for the next person's query to find it.
-		deps.corpus.vectors.push({ entryId: entry.id, vector: await deps.embed(documentTexts(entry)[0]!) });
+		deps.corpus.vectors.push({ entryId: entry.id, vector: await deps.embed(documentTexts(entry)[0]!, 'document') });
 	} catch {
 		// The card still shows. It will simply be composed again for the next person.
 	}

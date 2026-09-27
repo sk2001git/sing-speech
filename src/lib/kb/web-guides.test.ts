@@ -103,6 +103,17 @@ describe('KvGuides', () => {
 		expect((await store().find([1, 0], 'en', 0.86))?.foundAt).toBe('2026-09-27T00:00:00.000Z');
 	});
 
+	it('keeps each embedding apart: a question embedded one way never matches a guide kept the other', async () => {
+		const { kv } = setup();
+		const openai = new KvGuides(kv, () => T0);
+		const cloudflare = new KvGuides(kv, () => T0, 60_000, 'cloudflare');
+		await cloudflare.save(cpf);
+		expect(await cloudflare.find([1, 0], 'en', 0.86)).not.toBeNull();
+		expect(await openai.find([1, 0], 'en', 0.86)).toBeNull();
+		// The owner reviews them all in one list.
+		expect((await openai.list()).map((g) => g.space)).toEqual(['cloudflare']);
+	});
+
 	it('holds a guide the owner added for review, even from government pages', async () => {
 		const s = setup().store();
 		const kept = await s.save(cpf, { status: 'pending' });

@@ -76,7 +76,8 @@ describe('runSearch, speech', () => {
 			kind: 'results',
 			result: { fit: 'strong', nextOffset: 6, query: 'what health help can I get', heard: { short: 'Health help' } },
 		});
-		expect(embed.mock.calls[0]![0]).toMatch(/Query:what health help can I get$/);
+		// The meaning, marked as a query: each route's embedder adds its own instruction.
+		expect(embed.mock.calls[0]).toEqual(['what health help can I get', 'query']);
 	});
 
 	it('reports silence when the route heard nothing, without searching', async () => {

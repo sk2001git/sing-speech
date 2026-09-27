@@ -16,6 +16,7 @@ const row = (id: string, status: GuideListing['status'], over: Partial<GuideList
 	status,
 	foundAt: '2026-09-27T08:00:00.000Z',
 	official: false,
+	space: 'openai',
 	...over,
 });
 const answer: WebAnswer = {
@@ -37,7 +38,7 @@ const answer: WebAnswer = {
 	dropped: 0,
 	official: false,
 };
-const kept = (id: string): KeptGuide => ({ id, question: 'How can I buy bitcoin on Coinbase?', answer, language: 'en', foundAt: '2026-09-27T08:00:00.000Z', status: 'pending' });
+const kept = (id: string): KeptGuide => ({ id, question: 'How can I buy bitcoin on Coinbase?', answer, language: 'en', foundAt: '2026-09-27T08:00:00.000Z', status: 'pending', space: 'openai' });
 
 const signedIn = (guides: GuideListing[]): AdminState => [{ type: 'SIGNED_IN' as const }, { type: 'LOADED' as const, guides }].reduce(adminNext, adminStart());
 const noop = () => {};

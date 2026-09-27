@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 import { EMBEDDING, loadCorpus, loadJourneys, loadPlaces, loadRaw } from '../../lib/kb/corpus';
+import { CF_THRESHOLDS, cloudflareEmbed, vectorizeNearest } from '../../lib/kb/cf-search';
+import { queryText, type StoredVector } from '../../lib/kb/embed';
 import type { RawDoc } from '../../lib/kb/raw-store';
 import { MemoryTranslations, runSearch, SearchRequest, type SearchDeps } from '../../lib/kb/search';
 import { DEFAULT_TRANSLATORS, LUNA_6_TRANSLATORS, translateEntry } from '../../lib/kb/translate';
@@ -30,6 +32,9 @@ const THRESHOLDS = { strong: 0.86, weak: 0.82, floor: 0.8 };
 /** Lives as long as the isolate. D1 replaces it in build step 6. */
 const translations = new MemoryTranslations();
 
+/** Cards written from the crawl in this isolate, embedded for the Cloudflare route's search. */
+const cfWritten: StoredVector[] = [];
+
 export const POST: APIRoute = async ({ request, locals }) => {
 	let raw: unknown;
 	let parsed: SearchRequest;
@@ -58,11 +63,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			...(env.OPENROUTER_API_KEY && !lean ? { openrouterKey: env.OPENROUTER_API_KEY } : {}),
 		});
 
+		// The Cloudflare route searches its own index: qwen3 on Workers AI and Vectorize
+		// (plan-suara-0016). It falls back to the OpenAI index if either binding is missing.
+		const shared = loadCorpus();
+		const vectorize = env.SUARA_CARDS;
+		const cf = lean && env.AI && vectorize ? { embed: cloudflareEmbed(env.AI), nearest: vectorizeNearest(vectorize, shared.entries.keys(), () => cfWritten) } : null;
 		const deps: SearchDeps = {
-			corpus: loadCorpus(),
+			corpus: cf ? { entries: shared.entries, vectors: cfWritten } : shared,
+			...(cf ? { nearest: cf.nearest } : {}),
 			places: loadPlaces(),
 			journeys: loadJourneys(),
-			embed: async (text) => (await openai.embed(EMBEDDING.model, [text], EMBEDDING.dimensions))[0]!,
+			embed: cf ? cf.embed : async (text, kind) => (await openai.embed(EMBEDDING.model, [kind === 'query' ? queryText(text) : text], EMBEDDING.dimensions))[0]!,
 			hear: async (audio, mime, hint) => {
 				const heard = await hearVia(chain, audio, mime, hint);
 				served = heard.route;
@@ -77,8 +88,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			...(writer ? { write: writer } : {}),
 			// Near is not answered: the six nearest are read, and the web is next if none answers.
 			// Only where there is a web to go to.
-			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), guides: guidesFor(env.SUARA_GUIDES) } : {}),
-			thresholds: THRESHOLDS,
+			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), guides: guidesFor(env.SUARA_GUIDES, cf ? 'cloudflare' : 'openai') } : {}),
+			thresholds: cf ? CF_THRESHOLDS : THRESHOLDS,
 			translateBudgetMs: 4000,
 			now: () => new Date().toISOString(),
 			...(ctx?.waitUntil ? { waitUntil: (p) => ctx.waitUntil!(p) } : {}),
