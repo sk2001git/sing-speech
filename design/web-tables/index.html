@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara · figures from the web as a table (mockup)</title>
+<!--
+  Mockup (owner, 2026-09-28): "instead of like mentioning it like words, lets use the paradigm of
+  diagram being the first, illustrating information effectively through ui. we could have form a
+  table with each hospital." The answer is the owner's own screenshot: MOH bill estimates for
+  pulmonary oedema (DRG E64A). Style follows the approved A&E chart card (design/charts/ed-wait.html):
+  same card, badge, bars, colours, type. Hospital names are written out, not CGH / SKH.
+-->
+<style>
+@font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+:root {
+  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7;
+  --light: #007aff; --bar: #3a3a3c; --bar-dim: #d1d1d6;
+  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
+  --r: 20px; --pad: clamp(16px, 5vw, 28px); --col: 560px;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; }
+svg { display: block; }
+.app { max-width: var(--col); margin: 0 auto; min-height: 100svh; }
+@media (min-width: 720px) { body { background: var(--subtle); } .app { margin: 24px auto; border-radius: 28px; background: #fff; box-shadow: 0 0 0 1px var(--line); overflow: hidden; } }
+.page { display: grid; gap: 16px; padding: 20px var(--pad) 40px; }
+.demo { display: grid; gap: 8px; }
+.demo-lbl { font-size: .85rem; color: var(--muted); }
+.demo-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.demo button { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line-strong); background: #fff; font-size: .95rem; font-weight: 600; }
+.demo button[aria-pressed="true"] { background: #000; color: #fff; border-color: #000; }
+.said { padding: 14px 18px; border-radius: var(--r); background: var(--subtle); }
+.said span { font-size: .95rem; color: var(--muted); }
+.said p { font-size: 1.2rem; line-height: 1.4; margin-top: 2px; }
+.card { background: #fff; border-radius: var(--r); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 16px; }
+.badge { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--subtle); font-size: .95rem; font-weight: 700; width: max-content; }
+.head { font-size: clamp(1.35rem, 1.1rem + 1.4vw, 1.6rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.22; text-wrap: balance; }
+.sub { font-size: 1.05rem; color: var(--muted); line-height: 1.45; }
+
+/* A. Table: one row per hospital, the figure large and right-aligned */
+table.fig { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+.fig caption { text-align: left; font-size: .95rem; color: var(--muted); padding-bottom: 8px; }
+.fig th { text-align: left; font-size: .9rem; font-weight: 600; color: var(--muted); padding: 0 0 8px; border-bottom: 1px solid var(--line-strong); }
+.fig th:last-child, .fig td:last-child { text-align: right; }
+.fig td { padding: 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.3; }
+.fig td b { font-weight: 600; display: block; }
+.fig td small { color: var(--muted); font-size: .92rem; }
+.fig td.num { font-size: 1.25rem; font-weight: 700; white-space: nowrap; padding-left: 12px; font-variant-numeric: tabular-nums; }
+.fig tr.low td.num { color: var(--light); }
+
+/* B. Bars: ranked, from zero, labelled on the bar (the approved chart card) */
+.bars { display: grid; gap: 12px; }
+.brow { display: grid; gap: 5px; }
+.brow .nm2 { display: flex; justify-content: space-between; gap: 10px; font-size: 1.05rem; }
+.brow .nm2 b { font-weight: 600; }
+.brow .nm2 small { color: var(--muted); font-weight: 400; }
+.brow .nm2 span { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.track { height: 14px; border-radius: 7px; background: var(--subtle); overflow: hidden; }
+.fill { height: 100%; border-radius: 7px; background: var(--bar); transform-origin: left; animation: grow .5s cubic-bezier(.2, .8, .2, 1) both; }
+.brow.low .fill { background: var(--light); }
+.brow.low .nm2 { color: var(--light); }
+@keyframes grow { from { transform: scaleX(0); } }
+.scale { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 6px; }
+
+/* C. A small card per hospital */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tile { border-radius: 16px; background: var(--subtle); padding: 14px; display: grid; gap: 4px; align-content: start; }
+.tile b { font-size: 1rem; font-weight: 600; line-height: 1.25; }
+.tile small { color: var(--muted); font-size: .9rem; }
+.tile span { font-size: 1.45rem; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.tile.low { background: #eaf3ff; }
+.tile.low span { color: var(--light); }
+
+.facts { display: grid; gap: 6px; padding: 14px 16px; border-radius: 16px; background: var(--subtle); font-size: 1rem; line-height: 1.4; }
+.facts li { margin-left: 18px; }
+.sos { display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--ink); font-size: 1.05rem; font-weight: 600; }
+.src { font-size: .95rem; color: var(--muted); }
+.src a { color: inherit; }
+.btn { min-height: 56px; width: 100%; border-radius: 999px; border: 0; background: #fff; box-shadow: inset 0 0 0 2px var(--line-strong); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 600; }
+.note { font-size: .92rem; color: var(--muted); line-height: 1.45; padding: 0 4px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+<main class="page">
+	<div class="demo">
+		<span class="demo-lbl">Mockup: pick how the figures show</span>
+		<div class="demo-row" role="group" aria-label="Layout">
+			<button type="button" data-v="table" aria-pressed="true">A · Table</button>
+			<button type="button" data-v="bars" aria-pressed="false">B · Bars</button>
+			<button type="button" data-v="tiles" aria-pressed="false">C · Hospital cards</button>
+		</div>
+	</div>
+
+	<div class="said"><span>You asked</span><p>“How much is the hospital bill for fluid in the lungs?”</p></div>
+
+	<article class="card">
+		<span class="badge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>From the web</span>
+		<h2 class="head">A subsidised ward bill is usually $2,400 to $4,300</h2>
+		<p class="sub">Typical bills for pulmonary oedema with breathing failure, Singapore Citizens in subsidised public wards. Lowest first.</p>
+
+		<!-- A. Table -->
+		<table class="fig" data-view="table">
+			<caption>Typical bill, after subsidy, before MediSave and insurance</caption>
+			<thead><tr><th scope="col">Hospital</th><th scope="col">Bill</th></tr></thead>
+			<tbody>
+				<tr class="low"><td><b>Changi General Hospital</b><small>C ward</small></td><td class="num">$2,406</td></tr>
+				<tr><td><b>Ng Teng Fong General Hospital</b><small>C ward</small></td><td class="num">$2,911</td></tr>
+				<tr><td><b>Sengkang General Hospital</b><small>C ward</small></td><td class="num">$3,690</td></tr>
+				<tr><td><b>Singapore General Hospital</b><small>C ward</small></td><td class="num">$4,208</td></tr>
+				<tr><td><b>Singapore General Hospital</b><small>B2 ward</small></td><td class="num">$4,320</td></tr>
+			</tbody>
+		</table>
+
+		<!-- B. Bars -->
+		<div class="bars" data-view="bars" hidden>
+			<div class="brow low"><div class="nm2"><b>Changi General <small>· C ward</small></b><span>$2,406</span></div><div class="track"><div class="fill" style="width:48.1%"></div></div></div>
+			<div class="brow"><div class="nm2"><b>Ng Teng Fong General <small>· C ward</small></b><span>$2,911</span></div><div class="track"><div class="fill" style="width:58.2%"></div></div></div>
+			<div class="brow"><div class="nm2"><b>Sengkang General <small>· C ward</small></b><span>$3,690</span></div><div class="track"><div class="fill" style="width:73.8%"></div></div></div>
+			<div class="brow"><div class="nm2"><b>Singapore General <small>· C ward</small></b><span>$4,208</span></div><div class="track"><div class="fill" style="width:84.2%"></div></div></div>
+			<div class="brow"><div class="nm2"><b>Singapore General <small>· B2 ward</small></b><span>$4,320</span></div><div class="track"><div class="fill" style="width:86.4%"></div></div></div>
+			<div class="scale"><span>$0</span><span>$5,000</span></div>
+		</div>
+
+		<!-- C. Hospital cards -->
+		<div class="tiles" data-view="tiles" hidden>
+			<div class="tile low"><b>Changi General</b><small>C ward</small><span>$2,406</span></div>
+			<div class="tile"><b>Ng Teng Fong General</b><small>C ward</small><span>$2,911</span></div>
+			<div class="tile"><b>Sengkang General</b><small>C ward</small><span>$3,690</span></div>
+			<div class="tile"><b>Singapore General</b><small>C ward</small><span>$4,208</span></div>
+			<div class="tile"><b>Singapore General</b><small>B2 ward</small><span>$4,320</span></div>
+		</div>
+
+		<ul class="facts">
+			<li>Typical stay: about 10 to 13 days.</li>
+			<li>These are middle figures; one person's bill can differ.</li>
+			<li>They include GST and subsidy, but not MediSave or insurance.</li>
+			<li>MOH does not publish every hospital or ward class for this.</li>
+		</ul>
+
+		<div class="sos"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span>Very hard to breathe now? Call <a href="tel:995">995</a>.</span></div>
+
+		<p class="src">Ministry of Health · hospital bill sizes, DRG E64A</p>
+		<button class="btn" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>Read aloud</button>
+	</article>
+
+	<p class="note">How it would work: when a web answer compares one figure across three or more places, the model returns the figures as rows as well as the words, and the card draws them. Each figure must appear in the source, the same check the words already pass. The headline states the range; the lowest is in blue. Read aloud says the headline and the lowest and highest, not every row.</p>
+</main>
+</div>
+<script>
+const buttons = document.querySelectorAll('.demo button');
+buttons.forEach((b) => b.addEventListener('click', () => {
+	buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+	document.querySelectorAll('[data-view]').forEach((el) => { el.hidden = el.dataset.view !== b.dataset.v; });
+}));
+</script>
+</body>
+</html>
