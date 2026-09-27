@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara · A&amp;E ward-bed waits (mockup)</title>
+<!--
+  Mockup: a chart Suara draws itself from government data (owner, 2026-09-27: "YES DISPLAY
+  ACCREDITATION. i am just doing this for public good"). Data: MOH, Waiting Time for Admission to
+  Ward, weekly file of 26 Sep 2026, via ed-wait.json. MOH's own chart image is not used: its
+  images need written permission, and the one on the page shows 3-9 May 2026.
+
+  Chart rules from the UK Government Analysis Function guidance (analysisfunction.civilservice.gov.uk,
+  "Data visualisation: charts"): horizontal bars ranked by value, axis from zero, labels on the
+  bars and no legend, one colour with the bar of interest highlighted, a headline that says the
+  finding and a subtitle that says exactly what is measured, a table for screen readers.
+-->
+<style>
+@font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+:root {
+  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7; --surface: #fff;
+  --light: #007aff; --bar: #3a3a3c; --bar-dim: #d1d1d6; --note-bg: #fff6de; --note-line: #f0d9a0; --note-ink: #7a5200;
+  --shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 8px 22px rgb(0 0 0 / 8%);
+  --r: 20px; --pad: clamp(16px, 5vw, 28px); --col: 560px;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; }
+svg { display: block; }
+.app { max-width: var(--col); margin: 0 auto; min-height: 100svh; display: flex; flex-direction: column; }
+@media (min-width: 720px) { body { background: var(--subtle); } .app { margin: 24px auto; border-radius: 28px; background: #fff; box-shadow: 0 0 0 1px var(--line); overflow: hidden; } }
+.bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: max(12px, env(safe-area-inset-top)) var(--pad) 12px; background: rgb(255 255 255 / 92%); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.mk { width: 40px; height: 40px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
+.nm { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; }
+.page { display: grid; gap: 16px; padding: 18px var(--pad) calc(32px + env(safe-area-inset-bottom)); }
+.demo { display: flex; gap: 8px; flex-wrap: wrap; }
+.demo button { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: #fff; font-size: .95rem; font-weight: 600; }
+.demo button[aria-pressed="true"] { background: #000; color: #fff; border-color: #000; }
+.demo-lbl { font-size: .85rem; color: var(--muted); }
+.said { padding: 14px 18px; border-radius: var(--r); background: var(--subtle); }
+.said span { font-size: .95rem; color: var(--muted); }
+.said p { font-size: 1.2rem; line-height: 1.4; margin-top: 2px; }
+.card { background: #fff; border-radius: var(--r); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 14px; }
+.badge { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--subtle); font-size: .95rem; font-weight: 700; width: max-content; }
+.head { font-size: clamp(1.35rem, 1.1rem + 1.4vw, 1.65rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.22; text-wrap: balance; }
+.sub { font-size: 1.02rem; color: var(--muted); line-height: 1.45; }
+.not { display: flex; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--note-bg); border: 1px solid var(--note-line); color: var(--note-ink); font-size: 1rem; line-height: 1.4; }
+.not svg { flex: none; margin-top: 2px; }
+
+/* Bars: ranked, from zero, labelled on the bar, one colour, the one that matters in blue */
+.bars { display: grid; gap: 10px; }
+.brow { display: grid; gap: 4px; text-align: left; width: 100%; border: 0; background: none; padding: 6px 0; border-radius: 10px; }
+.brow .nm2 { display: flex; justify-content: space-between; gap: 10px; font-size: 1.05rem; }
+.brow .nm2 b { font-weight: 600; }
+.brow .nm2 span { font-weight: 700; white-space: nowrap; }
+.track { height: 14px; border-radius: 7px; background: var(--subtle); overflow: hidden; }
+.fill { height: 100%; border-radius: 7px; background: var(--bar); transform-origin: left; animation: grow .5s cubic-bezier(.2, .8, .2, 1) both; }
+.bars[data-focus] .fill { background: var(--bar-dim); }
+.bars[data-focus] .brow[data-on] .fill { background: var(--light); }
+.bars[data-focus] .brow[data-on] .nm2 { color: var(--light); }
+@keyframes grow { from { transform: scaleX(0); } }
+.scale { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 6px; }
+.hint { font-size: .95rem; color: var(--muted); }
+
+/* Trend: one hospital against the middle of all hospitals, 26 weeks */
+.trend { display: grid; gap: 8px; padding: 16px; border-radius: 16px; background: var(--subtle); }
+.trend h3 { font-size: 1.1rem; line-height: 1.3; }
+.trend .key { display: flex; gap: 16px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); }
+.trend .key i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+
+.btn { min-height: 56px; width: 100%; border-radius: 999px; border: 0; background: #fff; box-shadow: inset 0 0 0 2px var(--line-strong); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1rem; font-weight: 600; }
+.sos { display: flex; gap: 10px; align-items: center; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--ink); font-size: 1.05rem; font-weight: 600; }
+.sos a { color: inherit; }
+details.nums { border: 1px solid var(--line); border-radius: 16px; }
+details.nums > summary { list-style: none; min-height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-weight: 600; cursor: pointer; }
+details.nums > summary::-webkit-details-marker { display: none; }
+details.nums table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+details.nums th, details.nums td { text-align: left; padding: 8px 16px; border-top: 1px solid var(--line); }
+details.nums td:last-child, details.nums th:last-child { text-align: right; }
+
+/* The credit, always: who, what, when, under which licence */
+.credit { display: grid; gap: 6px; padding: 14px 16px; border-radius: 16px 16px 16px 4px; background: var(--subtle); font-size: .92rem; color: var(--muted); line-height: 1.45; }
+.credit b { color: var(--ink); }
+.credit a { color: var(--ink); text-underline-offset: .2em; }
+@media (prefers-reduced-motion: reduce) { .fill { animation: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+	<header class="bar"><span class="mk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/></svg></span><span class="nm">Suara</span></header>
+	<main class="page" id="page"></main>
+</div>
+<script>
+const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const date = (iso, year = true) => new Date(iso + 'T00:00:00').toLocaleDateString('en-SG', { day: 'numeric', month: 'short', ...(year ? { year: 'numeric' } : {}) });
+/** "about 3 h 50 min", rounded to 10 minutes: precise enough to plan by, no false precision. */
+function hm(h) {
+	const m = Math.round((h * 60) / 10) * 10;
+	const H = Math.floor(m / 60), M = m % 60;
+	return H === 0 ? `${M} min` : M === 0 ? `${H} h` : `${H} h ${M} min`;
+}
+const I = {
+	chart: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>',
+	info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>',
+	speaker: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+	phone: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 3.5h2.6l1.4 4-2 1.4a11 11 0 0 0 6.5 6.5l1.4-2 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/></svg>',
+	chev: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+};
+
+const ASK = [
+	{ key: 'all', q: 'How long is the wait at A&E now?', focus: null },
+	{ key: 'ttsh', q: 'How long do I wait at Tan Tock Seng A&E?', focus: 'TTSH' },
+];
+let D, ask = ASK[0], focus = null;
+
+function trendSvg(code) {
+	const W = 480, H = 170, L = 34, B = 24, T = 10, R = 8;
+	const weeks = D.weeks;
+	// MOH's file has weeks with no figures at all (2-8 Aug 2026): those stay a gap in the line.
+	const mine = weeks.map((w) => w.values[code]);
+	const mid = weeks.map((w) => { const v = Object.values(w.values).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : undefined; });
+	const known = [...mine, ...mid].filter((v) => typeof v === 'number');
+	const top = Math.max(4, Math.ceil(Math.max(...known) / 2) * 2);
+	const x = (i) => L + (i * (W - L - R)) / (weeks.length - 1);
+	const y = (v) => T + (1 - v / top) * (H - T - B);
+	const path = (vs) => vs.map((v, i) => (typeof v !== 'number' ? '' : `${i && typeof vs[i - 1] === 'number' ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)).join('');
+	const ticks = [0, top / 2, top];
+	return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(D.names[code])}: weekly wait over the past 26 weeks">
+		${ticks.map((t) => `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="#d1d1d6" stroke-width="1"/><text x="${L - 6}" y="${y(t) + 4}" text-anchor="end" font-size="12" fill="#5f5f64">${t} h</text>`).join('')}
+		<path d="${path(mid)}" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-dasharray="5 4"/>
+		<path d="${path(mine)}" fill="none" stroke="#007aff" stroke-width="3.5" stroke-linejoin="round"/>
+		${typeof mine.at(-1) === 'number' ? `<circle cx="${x(weeks.length - 1)}" cy="${y(mine.at(-1))}" r="5" fill="#007aff"/>` : ''}
+		<text x="${L}" y="${H - 4}" font-size="12" fill="#5f5f64">${date(weeks[0].end, false)}</text>
+		<text x="${W - R}" y="${H - 4}" font-size="12" fill="#5f5f64" text-anchor="end">${date(weeks.at(-1).end, false)}</text>
+	</svg>`;
+}
+
+function trendWords(code) {
+	const first = D.weeks[0].values[code], now = D.weeks.at(-1).values[code];
+	const change = now - first;
+	const dir = Math.abs(change) < 0.5 ? 'about the same as' : change > 0 ? 'longer than' : 'shorter than';
+	return `${D.names[code]}: about ${hm(now)} last week, ${dir} in the week to ${date(D.weeks[0].end, false)} (about ${hm(first)}).`;
+}
+
+/** Weeks MOH published no figures for are named, not bridged. */
+function gapNote() {
+	const gaps = D.weeks.filter((w) => Object.keys(w.values).length === 0).map((w) => {
+		const start = new Date(w.end + 'T00:00:00'); start.setDate(start.getDate() - 6);
+		// Formatted as a local date: through toISOString it would slip back a day in Singapore.
+		return `${start.toLocaleDateString('en-SG', { day: 'numeric', month: 'short' })} to ${date(w.end, false)}`;
+	});
+	return gaps.length ? `<p class="key">The gap: MOH published no figures for ${gaps.join(', ')}.</p>` : '';
+}
+
+function paint() {
+	const rows = Object.entries(D.latest).sort((a, b) => a[1] - b[1]);
+	const max = Math.ceil(rows.at(-1)[1] / 5) * 5;
+	const [lo, hi] = [rows[0], rows.at(-1)];
+	const f = focus ?? ask.focus;
+	const head = ask.focus
+		? `Last week at ${esc(D.names[ask.focus])}, people waited about ${hm(D.latest[ask.focus])} for a ward bed`
+		: `Last week, the wait for a ward bed ran from about ${hm(lo[1])} at ${esc(D.names[lo[0]].replace(' (urgent care)', ''))} to about ${hm(hi[1])} at ${esc(D.names[hi[0]])}`;
+	document.getElementById('page').innerHTML = `
+	<div><p class="demo-lbl">Mockup: try either question</p><div class="demo">${ASK.map((a) => `<button data-ask="${a.key}" aria-pressed="${a === ask}">${esc(a.q)}</button>`).join('')}</div></div>
+	<div class="said"><span>You said</span><p>&ldquo;${esc(ask.q)}&rdquo;</p></div>
+	<article class="card">
+		<span class="badge">${I.chart}Government data</span>
+		<h1 class="head">${head}</h1>
+		<p class="sub">A typical day, ${date(D.week.from, false)} to ${date(D.week.to)}. Half of patients waited less, half waited longer.</p>
+		<p class="not">${I.info}<span>This is not the wait to see a doctor. It is the time from the A&amp;E doctor deciding you need to stay in hospital, to leaving A&amp;E for a ward.</span></p>
+		<div class="bars" ${f ? 'data-focus' : ''}>
+			${rows.map(([c, v]) => `<button class="brow" data-code="${c}" ${c === f ? 'data-on' : ''} aria-label="${esc(D.names[c])}: about ${hm(v)}"><span class="nm2"><b>${esc(D.names[c])}</b><span>${hm(v)}</span></span><span class="track"><span class="fill" style="display:block;width:${((v / max) * 100).toFixed(1)}%"></span></span></button>`).join('')}
+			<div class="scale"><span>0 h</span><span>${max / 2} h</span><span>${max} h</span></div>
+		</div>
+		<p class="hint">Tap a hospital to see how its wait has changed.</p>
+		${f ? `<section class="trend"><h3>${esc(trendWords(f))}</h3>${trendSvg(f)}<p class="key"><span><i style="background:#007aff"></i>${esc(D.names[f])}</span><span><i style="background:#8e8e93"></i>Middle of all hospitals</span></p>${gapNote()}</section>` : ''}
+		<button class="btn">${I.speaker}Read aloud</button>
+	</article>
+	<p class="sos">${I.phone}<span>In an emergency, call <a href="tel:995">995</a>. Do not wait for a better time.</span></p>
+	<details class="nums"><summary><span>See the numbers</span>${I.chev}</summary>
+		<table><thead><tr><th>Hospital</th><th>Typical wait last week</th></tr></thead><tbody>${rows.map(([c, v]) => `<tr><td>${esc(D.names[c])}</td><td>${hm(v)}</td></tr>`).join('')}</tbody></table>
+	</details>
+	<div class="credit">
+		<span><b>Source:</b> Ministry of Health, <a href="${D.source.page}" target="_blank" rel="noopener">Waiting Time for Admission to Ward</a> (weekly hospital submissions), ${date(D.week.from, false)} to ${date(D.week.to)}. Figures in hours, as MOH reports them.</span>
+		<span>Used under the <a href="${D.source.licence}" target="_blank" rel="noopener">Singapore Open Data Licence</a>. Drawn by Suara from MOH's figures; checked 27 Sep 2026.</span>
+	</div>`;
+}
+
+document.addEventListener('click', (e) => {
+	const a = e.target.closest('[data-ask]'), b = e.target.closest('[data-code]');
+	if (a) { ask = ASK.find((x) => x.key === a.dataset.ask); focus = null; paint(); }
+	if (b) { focus = focus === b.dataset.code ? null : b.dataset.code; paint(); }
+});
+fetch('ed-wait.json').then((r) => r.json()).then((d) => { D = d; paint(); });
+</script>
+</body>
+</html>
