@@ -214,7 +214,7 @@ function replySchema(): Record<string, unknown> {
 						text: str(300),
 						points_lead: orNull(str(60)),
 						points: { type: 'array', items: str(200) },
-						about: orNull(str(280)),
+						about: orNull(str(360)),
 						confirm_label: str(24),
 						action_label: orNull(str(24)),
 					},
@@ -231,7 +231,7 @@ function systemPrompt(language: EntryLanguage, structured: boolean): string {
 		`You translate Singapore government answers into ${LANGUAGE_NAME[language]} for older readers.`,
 		'Plain, short, warm wording. Keep names of schemes, hospitals, forms and phone numbers recognisable.',
 		'Keep the same number of details, steps, points in each step and example phrasings, in the same order. Keep action_label, points_lead and about only where the input has one, and null otherwise.',
-		'Limits: title.short 16 characters, title.full 60, summary 140, detail heading 40, step name 40, each point 200, points_lead 60, about 280 and at most two sentences, confirm_label and action_label 24.',
+		'Limits: title.short 16 characters, title.full 60, summary 140, detail heading 40, step name 40, each point 200, points_lead 60, about 360 and at most two sentences, confirm_label and action_label 24.',
 		'Example phrasings should sound like how an older Singaporean would say it aloud in that language.',
 		structured ? '' : 'Reply with the JSON only, with exactly the same keys as the input. No explanation, no code fence.',
 	]

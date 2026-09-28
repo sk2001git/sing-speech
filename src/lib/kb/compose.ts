@@ -14,6 +14,7 @@
  */
 import { SCHEMA_VERSION, type Entry, type EntryLanguage } from './entry';
 import type { RawDoc } from './raw-store';
+import { sentenceCount, STEP_WRITING } from './step-writing';
 
 export interface ComposeRequest {
 	/** What the person said, in their words. */
@@ -67,7 +68,7 @@ export type Composed = { ok: true; entry: Entry } | { ok: false; errors: string[
 /** The model is asked for this and nothing else, so a bad reply is a parse failure. */
 export const PROMPT_VERSION = 'compose-2';
 
-const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600, point: 200, lead: 60, about: 280 } as const;
+const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600, point: 200, lead: 60, about: 360 } as const;
 
 /**
  * How each step is written, given to the model in so many words (owner, 2026-09-29: "pass the
@@ -75,19 +76,9 @@ const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, head
  * extensive and concise content"). Sources and the older-reader finding: vault obs-0073.
  */
 export const STEP_RULES = [
-	'How to write each step. These are the rules of two sources, applied to an older person following a guide on a phone:',
-	'- Todd Rogers and Jessica Lasky-Fink, Writing for Busy Readers (Harvard Kennedy School): less is more; make reading easy; design for easy navigation; use enough formatting, but no more; tell readers why they should care; make responding easy.',
-	'- The Cornell note-taking system (Walter Pauk, Cornell University): a cue, then notes in short, concise sentences, then a summary of the gist in your own words.',
-	'So, for every step:',
-	'- name is the cue: the one action, verb first.',
-	`- points are the notes: 1 to 4 items, one idea each, each a short complete sentence. Keep the words that link ideas ("if", "so", "then", "only"): older readers lose the meaning when those are cut. Use "lead", ending in a colon, only when the items are short parts that complete it, as in "The form must show:" then "The referral date". Items alike in form and in length. Leave "lead" out otherwise.`,
-	'- about is what the person reads under "More about this step": at most two sentences, never points. Put the bottom line up front: the first sentence is the one thing this person most needs to know about this step, and why it matters to them; the second, only if needed, is the one detail or exception that changes what they do. Nothing the points already say. Leave it "" when the pages say nothing more about this step. about_quote is the verbatim line it rests on.',
-	'- confirm_label is the summary, in the person\'s own words: what they tap when the step is done.',
-	'- text is the step read aloud: what the points say, as one or two plain sentences.',
-	'- Adequate and concise: every condition, exception, deadline and number on the pages that bears on a step appears in its points or its about, and nothing that does not bear on it.',
-	'- To make sure of that, first fill "covered": every condition, exception, deadline, number, place, name and cost on the pages that bears on the question, one item each, in the page’s own key words (every name in full, every number and time), not a label for them: "Tan Tock Seng Hospital", "within the same day of the GP’s referral", not "named hospitals" or "deadline". Then check that each one is in a step (its points, about or text) or in a detail. A place the person must go to is named in full in the step where they go, in its points or its about, never left as "a participating centre". A list of places too long for one point goes in that step’s about, or one place to a point.',
-	'- Every step stands on its own, because the person sees one step at a time: never "below", "above", "listed", "named", "the list" or "these" pointing outside the step.',
-	'- Words as people say them: "2am", not "0200hrs"; short forms spelled out ("Urgent Care Centre", not "UCC"), except A&E.',
+	...STEP_WRITING,
+	'- about_quote is the verbatim line the about rests on.',
+	'- To make sure nothing is left out, first fill "covered": every condition, exception, deadline, number, place, name and cost on the pages that bears on the question, one item each, in the page’s own key words (every name in full, every number and time), not a label for them: "Tan Tock Seng Hospital", "within the same day of the GP’s referral", not "named hospitals" or "deadline". Then check that each one is in a step (its points, about or text) or in a detail.',
 ].join('\n');
 
 /**
@@ -114,8 +105,6 @@ export function uncovered(covered: readonly string[], card: string): string[] {
 	});
 }
 
-/** Sentences in a short text: a stop, question or exclamation mark followed by a space or the end. */
-export const sentenceCount = (text: string) => (text.match(/[.!?。！？]+(?=\s|$)/g) ?? []).length;
 
 export function composePrompt(req: ComposeRequest, problems?: string[]): string {
 	const { asked, docs, language } = req;
@@ -151,7 +140,7 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their own words: "I have the form", "I called them". Never "Done", "Next", "OK" or "Continue".',
 		`- Answer the question that was asked. Leave out what is on the page but does not bear on it.`,
 		`- Write in ${reply}, short sentences, no jargon, no "please note", nothing about websites the person cannot use.`,
-		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, each point <= 140 (a point naming a list of places may run to ${LIMITS.point}), lead <= ${LIMITS.lead}, about <= ${LIMITS.about}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
+		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, each point <= 140 (a point naming a list of places may run to ${LIMITS.point}), lead <= ${LIMITS.lead}, about <= 280 (one naming a list of places may run to ${LIMITS.about}), confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
 		'- short is the one line on the card: two or three words, no punctuation.',
 		'- full is a heading that names the thing, not a sentence and never ending in a full stop: "What ElderFund is for", "Paying a bill with MediSave". It says more than short does, so the two are never the same words.',
 		'- Exactly three or four phrasings: short, different ways a person might ask this out loud, including the way this person did. Fewer than three and the card is rejected.',

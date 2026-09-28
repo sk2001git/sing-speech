@@ -51,7 +51,7 @@ const Points = z.strictObject({
 
 /** More about a step: at most two sentences, the bottom line first, citing its own quote. */
 const About = z.strictObject({
-	text: text(1, 280),
+	text: text(1, 360),
 	quote_refs: QuoteRefs,
 });
 

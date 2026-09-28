@@ -18,6 +18,19 @@ export interface Turn {
 	correction?: true;
 }
 
+/**
+ * The step of a guide the person was on when they asked "Ask about this step" (vault
+ * plan-suara-0020, contract C1): what they were reading, so "which hospital ah?" can be
+ * understood. It helps understand the question and is never a source for the answer (C4).
+ */
+export interface StepContext {
+	guide: string;
+	step: number;
+	of: number;
+	name: string;
+	points: string[];
+}
+
 export const RESOLVE_MODEL = 'gpt-6-luna';
 
 const SYSTEM = `You are the ears of Suara, a voice-first help service for older people in Singapore. You are given one
@@ -38,18 +51,24 @@ Work out the one question the person is asking now, whole and standalone, and fi
 - language: "zh" if the latest turn is mainly Chinese, "en" for English or Singlish, "other" otherwise.
 - confidence: from 0 to 1, how sure you are of meaning_en.
 
+Sometimes the JSON also has "context": the step of a guide the person was reading when they asked, with
+the guide's title, the step number and name, and its points. Their question is about that step unless it
+plainly is not. Write meaning_en and sentence so they stand on their own without the context: name the
+scheme, place, form or thing the step is about ("Which hospitals take the GPFirst form at A&E?", not
+"Which hospital?"). The context is what they were reading, not facts to answer from.
+
 Do not answer the question. Do not invent details.`;
 
 const STRICT = { ...HEARING_SCHEMA, additionalProperties: false };
 
-export function resolveBody(turns: Turn[], model = RESOLVE_MODEL) {
+export function resolveBody(turns: Turn[], model = RESOLVE_MODEL, context?: StepContext) {
 	return {
 		model,
 		store: false,
 		reasoning: { effort: 'low' },
 		input: [
 			{ role: 'system', content: SYSTEM },
-			{ role: 'user', content: JSON.stringify({ turns }) },
+			{ role: 'user', content: JSON.stringify(context ? { context, turns } : { turns }) },
 		],
 		text: { format: { type: 'json_schema', name: 'hearing', strict: true, schema: STRICT } },
 		max_output_tokens: 1200,
@@ -60,13 +79,13 @@ export function resolveBody(turns: Turn[], model = RESOLVE_MODEL) {
  * The corrected question. If the model cannot be reached, the correction as written stands: a
  * volunteer's typed words are a fair question on their own.
  */
-export async function resolveQuestion(turns: Turn[], opts: { apiKey: string; model?: string; fetchImpl?: typeof fetch }): Promise<Hearing> {
+export async function resolveQuestion(turns: Turn[], opts: { apiKey: string; model?: string; fetchImpl?: typeof fetch; context?: StepContext }): Promise<Hearing> {
 	const latest = turns.at(-1)!.said.trim();
 	try {
 		const res = await (opts.fetchImpl ?? fetch)('https://api.openai.com/v1/responses', {
 			method: 'POST',
 			headers: { authorization: `Bearer ${opts.apiKey}`, 'content-type': 'application/json' },
-			body: JSON.stringify(resolveBody(turns, opts.model)),
+			body: JSON.stringify(resolveBody(turns, opts.model, opts.context)),
 			signal: AbortSignal.timeout(8000),
 		});
 		if (!res.ok) throw new Error(String(res.status));

@@ -31,6 +31,24 @@ describe('resolveBody', () => {
 	});
 });
 
+describe('a question asked about a step of a guide', () => {
+	const step = { guide: 'GPFirst: paying less at the emergency department', step: 3, of: 5, name: 'Go to A&E the same day', points: ['Go on the day the form was given.', 'Given between 10pm and midnight? You can go until 2am.'] };
+	const asked: Turn[] = [{ role: 'user', kind: 'speech', said: 'which hospital ah?' }];
+
+	it('sends the step with the question, marked as what they were reading', () => {
+		const body = resolveBody(asked, undefined, step);
+		expect(JSON.parse(body.input[1]!.content)).toEqual({ context: step, turns: asked });
+		const system = body.input[0]!.content;
+		expect(system).toMatch(/"context"/);
+		expect(system).toMatch(/stand(s)? on its own|standalone/i);
+		expect(system).toMatch(/not facts to answer from|never an answer/i);
+	});
+
+	it('sends no context when there is none, so an ordinary question is unchanged', () => {
+		expect(JSON.parse(resolveBody(asked).input[1]!.content)).toEqual({ turns: asked });
+	});
+});
+
 describe('resolveQuestion', () => {
 	it('returns the one question the person means now', async () => {
 		const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ output: [{ type: 'message', content: [{ type: 'output_text', text: JSON.stringify(hearing) }] }] })));

@@ -182,11 +182,11 @@ describe('A direct answer from the web', () => {
 describe('Web steps', () => {
 	const answer = web();
 
-	it('asks before starting, in a sheet', () => {
+	it('shows every step before it starts, then one button to start', () => {
 		const html = render({ view: 'single', phase: 'web-confirm', back: answer });
-		expect(html).toContain('Start these 4 steps?');
-		expect(html).toContain('Yes, start');
-		expect(html).toContain('Not this');
+		for (const st of answer.result.answer.steps) expect(html).toContain(st.name);
+		expect(html).toContain('4 steps · from Coinbase Help, MAS');
+		expect(html).toContain('Start the guide');
 	});
 
 	it('opens the current step with its source, and three stages in view', () => {

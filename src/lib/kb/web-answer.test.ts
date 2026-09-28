@@ -38,6 +38,31 @@ describe('cleanText', () => {
 	});
 });
 
+describe('web steps in points (plan-suara-0020)', () => {
+	it('asks the web model for points and a short "more", to the same rules as Suara’s own cards', () => {
+		const body = webRequestBody('How do I buy bitcoin on Coinbase?', 'en') as unknown as { input: { content: string }[]; text: { format: { schema: { properties: { steps: { items: { required: readonly string[] } } } } } } };
+		const system = body.input[0]!.content;
+		expect(system).toContain('Writing for Busy Readers');
+		expect(system).toContain('Cornell');
+		expect(body.text.format.schema.properties.steps.items.required).toEqual(expect.arrayContaining(['points_lead', 'points', 'about']));
+	});
+
+	it('keeps a step’s points and its "more", cleaned, and cuts a "more" that ran past two sentences', () => {
+		const a = groundAnswer(
+			raw({
+				steps: [
+					{ name: 'Add a payment method', text: 'Add a card.', points_lead: 'You can add:', points: ['A Singapore debit card', 'A bank account([x](https://x.com))'], about: 'Cards are instant. Bank transfers take a day. Fees differ.', confirm_label: 'Card added', source_urls: ['https://help.coinbase.com/en/pay'] },
+					{ name: 'Review and buy', text: 'Tap Buy now.', points_lead: null, points: [], about: null, confirm_label: 'Bought', source_urls: ['https://help.coinbase.com/en/buy'] },
+				],
+			}),
+			SEEN,
+		);
+		expect(a.steps[0]).toMatchObject({ points: { lead: 'You can add:', items: ['A Singapore debit card', 'A bank account'] }, about: 'Cards are instant. Bank transfers take a day.' });
+		expect(a.steps[1]).not.toHaveProperty('points');
+		expect(a.steps[1]).not.toHaveProperty('about');
+	});
+});
+
 describe('groundAnswer', () => {
 	it('keeps only steps whose every cited page the search saw, and counts what it dropped', () => {
 		const a = groundAnswer(raw(), SEEN);

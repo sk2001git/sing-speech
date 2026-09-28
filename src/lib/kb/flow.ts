@@ -25,6 +25,8 @@ export interface Heard {
 	said?: string;
 	/** The question was corrected: `sentence` is the corrected question, from the whole thread. */
 	corrected?: true;
+	/** Asked about a step of a guide: which one (vault plan-suara-0020, C2). */
+	about?: { step: number; name: string };
 }
 
 export interface SearchResult {
@@ -100,7 +102,7 @@ export interface ChartResult {
 	language: EntryLanguage;
 }
 
-export type FlowState =
+type Phase =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
 	| { view: View; phase: 'listening' }
@@ -122,6 +124,16 @@ export type FlowState =
 	| { view: View; phase: 'notfound'; heard: Heard; web?: true }
 	| { view: View; phase: 'denied'; reason: MicFailure }
 	| { view: View; phase: 'offline' };
+
+/** A guide, Suara's or the web's, on the step the person was on. */
+export type GuideState = Extract<Phase, { phase: 'steps' | 'web-steps' }>;
+
+/**
+ * `guide`: the guide they left to ask a question, from "Ask about this step" or "Ask something
+ * else". It rides along through the question and its answer, so Back returns to the same step
+ * with the stages cleared still cleared (vault plan-suara-0020, C3 and C5).
+ */
+export type FlowState = Phase & { guide?: GuideState };
 
 export type FlowEvent =
 	| { type: 'PRESS' }
@@ -179,7 +191,22 @@ export function canSpeak(state: FlowState): boolean {
 	return CAN_SPEAK.has(state.phase);
 }
 
+/** Where a question and its answer live: a guide left for a question is kept through these. */
+const ASKING_PHASES = new Set<FlowState['phase']>(['arming', 'listening', 'searching', 'results', 'places', 'chart', 'journey', 'web-searching', 'web', 'notfound', 'denied', 'offline']);
+
 export function next(state: FlowState, event: FlowEvent): FlowState {
+	// Only a question starts the ride: Back or Home out of a guide leaves it behind.
+	const onGuide = state.phase === 'steps' || state.phase === 'web-steps';
+	const guide = onGuide ? (event.type === 'PRESS' || event.type === 'ASKING' ? state : undefined) : state.guide;
+	const out = advance(state, event);
+	if (!guide || event.type === 'HOME') return out;
+	// Back from an answer with nowhere else to go, or nothing said: the step they left.
+	if (event.type === 'BACK' && out === state && state.guide) return state.guide;
+	if (event.type === 'SILENCE' && out.phase === 'home' && state.guide) return state.guide;
+	return ASKING_PHASES.has(out.phase) && !out.guide ? { ...out, guide } : out;
+}
+
+function advance(state: FlowState, event: FlowEvent): FlowState {
 	const view = state.view;
 	switch (event.type) {
 		case 'PRESS':

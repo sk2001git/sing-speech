@@ -130,11 +130,41 @@ describe('Guided steps', () => {
 	const e: Entry = aProcess();
 	const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;
 
-	it('asks before starting, with full-card yes and no', () => {
+	it('shows every step before it starts, then one button to start (owner, 2026-09-29)', () => {
 		const html = render({ phase: 'confirm', view: 'grid', entry: e, back });
-		expect(html).toContain('Start these steps?');
+		for (const st of e.steps!) expect(html).toContain(st.name);
+		expect(html).toContain(`${e.steps!.length} steps · from`);
+		expect(html).toContain('Start the guide');
 		expect(html).toContain('confirm-yes');
-		expect(html).toContain('confirm-no');
+		expect(html).not.toContain('Start these steps?');
+	});
+
+	it('shows a step in points, with its lead-in', () => {
+		const inPoints = structuredClone(e);
+		inPoints.steps![1]!.points = { lead: 'The form must show:', items: ['The referral date', 'The clinic stamp'] };
+		const html = render({ phase: 'steps', view: 'grid', entry: inPoints, index: 1, back });
+		expect(html).toMatch(/The form must show:[\s\S]*<ul class="k-pts"><li>The referral date<\/li><li>The clinic stamp<\/li><\/ul>/);
+		expect(html).not.toContain(e.steps![1]!.text);
+	});
+
+	it('keeps "more" in a drop-down: the bottom line in bold, then the detail, the source, and asking about the step', () => {
+		const withMore = structuredClone(e);
+		withMore.steps![1]!.about = { text: 'GPFirst is only valid with the original form. A copy does not count.', quote_refs: [withMore.quotes[0]!.id] };
+		const html = render({ phase: 'steps', view: 'grid', entry: withMore, index: 1, back });
+		expect(html).toMatch(/<details class="k-xp"><summary>[\s\S]*More about this step[\s\S]*<b>GPFirst is only valid with the original form\.<\/b> A copy does not count\.[\s\S]*Ask about this step[\s\S]*<\/details>/);
+		expect(html).not.toContain('k-guide-sheet');
+	});
+
+	it('does not bold a "more" that is one long sentence', () => {
+		const long = structuredClone(e);
+		long.steps![1]!.about = { text: 'GPFirst is accepted at Changi General Hospital, Khoo Teck Puat Hospital, National University Hospital, Ng Teng Fong General Hospital and Sengkang General Hospital.', quote_refs: [long.quotes[0]!.id] };
+		const html = render({ phase: 'steps', view: 'grid', entry: long, index: 1, back });
+		expect(html).toContain('<p class="k-about">GPFirst is accepted at Changi');
+	});
+
+	it('says so plainly when the source has nothing more about a step', () => {
+		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
+		expect(html).toMatch(/says nothing more about this step/);
 	});
 
 	it('shows one step on the page, with the stage before and the next either side of it', () => {
@@ -143,7 +173,8 @@ describe('Guided steps', () => {
 		expect(html).toContain(`Now, step 2 of ${e.steps!.length}: </span>${e.steps![1]!.name}</span>`);
 		expect(html).toContain('aria-current="step"');
 		expect(html).toContain(e.steps![1]!.confirm_label);
-		expect(html).toContain(e.steps![1]!.text);
+		// The step as written now: its points, or its text if it was written before points.
+		expect(html).toContain((e.steps![1]!.points?.items[0] ?? e.steps![1]!.text));
 		expect(html).toContain(`Cleared: step 1, ${e.steps![0]!.name}`);
 		expect(html).toContain(e.steps![2]!.name);
 		expect(html).not.toContain(e.steps![2]!.text);
@@ -277,10 +308,18 @@ describe('Motion and state', () => {
 		expect(render(results(result({ fit: 'weak' })))).not.toContain('mx-mark');
 	});
 
-	it('asks yes or no in a sheet: one black button, and a plain "Not this"', () => {
+	it('starts a guide from its list of steps, not from a yes-or-no sheet', () => {
 		const html = render({ phase: 'confirm', view: 'single', entry: e, back });
-		expect(html).toMatch(/class="k-sheet"[\s\S]*Start these steps\?[\s\S]*class="k-btn k-btn-primary confirm-yes"[\s\S]*class="k-link confirm-no"/);
-		expect(html).not.toContain('mx-fill-host');
+		expect(html).toMatch(/<ol class="k-ov"[\s\S]*class="k-btn k-btn-primary confirm-yes"/);
+		expect(html).not.toContain('class="k-sheet"');
+	});
+
+	it('comes back to the step from a question asked about it, and says which step it was about', () => {
+		const step = { phase: 'steps' as const, view: 'single' as const, entry: e, index: 2, reached: 3, back };
+		const heard = { short: 'GPFirst hospitals', sentence: 'You want to know which hospitals take the form.', about: { step: 3, name: e.steps![2]!.name } };
+		const html = render({ ...results(result({ heard }), null, 'single'), guide: step } as FlowState);
+		expect(html).toContain('Back to step 3');
+		expect(html).toContain(`About step 3 · ${e.steps![2]!.name}`);
 	});
 
 	it('shows how far through the steps they are as three stages, not a bar (taste lab steps-10)', () => {

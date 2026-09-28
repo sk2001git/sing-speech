@@ -94,7 +94,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), guides: guidesFor(env.SUARA_GUIDES, cf ? 'cloudflare' : 'openai') } : {}),
 			thresholds: cf ? CF_THRESHOLDS : THRESHOLDS,
 			// A correction's thread, resolved to the one question meant now (lib/kb/thread.ts).
-			resolve: (turns) => resolveQuestion(turns, { apiKey: env.OPENAI_API_KEY! }),
+			// The same model reads a question asked about a step, with the step as context (plan-suara-0020).
+			resolve: (turns, context) => resolveQuestion(turns, { apiKey: env.OPENAI_API_KEY!, ...(context ? { context } : {}) }),
 			// MOH's A&E ward-bed waits (plan-suara-0017): KV's copy, else MOH, else the built-in one.
 			edWait: () => loadEdWait({ kv: env.SUARA_GUIDES, snapshot: edWaitSnapshot as EdWaitChart, ...(ctx?.waitUntil ? { waitUntil: (p) => ctx.waitUntil!(p) } : {}) }),
 			translateBudgetMs: 4000,

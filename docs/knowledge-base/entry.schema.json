@@ -136,7 +136,7 @@
             "additionalProperties": false,
             "required": ["text", "quote_refs"],
             "properties": {
-              "text": { "type": "string", "minLength": 1, "maxLength": 280 },
+              "text": { "type": "string", "minLength": 1, "maxLength": 360 },
               "quote_refs": { "$ref": "#/$defs/quoteRefs" }
             }
           },

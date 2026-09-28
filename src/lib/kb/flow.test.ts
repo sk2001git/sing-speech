@@ -166,6 +166,42 @@ describe('guided steps', () => {
 		expect(next(done, { type: 'STEPS_AGAIN' })).not.toHaveProperty('reached');
 	});
 
+	describe('asking a question from a step (plan-suara-0020, C3 and C5)', () => {
+		const onStep3 = () => run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }, { type: 'STEP_DONE' }, { type: 'STEP_DONE' }, { type: 'STEP_DONE' }, { type: 'STEP_BACK' }], results);
+		const heard = { short: 'GPFirst hospitals', sentence: 'You want to know which hospitals take the form.', about: { step: 3, name: 'Go to A&E the same day' } };
+
+		it('keeps the guide through the question, and Back returns to the same step with its stages still cleared', () => {
+			const step = onStep3();
+			expect(step).toMatchObject({ phase: 'steps', index: 2, reached: 3 });
+			const answered = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }, { type: 'RESULTS', result: { ...result(), heard } }], step);
+			expect(answered).toMatchObject({ phase: 'results', guide: { phase: 'steps', index: 2, reached: 3 } });
+			expect(next(answered, { type: 'BACK' })).toEqual(step);
+		});
+
+		it('comes back the same way from the web, from nothing found, and from a live question', () => {
+			const step = onStep3();
+			const searching = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }], step);
+			const web = run([{ type: 'WEB_SEARCH', heard, language: 'en' }, { type: 'WEB_ANSWER', answer: { kind: 'answer' } as never }], searching);
+			expect(web).toMatchObject({ phase: 'web', guide: { index: 2 } });
+			expect(next(web, { type: 'BACK' })).toEqual(step);
+			expect(next(next(searching, { type: 'NOTHING', heard }), { type: 'BACK' })).toEqual(step);
+			expect(next(next(step, { type: 'ASKING' }), { type: 'BACK' })).toEqual(step);
+		});
+
+		it('returns to the step when they said nothing, rather than to home', () => {
+			const step = onStep3();
+			expect(run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'SILENCE' }], step)).toEqual(step);
+		});
+
+		it('lets go of the guide when they go home or start another guide', () => {
+			const answered = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }, { type: 'RESULTS', result: result() }], onStep3());
+			expect(next(answered, { type: 'HOME' })).not.toHaveProperty('guide');
+			const another = run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }], answered);
+			expect(another).toMatchObject({ phase: 'steps', index: 0 });
+			expect(another).not.toHaveProperty('guide');
+		});
+	});
+
 	it('does not start steps for an answer card', () => {
 		expect(next(results, { type: 'START', id: 'sg.moh.chas-referral' })).toEqual(results);
 	});

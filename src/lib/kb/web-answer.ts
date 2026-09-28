@@ -12,14 +12,24 @@
  */
 import { HOSPITALS } from '../charts/ed-wait';
 import type { EntryLanguage } from './entry';
+import { firstTwoSentences, STEP_WRITING } from './step-writing';
 
 export const DEFAULT_WEB_MODEL = 'gpt-6-luna';
 
 export interface WebStep {
 	name: string;
 	text: string;
+	/** The step in points and its "more" (plan-suara-0020); absent on guides kept before them. */
+	points?: { lead?: string; items: string[] };
+	about?: string;
 	confirm_label: string;
 	source_urls: string[];
+}
+/** A step as the model writes it: the strict schema says "none" as null or empty. */
+export interface RawWebStep extends Omit<WebStep, 'points' | 'about'> {
+	points_lead?: string | null;
+	points?: string[];
+	about?: string | null;
 }
 export interface WebSource {
 	url: string;
@@ -59,7 +69,7 @@ export interface RawWebAnswer {
 	answer: string;
 	answer_urls: string[];
 	prerequisites: string;
-	steps: WebStep[];
+	steps: RawWebStep[];
 	legal: { applies: boolean; text: string; source_urls: string[] };
 	disclaimer: string;
 	sources: WebSource[];
@@ -67,7 +77,8 @@ export interface RawWebAnswer {
 	figures: WebFigures;
 }
 /** What the phone shows: grounded, cleaned, and honest about what was left out. */
-export interface WebAnswer extends Omit<RawWebAnswer, 'figures'> {
+export interface WebAnswer extends Omit<RawWebAnswer, 'figures' | 'steps'> {
+	steps: WebStep[];
 	/** Three or more grounded rows, best first; absent otherwise, and on guides kept before it. */
 	figures?: WebFigures;
 	/** Steps dropped because their pages were not among those the search saw. */
@@ -106,7 +117,9 @@ Rules:
   the person, or neither. When there are rows, the answer gives the range and what the figures
   mean; it does not list them again. Otherwise rows is empty and the other fields empty strings,
   with better "neither".
-- Step name at most 40 characters, text at most 300, confirm_label at most 24 ("I have signed in").
+- Step name at most 40 characters, text at most 300, each point at most 140, points_lead at most
+  60, about at most 280, confirm_label at most 24 ("I have signed in"). points_lead and about are
+  null when a step has none.
 - Plain text only in every field: no URLs, no markdown, no citation brackets.
   URLs go only in answer_urls, source_urls and sources.`;
 
@@ -135,8 +148,16 @@ const SCHEMA = {
 			items: {
 				type: 'object',
 				additionalProperties: false,
-				required: ['name', 'text', 'confirm_label', 'source_urls'],
-				properties: { name: str, text: str, confirm_label: str, source_urls: urls },
+				required: ['name', 'text', 'points_lead', 'points', 'about', 'confirm_label', 'source_urls'],
+				properties: {
+					name: str,
+					text: str,
+					points_lead: { type: ['string', 'null'] },
+					points: { type: 'array', maxItems: 4, items: str },
+					about: { type: ['string', 'null'] },
+					confirm_label: str,
+					source_urls: urls,
+				},
 			},
 		},
 		legal: {
@@ -184,7 +205,8 @@ export function webRequestBody(question: string, language: EntryLanguage, model 
 		tools: [{ type: 'web_search', user_location: { type: 'approximate', country: 'SG' } }],
 		include: ['web_search_call.action.sources'],
 		input: [
-			{ role: 'system', content: `${SYSTEM}\n${LANGUAGE[language]}` },
+			// The same step rules as Suara's own cards, word for word (step-writing.ts).
+			{ role: 'system', content: `${SYSTEM}\n${STEP_WRITING.join('\n')}\n${LANGUAGE[language]}` },
 			{ role: 'user', content: question },
 		],
 		text: { format: { type: 'json_schema', name: 'web_answer', strict: true, schema: SCHEMA } },
@@ -279,7 +301,20 @@ export function groundAnswer(raw: RawWebAnswer, seen: Set<string>): WebAnswer {
 		answer: kind === 'answer' ? cleanText(raw.answer) : '',
 		answer_urls: kind === 'answer' ? raw.answer_urls : [],
 		prerequisites: cleanText(raw.prerequisites),
-		steps: steps.map((s) => ({ ...s, name: cleanText(s.name), text: cleanText(s.text), confirm_label: cleanText(s.confirm_label) })),
+		steps: steps.map((s): WebStep => {
+			const items = (s.points ?? []).map(cleanText).filter(Boolean).slice(0, 4);
+			const lead = cleanText(s.points_lead ?? '');
+			// A "more" that ran on keeps its bottom line and one detail, as the rules ask.
+			const about = firstTwoSentences(cleanText(s.about ?? ''));
+			return {
+				name: cleanText(s.name),
+				text: cleanText(s.text),
+				...(items.length ? { points: { ...(lead ? { lead } : {}), items } } : {}),
+				...(about ? { about } : {}),
+				confirm_label: cleanText(s.confirm_label),
+				source_urls: s.source_urls,
+			};
+		}),
 		legal,
 		disclaimer: cleanText(raw.disclaimer),
 		sources,

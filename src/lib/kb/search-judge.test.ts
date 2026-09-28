@@ -235,3 +235,31 @@ describe('runSearch, a correction', () => {
 		expect(resolve).not.toHaveBeenCalled();
 	});
 });
+
+describe('runSearch, a question asked about a step of a guide (plan-suara-0020, C1 and C2)', () => {
+	const step = { guide: 'GPFirst: paying less at the emergency department', step: 3, of: 5, name: 'Go to A&E the same day', points: ['Go on the day the form was given.'] };
+	const resolved = { greeting: false, said: 'which hospital ah', meaning_en: 'which hospitals accept the GPFirst form at A&E', short: 'GPFirst hospitals', sentence: 'You want to know which hospitals take the GPFirst form at A&E.', language: 'en' as const, confidence: 0.9 };
+
+	it('understands a spoken question with the step, searches the standalone question, and says which step it was about', async () => {
+		const resolve = vi.fn(async () => resolved);
+		const embed = vi.fn(async () => [1, 0]);
+		const r = await runSearch({ ...speech, context: step }, deps({ resolve, embed }));
+		expect(resolve).toHaveBeenCalledWith([{ role: 'user', kind: 'speech', said: 'You want to pay your father’s hospital bill with MediSave.' }], step);
+		expect(embed).toHaveBeenCalledWith('which hospitals accept the GPFirst form at A&E', 'query');
+		expect(r).toMatchObject({ kind: 'results', result: { heard: { sentence: resolved.sentence, about: { step: 3, name: 'Go to A&E the same day' } } } });
+	});
+
+	it('does the same for a typed question', async () => {
+		const resolve = vi.fn(async () => resolved);
+		const r = await runSearch({ kind: 'text', query: 'which hospital ah', offset: 0, reply: 'en', context: step }, deps({ resolve }));
+		expect(resolve).toHaveBeenCalledWith([{ role: 'user', kind: 'text', said: 'which hospital ah' }], step);
+		expect(r).toMatchObject({ result: { heard: { about: { step: 3 } } } });
+	});
+
+	it('keeps the step when the question is then corrected', async () => {
+		const resolve = vi.fn(async () => resolved);
+		const said = { role: 'user' as const, kind: 'speech' as const, said: 'which hospital ah' };
+		await runSearch({ kind: 'text', query: 'the one near Bedok', offset: 0, reply: 'en', thread: [said], context: step }, deps({ resolve }));
+		expect(resolve).toHaveBeenCalledWith([said, { role: 'user', kind: 'text', said: 'the one near Bedok', correction: true }], step);
+	});
+});

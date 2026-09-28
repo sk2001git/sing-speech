@@ -92,7 +92,9 @@ if (byId.length > 0) {
 			continue;
 		}
 		console.log(`${doc.agency}: ${doc.title.slice(0, 84)}`);
-		chosen.push({ ...doc, priority: 'asked-for' });
+		// `--as "…"`: the words a person would use, when the page's own question asks for facts
+		// rather than steps (GPFirst's "What are the terms and conditions?").
+		chosen.push({ ...doc, priority: 'asked-for', ...(at('as') ? { asked: at('as')! } : {}) });
 	}
 }
 
@@ -111,7 +113,34 @@ if (needed.length > 0) {
 	}
 }
 
-for (const topic of needed.length > 0 || byId.length > 0 ? [] : priority.topics) {
+/*
+ * `--guides` rewrites every guide held (a process entry) with the current prompt, asked in
+ * the words it was first written for (its first phrasing), from the page it cites. A guide is
+ * only replaced by a guide: if the writer refuses, or turns it into an answer, the old one
+ * stays. Added for compose-2's points and "more" (vault plan-suara-0020).
+ */
+const guides = args.includes('--guides');
+const keepKind = new Map<string, string>();
+if (guides) {
+	const raw = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/kb/raw-index.json'), 'utf8')) as { questions: RawDoc[] };
+	const byUrl = new Map(raw.questions.map((q) => [q.url, q]));
+	for (const name of fs.readdirSync(ENTRIES).filter((f) => f.endsWith('.json'))) {
+		const held = JSON.parse(fs.readFileSync(path.join(ENTRIES, name), 'utf8')) as { kind?: string; language?: string; sources?: { url?: string }[]; search?: { example_phrasings?: string[] } };
+		if (held.kind !== 'process' || held.language !== 'en') continue;
+		const doc = byUrl.get(held.sources?.[0]?.url ?? '');
+		if (!doc) {
+			console.warn(`  no crawled page for ${name}`);
+			continue;
+		}
+		chosen.push({ ...doc, priority: 'guide', asked: held.search?.example_phrasings?.[0] ?? doc.title });
+		keepKind.set(doc.url, name);
+	}
+	const max = Number(at('max') ?? 0);
+	if (max > 0) chosen.splice(max);
+	console.log(`${chosen.length} guides to rewrite`);
+}
+
+for (const topic of needed.length > 0 || byId.length > 0 || guides ? [] : priority.topics) {
 	if (onlyTopic && topic.key !== onlyTopic) continue;
 	const mine = priority.questions.filter((q) => q.priority === topic.key).slice(0, per);
 	chosen.push(...mine);
@@ -139,7 +168,12 @@ async function structure(doc: RawDoc & { priority: string; asked?: string }) {
 		return;
 	}
 	const entry = made.entry;
-	if (!refresh && held.has(`${entry.id}.json`)) return;
+	if (guides && entry.kind !== 'process') {
+		reasons.set('rewritten as an answer, so the guide was kept', (reasons.get('rewritten as an answer, so the guide was kept') ?? 0) + 1);
+		failed += 1;
+		return;
+	}
+	if (!refresh && !guides && held.has(`${entry.id}.json`)) return;
 
 	/*
 	 * A rerun that chooses a different heading must replace this page's card, not add a

@@ -12,6 +12,7 @@ import { findPlaces, placeIntent, type Place, type PlaceKind } from '../places/p
 import { bestPerEntry, PAGE_SIZE, rank, type Thresholds } from './rank';
 import { searchRaw, type RawIndex } from './raw-store';
 import type { Judge } from './judge';
+import type { StepContext, Turn } from './thread';
 import type { GuideFinder } from './web-guides';
 import type { WebAnswer } from './web-answer';
 import { edWaitAsked } from '../charts/ed-wait';
@@ -29,8 +30,22 @@ const Thread = z
 	.max(6)
 	.optional();
 
+/**
+ * The step of a guide the question was asked about ("Ask about this step"; vault plan-suara-0020,
+ * C1): it helps understand the question and is never a source for the answer (C4).
+ */
+const Context = z
+	.object({
+		guide: z.string().min(1).max(120),
+		step: z.number().int().min(1).max(20),
+		of: z.number().int().min(1).max(20),
+		name: z.string().min(1).max(60),
+		points: z.array(z.string().max(300)).max(5),
+	})
+	.optional();
+
 export const SearchRequest = z.discriminatedUnion('kind', [
-	z.object({ kind: z.literal('speech'), audioBase64: z.string().min(1), mimeType: z.string().max(100).optional(), reply: Reply, thread: Thread }),
+	z.object({ kind: z.literal('speech'), audioBase64: z.string().min(1), mimeType: z.string().max(100).optional(), reply: Reply, thread: Thread, context: Context }),
 	z.object({
 		kind: z.literal('text'),
 		query: z.string().min(1).max(240),
@@ -39,6 +54,7 @@ export const SearchRequest = z.discriminatedUnion('kind', [
 		offset: Offset,
 		reply: Reply,
 		thread: Thread,
+		context: Context,
 	}),
 	z.object({ kind: z.literal('topic'), area: z.enum(AREAS), offset: Offset, reply: Reply }),
 ]);
@@ -156,10 +172,19 @@ export interface SearchDeps {
 	/** Web answers kept from earlier questions. Absent means every such question searches the web. */
 	guides?: GuideFinder;
 	/** A correction's thread, resolved to the one question meant now (lib/kb/thread.ts). */
-	resolve?: (turns: import('./thread').Turn[]) => Promise<Hearing>;
+	resolve?: (turns: import('./thread').Turn[], context?: import('./thread').StepContext) => Promise<Hearing>;
 	/** MOH's A&E ward-bed waiting times, for the questions they answer. Absent means no chart. */
 	edWait?: () => Promise<EdWaitChart>;
 }
+
+/** The latest turn, marked a correction when it follows a thread, resolved with the step if there is one. */
+function resolveWith(resolve: NonNullable<SearchDeps['resolve']>, thread: Turn[] | undefined, turn: Turn, context: StepContext | undefined): Promise<Hearing> {
+	const turns = thread ? [...thread, { ...turn, correction: true as const }] : [turn];
+	return context ? resolve(turns, context) : resolve(turns);
+}
+
+/** Which step the answer is about, for the screen to say so (C2). */
+const aboutOf = (context: StepContext | undefined) => (context ? { about: { step: context.step, name: context.name } } : {});
 
 export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<SearchResponse> {
 	if (req.kind === 'topic') return topic(req, deps);
@@ -178,12 +203,13 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 			if (err instanceof NothingHeard) return { kind: 'silence', language: req.reply === 'zh-Hans' ? 'zh-Hans' : 'en' };
 			throw err;
 		}
-		if (h.greeting && !req.thread) return { kind: 'greeting', language: replyLanguage(req.reply, h.language) };
-		// A spoken correction: the thread and this transcript make the question meant now.
-		if (req.thread && deps.resolve) {
-			const corrected = await deps.resolve([...req.thread, { role: 'user', kind: 'speech', said: (h.said ?? h.sentence).trim(), correction: true }]);
+		if (h.greeting && !req.thread && !req.context) return { kind: 'greeting', language: replyLanguage(req.reply, h.language) };
+		// A spoken correction, or a question about a step: the thread, the step and this
+		// transcript make the question meant now.
+		if ((req.thread || req.context) && deps.resolve) {
+			const corrected = await resolveWith(deps.resolve, req.thread, { role: 'user', kind: 'speech', said: (h.said ?? h.sentence).trim() }, req.context);
 			language = replyLanguage(req.reply, corrected.language);
-			heard = { short: corrected.short, sentence: corrected.sentence, said: corrected.said ?? '', corrected: true };
+			heard = { short: corrected.short, sentence: corrected.sentence, said: corrected.said ?? '', ...(req.thread ? { corrected: true as const } : {}), ...aboutOf(req.context) };
 			query = corrected.meaning_en;
 		} else {
 			language = replyLanguage(req.reply, h.language);
@@ -191,11 +217,12 @@ export async function runSearch(req: SearchRequest, deps: SearchDeps): Promise<S
 			heard = { short: h.short, sentence: h.sentence, ...(h.said?.trim() ? { said: h.said.trim() } : {}) };
 			query = h.meaning_en;
 		}
-	} else if (req.thread && deps.resolve) {
-		// A typed correction, perhaps a volunteer's: the thread makes the question meant now.
-		const corrected = await deps.resolve([...req.thread, { role: 'user', kind: 'text', said: req.query.trim(), correction: true }]);
+	} else if ((req.thread || req.context) && deps.resolve) {
+		// A typed correction, perhaps a volunteer's, or a question about a step: the thread and
+		// the step make the question meant now.
+		const corrected = await resolveWith(deps.resolve, req.thread, { role: 'user', kind: 'text', said: req.query.trim() }, req.context);
 		language = replyLanguage(req.reply, corrected.language);
-		heard = { short: corrected.short, sentence: corrected.sentence, said: req.query.trim(), corrected: true };
+		heard = { short: corrected.short, sentence: corrected.sentence, said: req.query.trim(), ...(req.thread ? { corrected: true as const } : {}), ...aboutOf(req.context) };
 		query = corrected.meaning_en;
 		offset = req.offset;
 	} else {

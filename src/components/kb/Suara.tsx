@@ -12,7 +12,7 @@ import { blobToBase64, pickMimeType } from '../../lib/record';
 import { createSilenceGate, rms } from '../../lib/silence';
 import { chartHeadline } from './ChartCard';
 import { readBack } from '../../lib/kb/readback';
-import type { Turn } from '../../lib/kb/thread';
+import type { StepContext, Turn } from '../../lib/kb/thread';
 import KbScreen from './KbScreen';
 
 const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' };
@@ -194,6 +194,10 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const thread = useRef<Turn[]>([]);
 	/** The next recording is a spoken correction of the question on screen. */
 	const correcting = useRef(false);
+	/** The step the next question is about, from "Ask about this step" (plan-suara-0020, C1). Sent once. */
+	const askContext = useRef<StepContext | null>(null);
+	/** The step last read aloud, so coming back to it from its question does not read it again. */
+	const spokenStep = useRef('');
 	const say = (text: string, language: EntryLanguage) => void routeSay(text, language, route);
 	/** The latest finish function, so the silence timer never calls a stale closure. */
 	const finishRef = useRef<(auto: 'done' | 'nothing' | 'tap') => void>(() => {});
@@ -210,6 +214,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	const stepKey =
 		state.phase === 'steps' ? `${state.entry.id}:${state.index}` : state.phase === 'web-steps' ? `web:${state.back.result.answer.title_full}:${state.index}` : '';
 	useEffect(() => {
+		if (!stepKey) {
+			// Asking about the step keeps it in mind; leaving the guide forgets it.
+			if (!state.guide) spokenStep.current = '';
+			return;
+		}
+		if (stepKey === spokenStep.current) return;
+		spokenStep.current = stepKey;
 		if (state.phase === 'web-steps') {
 			const step = state.back.result.answer.steps[state.index];
 			if (step) say(`${step.name}. ${step.text}`, state.back.result.language);
@@ -218,7 +229,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		if (state.phase !== 'steps') return;
 		const step = state.entry.steps?.[state.index];
 		if (step) say(`${step.name}. ${step.text}`, state.entry.language);
-	}, [stepKey]);
+	}, [stepKey, state.guide]);
 
 	useEffect(
 		() => () => {
@@ -247,7 +258,9 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		web.current = controller;
 		dispatch({ type: 'WEB_SEARCH', heard, language });
 		try {
-			const answer = await fetchWeb(heard.said ?? heard.sentence, opts.query, language, route, (stage) => dispatch({ type: 'WEB_STAGE', stage }), controller.signal);
+			// A question about a step searches the question it stands for, not "which hospital ah?".
+			const question = heard.about && opts.query ? opts.query : heard.said ?? heard.sentence;
+			const answer = await fetchWeb(question, opts.query, language, route, (stage) => dispatch({ type: 'WEB_STAGE', stage }), controller.signal);
 			if (controller.signal.aborted) return null;
 			if (!answer) throw new Error('no answer');
 			dispatch({ type: 'WEB_ANSWER', answer });
@@ -283,11 +296,14 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			const type = current.rec.mimeType || current.mimeType || 'audio/webm';
 			const isCorrection = correcting.current && thread.current.length > 0;
 			correcting.current = false;
+			const context = askContext.current;
+			askContext.current = null;
 			const reply = await post({
 				kind: 'speech',
 				audioBase64: await blobToBase64(new Blob(current.chunks, { type })),
 				mimeType: type,
 				...(isCorrection ? { thread: thread.current } : {}),
+				...(context ? { context } : {}),
 			});
 			remember(reply, 'speech', isCorrection);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
@@ -317,7 +333,9 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 					dispatch({ type: 'ASKING' });
 					try {
 						const heard = { short: said.slice(0, 40), sentence: said, said };
-						const reply = await post({ kind: 'text', query: said, heard });
+						const context = askContext.current;
+						askContext.current = null;
+						const reply = await post({ kind: 'text', query: said, heard, ...(context ? { context } : {}) });
 						if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
 						// Nothing in Suara: GPT-Live waits while the web is searched, then says the one line.
 						if ((reply.kind === 'nothing' || (reply.kind === 'results' && reply.webFirst)) && canWeb) {
@@ -447,7 +465,10 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		tell(readBack(reply.result.heard, reply.result.language, `${lead} ${top.title.full}. ${top.summary.text}`), top.language);
 	}
 
-	async function onSpeak(): Promise<void> {
+	/** `context`: the step, when asked with "Ask about this step"; nothing for any other question. */
+	async function onSpeak(context?: StepContext): Promise<void> {
+		// Only a step is sent: a click handler passing its event here must never reach the server.
+		if (state.phase !== 'listening') askContext.current = context && typeof context === 'object' && 'step' in context && 'guide' in context ? context : null;
 		if (isLive) {
 			// One tap opens the session and keeps it open; the next tap ends it.
 			if (live.current) {

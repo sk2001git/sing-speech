@@ -11,8 +11,11 @@ const entries = (JSON.parse(readFileSync('data/kb/index.json', 'utf8')) as { ent
 
 describe('vectorId', () => {
 	it('fits Vectorize\'s 64-byte id limit for every card, even the longest', () => {
-		expect(Math.max(...entries.map((id) => id.length))).toBeGreaterThan(64);
-		for (const id of entries) expect(new TextEncoder().encode(vectorId(id, 99)).length).toBeLessThanOrEqual(64);
+		// The longest an id can be (a 60-character slug after "sg.<agency>."), whatever the index
+		// holds today: a rewrite of the cards shortened the longest real one to 58 (2026-09-29).
+		const longest = `sg.mylegacy.${'a'.repeat(60)}`;
+		expect(longest.length).toBeGreaterThan(64);
+		for (const id of [...entries, longest]) expect(new TextEncoder().encode(vectorId(id, 99)).length).toBeLessThanOrEqual(64);
 	});
 
 	it('gives no two cards the same key', () => {

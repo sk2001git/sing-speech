@@ -10,6 +10,7 @@ import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
 import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
+import type { StepContext } from '../../lib/kb/thread';
 import type { WebAnswer, WebSource } from '../../lib/kb/web-answer';
 
 /**
@@ -24,7 +25,8 @@ export interface KbScreenProps {
 	englishIds: string[];
 	loadingMore: boolean;
 	dispatch: (event: FlowEvent) => void;
-	onSpeak: () => void;
+	/** `context`: the step, when asked with "Ask about this step" (plan-suara-0020). */
+	onSpeak: (context?: StepContext) => void;
 	onMore: () => void;
 	onTopic: (area: Area) => void;
 	onSay: (text: string, language: EntryLanguage) => void;
@@ -81,17 +83,19 @@ const WORDS = {
 		gridView: 'Two per row',
 		singleView: 'One large card',
 		back: 'Answers',
-		startThese: 'Start these steps?',
-		confirmEach: (n: number) => `${n} steps · you confirm each one`,
-		seeAll: 'See all steps',
-		yesStart: 'Yes, start',
-		notThis: 'Not this',
 		stepOf: (i: number, n: number) => `Step ${i} of ${n}`,
 		readAgain: 'Read again',
 		askElse: 'Ask something else',
 		allDone: 'That is every step',
 		stages: 'Stages',
 		stepBack: 'Back',
+		nothingMore: (from: string) => `${from} says nothing more about this step.`,
+		backToStep: (n: number) => `Back to step ${n}`,
+		aboutStep: (n: number, name: string) => `About step ${n} · ${name}`,
+		stepsFrom: (n: number, from: string) => `${n} ${n === 1 ? 'step' : 'steps'} · from ${from}`,
+		theSteps: 'The steps',
+		startTheGuide: 'Start the guide',
+		readSteps: 'Read the steps',
 		nowStep: (i: number, n: number) => `Now, step ${i} of ${n}: `,
 		start: 'Start',
 		finish: 'Finish',
@@ -102,7 +106,6 @@ const WORDS = {
 		clearedIs: 'Cleared: ',
 		cleared: 'Cleared',
 		moreStep: 'More about this step',
-		aboutGuide: 'About this guide',
 		askStep: 'Ask about this step',
 		goAgain: 'Go through it again',
 		allDoneLead: 'You have gone through every step.',
@@ -164,8 +167,6 @@ const WORDS = {
 		fineWeb: 'Found on the web, not an official answer.',
 		fineOfficialOn: (date: string) => `From official government pages, found by web search on ${date}.`,
 		fineWebOn: (date: string) => `Found on the web on ${date}, not an official answer.`,
-		startWeb: (n: number) => `Start these ${n} ${n === 1 ? 'step' : 'steps'}?`,
-		confirmWeb: 'You confirm each one. You can stop at any time.',
 		answerBack: 'Answer',
 		fromSite: (site: string, title: string) => `From ${site}${title ? ` · ${title}` : ''}`,
 		noReliable: 'I could not find a reliable answer',
@@ -202,17 +203,19 @@ const WORDS = {
 		gridView: '每行两个',
 		singleView: '一个大卡片',
 		back: '答案',
-		startThese: '开始这些步骤？',
-		confirmEach: (n: number) => `${n} 个步骤 · 每步您来确认`,
-		seeAll: '查看所有步骤',
-		yesStart: '好，开始',
-		notThis: '不是这个',
 		stepOf: (i: number, n: number) => `第 ${i} 步，共 ${n} 步`,
 		readAgain: '再读一次',
 		askElse: '问别的',
 		allDone: '所有步骤都完成了',
 		stages: '步骤',
 		stepBack: '返回',
+		nothingMore: (from: string) => `${from} 没有关于这一步的更多说明。`,
+		backToStep: (n: number) => `回到第 ${n} 步`,
+		aboutStep: (n: number, name: string) => `关于第 ${n} 步 · ${name}`,
+		stepsFrom: (n: number, from: string) => `${n} 个步骤 · 来自 ${from}`,
+		theSteps: '步骤',
+		startTheGuide: '开始这个指南',
+		readSteps: '读出步骤',
 		nowStep: (i: number, n: number) => `现在，第 ${i} 步，共 ${n} 步：`,
 		start: '开始',
 		finish: '完成',
@@ -223,7 +226,6 @@ const WORDS = {
 		clearedIs: '已完成：',
 		cleared: '完成了',
 		moreStep: '这一步的详情',
-		aboutGuide: '关于这个指南',
 		askStep: '问这一步',
 		goAgain: '再做一遍',
 		allDoneLead: '您已经完成每一步。',
@@ -284,8 +286,6 @@ const WORDS = {
 		fineWeb: '来自网络，不是官方答案。',
 		fineOfficialOn: (date: string) => `来自政府官方网页，于 ${date} 由网络搜索找到。`,
 		fineWebOn: (date: string) => `于 ${date} 在网上找到，不是官方答案。`,
-		startWeb: (n: number) => `开始这 ${n} 个步骤？`,
-		confirmWeb: '每一步由您确认，随时可以停下。',
 		answerBack: '答案',
 		fromSite: (site: string, title: string) => `来自 ${site}${title ? ` · ${title}` : ''}`,
 		noReliable: '找不到可靠的答案',
@@ -357,7 +357,7 @@ export default function KbScreen(props: KbScreenProps) {
 					words={{ find: w.find, placeholder: w.findPlaceholder, nothing: w.findNothing, speakInstead: w.speakInstead, close: w.close }}
 					onClose={props.onFindClose}
 					onChoose={props.onFound}
-					onSpeak={props.onSpeak}
+					onSpeak={() => props.onSpeak()}
 				/>
 			)}
 		</div>
@@ -366,7 +366,22 @@ export default function KbScreen(props: KbScreenProps) {
 
 type BodyProps = KbScreenProps & { w: Words; lang: EntryLanguage };
 
+/** Where a question asked from a guide is answered: these offer the way back to its step (C3). */
+const GUIDE_RETURN = new Set<FlowState['phase']>(['results', 'places', 'chart', 'journey', 'notfound', 'web']);
+
 function Body(p: BodyProps) {
+	const s = p.state;
+	// A web answer reached from the closest cards goes back to those cards first; they lead back here.
+	const toGuide = s.guide && GUIDE_RETURN.has(s.phase) && !(s.phase === 'web' && s.from);
+	return (
+		<>
+			{toGuide && <BackRow {...p} label={p.w.backToStep(s.guide!.index + 1)} />}
+			<Screen {...p} />
+		</>
+	);
+}
+
+function Screen(p: BodyProps) {
 	const s = p.state;
 	switch (s.phase) {
 		case 'home':
@@ -499,7 +514,7 @@ function Talk(p: BodyProps) {
 				<h1 className="k-h1">{p.w.imListening}</h1>
 				<LiveWaveform active analyser={p.analyser} />
 				<div className="k-listen-foot">
-					<button className="k-stop" type="button" aria-label={p.w.tapDone} onClick={p.onSpeak}>
+					<button className="k-stop" type="button" aria-label={p.w.tapDone} onClick={() => p.onSpeak()}>
 						<StopIcon />
 					</button>
 					<p className="k-orb-label" aria-live="polite">
@@ -515,7 +530,7 @@ function Talk(p: BodyProps) {
 			<h1 className="k-h1">{heading}</h1>
 			{s.phase === 'home' && s.notice === 'nothing' && <p className="k-notice">{p.w.nothingHeard}</p>}
 			<section className="k-orb-zone">
-				<button className="k-orb" type="button" onClick={p.onSpeak} disabled={waiting} aria-label={p.w.tapSpeak}>
+				<button className="k-orb" type="button" onClick={() => p.onSpeak()} disabled={waiting} aria-label={p.w.tapSpeak}>
 					{waiting ? <DotsIcon /> : <MicIcon />}
 				</button>
 				<p className="k-orb-label" aria-live="polite">
@@ -788,44 +803,61 @@ function BackRow(p: BodyProps & { label?: string; event?: 'BACK' | 'STEP_BACK' }
 }
 
 /**
- * "Start these steps?" as a bottom sheet: one black button and a plain "Not this", the way
- * Airbnb asks (owner's pick, taste lab round 2). The entry stays visible behind it.
+ * Before a guide starts: every step in order, then one button to start (owner, 2026-09-29:
+ * "before the start of the guide, we should see the generic steps"). It replaces the
+ * "Start these steps?" sheet; Back is the "Not this". The guide's own details fold under
+ * "Good to know", since a step shows only what bears on it.
  */
-function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }> }) {
-	const e = p.state.entry;
-	const steps = e.steps ?? [];
+function GuideOverview(p: BodyProps & { title: string; steps: readonly { name: string }[]; from: string; language: EntryLanguage; details?: readonly { heading: string; body: string }[]; backLabel?: string }) {
+	const details = p.details ?? [];
 	return (
 		<>
-			<BackRow {...p} />
-			<article className="k-card k-card-lead">
-				<p className="k-card-title k-card-title-lg">{e.title.full}</p>
-				<details className="k-detail">
+			<BackRow {...p} {...(p.backLabel ? { label: p.backLabel } : {})} />
+			<h1 className="k-h1">{p.title}</h1>
+			<p className="k-lead">{p.w.stepsFrom(p.steps.length, p.from)}</p>
+			<ol className="k-ov" aria-label={p.w.theSteps}>
+				{p.steps.map((st, i) => (
+					<li key={i}>
+						<span className="k-ov-n" aria-hidden="true">
+							{i + 1}
+						</span>
+						<span className="k-ov-t">{st.name}</span>
+					</li>
+				))}
+			</ol>
+			{details.length > 0 && (
+				<details className="k-know">
 					<summary>
-						<span>{p.w.seeAll}</span>
+						<span>
+							{p.w.goodToKnow} <small>· {p.w.thingsToCheck(details.length)}</small>
+						</span>
 						<ChevronIcon />
 					</summary>
-					<ol className="k-step-list">
-						{steps.map((st) => (
-							<li key={st.position}>{st.name}</li>
+					<div className="k-xp-in">
+						{details.map((d) => (
+							<div key={d.heading} className="k-guide-sec">
+								<h3>{d.heading}</h3>
+								<p>{d.body}</p>
+							</div>
 						))}
-					</ol>
+					</div>
 				</details>
-			</article>
-			<div className="k-scrim" aria-hidden="true" />
-			<section className="k-sheet" aria-labelledby="k-sheet-title">
-				<h2 className="k-sheet-title" id="k-sheet-title">
-					{p.w.startThese}
-				</h2>
-				<p className="k-lead">{p.w.confirmEach(steps.length)}</p>
-				<button className="k-btn k-btn-primary confirm-yes" type="button" onClick={() => p.dispatch({ type: 'YES' })}>
-					{p.w.yesStart}
-				</button>
-				<button className="k-link confirm-no" type="button" onClick={() => p.dispatch({ type: 'NO' })}>
-					{p.w.notThis}
-				</button>
-			</section>
+			)}
+			<button className="k-btn k-btn-primary confirm-yes" type="button" onClick={() => p.dispatch({ type: 'YES' })}>
+				{p.w.startTheGuide}
+				<ArrowIcon />
+			</button>
+			<button className="k-btn k-btn-plain" type="button" onClick={() => p.onSay(p.steps.map((st, i) => `${i + 1}. ${st.name}.`).join(' '), p.language)}>
+				<SpeakerIcon />
+				{p.w.readSteps}
+			</button>
 		</>
 	);
+}
+
+function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }> }) {
+	const e = p.state.entry;
+	return <GuideOverview {...p} title={e.title.full} steps={e.steps ?? []} from={publisherOf(e)} language={e.language} details={e.details ?? []} />;
 }
 
 /*
@@ -839,15 +871,49 @@ function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }
 interface GuideStepLine {
 	name: string;
 	text: string;
+	/** The step in points (compose-2); a step written before them shows its text. */
+	points?: { lead?: string; items: string[] };
+	/** "More about this step": at most two sentences, the bottom line first. */
+	about?: string;
 	confirm_label: string;
 }
 interface GuideLink {
 	url: string;
 	label: string;
 }
-interface GuideMore {
-	heading?: string;
-	body: string;
+
+/** The step as the person reads it: its points, or its text when it has none. */
+function StepBody({ step }: { step: GuideStepLine }) {
+	const p = step.points;
+	if (!p?.items.length) return <p className="k-guide-text">{step.text}</p>;
+	// One point with no lead-in is a sentence, not a list (NN/g: a list is three or more).
+	if (p.items.length === 1 && !p.lead) return <p className="k-guide-text">{p.items[0]}</p>;
+	return (
+		<>
+			{p.lead && <p className="k-pts-lead">{p.lead}</p>}
+			<ul className="k-pts">
+				{p.items.map((t) => (
+					<li key={t}>{t}</li>
+				))}
+			</ul>
+		</>
+	);
+}
+
+/**
+ * Bottom line up front: the first sentence in bold, then the one detail. Only when there is a
+ * detail after a short bottom line: a single long sentence (a list of eight hospitals) in bold
+ * is a block, not an emphasis.
+ */
+function BottomLine({ text }: { text: string }) {
+	const m = /^(.+?[.!?。！？])(?:\s+|$)([\s\S]*)$/.exec(text.trim());
+	if (!m || !m[2] || [...m[1]!].length > 100) return <>{text}</>;
+	return (
+		<>
+			<b>{m[1]}</b>
+			{m[2] ? ` ${m[2]}` : ''}
+		</>
+	);
 }
 
 /** Long enough to see the button, the bubble and the line say "cleared" before the next step. */
@@ -863,19 +929,25 @@ function GuideStep(
 		language: EntryLanguage;
 		/** Where this step comes from, shown under it (web steps). */
 		from?: GuideLink | null;
-		/** The sheet: detail sections and the source. */
-		more: readonly GuideMore[];
-		moreLabel?: string;
+		/** The page the guide comes from, in the drop-down. */
 		source: GuideLink | null;
+		/** Who the guide is from, for "… says nothing more about this step". */
+		publisher: string;
 	},
 ) {
 	const { steps, index, w } = p;
 	const current = steps[index]!;
-	// Both belong to one step: moving on or back closes the sheet and ends the clearing.
+	// The clearing belongs to one step: moving on or back ends it.
 	const [clearingAt, setClearingAt] = useState<number | null>(null);
-	const [openAt, setOpenAt] = useState<number | null>(null);
 	const clearing = clearingAt === index;
-	const open = openAt === index;
+	// "Ask about this step" sends the step with the question (plan-suara-0020, C1).
+	const context: StepContext = {
+		guide: p.title.slice(0, 120),
+		step: index + 1,
+		of: steps.length,
+		name: current.name.slice(0, 60),
+		points: current.points?.items.length ? current.points.items : [current.text],
+	};
 	// Which way the guide moved, so the step comes in from that side.
 	const at = useRef(index);
 	const dir = useRef<'fwd' | 'bwd'>('fwd');
@@ -909,16 +981,32 @@ function GuideStep(
 			/>
 			<div key={index} className={`k-guide-step k-guide-${dir.current}`}>
 				<h1 className="k-h1">{current.name}</h1>
-				<p className="k-guide-text">{current.text}</p>
+				<StepBody step={current} />
 				{p.from && (
 					<a className="k-web-from" href={p.from.url} target="_blank" rel="noopener noreferrer">
 						{p.from.label}
 					</a>
 				)}
-				<button className="k-guide-more" type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpenAt(index)}>
-					{w.moreStep}
-					<NextIcon />
-				</button>
+				{/* A drop-down in place, like "Good to know" (owner, 2026-09-29, over the sheet). Keyed
+				    with the step, so it closes when the step changes. */}
+				<details className="k-xp">
+					<summary>
+						<span>{w.moreStep}</span>
+						<ChevronIcon />
+					</summary>
+					<div className="k-xp-in">
+						<p className="k-about">{current.about ? <BottomLine text={current.about} /> : w.nothingMore(p.publisher)}</p>
+						{p.source && (
+							<a className="k-web-from" href={p.source.url} target="_blank" rel="noopener noreferrer">
+								{p.source.label}
+							</a>
+						)}
+						<button className="k-btn k-btn-quiet k-btn-mid" type="button" disabled={!canSpeak(p.state)} onClick={() => p.onSpeak(context)}>
+							<MicIcon />
+							{w.askStep}
+						</button>
+					</div>
+				</details>
 			</div>
 			<div className="k-guide-foot">
 				<button className="k-btn k-btn-primary k-guide-go" type="button" onClick={clear} {...(clearing ? { 'data-cleared': '' } : {})}>
@@ -931,7 +1019,6 @@ function GuideStep(
 				</button>
 			</div>
 			<AskButton {...p} label={w.askElse} />
-			{open && <GuideSheet {...p} name={current.name} onClose={() => setOpenAt(null)} />}
 		</>
 	);
 }
@@ -1012,59 +1099,8 @@ function GuideBar(p: { w: Words; steps: readonly GuideStepLine[]; index: number;
 	);
 }
 
-/** More about the step, in a sheet from below: detail, where it comes from, and a question. */
-function GuideSheet(p: BodyProps & { name: string; more: readonly GuideMore[]; moreLabel?: string; source: GuideLink | null; onClose: () => void }) {
-	const close = useRef<HTMLButtonElement>(null);
-	const { onClose } = p;
-	useEffect(() => {
-		close.current?.focus();
-		const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-		document.addEventListener('keydown', esc);
-		return () => document.removeEventListener('keydown', esc);
-	}, [onClose]);
-	return (
-		<>
-			<div className="k-scrim" aria-hidden="true" onClick={p.onClose} />
-			<section className="k-sheet k-guide-sheet" role="dialog" aria-modal="true" aria-labelledby="k-guide-sheet-title">
-				<div className="k-guide-sheet-head">
-					<h2 className="k-guide-sheet-title" id="k-guide-sheet-title">
-						{p.name}
-					</h2>
-					<button ref={close} className="k-guide-x" type="button" aria-label={p.w.close} onClick={p.onClose}>
-						<CrossIcon />
-					</button>
-				</div>
-				{p.more.length > 0 && p.moreLabel && <p className="k-label">{p.moreLabel}</p>}
-				{p.more.map((d) => (
-					<div key={`${d.heading ?? ''}|${d.body}`} className="k-guide-sec">
-						{d.heading && <h3>{d.heading}</h3>}
-						<p>{d.body}</p>
-					</div>
-				))}
-				{p.source && (
-					<a className="k-web-from" href={p.source.url} target="_blank" rel="noopener noreferrer">
-						{p.source.label}
-					</a>
-				)}
-				<button
-					className="k-btn k-btn-quiet k-btn-mid"
-					type="button"
-					disabled={!canSpeak(p.state)}
-					onClick={() => {
-						p.onClose();
-						p.onSpeak();
-					}}
-				>
-					<MicIcon />
-					{p.w.askStep}
-				</button>
-			</section>
-		</>
-	);
-}
-
 /** Every step cleared: a ticked list (taste lab steps-10, over one large tick). */
-function GuideDone(p: BodyProps & { title: string; steps: readonly GuideStepLine[] }) {
+function GuideDone(p: BodyProps & { title: string; steps: readonly { name: string }[] }) {
 	return (
 		<>
 			<BackRow {...p} event="STEP_BACK" label={p.w.stepBack} />
@@ -1096,14 +1132,12 @@ function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> })
 		<GuideStep
 			{...p}
 			title={e.title.full}
-			steps={e.steps ?? []}
+			steps={(e.steps ?? []).map((s) => ({ name: s.name, text: s.text, confirm_label: s.confirm_label, ...(s.points ? { points: s.points } : {}), ...(s.about ? { about: s.about.text } : {}) }))}
 			index={p.state.index}
 			reached={p.state.reached ?? p.state.index}
 			language={e.language}
-			// Entries carry detail for the whole guide, not per step, so the sheet says so.
-			more={e.details ?? []}
-			moreLabel={p.w.aboutGuide}
 			source={source ? { url: source.url, label: p.w.from(publisherOf(e)) } : null}
+			publisher={publisherOf(e)}
 		/>
 	);
 }
@@ -1123,10 +1157,9 @@ function WebSteps(p: BodyProps & { state: Extract<FlowState, { phase: 'web-steps
 			reached={p.state.reached ?? index}
 			language={language}
 			from={from ? { url: from.url, label: p.w.fromSite(from.site, from.title) } : null}
-			// The step names its page on the screen; the sheet holds the answer's cautions.
-			more={a.cautions.map((body) => ({ body }))}
-			moreLabel={p.w.goodToKnow}
+			// The step names its page under it, so the drop-down does not repeat it.
 			source={null}
+			publisher={from?.site ?? sitesOf(a)}
 		/>
 	);
 }
@@ -1170,10 +1203,14 @@ function WebSearching(p: BodyProps & { state: Extract<FlowState, { phase: 'web-s
 }
 
 /** Their question in full, spoken or typed: the web answers exactly this. */
-function Question({ w, heard, lang, onAsk, onSpeak }: { w: Words; heard: { said?: string; sentence: string; corrected?: true }; lang: EntryLanguage; onAsk?: (text: string) => void; onSpeak?: () => void }) {
+function Question({ w, heard, lang, onAsk, onSpeak }: { w: Words; heard: { said?: string; sentence: string; corrected?: true; about?: { step: number; name: string } }; lang: EntryLanguage; onAsk?: (text: string) => void; onSpeak?: () => void }) {
 	const edit = { ...(onAsk ? { onAsk } : {}), ...(onSpeak ? { onSpeak } : {}) };
+	// Asked about a step: say which, so "which hospital ah?" reads as the question it was (C2).
+	const about = heard.about ? <p className="k-about-step">{w.aboutStep(heard.about.step, heard.about.name)}</p> : null;
 	// A corrected question shows what Suara now understands, marked, not the correction's fragment.
-	if (heard.corrected) return <Said w={w} said={heard.sentence} label={w.youAskedCorrected} lang={lang} {...edit} />;
+	if (heard.corrected) return <>{about}<Said w={w} said={heard.sentence} label={w.youAskedCorrected} lang={lang} {...edit} /></>;
+	// About a step, what Suara understood is the question; their words alone would not say it.
+	if (heard.about) return <>{about}<Said w={w} said={heard.sentence} label={w.youAsked} lang={lang} {...edit} /></>;
 	return heard.said ? <Said w={w} said={heard.said} lang={lang} {...edit} /> : <Said w={w} said={heard.sentence} label={w.youAsked} lang={lang} {...edit} />;
 }
 
@@ -1324,38 +1361,13 @@ function WebTail({ w, answer: a, lang, foundAt }: { w: Words; answer: WebAnswer;
 }
 
 function WebConfirm(p: BodyProps & { state: Extract<FlowState, { phase: 'web-confirm' }> }) {
-	const a = p.state.back.result.answer;
-	return (
-		<>
-			<BackRow {...p} label={p.w.answerBack} />
-			<article className="k-card k-card-lead">
-				<p className="k-card-title k-card-title-lg">{a.title_full}</p>
-				<ol className="k-step-list">
-					{a.steps.map((st, i) => (
-						<li key={i}>{st.name}</li>
-					))}
-				</ol>
-			</article>
-			<div className="k-scrim" aria-hidden="true" onClick={() => p.dispatch({ type: 'NO' })} />
-			<section className="k-sheet" role="dialog" aria-modal="true" aria-labelledby="k-sheet-title">
-				<h2 className="k-sheet-title" id="k-sheet-title">
-					{p.w.startWeb(a.steps.length)}
-				</h2>
-				<p className="k-lead">{p.w.confirmWeb}</p>
-				<button className="k-btn k-btn-primary confirm-yes" type="button" onClick={() => p.dispatch({ type: 'YES' })}>
-					{p.w.yesStart}
-				</button>
-				<button className="k-link confirm-no" type="button" onClick={() => p.dispatch({ type: 'NO' })}>
-					{p.w.notThis}
-				</button>
-			</section>
-		</>
-	);
+	const { answer: a, language } = p.state.back.result;
+	return <GuideOverview {...p} title={a.title_full} steps={a.steps} from={sitesOf(a)} language={language} backLabel={p.w.answerBack} />;
 }
 
 function AskButton(p: BodyProps & { label: string; primary?: boolean }) {
 	return (
-		<button className={`k-btn ${p.primary ? 'k-btn-primary' : 'k-btn-plain'}`} type="button" onClick={p.onSpeak} disabled={!canSpeak(p.state)}>
+		<button className={`k-btn ${p.primary ? 'k-btn-primary' : 'k-btn-plain'}`} type="button" onClick={() => p.onSpeak()} disabled={!canSpeak(p.state)}>
 			<MicIcon />
 			{p.label}
 		</button>
@@ -1398,11 +1410,6 @@ const SpeakerIcon = () => (
 const ChevronIcon = () => (
 	<Svg>
 		<path d="m6 9 6 6 6-6" />
-	</Svg>
-);
-const NextIcon = () => (
-	<Svg>
-		<path d="m9 6 6 6-6 6" />
 	</Svg>
 );
 const FlagIcon = () => (
