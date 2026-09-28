@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preference lab</title>
+<style>
+:root{
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --bg:#FFFFFF;--bg-2:#F6F7F9;--line:#E8E9ED;--ink:#121316;--ink-2:#62656E;--ink-3:#9A9DA6;--focus:#2F5BEA;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}}
+:root[data-theme="dark"]{--bg:#0E0F11;--bg-2:#17181B;--line:#26282D;--ink:#F2F3F5;--ink-2:#A2A5AD;--ink-3:#6C6F77;--focus:#7C9BFF}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+kbd{font:inherit;font-size:11px;color:var(--ink-3);border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-left:6px}
+@media (hover:none){kbd{display:none}}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.brand{font-weight:600;font-size:15px}
+.tabs,.seg{display:flex;gap:2px;background:var(--bg-2);padding:3px;border-radius:10px}
+.tabs button,.seg button{padding:6px 11px;border-radius:8px;color:var(--ink-2);font-weight:500;font-size:13px}
+.tabs button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06),0 0 0 1px var(--line)}
+.meta{margin-left:auto;display:flex;gap:14px;color:var(--ink-3);font-size:12.5px;font-variant-numeric:tabular-nums}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.scene b{font-weight:600;font-size:17px;letter-spacing:-.015em}
+.scene span{color:var(--ink-3);font-size:13px;margin-left:8px}
+.hint{color:var(--ink-3);font-size:12.5px;margin:-4px 0 14px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;transition:opacity .22s}
+.duel.leaving{opacity:0}
+.side{display:grid;gap:10px}
+.pick{height:44px;border-radius:12px;background:var(--bg-2);font-weight:500;transition:background-color .2s,transform .12s}
+.pick:hover{background:color-mix(in srgb,var(--ink) 7%,var(--bg))}
+.pick:active{transform:scale(.98)}
+.pick.chosen{background:var(--ink);color:var(--bg)}
+.row2{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.row2 button{padding:8px 14px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:13px}
+.row2 button:hover{background:var(--bg-2);color:var(--ink)}
+.after{display:grid;justify-items:center;gap:8px;margin-top:14px;min-height:64px}
+.learned{color:var(--ink-2);font-size:13px;text-align:center}
+.why{display:none;width:min(440px,100%);height:38px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:13px}
+.why.show{display:block}
+@media (max-width:720px){.duel{grid-template-columns:1fr}.meta span:last-child{display:none}}
+.step{color:var(--ink-2);font-size:13px;font-weight:500}
+.board{display:grid;grid-template-columns:repeat(var(--k,3),minmax(0,1fr));gap:16px;transition:opacity .22s}
+.board.leaving{opacity:0}
+.card{display:grid;gap:10px;align-content:start;border-radius:22px;transition:opacity .2s}
+.card .stage{min-height:260px;transition:box-shadow .2s}
+.card.best .stage{box-shadow:0 0 0 2px var(--ink)}
+.card.worst{opacity:.45}
+.card.done:not(.best):not(.worst){opacity:.8}
+.cap{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:13px;padding:0 4px}
+.cap b{font-weight:600}
+.cap a,.cap i{color:var(--ink-3);font-style:normal;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cap a{text-decoration:underline;text-underline-offset:2px}
+.donebox{grid-column:1/-1;border-radius:20px;background:var(--bg-2);padding:28px;display:grid;gap:10px;justify-items:start}
+.donebox h2{font-size:20px;font-weight:600;letter-spacing:-.015em}.donebox p{color:var(--ink-2);max-width:62ch;line-height:1.5}
+.donebox ul{margin:0;padding-left:18px;color:var(--ink-2);line-height:1.6}
+.donebox .actions{margin-top:6px}.donebox .actions button{background:var(--bg);box-shadow:0 0 0 1px var(--line)}
+.donebox .actions button:first-child{background:var(--ink);color:var(--bg);box-shadow:none}
+.card .pick.worst-mode{background:transparent;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2)}
+.card.best .pick{background:var(--ink);color:var(--bg)}
+@media (max-width:720px){.board{grid-template-columns:1fr}.card .stage{min-height:220px}.top-in{flex-wrap:wrap;gap:10px}.meta{margin-left:0}}
+.head2{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head2 h1{font-size:24px;font-weight:600;letter-spacing:-.02em}
+.head2 p{color:var(--ink-2);margin-top:4px;max-width:60ch;line-height:1.5}
+.actions{display:flex;gap:8px}
+.actions button{padding:8px 14px;border-radius:10px;background:var(--bg-2);font-weight:500;font-size:13px}
+.actions .warn{color:#D14343}
+.genes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:28px}
+.gene{background:var(--bg-2);border-radius:14px;padding:14px}
+.gene h3{font-size:12.5px;font-weight:500;color:var(--ink-2);margin-bottom:10px;display:flex;justify-content:space-between}
+.gene h3 em{font-style:normal;color:var(--ink-3)}
+.gv{display:grid;grid-template-columns:84px 1fr 28px;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:var(--ink-2)}
+.gv.lead{color:var(--ink);font-weight:600}
+.gv .track{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.gv .track i{display:block;height:100%;background:var(--ink-3);border-radius:3px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.gv.lead .track i{background:var(--ink)}
+.gv em{font-style:normal;text-align:right;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sub-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.gcell{display:grid;gap:8px}.gcell .cap{font-size:12.5px;color:var(--ink-3)}
+.export{margin-top:14px;display:none}.export.show{display:block}
+.export textarea{width:100%;height:180px;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font:12px/1.5 ui-monospace,Menlo,monospace;padding:12px}
+
+/* Stage: the specimen frame. Always light so specimens are judged consistently. */
+.stage{position:relative;min-height:300px;border-radius:20px;background:#fff;color:#15171B;display:grid;place-items:center;overflow:hidden;
+  box-shadow:0 0 0 1px var(--line);font-family:var(--font);padding:20px}
+.stage.resetting>*{opacity:0;transition:opacity .18s}
+</style>
+
+<!-- ═══════════════ DOMAIN CSS: styles for specimens (rewrite per project) ═══════════════ -->
+<style id="domain-css">
+/* Suara guided steps: a phone screen per card. Only the decision under test changes between the
+   three cards on a screen; everything else is the current favourite. Airbnb-minimal: black
+   primary, #007AFF accent, Suara's type sizes raised for older readers. */
+.stage{min-height:620px;padding:14px}
+[data-tab="compare"]{display:none}
+.ph{--ground:#fff;--tint:#F4F5F7;--line:#E5E5EA;--line2:#C7C7CC;--ink:#1D1D1F;--muted:#5F5F64;--blue:#007AFF;--green:#1F7A36;
+  --r:18px;--rb:14px;
+  width:300px;height:600px;border-radius:30px;background:var(--ground);box-shadow:0 0 0 1px var(--line),0 12px 30px -18px rgb(0 0 0/35%);
+  overflow:hidden;position:relative;display:flex;flex-direction:column;gap:12px;padding:12px 16px 16px;text-align:left;color:var(--ink);
+  font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif}
+.ph *{box-sizing:border-box;margin:0}
+.ph svg{display:block;flex:none}
+.ph .bar{display:flex;align-items:center;gap:8px}
+.ph .mark{width:30px;height:30px;border-radius:9px;background:#1D1D1F;display:grid;place-items:center;color:#fff}
+.ph .brand{font-weight:700;font-size:17px;margin-right:auto;letter-spacing:-.02em}
+.ph .pill{height:34px;padding:0 12px;border-radius:999px;background:var(--tint);display:grid;place-items:center;font-size:13px;font-weight:600}
+.ph .back{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600;color:var(--muted)}
+.ph .gtitle{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.ph .lbl{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.ph .grow{flex:1}
+.ph .src{font-size:12.5px;color:var(--muted)}
+
+/* ── 1. The bar on top ───────────────────────────────────────────────────────── */
+.ph .trk{display:flex;align-items:flex-start;padding:4px 0 2px}
+.ph .trk .n{flex:none;display:grid;justify-items:center;gap:5px;position:relative}
+.ph .trk .c{width:var(--nd,30px);height:var(--nd,30px);border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:700;
+  background:#fff;color:var(--muted);box-shadow:inset 0 0 0 2px var(--line2);transition:all .35s}
+.ph .trk .c svg{width:58%;height:58%}
+.ph .trk .n[data-s="done"] .c{background:var(--done);color:#fff;box-shadow:none}
+.ph .trk .n[data-s="now"] .c{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 3px var(--ink),0 0 0 5px rgb(0 0 0/7%);transform:scale(1.12)}
+.ph .trk .ln{flex:1;height:3px;margin-top:calc(var(--nd,30px)/2 - 1.5px);background:var(--line);border-radius:2px;position:relative;overflow:hidden;min-width:4px}
+.ph .trk .ln i{position:absolute;inset:0;background:var(--done);transform-origin:left;transform:scaleX(var(--f,0));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.ph .trk .nm{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;max-width:48px;overflow:hidden;text-overflow:ellipsis}
+.ph .trk .n[data-s="now"] .nm{color:var(--ink);font-weight:700}
+.ph .trk .n[data-s="done"] .nm{color:var(--ink)}
+.ph .trk.named{--nd:24px}
+.ph .trk.named .c{font-size:12px}
+.ph .trk.dots{--nd:12px;align-items:center}
+.ph .trk.dots .c{font-size:0}
+.ph .trk.dots .c svg{display:none}
+.ph .trk.dots .n[data-s="now"] .c{--nd:18px;width:18px;height:18px;transform:none;box-shadow:inset 0 0 0 4px var(--ink)}
+.ph .trk.dots .ln{margin-top:0}
+.ph .trkhead{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+.ph .trkhead b{font-weight:700}
+.ph .trkhead span{color:var(--muted)}
+.ph .gap{display:grid;place-items:center;width:18px;color:var(--muted);font-weight:700;letter-spacing:1px;font-size:13px;padding-top:6px}
+.ph .seg{display:flex;gap:4px}
+.ph .seg i{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.ph .seg i[data-s="done"]{background:var(--done)}
+.ph .seg i[data-s="now"]{background:var(--ink)}
+
+/* ── 3. The current step ─────────────────────────────────────────────────────── */
+.ph .scard{border-radius:var(--r);background:#fff;box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/8%);padding:16px;display:grid;gap:10px}
+.ph .snum{font-size:13px;font-weight:700;color:var(--muted)}
+.ph .sname{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.18}
+.ph .stext{font-size:16px;line-height:1.42}
+.ph .page .sname{font-size:25px}
+.ph .page .stext{font-size:18px}
+.ph .page{display:grid;gap:12px;padding-top:4px}
+.ph .acc{display:grid;gap:6px}
+.ph .acc .row{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:var(--rb);background:var(--tint);font-size:15px;font-weight:600}
+.ph .acc .row .d{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;box-shadow:inset 0 0 0 2px var(--line2);color:var(--muted)}
+.ph .acc .row[data-s="done"]{background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.ph .acc .row[data-s="done"] .d{background:var(--done);color:#fff;box-shadow:none}
+.ph .acc .row[data-s="done"] .d svg{width:14px;height:14px}
+.ph .acc .open{border-radius:var(--r);background:#fff;box-shadow:inset 0 0 0 2px var(--ink);padding:14px;display:grid;gap:10px}
+
+/* ── 4. More information ─────────────────────────────────────────────────────── */
+.ph .more{display:grid;gap:0}
+.ph .more .hd{display:flex;align-items:center;gap:6px;min-height:44px;font-size:15.5px;font-weight:700;cursor:pointer}
+.ph .more .hd .cv{transition:transform .2s cubic-bezier(.15,1,.3,1)} /* Atlassian expand */
+.ph .more .bd{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.8,.2,1)}
+.ph .more .bd>div{overflow:hidden}
+.ph .more.open .bd{grid-template-rows:1fr}
+.ph .more .bd p{font-size:14.5px;line-height:1.42;color:var(--ink)}
+.ph .more .bd p b{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+.ph .more[data-k="expand"] .bd>div{padding-left:24px;border-left:2px solid var(--line);margin-left:7px}
+.ph .more[data-k="expand"].open .hd .cv{transform:rotate(90deg)}
+.ph .more[data-k="panel"]{border-radius:var(--rb);background:var(--tint)}
+.ph .more[data-k="panel"] .hd{padding:0 14px;justify-content:space-between}
+.ph .more[data-k="panel"] .bd>div{padding:0 14px}
+.ph .more[data-k="panel"].open .bd>div{padding-bottom:12px}
+.ph .more[data-k="panel"] .pm{width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:18px;font-weight:700;line-height:1}
+.ph .more[data-k="sheet"] .hd{color:var(--blue)}
+.ph .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 30px rgb(0 0 0/16%);
+  padding:10px 18px 20px;display:grid;gap:10px;transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);z-index:3}
+.ph .sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line2);justify-self:center}
+.ph .sheet h3{font-size:18px}
+.ph .sheet p{font-size:15px;line-height:1.42}
+.ph .sheet p b{display:block;font-size:13px;color:var(--muted)}
+.ph .scrim{position:absolute;inset:0;background:rgb(0 0 0/28%);opacity:0;transition:opacity .4s;z-index:2;pointer-events:none}
+.ph.sheet-open .sheet{transform:none}
+.ph.sheet-open .scrim{opacity:1}
+
+/* ── 5. The clear button ─────────────────────────────────────────────────────── */
+.ph .go{height:54px;border-radius:999px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16.5px;font-weight:700;position:relative;overflow:hidden}
+.ph .go svg{width:20px;height:20px}
+.ph .tickrow{display:flex;align-items:center;gap:14px}
+.ph .tickbtn{width:64px;height:64px;border-radius:50%;background:#000;color:#fff;display:grid;place-items:center;flex:none}
+.ph .tickbtn svg{width:30px;height:30px}
+.ph .tickrow span{font-size:16.5px;font-weight:700;line-height:1.25}
+.ph .split{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.ph .split .go{font-size:15.5px}
+.ph .split .help{height:54px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--line2);display:grid;place-items:center;font-size:15px;font-weight:700}
+.ph .hear{display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;font-size:14.5px;font-weight:600;color:var(--muted)}
+.ph .hear svg{width:18px;height:18px}
+
+/* ── 6. Clearing a stage (runs when the card plays) ──────────────────────────── */
+.ph .swap{display:grid}
+.ph .swap>*{grid-area:1/1}
+.ph .swap .next{opacity:0;transform:translateX(24px)}
+.ph.cleared .swap .prev{opacity:0;transform:translateX(-24px);transition:all .4s cubic-bezier(.2,.8,.2,1)}
+.ph.cleared .swap .next{opacity:1;transform:none;transition:all .45s cubic-bezier(.2,.8,.2,1) .18s}
+.ph .go .ok{position:absolute;inset:0;background:var(--done);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .2s}
+.ph.pressed .prev .go .ok{opacity:1}
+.ph .stamp{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.ph .stamp span{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--done);color:#fff;font-size:20px;font-weight:800;
+  transform:scale(1.6) rotate(-6deg);opacity:0;transition:all .35s cubic-bezier(.2,1.4,.4,1)}
+.ph .stamp svg{width:22px;height:22px}
+.ph.pressed .stamp span{transform:scale(1) rotate(-6deg);opacity:1}
+.ph .rel{position:relative}
+.ph .donerow{display:flex;align-items:center;gap:10px;height:0;overflow:hidden;opacity:0;padding:0 12px;border-radius:var(--rb);background:#fff;box-shadow:inset 0 0 0 1px var(--line);
+  font-size:14.5px;font-weight:600;color:var(--muted);transition:all .45s cubic-bezier(.2,.8,.2,1)}
+.ph .donerow .d{width:22px;height:22px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center}
+.ph .donerow .d svg{width:14px;height:14px}
+.ph .donerow em{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:700;color:var(--done)}
+.ph.cleared .donerow{height:44px;opacity:1}
+
+/* ── 8. Every stage cleared ──────────────────────────────────────────────────── */
+.ph .fin{display:grid;gap:10px;justify-items:start}
+.ph .fin h2{font-size:25px;letter-spacing:-.02em;line-height:1.15}
+.ph .fin p{font-size:15.5px;color:var(--muted);line-height:1.4}
+.ph .bigtick{width:96px;height:96px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center;justify-self:center;margin-top:30px}
+.ph .bigtick svg{width:48px;height:48px}
+.ph .checks{display:grid;gap:6px;width:100%}
+.ph .checks div{display:flex;align-items:center;gap:10px;min-height:42px;font-size:15px;font-weight:600;border-bottom:1px solid var(--line)}
+.ph .checks .d{width:22px;height:22px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center}
+.ph .checks .d svg{width:14px;height:14px}
+.ph .ask{height:52px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--line2);display:grid;place-items:center;font-size:16px;font-weight:700;width:100%}
+
+</style>
+
+<script>
+/* ═══════════════ DOMAIN: Suara guided steps, 8 decisions, one screen each ═══════════════
+   Owner, 2026-09-28: "It should have a check bar on top, like bubble nodes joining together for
+   each step, like how u see in delivery ecommerce, like stages ... a confluence like drop box for
+   more information ... just the step and a shorter description ... at each stage cleared, make
+   it cleared." Owner's limits (2026-09-24): at most 10 screens, broad decisions, one pick each, no
+   repeats. Content is Suara's real GPFirst guide (sg.moh.gpfirst-emergency-referral). */
+const SRC = {
+  current: 'Current Suara',
+  owner: 'Owner’s description',
+  gen: 'Generated: the extreme',
+  govuk: {name: 'GOV.UK step by step', url: 'https://github.com/alphagov/govuk_publishing_components/blob/main/app/assets/stylesheets/govuk_publishing_components/components/_step-by-step-nav.scss'},
+  dominos: {name: 'Domino’s Tracker (2026)', url: 'https://ir.dominos.com/news-releases/news-release-details/dominosr-updates-its-iconic-industry-first-tracker-even-better'},
+  muiLabel: {name: 'MUI Stepper, labels below', url: 'https://github.com/mui/material-ui/blob/master/packages/mui-material/src/StepLabel/StepLabel.js'},
+  antDot: {name: 'Ant Design Steps, dots', url: 'https://github.com/ant-design/ant-design/blob/master/components/steps/style/index.ts'},
+  antMax: {name: 'Ant Design Steps, maxCount', url: 'https://github.com/ant-design/ant-design/blob/master/components/steps/index.tsx'},
+  govCaption: {name: 'GOV.UK "Question 3 of 9"', url: 'https://design-system.service.gov.uk/patterns/question-pages/'},
+  govTask: {name: 'GOV.UK task list', url: 'https://design-system.service.gov.uk/patterns/complete-multiple-tasks/'},
+  atlassian: {name: 'Atlassian expand', url: 'https://support.atlassian.com/confluence-cloud/docs/insert-the-expand-macro/'},
+  mobile: {name: 'MUI MobileStepper', url: 'https://github.com/mui/material-ui/tree/master/packages/mui-material/src/MobileStepper'},
+};
+const LAB = {
+  id: 'suara-steps-8',
+  title: 'Suara guides · 8 choices',
+  choose: 3,
+  perGene: 1,           // one screen per decision
+  askWorst: false,       // one pick per screen
+  repeatEvery: 0,        // no repeat screens
+  order: ['tracker', 'done', 'layout', 'more', 'button', 'clear', 'long', 'finish'],
+  genes: {
+    tracker: {label: 'Top bar', scene: 'step', values: {
+      numbers: {name: 'Numbered bubbles, joined', source: SRC.govuk},
+      named:   {name: 'Bubbles with a name under each', source: SRC.muiLabel},
+      dots:    {name: 'Small dots and "Step 3 of 5"', source: SRC.antDot}}},
+    done:    {label: 'Colour of a cleared stage', scene: 'step', values: {
+      black: {name: 'Black tick', hex: '#1D1D1F'},
+      blue:  {name: 'Blue tick', hex: '#007AFF'},
+      green: {name: 'Green tick', hex: '#1F7A36'}}},
+    layout:  {label: 'Step layout', scene: 'step', values: {
+      card: {name: 'One card', source: SRC.dominos},
+      list: {name: 'Every step listed, this one open', source: SRC.govuk},
+      page: {name: 'The whole screen, no card', source: SRC.gen}}},
+    more:    {label: 'More information', scene: 'more', values: {
+      expand: {name: 'A line that opens in place', source: SRC.atlassian},
+      panel:  {name: 'A grey "Show more" box', source: SRC.govuk},
+      sheet:  {name: 'A sheet from below'}}},
+    button:  {label: 'Clear button', scene: 'step', values: {
+      wide:  {name: 'One wide black button', source: SRC.current},
+      tick:  {name: 'A round tick button'},
+      split: {name: '"Done" and "I need help"'}}},
+    clear:   {label: 'Clearing moment', scene: 'clearing', values: {
+      fill:     {name: 'The line runs on to the next'},
+      stamp:    {name: 'A "Cleared" stamp', source: SRC.gen},
+      collapse: {name: 'It folds into a done row'}}},
+    long:    {label: 'Long guide (9 steps)', scene: 'long', values: {
+      shrink: {name: 'Every bubble, smaller'},
+      window: {name: 'Nearby bubbles and "…"', source: SRC.antMax},
+      seg:    {name: 'A segmented bar', source: SRC.mobile}}},
+    finish:  {label: 'Last screen', scene: 'finish', values: {
+      tracker: {name: 'The full bar and what you did'},
+      checks:  {name: 'A ticked list', source: SRC.govTask},
+      big:     {name: 'One big tick', source: SRC.current}}},
+  },
+  scenes: [
+    {id: 'step', name: 'Step 3 of 5', group: 'A guide'},
+    {id: 'more', name: 'More information', group: 'A guide'},
+    {id: 'clearing', name: 'Clearing step 2', group: 'A guide'},
+    {id: 'long', name: 'A long guide', group: 'A guide'},
+    {id: 'finish', name: 'All cleared', group: 'A guide'},
+  ],
+  // The owner's words as a nudge only ([3,1] at most); one pick overturns it.
+  priors: {tracker: {numbers: [3, 1]}, more: {expand: [3, 1]}},
+  pool: null,
+  render: renderSteps,
+};
+
+const IC = {
+  wave: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>',
+  tick: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>',
+  chev: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+  back: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+  spk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
+};
+
+// Suara's GPFirst guide, word for word; "short" is the bubble label, "more" its detail sections.
+const GUIDE = {
+  title: 'GPFirst at A&E',
+  steps: [
+    {short: 'Form', name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', ok: 'I have the form',
+      more: [['Who can use it', 'Everyone living in Singapore, including permanent residents and foreigners.']]},
+    {short: 'Check', name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', ok: 'All three are there', more: []},
+    {short: 'Go', name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', ok: 'I am at A&E',
+      more: [['Which hospitals', 'Changi General, Khoo Teck Puat, National University (adult A&E only), Ng Teng Fong, Sengkang General, Singapore General and Tan Tock Seng hospitals, and the Alexandra Hospital Urgent Care Centre.']]},
+    {short: 'Show', name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', ok: 'Done', more: []},
+    {short: 'Costs', name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', ok: 'Understood', more: []},
+  ],
+};
+// Nine steps, to see what the bar does with many (a layout sample; the words are placeholders).
+const LONG = ['Check you can renew', 'Get a photo taken', 'Sign in with Singpass', 'Fill in the form', 'Upload the photo', 'Pay the fee', 'Wait for the SMS', 'Book a collection slot', 'Collect it'];
+
+const topBar = () => `<div class="bar"><span class="mark">${IC.wave}</span><span class="brand">Suara</span><span class="pill">English</span></div>`;
+const head = (title) => `<div class="back">${IC.back}Back</div><p class="gtitle">${title}</p>`;
+
+/** The bar on top: n stages, `cur` is the one in hand (index), those before it are cleared. */
+function tracker(kind, names, cur, opts = {}) {
+  const n = names.length;
+  if (kind === 'dots') {
+    const nodes = names.map((_, i) => `<div class="n" data-s="${i < cur ? 'done' : i === cur ? 'now' : 'later'}"><span class="c"></span></div>`);
+    const lines = names.slice(1).map((_, i) => `<span class="ln"><i style="--f:${i < cur ? 1 : 0}"></i></span>`);
+    return `<div class="trkhead"><b>Step ${Math.min(cur + 1, n)} of ${n}</b><span>${names[Math.min(cur, n - 1)]}</span></div>
+      <div class="trk dots">${nodes.map((x, i) => x + (lines[i] ?? '')).join('')}</div>`;
+  }
+  const nd = opts.nd;
+  const nodes = names.map((nm, i) => {
+    const s = i < cur ? 'done' : i === cur ? 'now' : 'later';
+    return `<div class="n" data-s="${s}" data-i="${i}"><span class="c">${s === 'done' ? IC.tick : i + 1}</span>${kind === 'named' ? `<span class="nm">${nm}</span>` : ''}</div>`;
+  });
+  const lines = names.slice(1).map((_, i) => `<span class="ln"><i style="--f:${i < cur ? 1 : 0}"></i></span>`);
+  return `<div class="trk ${kind}"${nd ? ` style="--nd:${nd}px"` : ''}>${nodes.map((x, i) => x + (lines[i] ?? '')).join('')}</div>`;
+}
+
+function moreBlock(kind, step, open) {
+  if (!step.more.length) return '';
+  const body = step.more.map(([h, b]) => `<p><b>${h}</b>${b}</p>`).join('');
+  if (kind === 'sheet') return `<div class="more" data-k="sheet"><div class="hd">More about this step ${IC.chev}</div></div>`;
+  if (kind === 'panel') return `<div class="more${open ? ' open' : ''}" data-k="panel"><div class="hd">More information<span class="pm">${open ? '−' : '+'}</span></div><div class="bd"><div>${body}</div></div></div>`;
+  return `<div class="more${open ? ' open' : ''}" data-k="expand"><div class="hd"><span class="cv">${IC.chev}</span>More information</div><div class="bd"><div>${body}</div></div></div>`;
+}
+
+function button(kind, step) {
+  const ok = `<span class="ok">${IC.tick}Cleared</span>`;
+  if (kind === 'tick') return `<div class="tickrow"><div class="go tickbtn">${IC.tick}${ok}</div><span>${step.ok}</span></div>`;
+  if (kind === 'split') return `<div class="split"><div class="go">${IC.tick}Done${ok}</div><div class="help">I need help</div></div>`;
+  return `<div class="go">${IC.tick}${step.ok}${ok}</div>`;
+}
+
+/** The step in hand, laid out as g.layout says. */
+function stepBody(g, i, opts = {}) {
+  const s = GUIDE.steps[i], n = GUIDE.steps.length;
+  const inner = `<p class="snum">Step ${i + 1} of ${n}</p><p class="sname">${s.name}</p><p class="stext">${s.text}</p>
+    ${moreBlock(g.more, s, opts.open)}${button(g.button, s)}<div class="hear">${IC.spk}Read it again</div>`;
+  if (g.layout === 'page') return `<div class="page">${inner}</div>`;
+  if (g.layout === 'list') {
+    const rows = GUIDE.steps.map((st, j) => j === i ? `<div class="open">${inner}</div>`
+      : `<div class="row" data-s="${j < i ? 'done' : 'later'}"><span class="d">${j < i ? IC.tick : j + 1}</span>${st.name}</div>`);
+    return `<div class="acc">${rows.join('')}</div>`;
+  }
+  return `<div class="scard">${inner}</div>`;
+}
+
+/** Re-runs a scene's own timeline each time the lab replays the card (it toggles .play). */
+function onPlay(el, run) {
+  el._mo?.disconnect();
+  const clear = () => { (el._ts || []).forEach(clearTimeout); el._ts = []; };
+  const go = () => { clear(); run((ms, f) => el._ts.push(setTimeout(f, ms))); };
+  el._mo = new MutationObserver(() => { if (el.classList.contains('play') && !el.classList.contains('resetting')) go(); });
+  el._mo.observe(el, {attributes: true, attributeFilter: ['class']});
+  go();
+}
+
+function renderSteps(el, scene, g) {
+  const V = LAB.genes, done = V.done.values[g.done].hex;
+  const names = GUIDE.steps.map((s) => s.short);
+  const trk = (cur) => tracker(g.tracker, g.tracker === 'dots' ? GUIDE.steps.map((s) => s.name) : names, cur);
+  let body = '', cycle = null, run = null;
+
+  if (scene === 'step') {
+    body = `${head(GUIDE.title)}${trk(2)}${stepBody(g, 2)}`;
+  }
+
+  if (scene === 'more') {
+    body = `${head(GUIDE.title)}${trk(2)}${stepBody(g, 2)}`;
+    const s = GUIDE.steps[2];
+    if (g.more === 'sheet') body += `<div class="scrim"></div><div class="sheet"><span class="grab"></span><h3>More about this step</h3>${s.more.map(([h, b]) => `<p><b>${h}</b>${b}</p>`).join('')}</div>`;
+    cycle = 3600;
+    run = (at, ph) => {
+      const m = ph.querySelector('.more'); ph.classList.remove('sheet-open'); m?.classList.remove('open');
+      const pm = ph.querySelector('.pm'); if (pm) pm.textContent = '+';
+      at(1000, () => { if (g.more === 'sheet') ph.classList.add('sheet-open'); else { m?.classList.add('open'); if (pm) pm.textContent = '−'; } });
+    };
+  }
+
+  if (scene === 'clearing') {
+    // Step 2 in hand; the button is pressed, the stage clears, step 3 comes in.
+    const prev = stepBody(g, 1), next = stepBody(g, 2);
+    const row = g.clear === 'collapse' ? `<div class="donerow"><span class="d">${IC.tick}</span>${GUIDE.steps[1].name}<em>Cleared</em></div>` : '';
+    const stamp = g.clear === 'stamp' ? `<div class="stamp"><span>${IC.tick}Cleared</span></div>` : '';
+    body = `${head(GUIDE.title)}<div class="trkslot">${trk(1)}</div>${row}<div class="swap rel"><div class="prev rel">${prev}${stamp}</div><div class="next">${next}</div></div>`;
+    cycle = 4200;
+    run = (at, ph) => {
+      ph.classList.remove('pressed', 'cleared');
+      const slot = ph.querySelector('.trkslot'); slot.innerHTML = trk(1);
+      at(900, () => ph.classList.add('pressed'));
+      at(g.clear === 'stamp' ? 1900 : 1300, () => {
+        // The bubble takes its tick, and the line runs on to the next one.
+        const n1 = slot.querySelector('[data-i="1"]'), n2 = slot.querySelector('[data-i="2"]');
+        if (n1) { n1.dataset.s = 'done'; n1.querySelector('.c').innerHTML = IC.tick; }
+        if (n2) n2.dataset.s = 'now';
+        const lines = slot.querySelectorAll('.ln i'); if (lines[1]) lines[1].style.setProperty('--f', 1);
+        if (g.tracker === 'dots') slot.innerHTML = trk(2);
+      });
+      at(g.clear === 'stamp' ? 2300 : 1700, () => ph.classList.add('cleared'));
+    };
+  }
+
+  if (scene === 'long') {
+    const cur = 4, n = LONG.length;
+    let bar;
+    if (g.long === 'seg') {
+      bar = `<div class="trkhead"><b>Step ${cur + 1} of ${n}</b><span>${LONG[cur]}</span></div><div class="seg">${LONG.map((_, i) => `<i data-s="${i < cur ? 'done' : i === cur ? 'now' : 'later'}"></i>`).join('')}</div>`;
+    } else if (g.long === 'window') {
+      // Two either side of the one in hand, the rest as "…".
+      const show = [cur - 2, cur - 1, cur, cur + 1, cur + 2];
+      const nodes = show.map((i) => `<div class="n" data-s="${i < cur ? 'done' : i === cur ? 'now' : 'later'}"><span class="c">${i < cur ? IC.tick : i + 1}</span></div>`);
+      bar = `<div class="trk numbers"><span class="gap">…</span>${nodes.map((x, k) => x + (k < 4 ? `<span class="ln"><i style="--f:${show[k] < cur ? 1 : 0}"></i></span>` : '')).join('')}<span class="gap">…</span></div>
+        <div class="trkhead"><b>Step ${cur + 1} of ${n}</b><span>${LONG[cur]}</span></div>`;
+    } else {
+      bar = `${tracker('numbers', LONG, cur, {nd: 22})}<div class="trkhead"><b>Step ${cur + 1} of ${n}</b><span>${LONG[cur]}</span></div>`;
+    }
+    body = `${head('Renewing a passport (sample)')}${bar}<div class="scard"><p class="snum">Step ${cur + 1} of ${n}</p><p class="sname">${LONG[cur]}</p>
+      <p class="stext">A short line says what to do here.</p>${button(g.button, {ok: 'Uploaded'})}</div>`;
+  }
+
+  if (scene === 'finish') {
+    const n = GUIDE.steps.length;
+    if (g.finish === 'tracker') {
+      body = `${head(GUIDE.title)}${trk(n)}<div class="fin"><h2>All ${n} stages cleared</h2><p>You brought the form to A&E the same day. Extra tests may still cost extra.</p></div>
+        <div class="grow"></div><div class="ask">Ask something else</div>`;
+    } else if (g.finish === 'checks') {
+      body = `${head(GUIDE.title)}<div class="fin"><h2>Every step done</h2></div><div class="checks">${GUIDE.steps.map((s) => `<div><span class="d">${IC.tick}</span>${s.name}</div>`).join('')}</div>
+        <div class="grow"></div><div class="ask">Ask something else</div>`;
+    } else {
+      body = `${head(GUIDE.title)}<div class="bigtick">${IC.tick}</div><div class="fin" style="justify-items:center;text-align:center"><h2>That is every step</h2><p>${GUIDE.title}</p></div>
+        <div class="grow"></div><div class="ask">Ask something else</div>`;
+    }
+  }
+
+  el.innerHTML = `<div class="ph" style="--done:${done}">${topBar()}${body}</div>`;
+  if (run) {
+    const ph = el.querySelector('.ph');
+    setTimeout(() => onPlay(el, (at) => run(at, ph)), 0);
+  }
+  return cycle;
+}
+/* ═══════════════ END DOMAIN ═══════════════ */
+
+</script>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand" id="brand"></div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="choose" aria-selected="true">Choose</button>
+    <button role="tab" data-tab="compare" aria-selected="false">Duel</button>
+    <button role="tab" data-tab="profile" aria-selected="false">Profile</button>
+  </nav>
+  <div class="meta"><span id="rounds">0 rounds</span><span id="sync">Saved on this device</span></div>
+</div></header>
+<main>
+  <section id="choose">
+    <div class="bar">
+      <div class="scene"><b id="cGene"></b><span id="cScene"></span></div>
+      <span class="step" id="cStep"></span>
+    </div>
+    <p class="hint" id="cHint"></p>
+    <div class="board" id="board"></div>
+    <div class="row2">
+      <button data-choose="both">No clear favourite<kbd>↑</kbd></button><button data-choose="none">None of these<kbd>↓</kbd></button>
+      <button id="cReplay">Replay<kbd>Space</kbd></button><button data-choose="skip" id="cSkip">Skip</button>
+    </div>
+    <div class="after">
+      <p class="learned" id="cLearned" aria-live="polite"></p>
+      <input class="why" id="cWhy" placeholder="What made it the best, or what was missing? Optional, press Enter" aria-label="Reason for your choice">
+    </div>
+  </section>
+  <section id="compare" hidden>
+    <div class="bar">
+      <div class="scene"><b id="sceneName"></b><span id="sceneGroup"></span></div>
+      <div class="seg" id="mode"><button data-mode="explore">Explore</button><button data-mode="balanced">Balanced</button><button data-mode="exploit">Exploit</button></div>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="duel" id="duel">
+      <div class="side"><div class="stage" id="stL"></div><button class="pick" data-pick="L">Prefer this<kbd>←</kbd></button></div>
+      <div class="side"><div class="stage" id="stR"></div><button class="pick" data-pick="R">Prefer this<kbd>→</kbd></button></div>
+    </div>
+    <div class="row2">
+      <button data-pick="both">Both good<kbd>↑</kbd></button><button data-pick="none">Neither<kbd>↓</kbd></button>
+      <button id="replay">Replay<kbd>Space</kbd></button><button data-pick="skip">Skip</button>
+    </div>
+    <div class="after">
+      <p class="learned" id="learned" aria-live="polite"></p>
+      <input class="why" id="why" placeholder="What made it better? Optional, press Enter" aria-label="Reason for your pick">
+    </div>
+  </section>
+  <section id="profile" hidden>
+    <div class="head2"><div><h1>What you're converging on</h1><p id="note"></p></div>
+      <div class="actions"><button id="copy">Copy profile</button><button id="reset" class="warn">Reset</button></div></div>
+    <div class="export" id="export"><textarea id="exportText" readonly></textarea></div>
+    <div class="genes" id="genes"></div>
+    <div class="sub-title">Current favourite on every scene</div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+</main>
+
+<script>
+/* ═══════════════ ENGINE (generic; no need to edit) ═══════════════ */
+const G = LAB.genes, GK = Object.keys(G), POOL = window.__POOL__ || LAB.pool, PARAM = typeof LAB.render === 'function';
+const $ = id => document.getElementById(id);
+$('brand').textContent = LAB.title; document.title = LAB.title;
+
+// Beta posteriors + Thompson sampling
+const randn = () => { let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+function gamma(k){ if (k<1) return gamma(k+1)*Math.pow(Math.random(),1/k); const d=k-1/3,c=1/Math.sqrt(9*d);
+  for(;;){ let x,v; do{ x=randn(); v=1+c*x; }while(v<=0); v=v*v*v; const u=Math.random();
+    if (u<1-.0331*x**4 || Math.log(u)<.5*x*x+d*(1-v+Math.log(v))) return d*v; } }
+const beta = (a,b) => { const x=gamma(a), y=gamma(b); return x/(x+y); };
+const shuffle = a => { for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+const KEY = 'lab:' + LAB.id;
+function fresh(){ const post={}; for (const g of GK){ post[g]={}; for (const v in G[g].values){ const p = LAB.priors?.[g]?.[v]; post[g][v] = p ? [...p] : [1,1]; } }
+  return {v:1, lab:LAB.id, rounds:0, mode:'explore', post, history:[], order:null, idx:0}; }
+function normalize(s){ const f=fresh(); s=Object.assign(f,s); for (const g of GK){ s.post[g]=s.post[g]||{}; for (const v in G[g].values) if(!Array.isArray(s.post[g][v])) s.post[g][v]=f.post[g][v]; } return s; }
+let S = fresh(); try { const r = localStorage.getItem(KEY); if (r) S = normalize(JSON.parse(r)); } catch(e){}
+
+const mean = (g,v) => { const [a,b]=S.post[g][v]; return a/(a+b); };
+const seen = (g,v) => { const [a,b]=S.post[g][v]; const p=LAB.priors?.[g]?.[v]||[1,1]; return Math.round((a+b-p[0]-p[1])*2)/2; };
+function thompson(g, ex){ let best, bv=-1; for (const v in G[g].values){ if (v===ex) continue; const x=beta(...S.post[g][v]); if (x>bv){ bv=x; best=v; } } return best; }
+function champion(){ const c={}; for (const g of GK){ let best,bm=-1; for (const v in G[g].values){ const m=mean(g,v); if (m>bm+1e-9){ bm=m; best=v; } } c[g]=best; } return c; }
+const unc = g => Object.keys(G[g].values).reduce((s,v)=>{ const [a,b]=S.post[g][v]; return s + a*b/((a+b)**2*(a+b+1)); }, 0);
+function status(g){ // settled | leaning | open | indifferent
+  const vals = Object.keys(G[g].values).map(v=>({v, m:mean(g,v), n:seen(g,v)})).sort((x,y)=>y.m-x.m);
+  const total = vals.reduce((s,x)=>s+x.n,0), gap = vals[0].m - vals[1].m;
+  if (vals[0].n >= 6 && vals[0].m > .68 && gap > .15) return 'settled';
+  if (total >= 12 && gap < .06) return 'indifferent';
+  if (total >= 4 && gap > .08) return 'leaning';
+  return 'open';
+}
+
+// Pair construction. Content (scene) is shared; style genes differ in 1–3 places.
+function nextScene(){ const ids = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  if (!S.order || S.idx >= S.order.length || !S.order.every(id=>ids.includes(id))){ S.order = shuffle(ids); S.idx = 0; } return S.order[S.idx++]; }
+function targets(){
+  let A = {}; if (S.mode==='explore') for (const g of GK) A[g]=thompson(g); else A = champion();
+  let change;
+  if (S.mode==='exploit'){ const w=GK.map(unc), t=w.reduce((a,b)=>a+b,0); let r=Math.random()*t, i=0; while (r>w[i] && i<w.length-1){ r-=w[i]; i++; } change=[GK[i]]; }
+  else change = shuffle([...GK]).slice(0, S.mode==='explore' ? Math.min(GK.length, 2+(Math.random()<.5)) : 1+(Math.random()<.5));
+  const B = {...A}; for (const g of change) B[g] = thompson(g, A[g]);
+  return [A, B];
+}
+const matches = (x,y) => GK.reduce((s,g)=>s+(x[g]===y[g]),0);
+function nearest(target, scene, notItem){
+  let best=null, bs=-1;
+  for (const it of shuffle(POOL.filter(p=>p.scene===scene && p!==notItem && (!notItem || matches(p.genes, notItem.genes) < GK.length)))){
+    const s = matches(it.genes, target); if (s>bs){ bs=s; best=it; } }
+  return best;
+}
+function makePair(){
+  const scene = nextScene(); const [A, B] = targets();
+  if (PARAM) return {scene, L:{genes:A}, R:{genes:B}, swap:Math.random()<.5};
+  const a = nearest(A, scene), b = nearest(B, scene, a) || nearest(A, scene, a);
+  return {scene, L:a, R:b, swap:Math.random()<.5};
+}
+
+// Rendering + replay loop (parametric scenes with animation return a cycle length)
+const loops = new Map();
+function show(el, scene, item){
+  el.className = 'stage'; el.removeAttribute('style');
+  if (PARAM){ el.dataset.cycle = LAB.render(el, scene, item.genes) || ''; el.classList.add('play'); }
+  else { el.innerHTML = item.html; el.dataset.cycle = ''; }
+}
+function restart(stages){ stages.forEach(s=>s.classList.add('resetting'));
+  setTimeout(()=>{ stages.forEach(s=>s.classList.remove('play')); void document.body.offsetWidth; stages.forEach(s=>{ s.classList.add('play'); s.classList.remove('resetting'); }); }, 190); }
+function loop(key, stages){ clearTimeout(loops.get(key)); const c = Math.max(0, ...stages.map(s=>+s.dataset.cycle||0)); if (!c) return;
+  loops.set(key, setTimeout(()=>{ restart(stages); loop(key, stages); }, c)); }
+const stop = pre => { for (const [k,t] of loops) if (k.startsWith(pre)){ clearTimeout(t); loops.delete(k); } };
+
+// Compare view
+const HINT = {explore:'Bold differences, to find what you respond to. Start here.',
+  balanced:'Your current favourite against a challenger that differs in one or two ways.',
+  exploit:'Your favourite against one tweak to the trait the lab is least sure about.'};
+let cur = null, busy = false;
+function showPair(){
+  cur = makePair(); if (cur.swap) [cur.L, cur.R] = [cur.R, cur.L];
+  const sc = LAB.scenes.find(s=>s.id===cur.scene) || {name:cur.scene, group:''};
+  $('sceneName').textContent = sc.name; $('sceneGroup').textContent = sc.group || '';
+  show($('stL'), cur.scene, cur.L); show($('stR'), cur.scene, cur.R); loop('cmp', [$('stL'), $('stR')]);
+}
+const vn = (g,v) => G[g].values[v]?.name || v;
+function vote(pick){
+  if (busy || !cur) return; busy = true;
+  const L = cur.L.genes, R = cur.R.genes; let msg = '';
+  if (pick==='L' || pick==='R'){
+    const W = pick==='L'?L:R, Lo = pick==='L'?R:L, bits=[];
+    for (const g of GK) if (W[g]!==Lo[g]){ S.post[g][W[g]][0]++; S.post[g][Lo[g]][1]++; bits.push(`${vn(g,W[g])} over ${vn(g,Lo[g])} (${G[g].label.toLowerCase()})`); }
+    msg = 'Learned: ' + bits.join(', ') + '.'; document.querySelector(`.pick[data-pick="${pick}"]`).classList.add('chosen');
+  } else if (pick==='both' || pick==='none'){
+    const i = pick==='both' ? 0 : 1; for (const g of GK) for (const v of new Set([L[g], R[g]])) S.post[g][v][i] += .5;
+    msg = pick==='both' ? 'Noted: both work for you.' : 'Noted: neither. If you can say what was missing, type it below.';
+  }
+  if (pick !== 'skip'){
+    S.rounds++; S.history.push({t:Date.now(), scene:cur.scene, mode:S.mode, pick, left:{id:cur.L.id, genes:L}, right:{id:cur.R.id, genes:R}});
+    if (S.history.length > 200) S.history = S.history.slice(-200);
+    save(); $('why').value = ''; $('why').classList.toggle('show', pick!=='both');
+  }
+  if (pick !== 'skip'){ const d = duelCount(); msg += d >= DUEL_TARGET ? ` That's ${d} duels: the check is done. Close the tab whenever you like.` : ` Duel ${d} of ${DUEL_TARGET}.`; }
+  $('learned').textContent = msg; meta();
+  setTimeout(()=>$('duel').classList.add('leaving'), pick==='skip'?0:420);
+  setTimeout(()=>{ document.querySelectorAll('.pick').forEach(b=>b.classList.remove('chosen')); showPair(); $('duel').classList.remove('leaving'); busy=false; }, pick==='skip'?220:650);
+}
+document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => vote(b.dataset.pick));
+$('replay').onclick = () => { restart([$('stL'),$('stR')]); loop('cmp',[$('stL'),$('stR')]); };
+$('why').addEventListener('keydown', e => { if (e.key==='Enter' && $('why').value.trim()){ const h = S.history[S.history.length-1]; if (h){ h.note = $('why').value.trim(); save(); }
+  $('why').value=''; $('why').classList.remove('show'); $('learned').textContent = 'Reason saved.'; } e.stopPropagation(); });
+// Choose view: one dimension per screen, the rest held at the favourite. Pick the best, then
+// optionally the worst. Every CHECK_EVERY-th screen repeats an earlier one to measure consistency.
+const K = Math.max(2, LAB.choose || 3), CHECK_EVERY = LAB.repeatEvery ?? 8, PER_GENE = LAB.perGene || 4, DUEL_TARGET = LAB.duelRounds || 8;
+// Finish point: a dimension is done once settled, indifferent, or shown PER_GENE times. When every
+// dimension is done, Choose stops and says so, unless the user asks to keep going (S.more).
+const shownCount = g => S.history.filter(h => h.mode==='choose' && h.gene===g && !h.repeatOf && h.pick!=='skip').length;
+const geneDone = g => ['settled','indifferent'].includes(status(g)) || shownCount(g) >= PER_GENE || (S.skipped || []).includes(g);
+const screensLeft = () => GK.filter(g => !geneDone(g)).reduce((n, g) => n + PER_GENE - shownCount(g), 0);
+const duelCount = () => S.history.filter(h => h.mode!=='choose' && h.pick!=='skip').length;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let ch = null, cbusy = false;
+function nextGene(){ // rotate through dimensions that are not done; null when all are, unless the user asked for more
+  const live = GK.filter(g => S.more ? status(g) !== 'settled' : !geneDone(g));
+  if (!live.length && !S.more) return null;
+  if (LAB.order && !S.more){ const o = LAB.order.find(g => live.includes(g)); if (o) return (S.lastGene = o); }
+  const ids = live.length ? live : GK;
+  if (!S.gorder || S.gi >= S.gorder.length || !S.gorder.every(g=>ids.includes(g))){ S.gorder = shuffle([...ids]); S.gi = 0;
+    if (S.gorder.length > 1 && S.gorder[0] === S.lastGene) S.gorder.push(S.gorder.shift()); }
+  return (S.lastGene = S.gorder[S.gi++]);
+}
+function itemFor(g, v, scene, base){ // the specimen for value v with every other dimension at the favourite
+  if (PARAM) return {genes:{...base, [g]:v}};
+  const pool = POOL.filter(p => p.scene===scene && p.genes[g]===v); if (!pool.length) return null;
+  const t = {...base, [g]:v}; let best=null, bs=-1; for (const it of shuffle(pool)){ const s = matches(it.genes, t); if (s>bs){ bs=s; best=it; } } return best;
+}
+function makeBoard(){
+  const n = S.history.filter(h=>h.mode==='choose').length;
+  const past = S.history.filter(h=>h.mode==='choose' && h.best && !h.repeatOf && h.shown.length > 2 && GK.includes(h.gene));
+  if (!S.more && !GK.some(g => !geneDone(g))) return {finished:true};
+  if (CHECK_EVERY > 0 && n && n % CHECK_EVERY === CHECK_EVERY-1 && past.length){ // consistency check: same set, new order
+    const o = past[Math.floor(Math.random()*past.length)], base = champion();
+    const cards = shuffle(o.shown.map(v => ({v, item:itemFor(o.gene, v, o.scene, base)}))).filter(c=>c.item);
+    if (cards.length === o.shown.length) return {gene:o.gene, scene:o.scene, cards, repeatOf:o.t};
+  }
+  const g = nextGene(), scene = G[g].scene || nextScene(), base = champion();
+  const vals = Object.keys(G[g].values).map(v=>({v, x:beta(...S.post[g][v])})).sort((a,b)=>b.x-a.x).map(o=>o.v);
+  const cards = []; for (const v of vals){ if (cards.length >= K) break; const item = itemFor(g, v, scene, base); if (item) cards.push({v, item}); }
+  return {gene:g, scene, cards:shuffle(cards)};
+}
+function source(v){ const s = v.source; if (!s) return '';
+  if (typeof s === 'string') return `<i>${esc(s)}</i>`;
+  return s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name||'Source')}</a>` : `<i>${esc(s.name)}</i>`; }
+function showDone(){
+  const n = S.history.filter(h=>h.mode==='choose').length, c = champion();
+  $('cGene').textContent = 'Finished'; $('cScene').textContent = ''; $('cStep').textContent = ''; $('cHint').textContent = '';
+  $('board').style.setProperty('--k', 1); document.querySelector('#choose .row2').style.display = 'none'; $('cWhy').classList.remove('show');
+  $('board').innerHTML = `<div class="donebox"><h2>That's enough. You're done.</h2>
+    <p>${n} of ${GK.length} decisions made, one pick each. Your picks are saved. Open the Profile tab to see them put together.</p>
+    <ul>${GK.map(g => `<li><b>${esc(G[g].label)}</b>: ${esc(vn(g, c[g]))} <i>(${status(g)})</i></li>`).join('')}</ul>
+    
+    <div class="actions"><button id="cMore">Keep choosing anyway</button></div></div>`;
+  if ($('cDuel')) $('cDuel').onclick = () => { setMode('exploit'); save(); document.querySelector('[data-tab="compare"]').click(); };
+  $('cMore').onclick = () => { S.more = true; save(); showBoard(); };
+}
+function showBoard(){
+  ch = makeBoard(); ch.phase = 'best';
+  if (ch.finished){ showDone(); return; }
+  document.querySelector('#choose .row2').style.display = '';
+  if (ch.cards.length < 2){ $('board').innerHTML = `<p class="learned">Not enough options for ${esc(G[ch.gene].label)} in this scene. Add values or pool items.</p>`; return; }
+  const sc = LAB.scenes.find(s=>s.id===ch.scene) || {name:ch.scene};
+  $('cGene').textContent = G[ch.gene].label; $('cScene').textContent = sc.name + (ch.repeatOf ? ' · checking an earlier pick' : '');
+  $('board').style.setProperty('--k', ch.cards.length);
+  $('board').innerHTML = ch.cards.map((c,i) => { const val = G[ch.gene].values[c.v];
+    return `<div class="card" data-i="${i}"><div class="stage"></div><div class="cap"><b>${esc(val.name||c.v)}</b>${source(val)}</div>
+      <button class="pick" data-card="${i}">Best<kbd>${i+1}</kbd></button></div>`; }).join('');
+  const stages = [...$('board').querySelectorAll('.stage')];
+  ch.cards.forEach((c,i) => show(stages[i], ch.scene, c.item)); loop('cho', stages);
+  $('board').querySelectorAll('[data-card]').forEach(b => b.onclick = () => choose(+b.dataset.card));
+  phase('best');
+}
+function phase(p){ ch.phase = p; const n = ch.cards.length;
+  const left = screensLeft(), sn = S.history.filter(h=>h.mode==='choose').length + 1;
+  $('cStep').textContent = (p==='best' ? 'Which is best?' : 'And the one you like least?') + (S.more ? '' : ` · screen ${sn}, at most ${left} to go`);
+  const also = GK.filter(g => g !== ch.gene && new Set(ch.cards.map(c=>c.item.genes?.[g])).size > 1).map(g => G[g].label.toLowerCase());
+  $('cHint').textContent = p==='worst' ? 'Optional, but it teaches the lab twice as much. Enter skips.'
+    : also.length ? `These also differ in ${also.join(' and ')}: the pool has no cleaner set. Judge the ${G[ch.gene].label.toLowerCase()}; only it is credited.`
+    : `Only the ${G[ch.gene].label.toLowerCase()} changes between these ${n}. Everything else is your current favourite.`;
+  $('cSkip').textContent = p==='best' ? 'Skip' : 'Skip this'; $('cSkip').querySelector('kbd')?.remove();
+  if (p==='worst') $('cSkip').insertAdjacentHTML('beforeend','<kbd>Enter</kbd>');
+  $('board').querySelectorAll('.card').forEach((el,i) => { const b = el.querySelector('.pick');
+    if (p==='best'){ b.hidden = false; b.classList.remove('worst-mode'); b.firstChild.textContent = 'Best'; return; }
+    el.classList.add('done'); if (i===ch.best){ b.firstChild.textContent = 'Best'; b.disabled = true; return; }
+    b.classList.add('worst-mode'); b.firstChild.textContent = 'Least'; });
+}
+function credit(g, w, l){ S.post[g][w][0]++; S.post[g][l][1]++; }
+function choose(i){
+  if (cbusy || !ch || ch.finished || i >= ch.cards.length) return;
+  const g = ch.gene, shown = ch.cards.map(c=>c.v);
+  if (ch.phase === 'best'){
+    ch.best = i; const b = shown[i];
+    for (const v of shown) if (v !== b) credit(g, b, v);
+    ch.rec = {t:Date.now(), mode:'choose', gene:g, scene:ch.scene, shown, best:b, worst:null, pick:'best', ...(ch.repeatOf ? {repeatOf:ch.repeatOf} : {})};
+    S.rounds++; S.history.push(ch.rec); if (S.history.length > 300) S.history = S.history.slice(-300); save(); meta();
+    $('board').querySelector(`.card[data-i="${i}"]`).classList.add('best');
+    $('cLearned').textContent = `Learned: ${vn(g,b)} over ${shown.filter(v=>v!==b).map(v=>vn(g,v)).join(' and ')}.`;
+    $('cWhy').value = ''; $('cWhy').classList.add('show');
+    if (shown.length > 2 && LAB.askWorst !== false) phase('worst'); else nextBoard();
+    return;
+  }
+  if (i === ch.best) return;
+  const w = shown[i]; for (const v of shown) if (v !== w && v !== shown[ch.best]) credit(g, v, w);
+  ch.rec.worst = w; save();
+  $('board').querySelector(`.card[data-i="${i}"]`).classList.add('worst');
+  $('cLearned').textContent += ` Least: ${vn(g,w)}.`; nextBoard();
+}
+function chooseOther(kind){ // both = no clear favourite, none = none of these, skip
+  if (cbusy || !ch || ch.finished) return;
+  if (ch.phase === 'worst'){ nextBoard(); return; }
+  if (kind !== 'skip' && ch.cards.length){ const g = ch.gene, shown = ch.cards.map(c=>c.v), idx = kind==='both' ? 0 : 1;
+    for (const v of shown) S.post[g][v][idx] += .5;
+    ch.rec = {t:Date.now(), mode:'choose', gene:g, scene:ch.scene, shown, best:null, worst:null, pick:kind, ...(ch.repeatOf ? {repeatOf:ch.repeatOf} : {})};
+    S.rounds++; S.history.push(ch.rec); save(); meta();
+    $('cLearned').textContent = kind==='both' ? `Noted: no clear favourite for ${G[g].label.toLowerCase()}. It may not matter to you.`
+      : 'Noted: none of these. Say what was missing below; it tells me which options to source next.';
+    $('cWhy').value = ''; $('cWhy').classList.add('show');
+  }
+  if (kind === 'skip' && ch.gene){ S.skipped = [...new Set([...(S.skipped || []), ch.gene])]; save(); }
+  nextBoard(kind==='skip' ? 0 : 420);
+}
+function nextBoard(wait = 520){ cbusy = true;
+  setTimeout(()=>$('board').classList.add('leaving'), wait);
+  setTimeout(()=>{ stop('cho'); showBoard(); $('board').classList.remove('leaving'); cbusy = false; }, wait + 240); }
+document.querySelectorAll('[data-choose]').forEach(b => b.onclick = () => chooseOther(b.dataset.choose));
+$('cReplay').onclick = () => { const st = [...$('board').querySelectorAll('.stage')]; restart(st); loop('cho', st); };
+$('cWhy').addEventListener('keydown', e => { if (e.key==='Enter' && $('cWhy').value.trim()){ const h = [...S.history].reverse().find(x=>x.mode==='choose');
+  if (h){ h.note = $('cWhy').value.trim(); save(); } $('cWhy').value=''; $('cWhy').classList.remove('show'); $('cLearned').textContent = 'Reason saved.'; } e.stopPropagation(); });
+function consistency(){ const out = {};
+  for (const h of S.history) if (h.mode==='choose' && h.repeatOf && h.best){ const o = S.history.find(x=>x.t===h.repeatOf); if (!o || !o.best) continue;
+    const r = out[h.gene] ||= {checks:0, agreed:0}; r.checks++; r.agreed += o.best===h.best; }
+  return out; }
+
+function setMode(m){ S.mode=m; document.querySelectorAll('#mode button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.mode===m)); $('hint').textContent = HINT[m]; }
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => { setMode(b.dataset.mode); save(); showPair(); });
+document.addEventListener('keydown', e => { if (e.target.closest('input,textarea')) return;
+  if (!$('choose').hidden){
+    if (/^[1-9]$/.test(e.key)){ e.preventDefault(); choose(+e.key - 1); return; }
+    const k = {ArrowUp:'both', ArrowDown:'none', Enter:'skip'}[e.key];
+    if (k && (k!=='skip' || ch?.phase==='worst')){ e.preventDefault(); chooseOther(k); } else if (e.key===' '){ e.preventDefault(); $('cReplay').click(); }
+    return; }
+  if ($('compare').hidden) return;
+  const k = {ArrowLeft:'L', ArrowRight:'R', ArrowUp:'both', ArrowDown:'none'}[e.key];
+  if (k){ e.preventDefault(); vote(k); } else if (e.key===' '){ e.preventDefault(); $('replay').click(); } });
+
+// Profile view
+function renderProfile(){
+  const c = champion(), n = S.rounds, neither = S.history.filter(h=>h.pick==='none').length, cons = consistency();
+  $('note').textContent = n < 12 ? `${n} round${n===1?'':'s'} so far. Early picks move things a lot; each trait needs roughly 6+ showings to settle.`
+    : `${n} rounds. ${neither/n > .3 ? 'You pick "Neither" often, which usually means what you want is outside these options.' : 'Darker bar is the current favourite; the number is how many times that option was shown in a decisive pick.'}`;
+  $('genes').innerHTML = GK.map(g => `<div class="gene"><h3>${G[g].label}<em>${status(g)}${cons[g] ? ` · same pick ${cons[g].agreed}/${cons[g].checks}` : ''}</em></h3>${Object.keys(G[g].values).map(v =>
+    `<div class="gv${c[g]===v?' lead':''}"><span>${vn(g,v)}</span><span class="track"><i style="width:${Math.round(mean(g,v)*100)}%"></i></span><em>${seen(g,v)}</em></div>`).join('')}</div>`).join('');
+  stop('gal');
+  const scenes = PARAM ? LAB.scenes.map(s=>s.id) : [...new Set(POOL.map(p=>p.scene))];
+  $('gallery').innerHTML = scenes.map(id => { const s = LAB.scenes.find(x=>x.id===id) || {name:id}; return `<div class="gcell"><div class="stage" data-scene="${id}"></div><div class="cap">${s.name}</div></div>`; }).join('');
+  $('gallery').querySelectorAll('.stage').forEach(el => { const id = el.dataset.scene; show(el, id, PARAM ? {genes:c} : nearest(c, id)); loop('gal-'+id, [el]); });
+}
+function summary(){
+  const c = champion(), fav = {}, post = {};
+  for (const g of GK){ const {name, ...rest} = G[g].values[c[g]]; fav[g] = {choice:c[g], name, status:status(g), ...rest};
+    post[g] = Object.fromEntries(Object.keys(G[g].values).map(v=>[v,{winRate:+mean(g,v).toFixed(3), seen:seen(g,v)}])); }
+  const decisive = S.history.filter(h=>h.pick==='L'||h.pick==='R').slice(-12).map(h=>{ const w=h.pick==='L'?h.left:h.right, l=h.pick==='L'?h.right:h.left; return {scene:h.scene, winner:w, loser:l, note:h.note}; });
+  return {lab:LAB.id, rounds:S.rounds, neitherRate:S.rounds? +(S.history.filter(h=>h.pick==='none').length/S.rounds).toFixed(2):0,
+    favourite:fav, posteriors:post, recentDecisive:decisive, consistency:consistency(),
+    notes:S.history.filter(h=>h.note).map(h=>({pick:h.pick, scene:h.scene, ...(h.gene ? {gene:h.gene, best:h.best} : {}), note:h.note}))};
+}
+document.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => { const t=b.dataset.tab;
+  document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute('aria-selected', x===b));
+  for (const id of ['choose','compare','profile']) $(id).hidden = t!==id;
+  stop('cmp'); stop('cho'); stop('gal'); $('gallery').innerHTML='';
+  if (t==='profile') renderProfile(); else if (t==='compare') showPair(); else showBoard(); });
+$('copy').onclick = async () => { const txt = JSON.stringify(summary(), null, 2);
+  try { await navigator.clipboard.writeText(txt); $('copy').textContent='Copied'; setTimeout(()=>$('copy').textContent='Copy profile',1400); }
+  catch(e){ $('exportText').value = txt; $('export').classList.add('show'); $('exportText').select(); } };
+let armed = false;
+$('reset').onclick = () => { if (!armed){ armed=true; $('reset').textContent='Click again to reset'; setTimeout(()=>{armed=false; $('reset').textContent='Reset';},2500); return; }
+  armed=false; $('reset').textContent='Reset'; const m=S.mode; S=fresh(); S.mode=m; save(); meta(); renderProfile(); };
+
+// Persistence: localStorage always; plus a local server (Claude Code) or the artifact db (claude.ai)
+let remote = null, saving = false, dirty = false;
+const meta = () => $('rounds').textContent = `${S.rounds} round${S.rounds===1?'':'s'}`;
+const sync = t => $('sync').textContent = t;
+async function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){}
+  if (!remote) return; if (saving){ dirty=true; return; } saving = true;
+  try { await remote.put({state:S, summary:summary(), updatedAt:new Date().toISOString()}); sync(remote.label); } catch(e){ sync('Saved on this device'); }
+  saving = false; if (dirty){ dirty=false; save(); }
+}
+async function adopt(doc){ if (doc && doc.state && doc.state.lab===LAB.id && doc.state.rounds >= S.rounds){ S = normalize(JSON.parse(JSON.stringify(doc.state))); setMode(S.mode); meta(); if (!$('profile').hidden) renderProfile(); } else if (S.rounds) save(); }
+async function initRemote(){
+  if (['localhost','127.0.0.1'].includes(location.hostname)){
+    try { const r = await fetch('/api/state'); remote = {label:'Saved to project', put: d => fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(x=>{ if(!x.ok) throw 0; })};
+      await adopt(r.ok ? await r.json() : null); sync(remote.label); return; } catch(e){ remote = null; } }
+  try { if (!window.claude?.use) return;
+    const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]); if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return; const ref = db.doc(`data/users/${uid}/${LAB.id}`);
+    const snap = await ref.get(); remote = {label:'Synced', put: d => ref.set(d)}; await adopt(snap.exists ? snap.data() : null); sync('Synced');
+  } catch(e){ remote = null; }
+}
+setMode(S.mode); meta(); showBoard(); initRemote();
+</script>
+</body>
+</html>

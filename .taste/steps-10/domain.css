@@ -1,0 +1,139 @@
+/* Suara guided steps: a phone screen per card. Only the decision under test changes between the
+   three cards on a screen; everything else is the current favourite. Airbnb-minimal: black
+   primary, #007AFF accent, Suara's type sizes raised for older readers. */
+.stage{min-height:620px;padding:14px}
+[data-tab="compare"]{display:none}
+.ph{--ground:#fff;--tint:#F4F5F7;--line:#E5E5EA;--line2:#C7C7CC;--ink:#1D1D1F;--muted:#5F5F64;--blue:#007AFF;--green:#1F7A36;
+  --r:18px;--rb:14px;
+  width:300px;height:600px;border-radius:30px;background:var(--ground);box-shadow:0 0 0 1px var(--line),0 12px 30px -18px rgb(0 0 0/35%);
+  overflow:hidden;position:relative;display:flex;flex-direction:column;gap:12px;padding:12px 16px 16px;text-align:left;color:var(--ink);
+  font-family:'Atkinson Hyperlegible Next',system-ui,-apple-system,'Segoe UI',sans-serif}
+.ph *{box-sizing:border-box;margin:0}
+.ph svg{display:block;flex:none}
+.ph .bar{display:flex;align-items:center;gap:8px}
+.ph .mark{width:30px;height:30px;border-radius:9px;background:#1D1D1F;display:grid;place-items:center;color:#fff}
+.ph .brand{font-weight:700;font-size:17px;margin-right:auto;letter-spacing:-.02em}
+.ph .pill{height:34px;padding:0 12px;border-radius:999px;background:var(--tint);display:grid;place-items:center;font-size:13px;font-weight:600}
+.ph .back{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600;color:var(--muted)}
+.ph .gtitle{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.ph .lbl{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.ph .grow{flex:1}
+.ph .src{font-size:12.5px;color:var(--muted)}
+
+/* ── 1. The bar on top ───────────────────────────────────────────────────────── */
+.ph .trk{display:flex;align-items:flex-start;padding:4px 0 2px}
+.ph .trk .n{flex:none;display:grid;justify-items:center;gap:5px;position:relative}
+.ph .trk .c{width:var(--nd,30px);height:var(--nd,30px);border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:700;
+  background:#fff;color:var(--muted);box-shadow:inset 0 0 0 2px var(--line2);transition:all .35s}
+.ph .trk .c svg{width:58%;height:58%}
+.ph .trk .n[data-s="done"] .c{background:var(--done);color:#fff;box-shadow:none}
+.ph .trk .n[data-s="now"] .c{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 3px var(--ink),0 0 0 5px rgb(0 0 0/7%);transform:scale(1.12)}
+.ph .trk .ln{flex:1;height:3px;margin-top:calc(var(--nd,30px)/2 - 1.5px);background:var(--line);border-radius:2px;position:relative;overflow:hidden;min-width:4px}
+.ph .trk .ln i{position:absolute;inset:0;background:var(--done);transform-origin:left;transform:scaleX(var(--f,0));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.ph .trk .nm{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;max-width:48px;overflow:hidden;text-overflow:ellipsis}
+.ph .trk .n[data-s="now"] .nm{color:var(--ink);font-weight:700}
+.ph .trk .n[data-s="done"] .nm{color:var(--ink)}
+.ph .trk.named{--nd:24px}
+.ph .trk.named .c{font-size:12px}
+.ph .trk.dots{--nd:12px;align-items:center}
+.ph .trk.dots .c{font-size:0}
+.ph .trk.dots .c svg{display:none}
+.ph .trk.dots .n[data-s="now"] .c{--nd:18px;width:18px;height:18px;transform:none;box-shadow:inset 0 0 0 4px var(--ink)}
+.ph .trk.dots .ln{margin-top:0}
+.ph .trkhead{display:flex;justify-content:space-between;align-items:baseline;font-size:14px}
+.ph .trkhead b{font-weight:700}
+.ph .trkhead span{color:var(--muted)}
+.ph .gap{display:grid;place-items:center;width:18px;color:var(--muted);font-weight:700;letter-spacing:1px;font-size:13px;padding-top:6px}
+.ph .seg{display:flex;gap:4px}
+.ph .seg i{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.ph .seg i[data-s="done"]{background:var(--done)}
+.ph .seg i[data-s="now"]{background:var(--ink)}
+
+/* ── 3. The current step ─────────────────────────────────────────────────────── */
+.ph .scard{border-radius:var(--r);background:#fff;box-shadow:0 1px 2px rgb(0 0 0/5%),0 8px 22px rgb(0 0 0/8%);padding:16px;display:grid;gap:10px}
+.ph .snum{font-size:13px;font-weight:700;color:var(--muted)}
+.ph .sname{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.18}
+.ph .stext{font-size:16px;line-height:1.42}
+.ph .page .sname{font-size:25px}
+.ph .page .stext{font-size:18px}
+.ph .page{display:grid;gap:12px;padding-top:4px}
+.ph .acc{display:grid;gap:6px}
+.ph .acc .row{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:var(--rb);background:var(--tint);font-size:15px;font-weight:600}
+.ph .acc .row .d{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;box-shadow:inset 0 0 0 2px var(--line2);color:var(--muted)}
+.ph .acc .row[data-s="done"]{background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.ph .acc .row[data-s="done"] .d{background:var(--done);color:#fff;box-shadow:none}
+.ph .acc .row[data-s="done"] .d svg{width:14px;height:14px}
+.ph .acc .open{border-radius:var(--r);background:#fff;box-shadow:inset 0 0 0 2px var(--ink);padding:14px;display:grid;gap:10px}
+
+/* ── 4. More information ─────────────────────────────────────────────────────── */
+.ph .more{display:grid;gap:0}
+.ph .more .hd{display:flex;align-items:center;gap:6px;min-height:44px;font-size:15.5px;font-weight:700;cursor:pointer}
+.ph .more .hd .cv{transition:transform .2s cubic-bezier(.15,1,.3,1)} /* Atlassian expand */
+.ph .more .bd{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.8,.2,1)}
+.ph .more .bd>div{overflow:hidden}
+.ph .more.open .bd{grid-template-rows:1fr}
+.ph .more .bd p{font-size:14.5px;line-height:1.42;color:var(--ink)}
+.ph .more .bd p b{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+.ph .more[data-k="expand"] .bd>div{padding-left:24px;border-left:2px solid var(--line);margin-left:7px}
+.ph .more[data-k="expand"].open .hd .cv{transform:rotate(90deg)}
+.ph .more[data-k="panel"]{border-radius:var(--rb);background:var(--tint)}
+.ph .more[data-k="panel"] .hd{padding:0 14px;justify-content:space-between}
+.ph .more[data-k="panel"] .bd>div{padding:0 14px}
+.ph .more[data-k="panel"].open .bd>div{padding-bottom:12px}
+.ph .more[data-k="panel"] .pm{width:24px;height:24px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:18px;font-weight:700;line-height:1}
+.ph .more[data-k="sheet"] .hd{color:var(--blue)}
+.ph .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 30px rgb(0 0 0/16%);
+  padding:10px 18px 20px;display:grid;gap:10px;transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);z-index:3}
+.ph .sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line2);justify-self:center}
+.ph .sheet h3{font-size:18px}
+.ph .sheet p{font-size:15px;line-height:1.42}
+.ph .sheet p b{display:block;font-size:13px;color:var(--muted)}
+.ph .scrim{position:absolute;inset:0;background:rgb(0 0 0/28%);opacity:0;transition:opacity .4s;z-index:2;pointer-events:none}
+.ph.sheet-open .sheet{transform:none}
+.ph.sheet-open .scrim{opacity:1}
+
+/* ── 5. The clear button ─────────────────────────────────────────────────────── */
+.ph .go{height:54px;border-radius:999px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16.5px;font-weight:700;position:relative;overflow:hidden}
+.ph .go svg{width:20px;height:20px}
+.ph .tickrow{display:flex;align-items:center;gap:14px}
+.ph .tickbtn{width:64px;height:64px;border-radius:50%;background:#000;color:#fff;display:grid;place-items:center;flex:none}
+.ph .tickbtn svg{width:30px;height:30px}
+.ph .tickrow span{font-size:16.5px;font-weight:700;line-height:1.25}
+.ph .split{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.ph .split .go{font-size:15.5px}
+.ph .split .help{height:54px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--line2);display:grid;place-items:center;font-size:15px;font-weight:700}
+.ph .hear{display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;font-size:14.5px;font-weight:600;color:var(--muted)}
+.ph .hear svg{width:18px;height:18px}
+
+/* ── 6. Clearing a stage (runs when the card plays) ──────────────────────────── */
+.ph .swap{display:grid}
+.ph .swap>*{grid-area:1/1}
+.ph .swap .next{opacity:0;transform:translateX(24px)}
+.ph.cleared .swap .prev{opacity:0;transform:translateX(-24px);transition:all .4s cubic-bezier(.2,.8,.2,1)}
+.ph.cleared .swap .next{opacity:1;transform:none;transition:all .45s cubic-bezier(.2,.8,.2,1) .18s}
+.ph .go .ok{position:absolute;inset:0;background:var(--done);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .2s}
+.ph.pressed .prev .go .ok{opacity:1}
+.ph .stamp{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.ph .stamp span{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--done);color:#fff;font-size:20px;font-weight:800;
+  transform:scale(1.6) rotate(-6deg);opacity:0;transition:all .35s cubic-bezier(.2,1.4,.4,1)}
+.ph .stamp svg{width:22px;height:22px}
+.ph.pressed .stamp span{transform:scale(1) rotate(-6deg);opacity:1}
+.ph .rel{position:relative}
+.ph .donerow{display:flex;align-items:center;gap:10px;height:0;overflow:hidden;opacity:0;padding:0 12px;border-radius:var(--rb);background:#fff;box-shadow:inset 0 0 0 1px var(--line);
+  font-size:14.5px;font-weight:600;color:var(--muted);transition:all .45s cubic-bezier(.2,.8,.2,1)}
+.ph .donerow .d{width:22px;height:22px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center}
+.ph .donerow .d svg{width:14px;height:14px}
+.ph .donerow em{margin-left:auto;font-style:normal;font-size:12.5px;font-weight:700;color:var(--done)}
+.ph.cleared .donerow{height:44px;opacity:1}
+
+/* ── 8. Every stage cleared ──────────────────────────────────────────────────── */
+.ph .fin{display:grid;gap:10px;justify-items:start}
+.ph .fin h2{font-size:25px;letter-spacing:-.02em;line-height:1.15}
+.ph .fin p{font-size:15.5px;color:var(--muted);line-height:1.4}
+.ph .bigtick{width:96px;height:96px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center;justify-self:center;margin-top:30px}
+.ph .bigtick svg{width:48px;height:48px}
+.ph .checks{display:grid;gap:6px;width:100%}
+.ph .checks div{display:flex;align-items:center;gap:10px;min-height:42px;font-size:15px;font-weight:600;border-bottom:1px solid var(--line)}
+.ph .checks .d{width:22px;height:22px;border-radius:50%;background:var(--done);color:#fff;display:grid;place-items:center}
+.ph .checks .d svg{width:14px;height:14px}
+.ph .ask{height:52px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--line2);display:grid;place-items:center;font-size:16px;font-weight:700;width:100%}
