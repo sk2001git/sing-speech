@@ -41,6 +41,12 @@ describe('checkRefsResolve', () => {
 		expect(checkRefsResolve(e, AT).note).toContain('q99');
 	});
 
+	it('fails a step "more" citing a missing quote', () => {
+		const e = original();
+		e.steps![0]!.about = { text: 'Open to all.', quote_refs: ['q98'] };
+		expect(checkRefsResolve(e, AT).note).toContain('steps.0.about cites missing q98');
+	});
+
 	it('fails a quote citing a source that does not exist', () => {
 		const e = original();
 		e.quotes[0]!.source = 'src2';
@@ -97,6 +103,14 @@ describe('checkTranslation', () => {
 		const e = original();
 		const t = chinese(e);
 		change(t);
+		expect(checkTranslation(e, t, AT).passed).toBe(false);
+	});
+
+	it('fails a translation whose "more" cites a different quote', () => {
+		const e = original();
+		e.steps![0]!.about = { text: 'Open to all.', quote_refs: ['q2'] };
+		const t = chinese(e);
+		t.steps![0]!.about = { text: '人人可用。', quote_refs: ['q3'] };
 		expect(checkTranslation(e, t, AT).passed).toBe(false);
 	});
 

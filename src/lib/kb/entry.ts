@@ -39,10 +39,28 @@ const Action = z.strictObject({
 	quote_refs: QuoteRefs.optional(),
 });
 
+/**
+ * A step in points (owner, 2026-09-29; vault obs-0073): an optional lead-in the points
+ * complete, then one to four short sentences, one idea each. Reshaped from the step's own
+ * quote, so it cites nothing of its own.
+ */
+const Points = z.strictObject({
+	lead: text(1, 60).optional(),
+	items: z.array(text(1, 140)).min(1).max(4),
+});
+
+/** More about a step: at most two sentences, the bottom line first, citing its own quote. */
+const About = z.strictObject({
+	text: text(1, 280),
+	quote_refs: QuoteRefs,
+});
+
 const Step = z.strictObject({
 	position: z.int().min(1),
 	name: text(1, 40),
 	text: text(1, 300),
+	points: Points.optional(),
+	about: About.optional(),
 	confirm_label: text(1, 24),
 	action: Action.optional(),
 	quote_refs: QuoteRefs,

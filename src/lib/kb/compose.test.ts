@@ -32,12 +32,18 @@ const draft: Draft = {
 		{
 			name: 'Check the relation',
 			text: 'Your parents count as approved dependants, along with your spouse, children and grandparents.',
+			points: { items: ['Your parents count as approved dependants.', 'So do your spouse, children and grandparents.'] },
+			about: '',
+			about_quote: '',
 			confirm_label: 'He is my father',
 			quote: 'You may use your MediSave for yourself and your approved dependants: your spouse, children, parents and grandparents.',
 		},
 		{
 			name: 'Tell the hospital',
 			text: 'Tell the hospital you want to use MediSave, and sign the Medical Claims Authorisation Form.',
+			points: { lead: 'At the hospital or clinic:', items: ['Say you want to use MediSave', 'Sign the Medical Claims Authorisation Form'] },
+			about: 'Withdrawal limits apply to each treatment.',
+			about_quote: 'Withdrawal limits apply to each treatment.',
 			confirm_label: 'I have told them',
 			quote: 'Tell the hospital or clinic that you wish to use MediSave, and sign the Medical Claims Authorisation Form.',
 		},
@@ -59,6 +65,16 @@ describe('composePrompt', () => {
 		expect(prompt.toLowerCase()).toContain('verbatim');
 	});
 
+	it('gives the writer the Harvard and Cornell rules for a step, in so many words', () => {
+		expect(prompt).toContain('Writing for Busy Readers');
+		expect(prompt).toContain('Cornell');
+		expect(prompt).toContain('bottom line up front');
+		expect(prompt).toMatch(/at most two sentences/i);
+		expect(prompt).toMatch(/every condition, exception, deadline and number/i);
+		expect(prompt).toContain('"points"');
+		expect(prompt).toContain('"about"');
+	});
+
 	it('states the limits the schema enforces, so a draft is not rejected for length', () => {
 		expect(prompt).toContain('16');
 		expect(prompt).toContain('140');
@@ -74,6 +90,34 @@ describe('draftToEntry', () => {
 		expect(made.entry.id).toBe('sg.cpf.paying-a-family-members-bill-with-medisave');
 		expect(made.entry.kind).toBe('process');
 		expect(made.entry.steps?.map((s) => s.position)).toEqual([1, 2]);
+	});
+
+	it('keeps each step in points, and its "more" citing its own quote', () => {
+		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
+		if (!made.ok) throw new Error(made.errors.join('; '));
+		const [first, second] = made.entry.steps!;
+		expect(first!.points).toEqual({ items: ['Your parents count as approved dependants.', 'So do your spouse, children and grandparents.'] });
+		expect(first!.about).toBeUndefined();
+		expect(second!.points?.lead).toBe('At the hospital or clinic:');
+		const ref = second!.about!.quote_refs[0]!;
+		expect(made.entry.quotes.find((q) => q.id === ref)?.text).toBe('Withdrawal limits apply to each treatment.');
+	});
+
+	const withStep = (change: (s: Draft['steps'][number]) => void): Draft => {
+		const d = structuredClone(draft);
+		change(d.steps[1]!);
+		return d;
+	};
+	it.each([
+		['a step with no points', withStep((s) => delete (s as Partial<typeof s>).points), 'steps.1.points'],
+		['five points', withStep((s) => (s.points = { items: ['a.', 'b.', 'c.', 'd.', 'e.'] })), 'steps.1.points'],
+		['a lead-in that does not lead into the points', withStep((s) => (s.points = { lead: 'At the hospital', items: ['Say so.'] })), 'steps.1.points.lead'],
+		['a "more" of three sentences', withStep((s) => (s.about = 'Limits apply. They apply to each treatment. Ask the hospital.')), 'steps.1.about'],
+		['a "more" whose quote is not on the page', withStep((s) => (s.about_quote = 'MediSave pays for everything.')), 'steps.1.about'],
+	])('refuses %s', (_name, d, where) => {
+		const made = draftToEntry(d, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
+		expect(made.ok).toBe(false);
+		if (!made.ok) expect(made.errors.join('; ')).toContain(where);
 	});
 
 	it('every line it shows resolves to a quote that is on the page', () => {
@@ -110,7 +154,8 @@ describe('draftToEntry', () => {
 	it('uses one quote once, however many lines cite it', () => {
 		const made = draftToEntry(draft, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		if (!made.ok) throw new Error(made.errors.join('; '));
-		expect(made.entry.quotes).toHaveLength(2);
+		// The summary and step 1 share a line; step 2 and its "more" cite one each.
+		expect(made.entry.quotes).toHaveLength(3);
 	});
 
 	it('keeps the person’s own words as a phrasing, so the next person finds it', () => {

@@ -114,8 +114,31 @@
             "type": "string", "minLength": 1, "maxLength": 40
           },
           "text": {
-            "description": "What to do, revealed when the step is open.",
+            "description": "What to do, revealed when the step is open. Read aloud; also what search indexes.",
             "type": "string", "minLength": 1, "maxLength": 300
+          },
+          "points": {
+            "description": "The step in points, as shown: an optional lead-in the points complete, then one to four short sentences, one idea each. Reshaped from the step's own quote, so no quote_refs of its own.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["items"],
+            "properties": {
+              "lead": { "type": "string", "minLength": 1, "maxLength": 60 },
+              "items": {
+                "type": "array", "minItems": 1, "maxItems": 4,
+                "items": { "type": "string", "minLength": 1, "maxLength": 140 }
+              }
+            }
+          },
+          "about": {
+            "description": "More about the step, behind a drop-down: at most two sentences, the bottom line first, then the one detail that changes what the person does.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["text", "quote_refs"],
+            "properties": {
+              "text": { "type": "string", "minLength": 1, "maxLength": 280 },
+              "quote_refs": { "$ref": "#/$defs/quoteRefs" }
+            }
           },
           "confirm_label": {
             "description": "What the person taps to say this step is done.",

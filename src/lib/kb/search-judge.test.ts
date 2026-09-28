@@ -65,6 +65,9 @@ const draft: Draft = {
 		{
 			name: 'Tell the hospital',
 			text: 'Tell the hospital you wish to use MediSave and sign the Medical Claims Authorisation Form.',
+			points: { items: ['Tell the hospital you wish to use MediSave.', 'Sign the Medical Claims Authorisation Form.'] },
+			about: '',
+			about_quote: '',
 			confirm_label: 'I have told them',
 			quote: 'Tell the hospital or clinic that you wish to use MediSave, and sign the Medical Claims Authorisation Form.',
 		},

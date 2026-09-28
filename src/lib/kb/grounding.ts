@@ -26,6 +26,7 @@ function citations(e: Entry): Array<[string, string[]]> {
 	e.details?.forEach((d, i) => out.push([`details.${i}`, d.quote_refs]));
 	e.steps?.forEach((s, i) => {
 		out.push([`steps.${i}`, s.quote_refs]);
+		if (s.about) out.push([`steps.${i}.about`, s.about.quote_refs]);
 		if (s.action?.quote_refs) out.push([`steps.${i}.action`, s.action.quote_refs]);
 	});
 	if (e.action?.quote_refs) out.push(['action', e.action.quote_refs]);
@@ -71,7 +72,7 @@ function structure(e: Entry) {
 		kind: e.kind,
 		summary: e.summary.quote_refs,
 		details: e.details?.map((d) => d.quote_refs) ?? [],
-		steps: e.steps?.map((s) => [s.position, s.quote_refs, s.action?.type ?? null, s.action?.quote_refs ?? null]) ?? [],
+		steps: e.steps?.map((s) => [s.position, s.quote_refs, s.about?.quote_refs ?? null, s.points?.items.length ?? null, s.action?.type ?? null, s.action?.quote_refs ?? null]) ?? [],
 		action: e.action ? [e.action.type, e.action.quote_refs ?? null] : null,
 	};
 }

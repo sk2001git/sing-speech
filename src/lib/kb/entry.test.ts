@@ -35,6 +35,16 @@ const CASES: Array<[string, () => Json, boolean]> = [
 	['a summary citing no quote', edit((e) => (e.summary.quote_refs = [])), false],
 	['an old schema version', edit((e) => (e.schema_version = '1.0.0')), false],
 	['a translation into a language Suara does not serve', edit((e) => (e.translations = { ms: { from_version: 1, at: AT } })), false],
+	['a step in points, with a short "more" citing its own quote', edit((e) => {
+		e.steps[1].points = { lead: 'The form must show:', items: ['The referral date', 'The referral time', 'The clinic’s stamp'] };
+		e.steps[0].points = { items: ['Only participating GP clinics give this form.'] };
+		e.steps[0].about = { text: 'GPFirst is open to everyone living in Singapore. That includes PRs and foreigners.', quote_refs: ['q2'] };
+	}), true],
+	['a step with five points', edit((e) => (e.steps[0].points = { items: ['a', 'b', 'c', 'd', 'e'] })), false],
+	['a step with no points in its list', edit((e) => (e.steps[0].points = { items: [] })), false],
+	['a point longer than a short sentence', edit((e) => (e.steps[0].points = { items: ['a'.repeat(141)] })), false],
+	['a "more" longer than two short sentences', edit((e) => (e.steps[0].about = { text: 'a'.repeat(281), quote_refs: ['q1'] })), false],
+	['a "more" citing no quote', edit((e) => (e.steps[0].about = { text: 'Open to all.', quote_refs: [] })), false],
 	['a translation that does not say which model made it', () => {
 		const e = translation();
 		delete e.provenance.translated;

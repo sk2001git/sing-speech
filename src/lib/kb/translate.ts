@@ -55,7 +55,8 @@ export interface DisplayText {
 	title: { short: string; full: string };
 	summary: string;
 	details: { heading: string; body: string }[];
-	steps: { name: string; text: string; confirm_label: string; action_label?: string }[];
+	/** `points` is empty and `points_lead` and `about` null where the original has none. */
+	steps: { name: string; text: string; points_lead: string | null; points: string[]; about: string | null; confirm_label: string; action_label?: string }[];
 	action_label?: string;
 	example_phrasings: string[];
 }
@@ -68,6 +69,9 @@ export function displayText(e: Entry): DisplayText {
 		steps: (e.steps ?? []).map((s) => ({
 			name: s.name,
 			text: s.text,
+			points_lead: s.points?.lead ?? null,
+			points: s.points?.items ?? [],
+			about: s.about?.text ?? null,
 			confirm_label: s.confirm_label,
 			...(s.action ? { action_label: s.action.label } : {}),
 		})),
@@ -91,7 +95,17 @@ const Reply = z.object({
 	summary: z.string(),
 	details: z.array(z.object({ heading: z.string(), body: z.string() })).default([]),
 	steps: z
-		.array(z.object({ name: z.string(), text: z.string(), confirm_label: z.string(), action_label: optionalLabel }))
+		.array(
+			z.object({
+				name: z.string(),
+				text: z.string(),
+				points_lead: optionalLabel,
+				points: z.array(z.string()).default([]),
+				about: optionalLabel,
+				confirm_label: z.string(),
+				action_label: optionalLabel,
+			}),
+		)
 		.default([]),
 	action_label: optionalLabel,
 	example_phrasings: z.array(z.string()),
@@ -108,6 +122,11 @@ function countProblems(original: Entry, r: z.infer<typeof Reply>): string[] {
 	steps.forEach((s, i) => {
 		const reply = r.steps[i];
 		if (reply && !!s.action !== !!reply.action_label) problems.push(`step ${i + 1}: action label presence differs`);
+		if (!reply) return;
+		const points = s.points?.items.length ?? 0;
+		if (reply.points.length !== points) problems.push(`step ${i + 1}: points: got ${reply.points.length}, expected ${points}`);
+		if (!!s.points?.lead !== !!reply.points_lead) problems.push(`step ${i + 1}: points lead-in presence differs`);
+		if (!!s.about !== !!reply.about) problems.push(`step ${i + 1}: "more" presence differs`);
 	});
 	if (!!original.action !== !!r.action_label) problems.push('action label presence differs');
 	if (r.example_phrasings.length !== original.search.example_phrasings.length)
@@ -136,6 +155,8 @@ export function applyTranslation(original: Entry, reply: unknown, language: Entr
 				...s,
 				name: rs.name,
 				text: rs.text,
+				...(s.points ? { points: { ...(rs.points_lead ? { lead: rs.points_lead } : {}), items: rs.points } } : {}),
+				...(s.about ? { about: { ...s.about, text: rs.about! } } : {}),
 				confirm_label: rs.confirm_label,
 				...(s.action ? { action: { ...s.action, label: rs.action_label! } } : {}),
 			};
@@ -187,8 +208,16 @@ function replySchema(): Record<string, unknown> {
 				items: {
 					type: 'object',
 					additionalProperties: false,
-					required: ['name', 'text', 'confirm_label', 'action_label'],
-					properties: { name: str(40), text: str(300), confirm_label: str(24), action_label: orNull(str(24)) },
+					required: ['name', 'text', 'points_lead', 'points', 'about', 'confirm_label', 'action_label'],
+					properties: {
+						name: str(40),
+						text: str(300),
+						points_lead: orNull(str(60)),
+						points: { type: 'array', items: str(140) },
+						about: orNull(str(280)),
+						confirm_label: str(24),
+						action_label: orNull(str(24)),
+					},
 				},
 			},
 			action_label: orNull(str(24)),
@@ -201,8 +230,8 @@ function systemPrompt(language: EntryLanguage, structured: boolean): string {
 	return [
 		`You translate Singapore government answers into ${LANGUAGE_NAME[language]} for older readers.`,
 		'Plain, short, warm wording. Keep names of schemes, hospitals, forms and phone numbers recognisable.',
-		'Keep the same number of details, steps and example phrasings, in the same order. Keep action_label only where the input has one.',
-		'Limits: title.short 16 characters, title.full 60, summary 140, detail heading 40, step name 40, confirm_label and action_label 24.',
+		'Keep the same number of details, steps, points in each step and example phrasings, in the same order. Keep action_label, points_lead and about only where the input has one, and null otherwise.',
+		'Limits: title.short 16 characters, title.full 60, summary 140, detail heading 40, step name 40, each point 140, points_lead 60, about 280 and at most two sentences, confirm_label and action_label 24.',
 		'Example phrasings should sound like how an older Singaporean would say it aloud in that language.',
 		structured ? '' : 'Reply with the JSON only, with exactly the same keys as the input. No explanation, no code fence.',
 	]

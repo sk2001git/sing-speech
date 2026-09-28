@@ -22,6 +22,9 @@ function chineseText(e: Entry) {
 		steps: t.steps.map((s, i) => ({
 			name: `第 ${i + 1} 步`,
 			text: '按说明做。',
+			points_lead: s.points_lead ? '表格上要有：' : null,
+			points: s.points.map((_, j) => `要点 ${j + 1}。`),
+			about: s.about ? '最重要的是这一点。' : null,
 			confirm_label: '好了',
 			...(s.action_label ? { action_label: '看医院' } : {}),
 		})),
@@ -48,6 +51,46 @@ describe('a reply from a strict schema', () => {
 		};
 		const applied = applyTranslation(e, withNulls, 'zh-Hans', 'gpt-5.6-luna', AT);
 		expect(applied.ok, applied.ok ? '' : applied.reason).toBe(true);
+	});
+});
+
+/** The example with its second step in points and its first carrying a "more". */
+function inPoints(): Entry {
+	const e = original();
+	e.steps![0]!.points = { items: ['Only participating GP clinics give this form.'] };
+	e.steps![0]!.about = { text: 'GPFirst is open to everyone living in Singapore.', quote_refs: ['q2'] };
+	e.steps![1]!.points = { lead: 'The form must show:', items: ['The referral date', 'The referral time', 'The clinic’s stamp'] };
+	return e;
+}
+
+describe('a step in points', () => {
+	it('is sent to be translated with its lead-in, its points and its "more"', () => {
+		const t = displayText(inPoints());
+		expect(t.steps[1]).toMatchObject({ points_lead: 'The form must show:', points: ['The referral date', 'The referral time', 'The clinic’s stamp'] });
+		expect(t.steps[0]!.about).toBe('GPFirst is open to everyone living in Singapore.');
+	});
+
+	it('comes back in Chinese with the same points and the "more" citing the same quote', () => {
+		const e = inPoints();
+		const applied = applyTranslation(e, chineseText(e), 'zh-Hans', 'gpt-6-luna', AT);
+		if (!applied.ok) throw new Error(applied.reason);
+		const [first, second] = applied.entry.steps!;
+		expect(second!.points).toEqual({ lead: '表格上要有：', items: ['要点 1。', '要点 2。', '要点 3。'] });
+		expect(first!.about).toEqual({ text: '最重要的是这一点。', quote_refs: ['q2'] });
+	});
+
+	it('is rejected when the reply dropped a point', () => {
+		const e = inPoints();
+		const reply = chineseText(e);
+		reply.steps[1]!.points = reply.steps[1]!.points.slice(0, 2);
+		expect(applyTranslation(e, reply, 'zh-Hans', 'gpt-6-luna', AT).ok).toBe(false);
+	});
+
+	it('is rejected when the reply dropped the "more"', () => {
+		const e = inPoints();
+		const reply = chineseText(e);
+		reply.steps[0]!.about = null;
+		expect(applyTranslation(e, reply, 'zh-Hans', 'gpt-6-luna', AT).ok).toBe(false);
 	});
 });
 

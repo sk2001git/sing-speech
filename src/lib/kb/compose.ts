@@ -33,6 +33,11 @@ export interface ComposeRequest {
 export interface DraftStep {
 	name: string;
 	text: string;
+	/** The step as shown: an optional lead-in, then one to four short sentences. */
+	points: { lead?: string; items: string[] };
+	/** "More about this step": at most two sentences, or empty. */
+	about: string;
+	about_quote: string;
 	confirm_label: string;
 	quote: string;
 }
@@ -58,9 +63,30 @@ export interface Draft {
 export type Composed = { ok: true; entry: Entry } | { ok: false; errors: string[] };
 
 /** The model is asked for this and nothing else, so a bad reply is a parse failure. */
-export const PROMPT_VERSION = 'compose-1';
+export const PROMPT_VERSION = 'compose-2';
 
-const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600 } as const;
+const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600, point: 140, lead: 60, about: 280 } as const;
+
+/**
+ * How each step is written, given to the model in so many words (owner, 2026-09-29: "pass the
+ * agent the cornell or harvard review pose exactly so the LLM gives us correct, adequate,
+ * extensive and concise content"). Sources and the older-reader finding: vault obs-0073.
+ */
+export const STEP_RULES = [
+	'How to write each step. These are the rules of two sources, applied to an older person following a guide on a phone:',
+	'- Todd Rogers and Jessica Lasky-Fink, Writing for Busy Readers (Harvard Kennedy School): less is more; make reading easy; design for easy navigation; use enough formatting, but no more; tell readers why they should care; make responding easy.',
+	'- The Cornell note-taking system (Walter Pauk, Cornell University): a cue, then notes in short, concise sentences, then a summary of the gist in your own words.',
+	'So, for every step:',
+	'- name is the cue: the one action, verb first.',
+	`- points are the notes: 1 to 4 items, one idea each, each a short complete sentence. Keep the words that link ideas ("if", "so", "then", "only"): older readers lose the meaning when those are cut. Use "lead", ending in a colon, only when the items are short parts that complete it, as in "The form must show:" then "The referral date". Items alike in form and in length. Leave "lead" out otherwise.`,
+	'- about is what the person reads under "More about this step": at most two sentences, never points. Put the bottom line up front: the first sentence is the one thing this person most needs to know about this step, and why it matters to them; the second, only if needed, is the one detail or exception that changes what they do. Nothing the points already say. Leave it "" when the pages say nothing more about this step. about_quote is the verbatim line it rests on.',
+	'- confirm_label is the summary, in the person\'s own words: what they tap when the step is done.',
+	'- text is the step read aloud: what the points say, as one or two plain sentences.',
+	'- Adequate and concise: every condition, exception, deadline and number on the pages that bears on a step appears in its points or its about, and nothing that does not bear on it.',
+].join('\n');
+
+/** Sentences in a short text: a stop, question or exclamation mark followed by a space or the end. */
+export const sentenceCount = (text: string) => (text.match(/[.!?。！？]+(?=\s|$)/g) ?? []).length;
 
 export function composePrompt(req: ComposeRequest, problems?: string[]): string {
 	const { asked, docs, language } = req;
@@ -85,7 +111,7 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		'',
 		'Otherwise write the card as JSON, and nothing else. Shape:',
 		'{"kind":"process"|"answer","short":"","full":"","summary":"","summary_quote":"",',
-		' "steps":[{"name":"","text":"","confirm_label":"","quote":""}],',
+		' "steps":[{"name":"","text":"","points":{"lead":"","items":[""]},"about":"","about_quote":"","confirm_label":"","quote":""}],',
 		' "details":[{"heading":"","body":"","quote":""}],',
 		' "phrasings":["","",""]}',
 		'',
@@ -96,11 +122,13 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their own words: "I have the form", "I called them". Never "Done", "Next", "OK" or "Continue".',
 		`- Answer the question that was asked. Leave out what is on the page but does not bear on it.`,
 		`- Write in ${reply}, short sentences, no jargon, no "please note", nothing about websites the person cannot use.`,
-		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
+		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, each point <= ${LIMITS.point}, lead <= ${LIMITS.lead}, about <= ${LIMITS.about}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
 		'- short is the one line on the card: two or three words, no punctuation.',
 		'- full is a heading that names the thing, not a sentence and never ending in a full stop: "What ElderFund is for", "Paying a bill with MediSave". It says more than short does, so the two are never the same words.',
 		'- Exactly three or four phrasings: short, different ways a person might ask this out loud, including the way this person did. Fewer than three and the card is rejected.',
 		'- At most 6 steps and at most 4 details.',
+		'',
+		STEP_RULES,
 	];
 	if (problems?.length) {
 		lines.push('', 'Your previous attempt was rejected:', ...problems.map((p) => `- ${p}`), '', 'Send the corrected JSON, nothing else.');
@@ -304,6 +332,27 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 		}
 	}
 
+	/*
+	 * Points and "more" (vault obs-0073). A step without points would show as prose on a screen
+	 * built for points, so it is sent back; a lead-in that does not end in a colon is not
+	 * leading into anything; a "more" of three sentences has stopped being the bottom line.
+	 */
+	const pointsOf = (s: DraftStep) => (Array.isArray(s.points?.items) ? s.points.items.map((t) => squash(String(t ?? ''))).filter(Boolean) : []);
+	for (const [i, step] of steps.entries()) {
+		const items = pointsOf(step);
+		if (items.length === 0) errors.push(`steps.${i}.points has no items: write the step as 1 to 4 short sentences`);
+		else if (items.length > 4) errors.push(`steps.${i}.points has ${items.length} items, at most 4`);
+		items.forEach((t, j) => {
+			if ([...t].length > LIMITS.point) errors.push(`steps.${i}.points.items.${j} is ${[...t].length} characters, over the limit of ${LIMITS.point}`);
+		});
+		const lead = squash(step.points?.lead ?? '');
+		if (lead && !/[:：]$/.test(lead)) errors.push(`steps.${i}.points.lead must end in a colon and be completed by the items, or be left out`);
+		if ([...lead].length > LIMITS.lead) errors.push(`steps.${i}.points.lead is ${[...lead].length} characters, over the limit of ${LIMITS.lead}`);
+		const about = squash(step.about ?? '');
+		if ([...about].length > LIMITS.about) errors.push(`steps.${i}.about is ${[...about].length} characters, over the limit of ${LIMITS.about}`);
+		if (sentenceCount(about) > 2) errors.push(`steps.${i}.about is ${sentenceCount(about)} sentences: at most two, the bottom line first`);
+	}
+
 	// The label is what fits on the card; the heading is what the card is about. Identical
 	// ones waste the only line that can say more.
 	if (squash(draft.short ?? '').toLowerCase() === squash(draft.full ?? '').toLowerCase()) {
@@ -357,6 +406,8 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 
 	const summaryRefs = refFor(draft.summary_quote, 'summary');
 	const stepRefs = steps.map((s, i) => refFor(s.quote, `steps.${i}`));
+	// A "more" rests on its own line of the page; an empty one cites nothing and is left off.
+	const aboutRefs = steps.map((s, i) => (squash(s.about ?? '') ? refFor(s.about_quote, `steps.${i}.about`) : []));
 	const detailRefs = details.map((d, i) => refFor(d.quote, `details.${i}`));
 
 	/*
@@ -399,13 +450,19 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 			: {}),
 		...(steps.length
 			? {
-					steps: steps.map((s, i) => ({
-						position: i + 1,
-						name: squash(s.name),
-						text: squash(s.text),
-						confirm_label: squash(s.confirm_label),
-						quote_refs: stepRefs[i]!,
-					})),
+					steps: steps.map((s, i) => {
+						const lead = squash(s.points?.lead ?? '');
+						const about = squash(s.about ?? '');
+						return {
+							position: i + 1,
+							name: squash(s.name),
+							text: squash(s.text),
+							points: { ...(lead ? { lead } : {}), items: pointsOf(s) },
+							...(about ? { about: { text: about, quote_refs: aboutRefs[i]! } } : {}),
+							confirm_label: squash(s.confirm_label),
+							quote_refs: stepRefs[i]!,
+						};
+					}),
 				}
 			: {}),
 		...(callAction(quotes) ? { action: callAction(quotes)! } : {}),
