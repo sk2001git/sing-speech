@@ -3,35 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Suara · a guide, stage by stage (prototype)</title>
+<title>Suara · a guide, stage by stage (prototype, round 2)</title>
 <!--
-  Clickable prototype of the owner's picks in the guided-steps taste lab (.taste/steps-10,
-  2026-09-28): numbered bubbles joined by a line (GOV.UK sizes), a cleared stage as a blue tick,
-  the step on the whole screen (no card), more information in a sheet from below, one wide black
-  button, the line running on to the next bubble when a stage clears, nearby bubbles and "..." for
-  long guides (Ant Design maxCount), and a ticked list at the end (GOV.UK task list).
-  Accessibility from the research (vault obs-0072): an <ol> with aria-current="step", a tick and
-  hidden "Cleared" text on every cleared stage (never colour alone), aria-expanded on the sheet link.
+  Round 2 of the guided-steps prototype (2026-09-28). Owner's notes on round 1: the circle
+  outlines felt off; take Airbnb's process flow but not its colours; fewer bubbles, greyscale,
+  skeleton-loading for the stages either side, focus on three stages (before, now, next); and a
+  Back button.
+  - Greyscale: ink #222, greys #717171 / #b0b0b0 / #dddddd / #ebebeb. No blue, no outlines.
+  - Airbnb's listing flow (as known, not re-read: it is behind a login): a thin segmented bar,
+    "Back" as an underlined link bottom left, the main button bottom right, an exit pill top right.
+  - Two trackers to compare (A three bubbles, B Airbnb segments) and two ways to show the stages
+    either side (skeleton bars or grey words). The names stay in the page for screen readers.
+  Kept from round 1: the step on the whole screen, the sheet from below, the ticked list at the end.
 -->
 <style>
 @font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
 :root {
-  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7;
-  --blue: #007aff; --r: 20px; --pad: clamp(18px, 5vw, 28px); --col: 520px; --node: 34px;
-  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ink: #222; --muted: #717171; --faint: #b0b0b0; --line: #dddddd; --skel: #ebebeb; --subtle: #f7f7f7;
+  --pad: clamp(18px, 5vw, 28px); --col: 520px; --ease: cubic-bezier(.2, .8, .2, 1);
 }
 * { box-sizing: border-box; margin: 0; }
 body { font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+button:disabled { cursor: default; }
 svg { display: block; flex: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Prototype controls, outside the phone */
 .demo { max-width: var(--col); margin: 16px auto 0; padding: 0 var(--pad); display: grid; gap: 8px; }
 .demo p { font-size: .85rem; color: var(--muted); }
-.demo div { display: flex; gap: 8px; flex-wrap: wrap; }
-.demo button { min-height: 40px; padding: 0 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); font-size: .9rem; font-weight: 600; }
-.demo button[aria-pressed="true"] { background: #000; color: #fff; box-shadow: none; }
+.demo div { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.demo span { font-size: .8rem; font-weight: 700; color: var(--muted); width: 64px; }
+.demo button { min-height: 38px; padding: 0 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); font-size: .88rem; font-weight: 600; }
+.demo button[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: none; }
 
 .app { max-width: var(--col); margin: 12px auto 24px; min-height: 760px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 @media (min-width: 720px) { body { background: var(--subtle); } .app { border-radius: 32px; background: #fff; box-shadow: 0 0 0 1px var(--line); } }
@@ -39,51 +43,90 @@ svg { display: block; flex: none; }
 .mk { width: 40px; height: 40px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
 .nm { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; margin-right: auto; }
 .lang { display: grid; place-items: center; min-height: 40px; padding: 0 14px; border-radius: 999px; background: var(--subtle); font-size: .95rem; font-weight: 600; }
-.page { flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 6px var(--pad) calc(24px + env(safe-area-inset-bottom)); }
-.back { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 1.05rem; font-weight: 600; color: var(--muted); width: max-content; }
-.gt { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-top: -6px; }
+.page { flex: 1; display: flex; flex-direction: column; gap: 22px; padding: 6px var(--pad) calc(20px + env(safe-area-inset-bottom)); }
+.head { display: flex; align-items: center; gap: 12px; }
+.gt { font-size: 1.05rem; font-weight: 700; color: var(--muted); line-height: 1.3; margin-right: auto; }
+.exit { min-height: 44px; padding: 0 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); font-size: 1rem; font-weight: 700; flex: none; }
 
-/* The bar: numbered bubbles joined by a line */
-.trk { list-style: none; padding: 6px 2px 0; display: flex; align-items: center; }
-.trk li:not(.link):not(.gap) { display: contents; }
-.node { width: var(--node); height: var(--node); border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 1rem; font-weight: 700;
-  background: #fff; color: var(--muted); box-shadow: inset 0 0 0 2px var(--line-strong); transition: background .3s, box-shadow .3s, color .3s, transform .3s var(--ease); }
-.node svg { width: 19px; height: 19px; }
-.node[data-s="done"] { background: var(--blue); color: #fff; box-shadow: none; }
-.node[data-s="done"]:hover { transform: scale(1.06); }
-.node[data-s="now"] { color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink), 0 0 0 6px rgb(0 0 0 / 7%); transform: scale(1.12); }
-.node:disabled { cursor: default; }
-.link { flex: 1; height: 3px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; min-width: 6px; }
-.link i { position: absolute; inset: 0; background: var(--blue); transform-origin: left; transform: scaleX(var(--f, 0)); transition: transform .5s var(--ease); }
-.gap { flex: none; width: 22px; text-align: center; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
-.cap { display: flex; justify-content: space-between; gap: 12px; font-size: 1rem; color: var(--muted); margin-top: -6px; }
-.cap b { color: var(--ink); }
+/* Skeleton: the stages either side, drawn like content still loading */
+.bone { display: block; height: 12px; border-radius: 6px; background: var(--skel); position: relative; overflow: hidden; }
+.bone + .bone { margin-top: 7px; width: 62%; }
+.bone::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 75%), transparent); animation: shimmer 1.8s infinite; }
+@keyframes shimmer { to { transform: translateX(100%); } }
+
+/* A · three bubbles: before, now, next */
+.tri { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); align-items: start; }
+.tri li { position: relative; display: grid; justify-items: center; gap: 10px; text-align: center; }
+.tri li + li::before { content: ''; position: absolute; top: 20px; right: 50%; width: 100%; height: 3px; margin-top: -1.5px; background: var(--skel); z-index: 0; }
+.tri li.now::before { background: var(--ink); }
+.tri li.none::before, .tri li.none + li::before { display: none; }
+.bub { position: relative; z-index: 1; display: grid; place-items: center; border-radius: 50%; font-weight: 700; }
+.bub svg { width: 16px; height: 16px; }
+.tri .was .bub { width: 40px; height: 40px; }
+.tri .was .bub i { width: 28px; height: 28px; border-radius: 50%; background: var(--faint); color: #fff; display: grid; place-items: center; }
+.tri .now .bub { width: 40px; height: 40px; background: var(--ink); color: #fff; font-size: 1.1rem; box-shadow: 0 0 0 6px #fff; }
+.tri .next .bub { width: 40px; height: 40px; }
+.tri .next .bub i { width: 28px; height: 28px; border-radius: 50%; background: var(--skel); color: var(--faint); display: grid; place-items: center; font-style: normal; font-size: .9rem; }
+.tri .lbl { font-size: .95rem; line-height: 1.25; color: var(--faint); font-weight: 600; width: 100%; padding: 0 6px; }
+.tri .now .lbl { color: var(--ink); font-weight: 700; font-size: 1rem; }
+.tri .lbl .bone { margin-inline: auto; width: 80%; }
+.tri .lbl .bone + .bone { width: 50%; }
+.tri button.was-go { display: grid; justify-items: center; gap: 10px; width: 100%; }
+
+/* B · Airbnb segments, one per stage, with the stages either side underneath */
+.seg { list-style: none; padding: 0; display: flex; gap: 5px; }
+.seg li { flex: 1; height: 6px; border-radius: 3px; background: var(--skel); position: relative; overflow: hidden; }
+.seg li.done { background: var(--ink); }
+.seg li.now { background: var(--line); }
+.seg li.now::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform-origin: left; transform: scaleX(.35); transition: transform .45s var(--ease); }
+.seg li.now.full::after { transform: none; }
+.nb { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 12px; margin-top: 14px; font-size: .95rem; font-weight: 600; color: var(--faint); line-height: 1.25; }
+.nb .l { display: flex; gap: 6px; align-items: start; text-align: left; }
+.nb .r { display: flex; gap: 6px; align-items: start; justify-content: end; text-align: right; }
+.nb .l svg, .nb .r svg { width: 16px; height: 16px; margin-top: 1px; }
+.nb .l .t, .nb .r .t { flex: 1; min-width: 0; }
+.nb .c { color: var(--muted); }
+.nb .bone { width: 100%; }
+.nb .r .bone { margin-left: auto; }
+
+/* Moving between stages */
+.fwd { animation: fwd .45s var(--ease) both; }
+.bwd { animation: bwd .45s var(--ease) both; }
+@keyframes fwd { from { opacity: .2; transform: translateX(22%); } }
+@keyframes bwd { from { opacity: .2; transform: translateX(-22%); } }
 
 /* The step, on the whole screen */
 .stage { display: grid; }
 .stage > .step { grid-area: 1 / 1; display: grid; gap: 14px; align-content: start; }
-.step.out { opacity: 0; transform: translateX(-28px); transition: opacity .35s var(--ease), transform .35s var(--ease); }
-.step.in { animation: in .45s var(--ease) .12s both; }
+.step.out { opacity: 0; transform: translateX(-28px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.step.out-r { opacity: 0; transform: translateX(28px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.step.in { animation: in .42s var(--ease) .08s both; }
+.step.in-l { animation: in-l .42s var(--ease) .08s both; }
 @keyframes in { from { opacity: 0; transform: translateX(28px); } }
-.sn { font-size: 1rem; font-weight: 700; color: var(--muted); }
-.st { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 1.95rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
+@keyframes in-l { from { opacity: 0; transform: translateX(-28px); } }
+.st { font-size: clamp(1.7rem, 1.35rem + 1.5vw, 2.05rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
 .sx { font-size: 1.2rem; line-height: 1.5; }
-.more { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; font-size: 1.1rem; font-weight: 700; color: var(--blue); width: max-content; }
-.foot { margin-top: auto; display: grid; gap: 6px; }
-.go { position: relative; overflow: hidden; min-height: 60px; border-radius: 999px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.15rem; font-weight: 700; }
-.go svg { width: 22px; height: 22px; }
-.go .ok { position: absolute; inset: 0; background: var(--blue); display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity .2s; }
+.more { display: inline-flex; align-items: center; gap: 4px; min-height: 48px; font-size: 1.1rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; width: max-content; }
+
+/* Airbnb's footer: Back on the left, the main button on the right */
+.foot { margin-top: auto; display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line); }
+.row { display: flex; align-items: center; gap: 14px; }
+.bk { min-height: 60px; padding: 0 6px; font-size: 1.1rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; flex: none; }
+.go { flex: 1; position: relative; overflow: hidden; min-height: 60px; border-radius: 14px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; font-size: 1.12rem; font-weight: 700; line-height: 1.2; }
+.go svg { width: 20px; height: 20px; }
+.go .ok { position: absolute; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: opacity .2s; }
 .go.pressed .ok { opacity: 1; }
-.hear { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; font-size: 1.05rem; font-weight: 600; color: var(--muted); }
+.hear { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; font-size: 1.02rem; font-weight: 600; color: var(--muted); }
 
 /* More information: a sheet from below */
 .scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 30%); opacity: 0; pointer-events: none; transition: opacity .35s; z-index: 4; }
-.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; max-height: 78%; overflow: auto; background: #fff; border-radius: 26px 26px 0 0;
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; max-height: 78%; overflow: auto; background: #fff; border-radius: 24px 24px 0 0;
   box-shadow: 0 -12px 34px rgb(0 0 0 / 18%); padding: 10px var(--pad) calc(24px + env(safe-area-inset-bottom)); display: grid; gap: 16px;
   transform: translateY(105%); transition: transform .42s var(--ease); }
 .open .scrim { opacity: 1; pointer-events: auto; }
 .open .sheet { transform: none; }
-.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line-strong); justify-self: center; }
+.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line); justify-self: center; }
 .sh { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
 .sh h2 { font-size: 1.35rem; letter-spacing: -.02em; line-height: 1.2; }
 .x { width: 44px; height: 44px; border-radius: 50%; background: var(--subtle); display: grid; place-items: center; flex: none; }
@@ -91,7 +134,7 @@ svg { display: block; flex: none; }
 .sec p { font-size: 1.1rem; line-height: 1.5; }
 .src { font-size: 1rem; color: var(--muted); }
 .src a { color: inherit; }
-.ask { min-height: 56px; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--line-strong); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; font-weight: 700; }
+.ask { min-height: 56px; border-radius: 14px; box-shadow: inset 0 0 0 1px var(--ink); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; font-weight: 700; }
 
 /* Every stage cleared: a ticked list */
 .fin { display: grid; gap: 14px; animation: in .45s var(--ease) both; }
@@ -99,21 +142,31 @@ svg { display: block; flex: none; }
 .fin p { font-size: 1.1rem; color: var(--muted); line-height: 1.45; }
 .checks { list-style: none; padding: 0; display: grid; }
 .checks li { display: flex; align-items: center; gap: 12px; min-height: 56px; border-bottom: 1px solid var(--line); font-size: 1.1rem; font-weight: 600; }
-.checks .d { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; }
+.checks .d { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; flex: none; }
 .checks .d svg { width: 16px; height: 16px; }
-.again { min-height: 56px; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--line-strong); font-size: 1.1rem; font-weight: 700; }
-.primary { min-height: 60px; border-radius: 999px; background: #000; color: #fff; font-size: 1.15rem; font-weight: 700; }
+.again { min-height: 56px; border-radius: 14px; box-shadow: inset 0 0 0 1px var(--ink); font-size: 1.1rem; font-weight: 700; }
+.primary { min-height: 60px; border-radius: 14px; background: var(--ink); color: #fff; font-size: 1.12rem; font-weight: 700; }
+.stub { display: grid; gap: 14px; animation: in .45s var(--ease) both; }
+.stub p { font-size: 1.1rem; color: var(--muted); line-height: 1.45; }
 .note { max-width: var(--col); margin: 0 auto 40px; padding: 0 var(--pad); font-size: .9rem; color: var(--muted); line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 </style>
 </head>
 <body>
 <div class="demo">
-	<p>Prototype: pick a guide, then tap through it. Tap a blue bubble to go back to that stage.</p>
-	<div role="group" aria-label="Guide">
-		<button type="button" data-guide="gpfirst" aria-pressed="true">GPFirst · 5 steps</button>
+	<p>Prototype, round 2: tap through a guide. Back goes one step back; tap the stage before to do the same.</p>
+	<div role="group" aria-label="Guide"><span>Guide</span>
+		<button type="button" data-guide="gpfirst" aria-pressed="true">GPFirst · 5</button>
 		<button type="button" data-guide="face" aria-pressed="false">Face verification · 6</button>
-		<button type="button" data-guide="long" aria-pressed="false">A long guide · 9 (sample)</button>
+		<button type="button" data-guide="long" aria-pressed="false">Long · 9 (sample)</button>
+	</div>
+	<div role="group" aria-label="Tracker"><span>Tracker</span>
+		<button type="button" data-trk="tri" aria-pressed="true">A · Three bubbles</button>
+		<button type="button" data-trk="seg" aria-pressed="false">B · Airbnb segments</button>
+	</div>
+	<div role="group" aria-label="Stages either side"><span>Either side</span>
+		<button type="button" data-side="bone" aria-pressed="true">Skeleton</button>
+		<button type="button" data-side="words" aria-pressed="false">Grey words</button>
 	</div>
 </div>
 
@@ -123,13 +176,15 @@ svg { display: block; flex: none; }
 	<div class="scrim" id="scrim"></div>
 	<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true"></section>
 </div>
-<p class="note">GPFirst and face verification are Suara's own guides, word for word. Their "more information" is the guide's own detail sections where one fits a step; every step also names its source and offers "Ask about this step". The nine-step guide is a sample to show the bar folding.</p>
+<p class="note">GPFirst and face verification are Suara's own guides, word for word. The nine-step guide is a sample. Airbnb's pattern here (thin segments, "Back" bottom left, an exit pill top right) is from its listing flow as I know it; the flow is behind a login, so it was not re-read for this round.</p>
 
 <script>
 const IC = {
 	tick: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>',
 	chev: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
-	back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+	left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+	right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+	flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
 	spk: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
 	x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
 	mic: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
@@ -164,66 +219,92 @@ const GUIDES = {
 			.map((name) => ({name, text: 'A short line says what to do here.', ok: 'Done', more: []})),
 	},
 };
-const FOLD_OVER = 6; // more stages than this, and the bar shows nearby bubbles and "..."
 
-let G = GUIDES.gpfirst, cur = 0, busy = false;
+let G = GUIDES.gpfirst, cur = 0, busy = false, trk = 'tri', side = 'bone';
 const page = document.getElementById('page'), app = document.getElementById('app'), sheet = document.getElementById('sheet');
 
-function bar() {
-	const n = G.steps.length;
-	let idx = [...Array(n).keys()], lead = false, tail = false;
-	if (n > FOLD_OVER) {
-		// Two either side of the stage in hand, the rest folded into "..." (Ant Design maxCount).
-		const a = Math.max(0, Math.min(cur - 2, n - 5)), b = Math.min(n, a + 5);
-		idx = idx.slice(a, b); lead = a > 0; tail = b < n;
-	}
-	const node = (i) => {
-		const s = i < cur ? 'done' : i === cur ? 'now' : 'later';
-		const label = `${s === 'done' ? 'Cleared: ' : s === 'now' ? 'Now: ' : ''}step ${i + 1}, ${G.steps[i].name}`;
-		return `<li${s === 'now' ? ' aria-current="step"' : ''}><button class="node" data-s="${s}" data-i="${i}" aria-label="${label}"${s === 'done' ? '' : ' disabled'}>${s === 'done' ? IC.tick : i + 1}</button></li>`;
-	};
-	const link = (i) => `<li aria-hidden="true" class="link"><i style="--f:${i < cur ? 1 : 0}"></i></li>`;
-	let html = lead ? '<li aria-hidden="true" class="gap">…</li>' : '';
-	idx.forEach((i, k) => { html += node(i) + (k < idx.length - 1 ? link(i) : ''); });
-	if (tail) html += '<li aria-hidden="true" class="gap">…</li>';
-	return `<ol class="trk" aria-label="Stages">${html}</ol>`;
+/** A stage either side of the one in hand: skeleton bars or grey words. The name is always there for screen readers. */
+function sideLabel(name) {
+	return side === 'bone' ? `<span class="sr">${name}</span><span aria-hidden="true"><span class="bone"></span><span class="bone"></span></span>` : name;
 }
 
-function stepHtml(i) {
+// A · three bubbles: the stage before (a grey tick), the stage in hand (black), the next (skeleton).
+function tri(dir) {
+	const n = G.steps.length, prev = cur - 1, next = cur + 1;
+	const was = prev >= 0
+		? `<li class="was"><button class="was-go" type="button" data-back aria-label="Cleared: step ${cur}, ${G.steps[prev].name}. Go back to it">
+			<span class="bub"><i>${IC.tick}</i></span><span class="lbl">${sideLabel(G.steps[prev].name)}</span></button></li>`
+		: '<li class="none" aria-hidden="true"></li>';
+	const now = `<li class="now" aria-current="step"><span class="bub">${cur + 1}</span><span class="lbl">Step ${cur + 1} of ${n}<span class="sr">, now: ${G.steps[cur].name}</span></span></li>`;
+	const nx = next < n
+		? `<li class="next"><span class="bub"><i>${side === 'words' ? next + 1 : ''}</i></span><span class="lbl"><span class="sr">Next: </span>${sideLabel(G.steps[next].name)}</span></li>`
+		: `<li class="next"><span class="bub"><i>${IC.flag}</i></span><span class="lbl">${side === 'words' ? 'Finish' : sideLabel('Finish')}</span></li>`;
+	return `<ol class="tri ${dir || ''}" aria-label="Stages">${was}${now}${nx}</ol>`;
+}
+
+// B · Airbnb segments: one thin segment per stage, the one in hand part-filled; the stages either side named underneath.
+function seg(dir) {
+	const n = G.steps.length, prev = cur - 1, next = cur + 1;
+	const bars = G.steps.map((s, i) => {
+		const st = i < cur ? 'done' : i === cur ? 'now' : 'later';
+		return `<li class="${st}"><span class="sr">${st === 'done' ? 'Cleared: ' : st === 'now' ? 'Now: ' : ''}step ${i + 1}, ${s.name}</span></li>`;
+	}).join('');
+	const l = prev >= 0 ? `<button class="l" type="button" data-back aria-label="Go back to step ${cur}, ${G.steps[prev].name}">${IC.left}<span class="t">${sideLabel(G.steps[prev].name)}</span></button>` : '<span></span>';
+	const r = next < n ? `<span class="r"><span class="t"><span class="sr">Next: </span>${sideLabel(G.steps[next].name)}</span>${IC.right}</span>` : `<span class="r"><span class="t">Finish</span>${IC.flag}</span>`;
+	return `<ol class="seg" aria-label="Stages">${bars}</ol><div class="nb ${dir || ''}">${l}<span class="c">${cur + 1} of ${n}</span>${r}</div>`;
+}
+
+function stepHtml(i, cls) {
 	const s = G.steps[i];
-	return `<div class="step in"><p class="sn">Step ${i + 1} of ${G.steps.length}</p><h1 class="st">${s.name}</h1><p class="sx">${s.text}</p>
+	return `<div class="step ${cls}"><h1 class="st">${s.name}</h1><p class="sx">${s.text}</p>
 		<button class="more" type="button" aria-expanded="false" aria-controls="sheet">More about this step ${IC.chev}</button></div>`;
 }
 
-function render() {
+function render(dir) {
 	if (cur >= G.steps.length) return finish();
 	const s = G.steps[cur];
-	page.innerHTML = `<button class="back" type="button">${IC.back}Back</button><p class="gt">${G.title}</p><div id="bar">${bar()}</div>
-		<div class="stage" id="stage">${stepHtml(cur)}</div>
-		<div class="foot"><button class="go" type="button" id="go">${IC.tick}<span>${s.ok}</span><span class="ok">${IC.tick}Cleared</span></button>
-		<button class="hear" type="button">${IC.spk}Read it again</button></div>`;
+	page.innerHTML = `<div class="head"><p class="gt">${G.title}</p><button class="exit" type="button" data-exit>Exit</button></div>
+		<div id="bar">${trk === 'tri' ? tri(dir) : seg(dir)}</div>
+		<div class="stage" id="stage">${stepHtml(cur, dir === 'bwd' ? 'in-l' : 'in')}</div>
+		<div class="foot"><div class="row"><button class="bk" type="button" data-back>Back</button>
+			<button class="go" type="button" id="go">${IC.tick}<span>${s.ok}</span><span class="ok">${IC.tick}Cleared</span></button></div>
+			<button class="hear" type="button">${IC.spk}Read it again</button></div>`;
 	wire();
 }
 
 function wire() {
 	page.querySelector('#go')?.addEventListener('click', clear);
 	page.querySelector('.more')?.addEventListener('click', openSheet);
-	page.querySelectorAll('.node[data-s="done"]').forEach((b) => b.addEventListener('click', () => { if (!busy) { cur = +b.dataset.i; render(); } }));
+	page.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
+	page.querySelectorAll('[data-exit]').forEach((b) => b.addEventListener('click', exit));
 }
 
-/** The stage clears: the button says so, the bubble takes a blue tick, the line runs on, the next step comes in. */
+/** The stage clears: the button says so, the stage takes its tick, and everything moves one along. */
 function clear() {
 	if (busy) return; busy = true;
-	const go = page.querySelector('#go'); go.classList.add('pressed');
+	page.querySelector('#go').classList.add('pressed');
 	setTimeout(() => {
-		const n = page.querySelector(`.node[data-i="${cur}"]`);
-		if (n) { n.dataset.s = 'done'; n.innerHTML = IC.tick; }
-		const links = page.querySelectorAll('.link i'); const k = [...page.querySelectorAll('.node')].indexOf(n);
-		if (links[k]) links[k].style.setProperty('--f', 1);
-		const next = page.querySelector(`.node[data-i="${cur + 1}"]`); if (next) { next.dataset.s = 'now'; }
-	}, 350);
-	setTimeout(() => page.querySelector('.step')?.classList.add('out'), 700);
-	setTimeout(() => { cur += 1; busy = false; render(); }, 1050);
+		const b = page.querySelector('.tri .now .bub'); if (b) b.innerHTML = IC.tick;
+		page.querySelector('.seg li.now')?.classList.add('full');
+	}, 300);
+	setTimeout(() => page.querySelector('.step')?.classList.add('out'), 650);
+	setTimeout(() => { cur += 1; busy = false; render('fwd'); }, 950);
+}
+
+/** One step back. From the first step, Back leaves the guide, like Airbnb's. */
+function back() {
+	if (busy) return;
+	if (cur === 0) return exit();
+	busy = true;
+	page.querySelector('.step')?.classList.add('out-r');
+	setTimeout(() => { cur -= 1; busy = false; render('bwd'); }, 280);
+}
+
+function exit() {
+	closeSheet();
+	page.innerHTML = `<div class="stub"><p>Back on the answer. The guide remembers where you stopped: step ${Math.min(cur, G.steps.length - 1) + 1} of ${G.steps.length}.</p>
+		<button class="primary" type="button" id="resume">Carry on with the guide</button></div>`;
+	page.querySelector('#resume').addEventListener('click', () => render());
 }
 
 function openSheet() {
@@ -238,6 +319,7 @@ function openSheet() {
 	sheet.querySelector('.x').focus();
 }
 function closeSheet() {
+	if (!app.classList.contains('open')) return;
 	app.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true');
 	const m = page.querySelector('.more'); m?.setAttribute('aria-expanded', 'false'); m?.focus();
 }
@@ -245,16 +327,23 @@ document.getElementById('scrim').addEventListener('click', closeSheet);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
 
 function finish() {
-	page.innerHTML = `<button class="back" type="button">${IC.back}Back</button><div class="fin"><h1>Every step done</h1><p>${G.title}</p>
+	page.innerHTML = `<div class="head"><p class="gt">${G.title}</p><button class="exit" type="button" data-exit>Exit</button></div>
+		<div class="fin"><h1>Every step done</h1>
 		<ol class="checks">${G.steps.map((s) => `<li><span class="d">${IC.tick}</span><span class="sr">Cleared: </span>${s.name}</li>`).join('')}</ol></div>
-		<div class="foot"><button class="primary" type="button">Ask something else</button><button class="again" type="button" id="again">Go through it again</button></div>`;
+		<div class="foot"><div class="row"><button class="bk" type="button" data-back>Back</button><button class="primary" type="button" style="flex:1">Ask something else</button></div>
+		<button class="again" type="button" id="again">Go through it again</button></div>`;
 	page.querySelector('#again').addEventListener('click', () => { cur = 0; render(); });
+	page.querySelector('[data-back]').addEventListener('click', () => { cur = G.steps.length - 1; render('bwd'); });
+	page.querySelector('[data-exit]').addEventListener('click', exit);
 }
 
-document.querySelectorAll('[data-guide]').forEach((b) => b.addEventListener('click', () => {
-	document.querySelectorAll('[data-guide]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-	G = GUIDES[b.dataset.guide]; cur = 0; closeSheet(); render();
+const group = (attr, set) => document.querySelectorAll(`[${attr}]`).forEach((b) => b.addEventListener('click', () => {
+	document.querySelectorAll(`[${attr}]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+	set(b.getAttribute(attr)); closeSheet(); render();
 }));
+group('data-guide', (v) => { G = GUIDES[v]; cur = 0; });
+group('data-trk', (v) => { trk = v; });
+group('data-side', (v) => { side = v; });
 render();
 </script>
 </body>
