@@ -19,9 +19,9 @@ export interface Translator {
 
 /** DeepSeek first (obs-0031); free models that answered in the probe after it (obs-0030). */
 /**
- * One vendor, cheapest first (OpenAI list prices, read 2026-09-19).
+ * One vendor, cheapest first (OpenAI list prices, read 2026-09-19; gpt-6-luna OpenRouter catalogue and Artificial Analysis, 2026-09-29).
  *
- *   gpt-5.6-luna   $0.20 / $1.20 per M tokens
+ *   gpt-6-luna     $0.10 / $0.50 per M tokens
  *   gpt-5.4-nano   $0.20 / $1.25
  *   gpt-5.4-mini   $0.75 / $4.50
  *
@@ -30,7 +30,7 @@ export interface Translator {
  * OpenAI, cheapest luna (vault dec-suara-0022).
  */
 export const DEFAULT_TRANSLATORS: Translator[] = [
-	{ model: 'gpt-5.6-luna', structured: true },
+	{ model: 'gpt-6-luna', structured: true },
 	{ model: 'gpt-5.4-nano', structured: true },
 	{ model: 'gpt-5.4-mini', structured: true },
 ];

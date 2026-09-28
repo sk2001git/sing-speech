@@ -64,7 +64,7 @@ describe('OpenAiWsRoute', () => {
 		expect(headers.Authorization).toBe('Bearer sk');
 		expect(msg).toMatchObject({
 			type: 'response.create',
-			model: 'gpt-5.6-luna',
+			model: 'gpt-6-luna',
 			store: false,
 			reasoning: { effort: 'none' },
 			text: { format: { type: 'json_schema', strict: true } },

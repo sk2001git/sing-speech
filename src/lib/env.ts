@@ -8,7 +8,7 @@ export interface RuntimeEnv extends ProviderEnv {
 	OPENROUTER_API_KEY?: string;
 	/** Vendor route that hears a request: `openai-ws` (default) or `gemini`. `?route=` overrides it. */
 	SUARA_ROUTE?: string;
-	/** Text model on the OpenAI route. Default gpt-5.6-luna. */
+	/** Text model on the OpenAI route. Default gpt-6-luna. */
 	SUARA_OPENAI_HEAR_MODEL?: string;
 	/** OpenAI voice for the openai-ws route. Default marin. */
 	SUARA_OPENAI_VOICE?: string;
@@ -18,7 +18,7 @@ export interface RuntimeEnv extends ProviderEnv {
 	SUARA_LIVE_MODEL?: string;
 	SUARA_OPENAI_MODEL?: string;
 	/**
-	 * Model that writes an on-demand card from a crawled page. Default gpt-5.6-luna.
+	 * Model that writes an on-demand card from a crawled page. Default gpt-6-luna.
 	 * Its own setting on purpose: `SUARA_OPENAI_MODEL` carries the realtime voice model,
 	 * which has no text endpoint and returns 404 if asked to write.
 	 */

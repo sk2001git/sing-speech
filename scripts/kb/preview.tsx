@@ -81,7 +81,7 @@ const FONTS: Array<[string, string]> = [
 
 const render = (state: FlowState, over?: Record<string, unknown>) =>
 	renderToStaticMarkup(
-		<KbScreen state={state} setting="en" englishIds={[]} loadingMore={false} dispatch={noop} onSpeak={noop} onMore={noop} onTopic={noop} onSay={noop} onLanguage={noop} routeLabel="OpenAI · gpt-5.6-luna over WebSocket" level={0.4} {...over} />,
+		<KbScreen state={state} setting="en" englishIds={[]} loadingMore={false} dispatch={noop} onSpeak={noop} onMore={noop} onTopic={noop} onSay={noop} onLanguage={noop} routeLabel="OpenAI · gpt-6-luna over WebSocket" level={0.4} {...over} />,
 	);
 
 const frames = screens

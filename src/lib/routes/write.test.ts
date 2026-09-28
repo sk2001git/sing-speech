@@ -53,7 +53,7 @@ describe('writerFor', () => {
 		const { calls, impl } = seen();
 		await writerFor({ openaiKey: 'a', openrouterKey: 'b', fetchImpl: impl })!('p');
 		expect(calls[0]!.url).toContain('api.openai.com');
-		expect(calls[0]!.body.model).toBe('gpt-5.6-luna');
+		expect(calls[0]!.body.model).toBe('gpt-6-luna');
 	});
 
 	it('sends a gpt- model to OpenAI, which is the one knob for switching vendor', async () => {
@@ -73,7 +73,7 @@ describe('writerFor', () => {
 		const { calls, impl } = seen();
 		await writerFor({ openaiKey: 'a', model: 'google/gemini-3.5-flash-lite', fetchImpl: impl })!('p');
 		expect(calls[0]!.url).toContain('api.openai.com');
-		expect(calls[0]!.body.model).toBe('gpt-5.6-luna');
+		expect(calls[0]!.body.model).toBe('gpt-6-luna');
 	});
 
 	it('hands over to the other vendor when the first cannot be paid', async () => {

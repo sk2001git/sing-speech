@@ -32,7 +32,7 @@ export const workersConnect: Connect = async (url, headers) => {
 
 export interface OpenAiWsOptions {
 	apiKey: string | undefined;
-	/** gpt-5.6-luna: $0.20 / $1.20 per M tokens, text and image input (checked 2026-09-16). */
+	/** gpt-6-luna: $0.10 / $0.50 per M tokens, the same Intelligence Index as gpt-5.6-luna (37) at under half the price (OpenRouter catalogue and Artificial Analysis, 2026-09-29; owner's pick). */
 	model?: string;
 	/** gpt-transcribe: $0.0045 a minute (checked 2026-09-16). */
 	transcribeModel?: string;
@@ -82,7 +82,7 @@ export class OpenAiWsRoute implements HearingRoute {
 	constructor(private readonly opts: OpenAiWsOptions) {
 		this.id = opts.id ?? ID;
 		this.vendor = opts.vendor ?? 'openai';
-		this.model = opts.model ?? 'gpt-5.6-luna';
+		this.model = opts.model ?? 'gpt-6-luna';
 		this.transcribeModel = opts.transcribeModel ?? 'gpt-transcribe';
 		this.label = opts.label ?? `OpenAI · ${this.model} over WebSocket`;
 		// Bound: workerd rejects a detached global fetch with "Illegal invocation".

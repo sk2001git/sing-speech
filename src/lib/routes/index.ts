@@ -25,7 +25,7 @@ type ChainRouteId = HearingRouteId | 'cloudflare' | 'local';
 export type HearingRouteId = (typeof HEARING_ROUTE_IDS)[number];
 
 export const ROUTE_LABEL: Record<RouteId, string> = {
-	'openai-ws': 'OpenAI · gpt-5.6-luna over WebSocket',
+	'openai-ws': 'OpenAI · gpt-6-luna over WebSocket',
 	gemini: 'Google · gemini-3.5-flash-lite',
 	'openai-live': 'OpenAI · gpt-live-1, continuous',
 	cloudflare: 'Cloudflare · whisper-large-v3-turbo + gpt-6-luna',

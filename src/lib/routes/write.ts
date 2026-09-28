@@ -26,8 +26,8 @@ export interface WriterOptions {
 const OPENAI_URL = 'https://api.openai.com/v1/responses';
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-/** gpt-5.6-luna: $0.20 / $1.20 per M tokens (OpenRouter catalogue, 2026-09-18). */
-export const DEFAULT_OPENAI_MODEL = 'gpt-5.6-luna';
+/** gpt-6-luna: $0.10 / $0.50 per M tokens (OpenRouter catalogue and Artificial Analysis, 2026-09-29; owner, 2026-09-29: "use gpt 6 luna instead of 5.6"). */
+export const DEFAULT_OPENAI_MODEL = 'gpt-6-luna';
 /**
  * gemini-3.5-flash-lite: $0.30 / $2.50 per M tokens (OpenRouter catalogue, 2026-09-18).
  *
