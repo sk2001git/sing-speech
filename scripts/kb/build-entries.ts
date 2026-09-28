@@ -129,7 +129,7 @@ async function structure(doc: RawDoc & { priority: string; asked?: string }) {
 	// point for a card written without a person in front of us. Where this was asked for by
 	// name, the words of the need are used instead, so the card answers that.
 	const req: ComposeRequest = { asked: doc.asked ?? doc.title, docs: [doc], language: 'en' };
-	const made = await compose(req, writer!, new Date().toISOString());
+	const made = await compose(req, writer!, new Date().toISOString(), 3);
 	if (!made.ok) {
 		const first = made.errors[0] ?? 'unknown';
 		const reason = first.includes('does not answer') ? 'the page does not answer its own question' : first.slice(0, 60);

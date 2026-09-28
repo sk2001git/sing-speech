@@ -58,6 +58,8 @@ export interface Draft {
 	steps: DraftStep[];
 	details: DraftDetail[];
 	phrasings: string[];
+	/** The writer's own checklist of what the pages say that bears on the question. Not stored. */
+	covered?: string[];
 }
 
 export type Composed = { ok: true; entry: Entry } | { ok: false; errors: string[] };
@@ -65,7 +67,7 @@ export type Composed = { ok: true; entry: Entry } | { ok: false; errors: string[
 /** The model is asked for this and nothing else, so a bad reply is a parse failure. */
 export const PROMPT_VERSION = 'compose-2';
 
-const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600, point: 140, lead: 60, about: 280 } as const;
+const LIMITS = { short: 16, full: 60, summary: 140, step: 300, confirm: 24, heading: 40, body: 600, point: 200, lead: 60, about: 280 } as const;
 
 /**
  * How each step is written, given to the model in so many words (owner, 2026-09-29: "pass the
@@ -83,7 +85,34 @@ export const STEP_RULES = [
 	'- confirm_label is the summary, in the person\'s own words: what they tap when the step is done.',
 	'- text is the step read aloud: what the points say, as one or two plain sentences.',
 	'- Adequate and concise: every condition, exception, deadline and number on the pages that bears on a step appears in its points or its about, and nothing that does not bear on it.',
+	'- To make sure of that, first fill "covered": every condition, exception, deadline, number, place, name and cost on the pages that bears on the question, one item each, in the page’s own key words (every name in full, every number and time), not a label for them: "Tan Tock Seng Hospital", "within the same day of the GP’s referral", not "named hospitals" or "deadline". Then check that each one is in a step (its points, about or text) or in a detail. A place the person must go to is named in full in the step where they go, in its points or its about, never left as "a participating centre". A list of places too long for one point goes in that step’s about, or one place to a point.',
+	'- Every step stands on its own, because the person sees one step at a time: never "below", "above", "listed", "named", "the list" or "these" pointing outside the step.',
+	'- Words as people say them: "2am", not "0200hrs"; short forms spelled out ("Urgent Care Centre", not "UCC"), except A&E.',
 ].join('\n');
+
+/**
+ * The items of the writer's own checklist ("covered") that the card does not carry.
+ *
+ * Adequacy is checked, not hoped for: at low reasoning gpt-6-luna dropped a condition in one of
+ * three GPFirst runs, and at medium in one of two, at four times the time. A word of six letters
+ * or more counts as carried when the card has a word beginning with the same five letters, so
+ * "separate charges" is carried by "charged separately"; an item is carried when half its long
+ * words are, and when a number in it appears on the card. English only: Chinese is not split into
+ * words, so a Chinese checklist is not judged.
+ */
+export function uncovered(covered: readonly string[], card: string): string[] {
+	const words = (s: string) => s.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+	// "0200hrs" and "02:00" are the 2 of "2am".
+	const digits = (s: string) => (s.replace(/\b(\d{1,2}):?(\d{2})\s*hrs?\b/gi, (_, h: string) => String(Number(h))).match(/\d+/g) ?? []).map((n) => n.replace(/^0+(?=\d)/, ''));
+	const stems = new Set(words(card).filter((w) => w.length >= 5).map((w) => w.slice(0, 5)));
+	const numbers = new Set(digits(card));
+	return covered.filter((item) => {
+		const long = words(item).filter((w) => w.length >= 6);
+		const nums = digits(item);
+		if (nums.length && !nums.some((n) => numbers.has(n))) return true;
+		return long.length > 0 && long.filter((w) => stems.has(w.slice(0, 5))).length * 2 < long.length;
+	});
+}
 
 /** Sentences in a short text: a stop, question or exclamation mark followed by a space or the end. */
 export const sentenceCount = (text: string) => (text.match(/[.!?。！？]+(?=\s|$)/g) ?? []).length;
@@ -113,7 +142,7 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		'{"kind":"process"|"answer","short":"","full":"","summary":"","summary_quote":"",',
 		' "steps":[{"name":"","text":"","points":{"lead":"","items":[""]},"about":"","about_quote":"","confirm_label":"","quote":""}],',
 		' "details":[{"heading":"","body":"","quote":""}],',
-		' "phrasings":["","",""]}',
+		' "phrasings":["","",""], "covered":[""]}',
 		'',
 		'Rules, all of them binding:',
 		`- Every quote field must be copied verbatim from one of the pages above, as one unbroken run of its text. A line that is on none of them is rejected and the person is told Suara does not know.`,
@@ -122,7 +151,7 @@ export function composePrompt(req: ComposeRequest, problems?: string[]): string 
 		'- Steps are what the person does, one action each, in order. confirm_label is what they tap when that step is done, in their own words: "I have the form", "I called them". Never "Done", "Next", "OK" or "Continue".',
 		`- Answer the question that was asked. Leave out what is on the page but does not bear on it.`,
 		`- Write in ${reply}, short sentences, no jargon, no "please note", nothing about websites the person cannot use.`,
-		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, each point <= ${LIMITS.point}, lead <= ${LIMITS.lead}, about <= ${LIMITS.about}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
+		`- Lengths, in characters: short <= ${LIMITS.short}, full <= ${LIMITS.full}, summary <= 120 (the hard limit is ${LIMITS.summary}, so leave room), step text <= ${LIMITS.step}, each point <= 140 (a point naming a list of places may run to ${LIMITS.point}), lead <= ${LIMITS.lead}, about <= ${LIMITS.about}, confirm_label <= ${LIMITS.confirm}, detail heading <= ${LIMITS.heading}, detail body <= ${LIMITS.body}.`,
 		'- short is the one line on the card: two or three words, no punctuation.',
 		'- full is a heading that names the thing, not a sentence and never ending in a full stop: "What ElderFund is for", "Paying a bill with MediSave". It says more than short does, so the two are never the same words.',
 		'- Exactly three or four phrasings: short, different ways a person might ask this out loud, including the way this person did. Fewer than three and the card is rejected.',
@@ -353,6 +382,18 @@ export function draftToEntry(input: Draft, req: ComposeRequest, now: string): Co
 		if (sentenceCount(about) > 2) errors.push(`steps.${i}.about is ${sentenceCount(about)} sentences: at most two, the bottom line first`);
 	}
 
+	if (req.language === 'en' && Array.isArray(draft.covered) && draft.covered.length) {
+		const card = [
+			draft.full,
+			draft.summary,
+			...details.flatMap((d) => [d.heading, d.body]),
+			...steps.flatMap((s) => [s.name, s.text, s.points?.lead ?? '', ...pointsOf(s), s.about ?? '']),
+		].join(' ');
+		for (const item of uncovered(draft.covered.map(String), card)) {
+			errors.push(`covered lists "${item}", but the card does not say it: put it in the step it bears on, or in a detail`);
+		}
+	}
+
 	// The label is what fits on the card; the heading is what the card is about. Identical
 	// ones waste the only line that can say more.
 	if (squash(draft.short ?? '').toLowerCase() === squash(draft.full ?? '').toLowerCase()) {
@@ -511,14 +552,15 @@ export function readDraft(reply: string): Draft | undefined {
 export type Writer = (prompt: string) => Promise<string>;
 
 /**
- * Ask the writer for a card, and once more with the reasons if the first is refused.
+ * Ask the writer for a card, and again with the reasons if one is refused.
  *
- * One retry, not more: the person is waiting, and a model that invents a quote twice is not
- * going to stop on the third attempt.
+ * Two attempts when a person is waiting: a model that invents a quote twice is not going to
+ * stop on the third. Cards built ahead of time (`build-entries.ts`) take three, because most
+ * compose-2 refusals were a length or a missing condition, which a second retry often fixes.
  */
-export async function compose(req: ComposeRequest, writer: Writer, now: string): Promise<Composed> {
+export async function compose(req: ComposeRequest, writer: Writer, now: string, attempts = 2): Promise<Composed> {
 	let problems: string[] | undefined;
-	for (let attempt = 1; attempt <= 2; attempt += 1) {
+	for (let attempt = 1; attempt <= attempts; attempt += 1) {
 		const reply = await writer(composePrompt(req, problems));
 		const draft = readDraft(reply);
 		if (!draft) {

@@ -75,6 +75,14 @@ describe('composePrompt', () => {
 		expect(prompt).toContain('"about"');
 	});
 
+	it('makes the writer list what the pages say before writing, and name every place in full', () => {
+		expect(prompt).toContain('"covered"');
+		expect(prompt).toMatch(/named in full/);
+		expect(prompt).toMatch(/never "below", "above", "listed", "named"/);
+		expect(prompt).toMatch(/in the step where they go/);
+		expect(prompt).toContain('"2am", not "0200hrs"');
+	});
+
 	it('states the limits the schema enforces, so a draft is not rejected for length', () => {
 		expect(prompt).toContain('16');
 		expect(prompt).toContain('140');
@@ -118,6 +126,22 @@ describe('draftToEntry', () => {
 		const made = draftToEntry(d, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
 		expect(made.ok).toBe(false);
 		if (!made.ok) expect(made.errors.join('; ')).toContain(where);
+	});
+
+	it('sends a card back when something on its own checklist is not on it', () => {
+		const d = { ...structuredClone(draft), covered: ['Approved dependants: spouse, children, parents, grandparents', 'Withdrawal limits for each treatment', 'Medical Claims Authorisation Form', 'Deductible payable in cash'] };
+		const made = draftToEntry(d, { asked: ASKED, docs: [doc], language: 'en' }, NOW);
+		expect(made.ok).toBe(false);
+		if (!made.ok) {
+			expect(made.errors.join('; ')).toContain('Deductible payable in cash');
+			expect(made.errors.join('; ')).not.toContain('Withdrawal limits');
+		}
+	});
+
+	it('takes a checklist whose words appear in other forms on the card', () => {
+		// "charged separately" covers "separate charges"; "grandparents" covers "grandparent".
+		const d = { ...structuredClone(draft), covered: ['Grandparent counts as a dependant', 'Authorisation form signed at the hospital'] };
+		expect(draftToEntry(d, { asked: ASKED, docs: [doc], language: 'en' }, NOW).ok).toBe(true);
 	});
 
 	it('every line it shows resolves to a quote that is on the page', () => {
@@ -352,6 +376,14 @@ describe('compose', () => {
 		expect(result.ok).toBe(true);
 		expect(prompts).toHaveLength(2);
 		expect(prompts[1]).toContain('summary');
+	});
+
+	it('takes a third attempt when asked, for cards built ahead of time', async () => {
+		let calls = 0;
+		const writer = async () => (++calls < 3 ? '{"kind":"process"}' : JSON.stringify(draft));
+		const made = await compose({ asked: ASKED, docs: [doc], language: 'en' }, writer, NOW, 3);
+		expect(made.ok).toBe(true);
+		expect(calls).toBe(3);
 	});
 
 	it('gives up rather than show an invention', async () => {

@@ -48,8 +48,10 @@ export const DEFAULT_OPENROUTER_MODEL = 'google/gemini-3.5-flash-lite';
  * One card is a few hundred tokens, but on the gpt-5 family reasoning tokens are drawn from
  * the same budget: at 1,200 the model spent it thinking and the reply arrived truncated,
  * which reads as "the reply was not a card". The cap is there to stop a runaway, not to trim.
+ * 4,000 since compose-2: points, "more" and the checklist made a GPFirst card run past 2,500
+ * twice in a row (2026-09-29).
  */
-const MAX_TOKENS = 2500;
+const MAX_TOKENS = 4000;
 
 function textFromResponses(body: unknown): string {
 	const b = body as {

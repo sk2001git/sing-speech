@@ -46,7 +46,7 @@ const Action = z.strictObject({
  */
 const Points = z.strictObject({
 	lead: text(1, 60).optional(),
-	items: z.array(text(1, 140)).min(1).max(4),
+	items: z.array(text(1, 200)).min(1).max(4),
 });
 
 /** More about a step: at most two sentences, the bottom line first, citing its own quote. */

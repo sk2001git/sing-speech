@@ -42,7 +42,7 @@ const CASES: Array<[string, () => Json, boolean]> = [
 	}), true],
 	['a step with five points', edit((e) => (e.steps[0].points = { items: ['a', 'b', 'c', 'd', 'e'] })), false],
 	['a step with no points in its list', edit((e) => (e.steps[0].points = { items: [] })), false],
-	['a point longer than a short sentence', edit((e) => (e.steps[0].points = { items: ['a'.repeat(141)] })), false],
+	['a point longer than a short sentence', edit((e) => (e.steps[0].points = { items: ['a'.repeat(201)] })), false],
 	['a "more" longer than two short sentences', edit((e) => (e.steps[0].about = { text: 'a'.repeat(281), quote_refs: ['q1'] })), false],
 	['a "more" citing no quote', edit((e) => (e.steps[0].about = { text: 'Open to all.', quote_refs: [] })), false],
 	['a translation that does not say which model made it', () => {
