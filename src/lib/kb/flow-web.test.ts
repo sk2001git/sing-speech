@@ -101,6 +101,13 @@ describe('web steps', () => {
 		expect(next(done, { type: 'STEPS_AGAIN' })).toMatchObject({ phase: 'web-steps', index: 0 });
 	});
 
+	it('goes forward through steps already cleared', () => {
+		const answer = shown();
+		const second = run([{ type: 'WEB_START' }, { type: 'YES' }, { type: 'STEP_DONE' }, { type: 'STEP_BACK' }], answer);
+		expect(second).toMatchObject({ phase: 'web-steps', index: 0, reached: 1 });
+		expect(next(second, { type: 'STEP_NEXT' })).toMatchObject({ phase: 'web-steps', index: 1 });
+	});
+
 	it('has nothing to start on a direct answer', () => {
 		const answer = run([...toWebSearch, { type: 'WEB_ANSWER', answer: guide({ kind: 'answer', answer: 'No.', steps: [] }) }]);
 		expect(next(answer, { type: 'WEB_START' })).toBe(answer);

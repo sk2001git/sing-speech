@@ -151,6 +151,14 @@ describe('Guided steps', () => {
 		expect(html).toContain('Back');
 	});
 
+	it('after going back, marks the next stage cleared and lets them go forward to it', () => {
+		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 0, reached: 2, back });
+		expect(html).toContain(`Cleared: step 2, ${e.steps![1]!.name}. Go to it`);
+		expect(render({ phase: 'steps', view: 'grid', entry: e, index: 1, reached: 1, back })).not.toContain('Go to it');
+		const n = e.steps!.length;
+		expect(render({ phase: 'steps', view: 'grid', entry: e, index: n - 1, reached: n, back })).toContain('Every step cleared. Go to the end');
+	});
+
 	it('marks the ends: Start before the first step, Finish after the last', () => {
 		const n = e.steps!.length;
 		expect(render({ phase: 'steps', view: 'grid', entry: e, index: 0, back })).toContain('Start');

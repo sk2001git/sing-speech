@@ -95,6 +95,8 @@ const WORDS = {
 		start: 'Start',
 		finish: 'Finish',
 		clearedGoBack: (i: number, name: string) => `Cleared: step ${i}, ${name}. Go back to it`,
+		clearedGoTo: (i: number, name: string) => `Cleared: step ${i}, ${name}. Go to it`,
+		seeEnd: 'Every step cleared. Go to the end',
 		nextIs: 'Next: ',
 		clearedIs: 'Cleared: ',
 		cleared: 'Cleared',
@@ -213,6 +215,8 @@ const WORDS = {
 		start: '开始',
 		finish: '完成',
 		clearedGoBack: (i: number, name: string) => `已完成：第 ${i} 步，${name}。返回这一步`,
+		clearedGoTo: (i: number, name: string) => `已完成：第 ${i} 步，${name}。前往这一步`,
+		seeEnd: '所有步骤都完成了。前往结尾',
 		nextIs: '下一步：',
 		clearedIs: '已完成：',
 		cleared: '完成了',
@@ -852,6 +856,8 @@ function GuideStep(
 		title: string;
 		steps: readonly GuideStepLine[];
 		index: number;
+		/** The furthest step they got to: the ones before it are cleared, ahead of them too after going back. */
+		reached: number;
 		language: EntryLanguage;
 		/** Where this step comes from, shown under it (web steps). */
 		from?: GuideLink | null;
@@ -889,7 +895,16 @@ function GuideStep(
 		<>
 			<BackRow {...p} event="STEP_BACK" label={p.w.stepBack} />
 			<p className="k-guide-title">{p.title}</p>
-			<GuideBar w={w} steps={steps} index={index} clearing={clearing} dir={dir.current} onBack={() => p.dispatch({ type: 'STEP_BACK' })} />
+			<GuideBar
+				w={w}
+				steps={steps}
+				index={index}
+				reached={p.reached}
+				clearing={clearing}
+				dir={dir.current}
+				onBack={() => p.dispatch({ type: 'STEP_BACK' })}
+				onNext={() => p.dispatch({ type: 'STEP_NEXT' })}
+			/>
 			<div key={index} className={`k-guide-step k-guide-${dir.current}`}>
 				<h1 className="k-h1">{current.name}</h1>
 				<p className="k-guide-text">{current.text}</p>
@@ -924,14 +939,17 @@ function GuideStep(
  * hand solid, the next grey. A Start point and a Finish flag fill the ends, so the one in
  * hand stays in the middle. Names either side in grey words (owner, 2026-09-29).
  */
-function GuideBar({ w, steps, index, clearing, dir, onBack }: { w: Words; steps: readonly GuideStepLine[]; index: number; clearing: boolean; dir: 'fwd' | 'bwd'; onBack: () => void }) {
+function GuideBar(p: { w: Words; steps: readonly GuideStepLine[]; index: number; reached: number; clearing: boolean; dir: 'fwd' | 'bwd'; onBack: () => void; onNext: () => void }) {
+	const { w, steps, index, clearing, dir, onBack, onNext } = p;
 	const before = steps[index - 1];
 	const after = steps[index + 1];
+	// After going back, the next stage may be cleared already: a grey tick, and a tap goes forward to it.
+	const ahead = index < p.reached;
 	return (
 		<ol key={index} className={`k-trk k-guide-${dir}`} aria-label={w.stages} {...(clearing ? { 'data-cleared': '' } : {})}>
 			{before ? (
 				<li className="k-trk-was">
-					<button className="k-trk-back" type="button" onClick={onBack} aria-label={w.clearedGoBack(index, before.name)}>
+					<button className="k-trk-tap" type="button" onClick={onBack} aria-label={w.clearedGoBack(index, before.name)}>
 						<span className="k-bub">
 							<i>
 								<CheckIcon />
@@ -954,7 +972,18 @@ function GuideBar({ w, steps, index, clearing, dir, onBack }: { w: Words; steps:
 				</span>
 				<span className="k-trk-lbl">{w.stepOf(index + 1, steps.length)}</span>
 			</li>
-			{after ? (
+			{ahead ? (
+				<li className="k-trk-next k-trk-ahead">
+					<button className="k-trk-tap" type="button" onClick={onNext} aria-label={after ? w.clearedGoTo(index + 2, after.name) : w.seeEnd}>
+						<span className="k-bub">
+							<i>
+								<CheckIcon />
+							</i>
+						</span>
+						<span className="k-trk-lbl">{after ? after.name : w.finish}</span>
+					</button>
+				</li>
+			) : after ? (
 				<li className="k-trk-next">
 					<span className="k-bub" aria-hidden="true">
 						<i>{index + 2}</i>
@@ -1064,6 +1093,7 @@ function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> })
 			title={e.title.full}
 			steps={e.steps ?? []}
 			index={p.state.index}
+			reached={p.state.reached ?? p.state.index}
 			language={e.language}
 			// Entries carry detail for the whole guide, not per step, so the sheet says so.
 			more={e.details ?? []}
@@ -1085,6 +1115,7 @@ function WebSteps(p: BodyProps & { state: Extract<FlowState, { phase: 'web-steps
 			title={a.title_full}
 			steps={a.steps}
 			index={index}
+			reached={p.state.reached ?? index}
 			language={language}
 			from={from ? { url: from.url, label: p.w.fromSite(from.site, from.title) } : null}
 			// The step names its page on the screen; the sheet holds the answer's cautions.

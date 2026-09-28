@@ -110,12 +110,13 @@ export type FlowState =
 	| { view: View; phase: 'places'; result: PlacesResult }
 	| { view: View; phase: 'chart'; result: ChartResult }
 	| { view: View; phase: 'confirm'; entry: Entry; back: Results }
-	| { view: View; phase: 'steps'; entry: Entry; index: number; back: Results }
+	/** `reached`: the furthest step they got to; every step before it is cleared (the step count when all are). */
+	| { view: View; phase: 'steps'; entry: Entry; index: number; reached?: number; back: Results }
 	| { view: View; phase: 'done'; entry: Entry; back: Results }
 	| { view: View; phase: 'web-searching'; heard: Heard; language: EntryLanguage; stage: WebStage | null; pages: number; from?: Results }
 	| WebPhase
 	| { view: View; phase: 'web-confirm'; back: WebPhase }
-	| { view: View; phase: 'web-steps'; index: number; back: WebPhase }
+	| { view: View; phase: 'web-steps'; index: number; reached?: number; back: WebPhase }
 	| { view: View; phase: 'web-done'; back: WebPhase }
 	/** `web`: the web was searched too, and had no reliable answer either. */
 	| { view: View; phase: 'notfound'; heard: Heard; web?: true }
@@ -153,6 +154,8 @@ export type FlowEvent =
 	| { type: 'STEP_DONE' }
 	/** In a guide: one step back; from the first step it leaves, from the end it reopens the last. */
 	| { type: 'STEP_BACK' }
+	/** In a guide, after going back: forward to a step already cleared, without clearing it again. */
+	| { type: 'STEP_NEXT' }
 	/** At the end of a guide: through it again from step 1. */
 	| { type: 'STEPS_AGAIN' }
 	| { type: 'BACK' }
@@ -277,20 +280,34 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 		case 'NO':
 			return state.phase === 'confirm' || state.phase === 'web-confirm' ? state.back : state;
 		case 'STEP_DONE': {
+			if (state.phase !== 'steps' && state.phase !== 'web-steps') return state;
+			const reached = Math.max(state.reached ?? state.index, state.index + 1);
 			if (state.phase === 'web-steps') {
 				const last = state.back.result.answer.steps.length - 1;
-				return state.index < last ? { ...state, index: state.index + 1 } : { view, phase: 'web-done', back: state.back };
+				return state.index < last ? { ...state, index: state.index + 1, reached } : { view, phase: 'web-done', back: state.back };
 			}
-			if (state.phase !== 'steps') return state;
 			const last = (state.entry.steps?.length ?? 0) - 1;
 			return state.index < last
-				? { ...state, index: state.index + 1 }
+				? { ...state, index: state.index + 1, reached }
 				: { view, phase: 'done', entry: state.entry, back: state.back };
+		}
+		case 'STEP_NEXT': {
+			if (state.phase !== 'steps' && state.phase !== 'web-steps') return state;
+			if (state.index >= (state.reached ?? state.index)) return state;
+			const n = state.phase === 'steps' ? (state.entry.steps?.length ?? 0) : state.back.result.answer.steps.length;
+			if (state.index + 1 < n) return { ...state, index: state.index + 1 };
+			return state.phase === 'steps' ? { view, phase: 'done', entry: state.entry, back: state.back } : { view, phase: 'web-done', back: state.back };
 		}
 		case 'STEP_BACK':
 			if (state.phase === 'steps' || state.phase === 'web-steps') return state.index > 0 ? { ...state, index: state.index - 1 } : state.back;
-			if (state.phase === 'done') return { view, phase: 'steps', entry: state.entry, index: (state.entry.steps?.length ?? 1) - 1, back: state.back };
-			if (state.phase === 'web-done') return { view, phase: 'web-steps', index: state.back.result.answer.steps.length - 1, back: state.back };
+			if (state.phase === 'done') {
+				const n = state.entry.steps?.length ?? 1;
+				return { view, phase: 'steps', entry: state.entry, index: n - 1, reached: n, back: state.back };
+			}
+			if (state.phase === 'web-done') {
+				const n = state.back.result.answer.steps.length;
+				return { view, phase: 'web-steps', index: n - 1, reached: n, back: state.back };
+			}
 			return state;
 		case 'STEPS_AGAIN':
 			if (state.phase === 'done') return { view, phase: 'steps', entry: state.entry, index: 0, back: state.back };

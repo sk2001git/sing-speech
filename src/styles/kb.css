@@ -1258,7 +1258,7 @@
 	.k-trk[data-cleared] > .k-trk-next::after {
 		transform: none;
 	}
-	.k-trk-back {
+	.k-trk-tap {
 		display: grid;
 		justify-items: center;
 		gap: 0.625rem;
@@ -1292,9 +1292,13 @@
 		width: 1rem;
 		height: 1rem;
 	}
-	.k-trk-was .k-bub i {
+	.k-trk-was .k-bub i,
+	.k-trk-next.k-trk-ahead .k-bub i {
 		background: var(--line-strong);
 		color: var(--ground);
+	}
+	.k-trk > .k-trk-ahead::before {
+		background: var(--line-strong);
 	}
 	.k-trk-start .k-bub i {
 		width: 1rem;

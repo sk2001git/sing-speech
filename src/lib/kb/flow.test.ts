@@ -150,6 +150,22 @@ describe('guided steps', () => {
 		expect(next(results, { type: 'STEP_BACK' })).toBe(results);
 	});
 
+	it('remembers the steps cleared ahead after going back, and goes forward through them without clearing again', () => {
+		const first = run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }], results);
+		const third = run([{ type: 'STEP_DONE' }, { type: 'STEP_DONE' }], first);
+		const back = run([{ type: 'STEP_BACK' }, { type: 'STEP_BACK' }], third);
+		expect(back).toMatchObject({ phase: 'steps', index: 0, reached: 2 });
+		expect(run([{ type: 'STEP_NEXT' }, { type: 'STEP_NEXT' }], back)).toMatchObject({ phase: 'steps', index: 2, reached: 2 });
+		// Not past the furthest step reached: that one still needs clearing.
+		expect(next(third, { type: 'STEP_NEXT' })).toBe(third);
+		expect(next(first, { type: 'STEP_NEXT' })).toBe(first);
+		// From the end and back, every step is cleared, so Finish goes to the end again.
+		const done = run(Array.from({ length: 5 }, () => ({ type: 'STEP_DONE' }) as const), first);
+		const last = next(done, { type: 'STEP_BACK' });
+		expect(next(last, { type: 'STEP_NEXT' }).phase).toBe('done');
+		expect(next(done, { type: 'STEPS_AGAIN' })).not.toHaveProperty('reached');
+	});
+
 	it('does not start steps for an answer card', () => {
 		expect(next(results, { type: 'START', id: 'sg.moh.chas-referral' })).toEqual(results);
 	});
