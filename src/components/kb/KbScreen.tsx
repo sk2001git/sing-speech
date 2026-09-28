@@ -92,6 +92,7 @@ const WORDS = {
 		allDone: 'That is every step',
 		stages: 'Stages',
 		stepBack: 'Back',
+		nowStep: (i: number, n: number) => `Now, step ${i} of ${n}: `,
 		start: 'Start',
 		finish: 'Finish',
 		clearedGoBack: (i: number, name: string) => `Cleared: step ${i}, ${name}. Go back to it`,
@@ -212,6 +213,7 @@ const WORDS = {
 		allDone: '所有步骤都完成了',
 		stages: '步骤',
 		stepBack: '返回',
+		nowStep: (i: number, n: number) => `现在，第 ${i} 步，共 ${n} 步：`,
 		start: '开始',
 		finish: '完成',
 		clearedGoBack: (i: number, name: string) => `已完成：第 ${i} 步，${name}。返回这一步`,
@@ -970,7 +972,10 @@ function GuideBar(p: { w: Words; steps: readonly GuideStepLine[]; index: number;
 				<span className="k-bub" aria-hidden="true">
 					<i>{clearing ? <CheckIcon /> : index + 1}</i>
 				</span>
-				<span className="k-trk-lbl">{w.stepOf(index + 1, steps.length)}</span>
+				<span className="k-trk-lbl">
+					<span className="k-sr">{w.nowStep(index + 1, steps.length)}</span>
+					{steps[index]!.name}
+				</span>
 			</li>
 			{ahead ? (
 				<li className="k-trk-next k-trk-ahead">

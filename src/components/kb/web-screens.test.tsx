@@ -191,7 +191,7 @@ describe('Web steps', () => {
 
 	it('opens the current step with its source, and three stages in view', () => {
 		const html = render({ view: 'single', phase: 'web-steps', index: 0, back: answer });
-		expect(html).toContain('Step 1 of 4');
+		expect(html).toContain('Now, step 1 of 4: </span>Add a payment method</span>');
 		expect(html).toContain('Add a Singapore debit card.');
 		expect(html).toContain('Card added');
 		expect(html).toMatch(/href="https:\/\/help\.coinbase\.com\/a"[^>]*>From Coinbase Help · Payment methods/);

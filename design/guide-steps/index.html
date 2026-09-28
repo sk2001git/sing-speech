@@ -92,6 +92,12 @@ svg { display: block; flex: none; }
 .sn { font-size: 1rem; font-weight: 700; color: var(--muted); }
 .st { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 1.95rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
 .sx { font-size: 1.2rem; line-height: 1.5; }
+.lead { font-size: 1.2rem; line-height: 1.4; font-weight: 700; margin-bottom: -4px; }
+.pts { display: grid; gap: 10px; padding: 0; list-style: none; }
+.pts li { position: relative; padding-left: 26px; font-size: 1.2rem; line-height: 1.45; }
+.pts li::before { content: ''; position: absolute; left: 6px; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.tri .ahead::before { background: var(--line-strong); }
+.tri .ahead .bub i { width: 28px; height: 28px; background: var(--line-strong); color: #fff; }
 .more { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; font-size: 1.1rem; font-weight: 700; color: var(--blue); width: max-content; }
 .foot { margin-top: auto; display: grid; gap: 6px; }
 .go { position: relative; overflow: hidden; min-height: 60px; border-radius: 999px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.15rem; font-weight: 700; }
@@ -133,15 +139,15 @@ svg { display: block; flex: none; }
 </head>
 <body>
 <div class="demo">
-	<p>Prototype, round 2: only the bubbles changed. Back goes one step back; so does tapping the stage before.</p>
+	<p>Prototype, round 3: every bubble named by its step; each step in points. Back goes one step back; after going back, a cleared stage ahead takes you forward.</p>
 	<div role="group" aria-label="Guide">
 		<button type="button" data-guide="gpfirst" aria-pressed="true">GPFirst · 5 steps</button>
 		<button type="button" data-guide="face" aria-pressed="false">Face verification · 6</button>
 		<button type="button" data-guide="long" aria-pressed="false">A long guide · 9 (sample)</button>
 	</div>
-	<div role="group" aria-label="Stages either side">
-		<button type="button" data-side="bone" aria-pressed="true">Either side: skeleton</button>
-		<button type="button" data-side="words" aria-pressed="false">Either side: grey words</button>
+	<div role="group" aria-label="How a step is written">
+		<button type="button" data-form="points" aria-pressed="true">Step: in points</button>
+		<button type="button" data-form="prose" aria-pressed="false">Step: as written now</button>
 	</div>
 </div>
 
@@ -151,7 +157,7 @@ svg { display: block; flex: none; }
 	<div class="scrim" id="scrim"></div>
 	<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true"></section>
 </div>
-<p class="note">GPFirst and face verification are Suara's own guides, word for word. Their "more information" is the guide's own detail sections where one fits a step; every step also names its source and offers "Ask about this step". The nine-step guide is a sample: the bar shows three stages however long the guide.</p>
+<p class="note">GPFirst and face verification are Suara's own guides. "In points" uses only each step's own words, reshaped: a heading that says the one thing to do, then the points, then the button to say it is done (the Cornell shape: cue, notes, summary). "As written now" is the text the app shows today. Their "more information" is the guide's own detail sections where one fits a step; every step also names its source and offers "Ask about this step". The nine-step guide is a sample: the bar shows three stages however long the guide.</p>
 
 <script>
 const IC = {
@@ -167,33 +173,33 @@ const GUIDES = {
 	gpfirst: {
 		title: 'GPFirst: paying less at the emergency department', source: 'Ministry of Health', url: 'https://www.moh.gov.sg/',
 		steps: [
-			{name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', ok: 'I have the form',
+			{name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', pts: {items: ['Only participating GP clinics give this form.', 'These clinics are near the partner hospitals.']}, ok: 'I have the form',
 				more: [['Who can use it', 'Everyone living in Singapore, including permanent residents and foreigners.']]},
-			{name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', ok: 'All three are there', more: []},
-			{name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', ok: 'I am at A&E',
+			{name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', pts: {lead: 'The form must show:', items: ['The referral date', 'The referral time', 'The clinic’s stamp']}, ok: 'All three are there', more: []},
+			{name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', pts: {items: ['Go on the day the form was given.', 'Given between 10pm and midnight? You can go until 2am.']}, ok: 'I am at A&E',
 				more: [['Which hospitals', 'Changi General, Khoo Teck Puat, National University (adult A&E only), Ng Teng Fong, Sengkang General, Singapore General and Tan Tock Seng hospitals, and the Alexandra Hospital Urgent Care Centre.']]},
-			{name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', ok: 'Done', more: []},
-			{name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', ok: 'Understood', more: []},
+			{name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', pts: {lead: 'At registration, show:', items: ['The original form, fully completed', 'Your NRIC']}, ok: 'Done', more: []},
+			{name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', pts: {lead: 'Charged separately at A&E:', items: ['Special tests', 'Non-standard medicines']}, ok: 'Understood', more: []},
 		],
 	},
 	face: {
 		title: 'Improving face verification', source: 'Singpass', url: 'https://www.singpass.gov.sg/',
 		steps: [
-			{name: 'Uncover your face', text: 'Make sure your face is not covered before scanning.', ok: 'My face is uncovered', more: []},
-			{name: 'Keep still', text: 'Keep still while the scan is in progress.', ok: 'I am staying still', more: []},
-			{name: 'Improve the lighting', text: 'Use an environment that is not too dark, and avoid strong lighting behind you.', ok: 'My lighting is better', more: []},
-			{name: 'Check the background', text: 'Make sure there is no strong lighting in the background.', ok: 'My background is clear', more: []},
-			{name: 'Check the camera', text: 'Use a camera with a minimum resolution of two megapixels. If you are using a laptop, try again with a mobile phone that has a better camera.', ok: 'I checked my camera', more: []},
-			{name: 'Contact Singpass', text: 'If verification still fails, contact the Singpass Helpdesk directly.', ok: 'I contacted Singpass', more: []},
+			{name: 'Uncover your face', text: 'Make sure your face is not covered before scanning.', pts: {items: ['Make sure your face is not covered before you scan.']}, ok: 'My face is uncovered', more: []},
+			{name: 'Keep still', text: 'Keep still while the scan is in progress.', pts: {items: ['Keep still while the scan is in progress.']}, ok: 'I am staying still', more: []},
+			{name: 'Improve the lighting', text: 'Use an environment that is not too dark, and avoid strong lighting behind you.', pts: {items: ['Use a place that is not too dark.', 'Avoid strong lighting behind you.']}, ok: 'My lighting is better', more: []},
+			{name: 'Check the background', text: 'Make sure there is no strong lighting in the background.', pts: {items: ['Make sure there is no strong lighting in the background.']}, ok: 'My background is clear', more: []},
+			{name: 'Check the camera', text: 'Use a camera with a minimum resolution of two megapixels. If you are using a laptop, try again with a mobile phone that has a better camera.', pts: {items: ['Use a camera of at least two megapixels.', 'On a laptop? Try again with a mobile phone that has a better camera.']}, ok: 'I checked my camera', more: []},
+			{name: 'Contact Singpass', text: 'If verification still fails, contact the Singpass Helpdesk directly.', pts: {items: ['If it still fails, contact the Singpass Helpdesk directly.']}, ok: 'I contacted Singpass', more: []},
 		],
 	},
 	long: {
 		title: 'Renewing a passport (sample)', source: 'Sample', url: '#',
 		steps: ['Check you can renew', 'Get a photo taken', 'Sign in with Singpass', 'Fill in the form', 'Upload the photo', 'Pay the fee', 'Wait for the SMS', 'Book a collection slot', 'Collect it']
-			.map((name) => ({name, text: 'A short line says what to do here.', ok: 'Done', more: []})),
+			.map((name) => ({name, text: 'A short line says what to do here.', pts: {items: ['A short line says what to do here.']}, ok: 'Done', more: []})),
 	},
 };
-let G = GUIDES.gpfirst, cur = 0, busy = false, side = 'bone';
+let G = GUIDES.gpfirst, cur = 0, reached = 0, busy = false, side = 'words', form = 'points';
 const page = document.getElementById('page'), app = document.getElementById('app'), sheet = document.getElementById('sheet');
 
 /** A stage either side of the one in hand: skeleton bars or grey words. The name stays in the page for screen readers. */
@@ -209,7 +215,13 @@ function bar(dir) {
 		? `<li class="was"><button class="was-go" type="button" data-back aria-label="Cleared: step ${cur}, ${G.steps[prev].name}. Go back to it">
 			<span class="bub"><i>${IC.tick}</i></span><span class="lbl">${sideLabel(G.steps[prev].name)}</span></button></li>`
 		: `<li class="start" aria-hidden="true"><span class="bub"><i></i></span><span class="lbl">${side === 'words' ? 'Start' : sideLabel('Start')}</span></li>`;
-	const now = `<li class="now" aria-current="step"><span class="bub"><i>${cur + 1}</i></span><span class="lbl">Step ${cur + 1} of ${n}<span class="sr">, now: ${G.steps[cur].name}</span></span></li>`;
+	const now = `<li class="now" aria-current="step"><span class="bub"><i>${cur + 1}</i></span><span class="lbl"><span class="sr">Now, step ${cur + 1} of ${n}: </span>${G.steps[cur].name}</span></li>`;
+	const ahead = cur < reached;
+	if (ahead) {
+		const label = next < n ? `Cleared: step ${next + 1}, ${G.steps[next].name}. Go to it` : 'Every step cleared. Go to the end';
+		const nxa = `<li class="next ahead"><button class="was-go" type="button" data-fwd aria-label="${label}"><span class="bub"><i>${IC.tick}</i></span><span class="lbl">${next < n ? G.steps[next].name : 'Finish'}</span></button></li>`;
+		return `<ol class="tri ${dir || ''}" aria-label="Stages">${was}${now}${nxa}</ol>`;
+	}
 	const nx = next < n
 		? `<li class="next"><span class="bub"><i>${side === 'words' ? next + 1 : ''}</i></span><span class="lbl"><span class="sr">Next: </span>${sideLabel(G.steps[next].name)}</span></li>`
 		: `<li class="next"><span class="bub"><i>${IC.flag}</i></span><span class="lbl">${side === 'words' ? 'Finish' : sideLabel('Finish')}</span></li>`;
@@ -218,7 +230,11 @@ function bar(dir) {
 
 function stepHtml(i, cls) {
 	const s = G.steps[i];
-	return `<div class="step ${cls}"><h1 class="st">${s.name}</h1><p class="sx">${s.text}</p>
+	const one = s.pts.items.length === 1 && !s.pts.lead;
+	const body = form === 'prose' ? `<p class="sx">${s.text}</p>`
+		: one ? `<p class="sx">${s.pts.items[0]}</p>`
+		: `${s.pts.lead ? `<p class="lead">${s.pts.lead}</p>` : ''}<ul class="pts">${s.pts.items.map((t) => `<li>${t}</li>`).join('')}</ul>`;
+	return `<div class="step ${cls}"><h1 class="st">${s.name}</h1>${body}
 		<button class="more" type="button" aria-expanded="false" aria-controls="sheet">More about this step ${IC.chev}</button></div>`;
 }
 
@@ -236,6 +252,7 @@ function wire() {
 	page.querySelector('#go')?.addEventListener('click', clear);
 	page.querySelector('.more')?.addEventListener('click', openSheet);
 	page.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
+	page.querySelectorAll('[data-fwd]').forEach((b) => b.addEventListener('click', () => { if (busy) return; cur += 1; render('fwd'); }));
 }
 
 /** The stage clears: the button says so, the bubble takes a blue tick, the line runs on, and the bar moves one along. */
@@ -247,7 +264,7 @@ function clear() {
 		t.querySelector('.now .bub i').innerHTML = IC.tick;
 	}, 300);
 	setTimeout(() => page.querySelector('.step')?.classList.add('out'), 750);
-	setTimeout(() => { cur += 1; busy = false; render('fwd'); }, 1050);
+	setTimeout(() => { cur += 1; reached = Math.max(reached, cur); busy = false; render('fwd'); }, 1050);
 }
 
 /** One step back. From the first step, Back leaves the guide. */
@@ -289,16 +306,16 @@ function finish() {
 	page.innerHTML = `<button class="back" type="button">${IC.back}Back</button><div class="fin"><h1>Every step done</h1><p>${G.title}</p>
 		<ol class="checks">${G.steps.map((s) => `<li><span class="d">${IC.tick}</span><span class="sr">Cleared: </span>${s.name}</li>`).join('')}</ol></div>
 		<div class="foot"><button class="primary" type="button">Ask something else</button><button class="again" type="button" id="again">Go through it again</button></div>`;
-	page.querySelector('#again').addEventListener('click', () => { cur = 0; render(); });
-	page.querySelector('.back').addEventListener('click', () => { cur = G.steps.length - 1; render('bwd'); });
+	page.querySelector('#again').addEventListener('click', () => { cur = 0; reached = 0; render(); });
+	page.querySelector('.back').addEventListener('click', () => { cur = G.steps.length - 1; reached = G.steps.length; render('bwd'); });
 }
 
 const group = (attr, set) => document.querySelectorAll(`[${attr}]`).forEach((b) => b.addEventListener('click', () => {
 	document.querySelectorAll(`[${attr}]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
 	set(b.getAttribute(attr)); closeSheet(); render();
 }));
-group('data-guide', (v) => { G = GUIDES[v]; cur = 0; });
-group('data-side', (v) => { side = v; });
+group('data-guide', (v) => { G = GUIDES[v]; cur = 0; reached = 0; });
+group('data-form', (v) => { form = v; });
 render();
 </script>
 </body>

@@ -139,7 +139,8 @@ describe('Guided steps', () => {
 
 	it('shows one step on the page, with the stage before and the next either side of it', () => {
 		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
-		expect(html).toContain(`Step 2 of ${e.steps!.length}`);
+		// Every bubble is named by its step; the count is for screen readers.
+		expect(html).toContain(`Now, step 2 of ${e.steps!.length}: </span>${e.steps![1]!.name}</span>`);
 		expect(html).toContain('aria-current="step"');
 		expect(html).toContain(e.steps![1]!.confirm_label);
 		expect(html).toContain(e.steps![1]!.text);
