@@ -1,0 +1,148 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.booking-a-cremation-slot",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Cremation slot",
+		"full": "Booking a cremation slot"
+	},
+	"summary": {
+		"text": "Apply for a cremation permit, then book a slot online or at the service counter.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Changes or cancellations",
+			"body": "To change or cancel an approved permit, contact the service counter at Mandai Crematorium directly.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Apply for a cremation permit",
+			"text": "Apply through the NEA ePortal. Submit only one application.",
+			"points": {
+				"items": [
+					"Apply for a permit to cremate through the NEA ePortal.",
+					"Submit only one application."
+				]
+			},
+			"confirm_label": "I applied for a permit",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Book a cremation slot",
+			"text": "Book online using the NEA ePortal, or visit the Mandai Crematorium Service Counter during opening hours. Your funeral director can also help.",
+			"points": {
+				"items": [
+					"Book online using the NEA ePortal.",
+					"Visit the Mandai Crematorium Service Counter during opening hours.",
+					"Your funeral director can help you."
+				]
+			},
+			"about": {
+				"text": "If you need to change the date or time of a confirmed booking, go in person to the Mandai Crematorium Service Counter.",
+				"quote_refs": [
+					"q3"
+				]
+			},
+			"confirm_label": "I booked a slot",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"cremation",
+			"burial"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"how do I book a cremation slot",
+			"Book cremation",
+			"How do I book a cremation slot?",
+			"Where can I book a cremation time?",
+			"How can I arrange a cremation booking?",
+			"Once someone passes on, can I directly proceed to Mandai crematorium to cremate immediately? Do I need to book with NEA?",
+			"Booking a cremation slot"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iv100c95v0xip5kbcud",
+			"page_title": "Once someone passes on, can I directly proceed to Mandai crematorium to cremate immediately? Do I need to book with NEA?",
+			"source_modified_at": "2025-06-27",
+			"retrieved_at": "2026-09-28T17:32:01.801Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You do need to apply for a permit to cremate via the NEA ePortal. You should submit only one application."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To book a cremation slot at Mandia Crematorium, you can: Visit the Mandai Crematorium Service Counter (during opening hours) Book online using the NEA ePortal Your funeral director can help you with this."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If you need to make changes to the date or time of the confirmed booking, please do so in person at the Mandai Crematorium Service Counter."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you need to make changes or cancel the approved permit, contact the service counter at Mandai Crematorium directly."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:32:01.801Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:32:01.801Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:32:01.801Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iv100c95v0xip5kbcud"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:32:01.801Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:32:01.801Z",
+		"updated_at": "2026-09-28T17:32:01.801Z"
+	}
+}

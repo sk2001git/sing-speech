@@ -1,0 +1,166 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.paying-for-outpatient-treatment-with-medisave",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Using MediSave",
+		"full": "Paying for outpatient treatment with MediSave"
+	},
+	"summary": {
+		"text": "Tell the clinic you want to use MediSave. Provide the required information and sign the authorisation form.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Tell the clinic",
+			"text": "Tell the clinic you want to use MediSave to pay for your outpatient treatment. Show your NRIC or passport; if you are paying for an approved dependant, show theirs too.",
+			"points": {
+				"items": [
+					"Tell the clinic you want to use MediSave to pay for your outpatient treatment.",
+					"Show your NRIC or passport.",
+					"If you are paying for an approved dependant, show their NRIC or passport. Approved dependants are your spouse, children, parents, grandparents and siblings.",
+					"Your grandparents and siblings must be Singapore Citizens or Permanent Residents."
+				]
+			},
+			"confirm_label": "I told the clinic",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check your MediSave amount",
+			"text": "If the clinic needs to know how much MediSave is available, check your Healthcare dashboard under my cpf digital services with your Singpass. The clinic may be able to check for you.",
+			"points": {
+				"items": [
+					"If the clinic needs to know how much MediSave is available, check your Healthcare dashboard under my cpf digital services with your Singpass.",
+					"You do not need to check if the clinic can check on your behalf."
+				]
+			},
+			"confirm_label": "I checked my amount",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Sign the authorisation form",
+			"text": "You and the patient, if applicable, must sign a Medical Claims Authorisation Form. This lets the clinic use your MediSave to pay the bill.",
+			"points": {
+				"items": [
+					"You and the patient, if applicable, must sign a Medical Claims Authorisation Form.",
+					"The form allows the clinic to use your MediSave to pay the outpatient medical treatment bill."
+				]
+			},
+			"confirm_label": "I signed the form",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Bring payment documents",
+			"text": "If your employer or insurer is also paying for your treatment, bring your Letter of Guarantee or Employer Identity Pass, if your clinic has an existing arrangement with them.",
+			"points": {
+				"items": [
+					"If your employer or insurer is also paying for your outpatient treatment, bring your Letter of Guarantee or Employer Identity Pass.",
+					"Bring the pass only if your clinic has an existing arrangement with your employer or insurer."
+				]
+			},
+			"confirm_label": "I brought the documents",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medisave"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I visited a clinic for an outpatient treatment that can be paid by my MediSave. How do I go about utilising my MediSave?",
+			"Using MediSave",
+			"How do I use MediSave for outpatient treatment?",
+			"Paying for outpatient treatment with MediSave"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0401odpz7az8f8gzkh",
+			"page_title": "I visited a clinic for an outpatient treatment that can be paid by my MediSave. How do I go about utilising my MediSave?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-28T17:27:59.832Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To use your MediSave to pay for your outpatient medical treatment cost:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Inform the clinic that you wish to use MediSave to pay for your outpatient medical treatment. The staff will require your NRIC/Passport. If you are paying for your approved dependant, please also produce his/her NRIC/Passport. Approved dependants refer to your spouse, children, parents, grandparents and siblings. Please note that your grandparents and siblings must be Singapore Citizens or Permanent Residents."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "The clinic may require information on how much MediSave is available for payment of the outpatient treatment. You will be able to obtain this information by logging in to your Healthcare dashboard under my cpf digital services with your Singpass. This is not needed if the clinic can check on your behalf."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You and the patient (if applicable) must sign a Medical Claims Authorisation Form to allow the clinic to use your MediSave to pay for the outpatient medical treatment bill."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "If your employer or insurer is also paying for your outpatient treatment, please bring along your Letter of Guarantee or Employer Identity Pass (i.e. if your clinic has an existing arrangement with your employer or insurer)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:27:59.832Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:59.832Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:27:59.832Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0401odpz7az8f8gzkh"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:27:59.832Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:27:59.832Z",
+		"updated_at": "2026-09-28T17:27:59.832Z"
+	}
+}

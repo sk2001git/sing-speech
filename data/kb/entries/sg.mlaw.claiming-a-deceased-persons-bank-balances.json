@@ -1,0 +1,146 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.claiming-a-deceased-persons-bank-balances",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Bank balances",
+		"full": "Claiming a deceased person’s bank balances"
+	},
+	"summary": {
+		"text": "For $5,000 or less, contact the bank. For more, the Public Trustee may help up to $50,000.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the balance",
+			"text": "If the balance is $5,000 or below, approach the bank. If it is more than $5,000 and up to $50,000, the Public Trustee’s Office may help on a case-by-case basis.",
+			"points": {
+				"items": [
+					"For $5,000 or below, approach the bank directly.",
+					"For more than $5,000 to $50,000, the Public Trustee’s Office may assist case by case."
+				]
+			},
+			"confirm_label": "I checked the balance",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Contact the bank",
+			"text": "If the balance is $5,000 or below, approach the bank directly to claim the deceased’s bank money.",
+			"points": {
+				"items": [
+					"Approach the bank directly to claim the deceased’s bank money."
+				]
+			},
+			"confirm_label": "I contacted the bank",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Apply to the Public Trustee",
+			"text": "If the balance is more than $5,000 and up to $50,000, apply online. The Public Trustee’s Office may assist on a case-by-case basis.",
+			"points": {
+				"items": [
+					"Apply online to have the Public Trustee administer the deceased’s estate.",
+					"Select “Deceased’s Assets other than Un-nominated CPF Moneys / Baby Bonus / Edusave / PSEA”.",
+					"Disclose the deceased’s shares, bank savings account, death gratuity, insurance policies and vehicles, if any."
+				]
+			},
+			"about": {
+				"text": "You need Singpass to access the online form. If you cannot apply for Singpass, apply for a login ID and password through the Public Trustee’s website.",
+				"quote_refs": [
+					"q3"
+				]
+			},
+			"confirm_label": "I applied online",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"deceased-persons-estate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How to claim the Deceased's bank account balances?",
+			"Bank balances",
+			"How do I claim a deceased person’s bank balance?",
+			"Who can help me claim money in a deceased person’s bank account?",
+			"Claiming a deceased person’s bank balances"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr601tled2hqntrwx3n",
+			"page_title": "How to claim the Deceased's bank account balances?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-28T17:29:29.794Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Bank account balance $5,000 or below For your convenience and in order to save costs at your end, you may approach the bank directly to claim the Deceased’s bank moneys."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The Public Trustee’s Office may assist to administer such cases on a case-by-case basis."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You will need to have your Singpass ready in order to access our online application form. You may apply for your Singpass at https://www.singpass.gov.sg if you do not have one. If you are ineligible to apply for a Singpass, you may apply for a login ID and password through our website: https://go.gov.sg/pto."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:29:29.794Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:29.794Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:29:29.794Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr601tled2hqntrwx3n"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:29:29.794Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:29:29.794Z",
+		"updated_at": "2026-09-28T17:29:29.794Z"
+	}
+}

@@ -1,0 +1,107 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.getting-help-to-apply-for-cpf-money",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF money",
+		"full": "Getting help to apply for CPF money"
+	},
+	"summary": {
+		"text": "For an un-nominated CPF moneys application, get help online or visit a ServiceSG Centre.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Get help applying",
+			"text": "Ask a family member or trusted friend to help you submit the online application, or visit a ServiceSG Centre.",
+			"points": {
+				"lead": "You can:",
+				"items": [
+					"Ask a family member or trusted friend to help you submit the online application.",
+					"Visit ServiceSG@Nee Soon Central Community Club, ServiceSG Centre Bukit Canberra, or ServiceSG@Keat Hong Community Club.",
+					"Visit ServiceSG@Kampong Chai Chee Community Club, ServiceSG@The Frontier Community Club, or ServiceSG Centre Our Tampines Hub.",
+					"Visit ServiceSG Centre One Punggol, ServiceSG Centre Woodlands, ServiceSG Centre Bukit Merah, or ServiceSG Centre Ang Mo Kio."
+				]
+			},
+			"confirm_label": "I have help applying",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"public-trustee"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"how do I claim the CPF money of someone who died",
+			"How can I get help claiming someone’s CPF money?",
+			"Where can I get help with an un-nominated CPF moneys application?",
+			"I need someone to assist me to submit the un-nominated CPF moneys application.",
+			"Getting help to apply for CPF money"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmf0tebqz01qved2hrqqo7nib",
+			"page_title": "I need someone to assist me to submit the un-nominated CPF moneys application.",
+			"source_modified_at": "2026-04-21",
+			"retrieved_at": "2026-09-28T17:27:27.518Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may wish to get a family member or a trusted friend to assist you in submitting the online application."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may wish to get a family member or a trusted friend to assist you in submitting the online application. Alternatively, you may visit any of the ServiceSG Centres at:"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:27:27.518Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:27.518Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:27:27.518Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmf0tebqz01qved2hrqqo7nib"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:27:27.518Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:27:27.518Z",
+		"updated_at": "2026-09-28T17:27:27.518Z"
+	}
+}

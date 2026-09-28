@@ -1,0 +1,179 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.what-to-do-with-a-gpfirst-letter",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Use the letter",
+		"full": "What to do with a GPFirst letter"
+	},
+	"summary": {
+		"text": "Bring the completed original form and your ID to a participating emergency department or urgent care centre in time.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Extra charges may apply",
+			"body": "Specialised investigations required and non-standard medications prescribed at participating hospitals’ emergency departments or urgent care centre will be charged separately.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the form",
+			"text": "Check that the original referral form is fully completed and shows the referral date, referral time and clinic stamp.",
+			"points": {
+				"lead": "The original form must show:",
+				"items": [
+					"The referral date and referral time.",
+					"The clinic stamp."
+				]
+			},
+			"about": {
+				"text": "The original form must be fully completed for the GPFirst programme to be valid.",
+				"quote_refs": [
+					"q1"
+				]
+			},
+			"confirm_label": "I checked the form",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Bring your ID",
+			"text": "Bring the original form and your NRIC, passport, work permit or foreigner pass to registration.",
+			"points": {
+				"items": [
+					"Bring the original referral form.",
+					"Bring your NRIC, passport, work permit or foreigner pass."
+				]
+			},
+			"about": {
+				"text": "You must produce both at registration for the GPFirst programme to be valid.",
+				"quote_refs": [
+					"q1"
+				]
+			},
+			"confirm_label": "I have my form and ID",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Go to a participating hospital",
+			"text": "Go to a participating emergency department or urgent care centre on the day the GP referred you. If the letter was issued between 10pm and 12am, you can go up to 2am the next day.",
+			"points": {
+				"items": [
+					"Go on the same day as the GP’s referral.",
+					"If the form was issued between 10pm and 12am, go by 2am the following day."
+				]
+			},
+			"about": {
+				"text": "GPFirst is accepted at Changi General Hospital, Khoo Teck Puat Hospital, National University Hospital’s Adult Emergency Department, Ng Teng Fong General Hospital, Sengkang General Hospital, Singapore General Hospital, Tan Tock Seng Hospital Emergency Departments, or Alexandra Hospital Urgent Care Centre.",
+				"quote_refs": [
+					"q4"
+				]
+			},
+			"confirm_label": "I know where to go",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"gpfirst"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"my GP gave me a GPFirst letter for A&E, what do I do",
+			"What do I do with my GPFirst letter?",
+			"My GP gave me a GPFirst letter for A&E, what do I do",
+			"Where do I take my GPFirst form?",
+			"How soon do I need to go with a GPFirst letter?",
+			"What are the GPFirst Terms and Conditions?",
+			"What to do with a GPFirst letter"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2owrtga00fp9apof6gm5d7l",
+			"page_title": "What are the GPFirst Terms and Conditions?",
+			"source_modified_at": "2025-09-01",
+			"retrieved_at": "2026-09-28T17:43:15.222Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "For GPFirst Programme to be valid, the original referral form must be fully completed and produced together with the NRIC/passport/work permit/foreigner pass, at the point of registration at the respective hospital’s ED or UCC."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The referral date, referral time and clinic stamp must be clearly indicated on the original GPFirst Referral Form."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Patients’ visit to the ED/UCC must be within the same day of the GP's referral or up to 0200hrs of the following day if the form is issued close to midnight (between 10pm to 12am)."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "This programme is only applicable at the Changi General Hospital (CGH), Khoo Teck Puat Hospital (KTPH), National University Hospital (NUH) (Adult ED only), Ng Teng Fong General Hospital (NTFGH), Sengkang General Hospital (SKH), Singapore General Hospital (SGH), Tan Tock Seng Hospital (TTSH) Emergency Departments (ED) or Alexandra Hospital Urgent Care Centre (AH UCC)."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Specialised investigations required and/or non-standard medications prescribed at participating hospitals’ ED or UCC will be separately charged"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:43:15.222Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:43:15.222Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:43:15.222Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2owrtga00fp9apof6gm5d7l"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:43:15.222Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:43:15.222Z",
+		"updated_at": "2026-09-28T17:43:15.222Z"
+	}
+}

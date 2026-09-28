@@ -1,0 +1,132 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.using-medisave-for-vaccination-co-payments",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Using MediSave",
+		"full": "Using MediSave for vaccination co-payments"
+	},
+	"summary": {
+		"text": "If you are eligible for a subsidised vaccination, ask your preferred clinic if you can pay the remaining co-payment with MediSave.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Where MediSave can be used",
+			"body": "Those eligible for subsidised vaccination may use MediSave to cover the out-of-pocket expense at CHAS GP clinics and polyclinics.",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Ask your clinic",
+			"text": "Ask your preferred clinic if it can process the remaining co-payment through MediSave.",
+			"points": {
+				"items": [
+					"Ask your preferred clinic if it can process the remaining co-payment via MediSave."
+				]
+			},
+			"confirm_label": "I asked my clinic",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Check your eligibility",
+			"text": "If the clinic can process the co-payment through MediSave, check with them if you are eligible to pay that way.",
+			"points": {
+				"items": [
+					"If the clinic can process the co-payment through MediSave, check with them on your eligibility to pay via MediSave."
+				]
+			},
+			"confirm_label": "I checked my eligibility",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"payment"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can MediSave be used for the co-payment after subsidy for vaccinations?",
+			"Vaccination costs",
+			"Can I use MediSave for the co-payment after subsidy for vaccinations?",
+			"Can MediSave pay the rest of my vaccination bill?",
+			"Can I use MediSave for a subsidised vaccination?",
+			"Using MediSave for vaccination co-payments"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/clgx67vty000nmf08q0kbk4am",
+			"page_title": "Can MediSave be used for the co-payment after subsidy for vaccinations?",
+			"source_modified_at": "2026-06-25",
+			"retrieved_at": "2026-09-28T17:28:50.528Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Those eligible for subsidised vaccination may also use their MediSave to cover the out-of-pocket expense at CHAS GP clinics and polyclinics."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Please check with your preferred clinic if the clinic is able to process the remaining co-payment via MediSave."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If they do, please check with them on your eligibility to pay via MediSave."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:28:50.528Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:50.528Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:28:50.528Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/clgx67vty000nmf08q0kbk4am"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:28:50.528Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:28:50.528Z",
+		"updated_at": "2026-09-28T17:28:50.528Z"
+	}
+}

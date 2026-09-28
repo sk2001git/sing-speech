@@ -1,0 +1,157 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.signing-up-for-careshield-life-for-a-family-member",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CareShield Life",
+		"full": "Signing up for CareShield Life for a family member"
+	},
+	"summary": {
+		"text": "Your family member needs their Singpass to apply. You can guide them or accompany them if they face difficulties.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Use their Singpass",
+			"text": "Your family member needs their Singpass to sign up.",
+			"points": {
+				"items": [
+					"Your family member’s Singpass is required to sign up."
+				]
+			},
+			"confirm_label": "I have their Singpass",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Apply using the form",
+			"text": "Guide your family member to use their Singpass to apply with the Application to join CareShield Life form.",
+			"points": {
+				"items": [
+					"Guide your family member to use their Singpass to apply with the Application to join CareShield Life form."
+				]
+			},
+			"confirm_label": "I have guided them",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Wait for AIC’s advice",
+			"text": "Some applicants may need a disability assessment. After the application, Agency for Integrated Care (AIC) will inform your family member if one is required.",
+			"points": {
+				"items": [
+					"Some applicants may need a disability assessment.",
+					"After the application, Agency for Integrated Care (AIC) will inform your family member if one is required."
+				]
+			},
+			"confirm_label": "I know what to expect",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 4,
+			"name": "Go with them if needed",
+			"text": "If your family member faces difficulties, accompany them to the Community Clubs/Centres to sign up.",
+			"points": {
+				"items": [
+					"If your family member faces difficulties, accompany them to the Community Clubs/Centres to sign up."
+				]
+			},
+			"confirm_label": "I went with them",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"healthcare-financing",
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I sign up for CareShield Life on behalf of my parent/spouse/sibling?",
+			"Joining CareShield",
+			"Can I help my family member apply for CareShield Life?",
+			"Does my family member need to use their Singpass?",
+			"Signing up for CareShield Life for a family member"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmc15nru100fbgt0f8z77yk03",
+			"page_title": "Can I sign up for CareShield Life on behalf of my parent/spouse/sibling?",
+			"source_modified_at": "2025-06-17",
+			"retrieved_at": "2026-09-28T17:31:31.170Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Your family member’s Singpass will be required to sign up for CareShield Life."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can guide your family member to use his/her Singpass to apply for CareShield Life via the Application to join CareShield Life form."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Some applicants may need to undergo a disability assessment. Your family member will be informed by Agency for Integrated Care (AIC) if a disability assessment is required, after his/her application."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If they are facing difficulties, you can accompany them to the Community Clubs/Centres to sign up."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:31:31.170Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:31.170Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:31:31.170Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmc15nru100fbgt0f8z77yk03"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:31:31.170Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:31:31.170Z",
+		"updated_at": "2026-09-28T17:31:31.170Z"
+	}
+}

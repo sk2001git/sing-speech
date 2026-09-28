@@ -5,11 +5,11 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "Claim details",
+		"short": "View claims",
 		"full": "Viewing MediShield Life claim details"
 	},
 	"summary": {
-		"text": "Use CPF’s Healthcare dashboard to view MediSave and MediShield Life claim details for the past 15 months.",
+		"text": "Sign in to your CPF Healthcare dashboard and follow the steps to view claim details from the past 15 months.",
 		"quote_refs": [
 			"q1"
 		]
@@ -17,7 +17,7 @@
 	"details": [
 		{
 			"heading": "Claims older than 15 months",
-			"body": "For claims before the past 15 months, submit a request to the Central Provident Fund Board through the CPF website.",
+			"body": "To view details of claims prior to the past 15 months, submit a request to the Central Provident Fund Board via www.cpf.gov.sg/eSvc/Web/FeedbackSubscription/Index.",
 			"quote_refs": [
 				"q7"
 			]
@@ -27,44 +27,70 @@
 		{
 			"position": 1,
 			"name": "Sign in",
-			"text": "Log in to your Healthcare dashboard under my cpf digital services with your Singpass.",
-			"confirm_label": "I signed in",
+			"text": "Go to www.cpf.gov.sg and sign in to your Healthcare dashboard under my cpf digital services with your Singpass.",
+			"points": {
+				"items": [
+					"Go to www.cpf.gov.sg.",
+					"Sign in to your Healthcare dashboard under my cpf digital services with your Singpass."
+				]
+			},
+			"confirm_label": "I am signed in",
 			"quote_refs": [
 				"q2"
 			]
 		},
 		{
 			"position": 2,
-			"name": "Open claims",
+			"name": "Open the claims page",
 			"text": "Go to “Latest healthcare payments and claims”.",
-			"confirm_label": "I opened the claims",
+			"points": {
+				"items": [
+					"Go to “Latest healthcare payments and claims”."
+				]
+			},
+			"confirm_label": "I opened the claims page",
 			"quote_refs": [
 				"q3"
 			]
 		},
 		{
 			"position": 3,
-			"name": "Show past claims",
-			"text": "Select “View past 15 months”.",
-			"confirm_label": "I chose 15 months",
+			"name": "View past claims",
+			"text": "Choose “View past 15 months”.",
+			"points": {
+				"items": [
+					"Choose “View past 15 months”."
+				]
+			},
+			"confirm_label": "I chose past 15 months",
 			"quote_refs": [
 				"q4"
 			]
 		},
 		{
 			"position": 4,
-			"name": "Choose a period",
-			"text": "Select the hospitalisation period you want to view.",
-			"confirm_label": "I chose the period",
+			"name": "Select the hospitalisation period",
+			"text": "Choose the hospitalisation period for the claim.",
+			"points": {
+				"items": [
+					"Choose the hospitalisation period for the claim."
+				]
+			},
+			"confirm_label": "I selected the period",
 			"quote_refs": [
 				"q5"
 			]
 		},
 		{
 			"position": 5,
-			"name": "Open the details",
-			"text": "Click the amount under MediSave Payment or MediShield Life/Integrated Shield Plan Payment to see the claim details.",
-			"confirm_label": "I saw the claim details",
+			"name": "Open the claim details",
+			"text": "Tap the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment to view the details.",
+			"points": {
+				"items": [
+					"Tap the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment."
+				]
+			},
+			"confirm_label": "I opened the details",
 			"quote_refs": [
 				"q6"
 			]
@@ -80,8 +106,10 @@
 	"search": {
 		"example_phrasings": [
 			"How do I view details of my MediShield Life claims from the online MediSave and/or MediShield Life Claim Statements?",
-			"How do I view MediShield Life claim details?",
-			"Where can I see my MediSave and MediShield Life claims?"
+			"View claims",
+			"How do I check my MediShield Life claim details?",
+			"Where can I see my MediSave and MediShield Life claims?",
+			"Viewing MediShield Life claim details"
 		]
 	},
 	"sources": [
@@ -91,7 +119,7 @@
 			"url": "https://ask.gov.sg/moh/questions/cm2vplo9r00js9apo55u0zap6",
 			"page_title": "How do I view details of my MediShield Life claims from the online MediSave and/or MediShield Life Claim Statements?",
 			"source_modified_at": "2024-10-30",
-			"retrieved_at": "2026-09-19T09:59:28.631Z"
+			"retrieved_at": "2026-09-28T17:31:41.581Z"
 		}
 	],
 	"quotes": [
@@ -103,27 +131,27 @@
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "(1) Login to your Healthcare dashboard under my cpf digital services with your Singpass"
+			"text": "Login to your Healthcare dashboard under my cpf digital services with your Singpass"
 		},
 		{
 			"id": "q3",
 			"source": "src1",
-			"text": "(2) Proceed to “Latest healthcare payments and claims”"
+			"text": "Proceed to “Latest healthcare payments and claims”"
 		},
 		{
 			"id": "q4",
 			"source": "src1",
-			"text": "(3) Click on “View past 15 months”"
+			"text": "Click on “View past 15 months”"
 		},
 		{
 			"id": "q5",
 			"source": "src1",
-			"text": "(4) Select the hospitalisation period"
+			"text": "Select the hospitalisation period"
 		},
 		{
 			"id": "q6",
 			"source": "src1",
-			"text": "(5) Click on the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment to view the claim details."
+			"text": "Click on the amount at MediSave Payment or MediShield Life/Integrated Shield Plan Payment to view the claim details."
 		},
 		{
 			"id": "q7",
@@ -134,13 +162,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T09:59:28.631Z"
+			"at": "2026-09-28T17:31:41.581Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T09:59:28.631Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:41.581Z"
 		}
 	},
 	"verification": {
@@ -149,19 +177,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T09:59:28.631Z",
+				"at": "2026-09-28T17:31:41.581Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vplo9r00js9apo55u0zap6"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T09:59:28.631Z"
+				"at": "2026-09-28T17:31:41.581Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T09:59:28.631Z",
-		"updated_at": "2026-09-19T09:59:28.631Z"
+		"created_at": "2026-09-28T17:31:41.581Z",
+		"updated_at": "2026-09-28T17:31:41.581Z"
 	}
 }

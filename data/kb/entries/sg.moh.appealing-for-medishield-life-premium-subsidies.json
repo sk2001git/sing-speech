@@ -1,0 +1,118 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.appealing-for-medishield-life-premium-subsidies",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Appeal subsidies",
+		"full": "Appealing for MediShield Life Premium Subsidies"
+	},
+	"summary": {
+		"text": "Choose the MediShield Life e-Service or call the hotline to submit your request.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose how to submit your request",
+			"text": "Submit it through the MediShield Life e-Service, or call the hotline.",
+			"points": {
+				"items": [
+					"Use the MediShield Life e-Service at https://medishieldlife.moh.gov.sg/.",
+					"Call the MediShield Life hotline at 1800-222-3399."
+				]
+			},
+			"about": {
+				"text": "Supporting documents will be requested for assessment.",
+				"quote_refs": [
+					"q2"
+				]
+			},
+			"confirm_label": "I submitted my request",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"action": {
+		"type": "call",
+		"label": "Call 18002223399",
+		"value": "18002223399",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"premiums-and-subsidies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I appeal for MediShield Life Premium Subsidies?",
+			"Appeal subsidies",
+			"How can I appeal for MediShield Life Premium Subsidies?",
+			"Appealing for MediShield Life Premium Subsidies"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vq3nr3002166lwehlw0mex",
+			"page_title": "How do I appeal for MediShield Life Premium Subsidies?",
+			"source_modified_at": "2025-02-28",
+			"retrieved_at": "2026-09-28T17:29:53.976Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can submit your request through the MediShield Life e-Service (https://medishieldlife.moh.gov.sg/) or call our MediShield Life hotline at 1800-222-3399."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Do note that supporting documents will be requested for assessment."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:29:53.976Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:53.976Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:29:53.976Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vq3nr3002166lwehlw0mex"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:29:53.976Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:29:53.976Z",
+		"updated_at": "2026-09-28T17:29:53.976Z"
+	}
+}

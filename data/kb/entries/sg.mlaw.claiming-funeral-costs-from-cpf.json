@@ -9,69 +9,65 @@
 		"full": "Claiming funeral costs from CPF"
 	},
 	"summary": {
-		"text": "A beneficiary may claim up to $6,000 from the deceased’s un-nominated CPF monies for funeral expenses.",
+		"text": "A beneficiary can claim funeral expenses from the deceased’s un-nominated CPF monies. Claims of up to $6,000 are generally allowed.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "How much can be claimed",
-			"body": "Generally, claims of up to $6,000 are allowable.",
+			"heading": "Proof of relationship",
+			"body": "If you are the deceased’s spouse, provide the marriage certificate. If you are their child, provide your birth certificate and your parents’ marriage certificate. If you are their parent, provide the deceased’s birth certificate and your marriage certificate. If you are their sibling, provide the deceased’s and your birth certificates, and your parents’ marriage and death certificates.",
 			"quote_refs": [
-				"q1"
-			]
-		},
-		{
-			"heading": "Relationship documents",
-			"body": "The document needed depends on whether you are the spouse, child, parent or sibling of the deceased.",
-			"quote_refs": [
-				"q6"
+				"q5"
 			]
 		},
 		{
 			"heading": "How payment is made",
-			"body": "Payment is made by PayNow or direct credit to a bank account. PayNow must be registered with your NRIC.",
+			"body": "Payment is made to the claimant by PayNow registered with their NRIC, or by direct credit to a bank account. For payment by GIRO to a non-DBS or non-POSB bank account, provide a copy of the beneficiary’s bank passbook or statement showing the account and holder’s name. No documents are needed for payment by PayNow.",
 			"quote_refs": [
-				"q7"
+				"q6"
 			]
 		}
 	],
 	"steps": [
 		{
 			"position": 1,
-			"name": "Check that you can claim",
-			"text": "You must be a beneficiary of the deceased to claim reimbursement of funeral expenses from the deceased’s un-nominated CPF monies.",
-			"confirm_label": "I am a beneficiary",
+			"name": "Apply for reimbursement",
+			"text": "In the online application form, indicate how much you want to claim. Only a beneficiary can claim.",
+			"points": {
+				"items": [
+					"Indicate the amount of funeral expenses you want to claim in the online application form.",
+					"Only a beneficiary can claim reimbursement from the deceased’s un-nominated CPF monies.",
+					"Claims of up to $6,000 are generally allowed."
+				]
+			},
+			"confirm_label": "I gave the amount",
 			"quote_refs": [
 				"q2"
 			]
 		},
 		{
 			"position": 2,
-			"name": "Apply for the amount",
-			"text": "In the online application form, indicate the amount of funeral expenses you want to claim.",
-			"confirm_label": "I entered the amount",
-			"quote_refs": [
-				"q3"
-			]
-		},
-		{
-			"position": 3,
-			"name": "Gather your documents",
-			"text": "Prepare the documents that show your relationship to the deceased, the Declaration Form for funeral expenses, and the relevant funeral receipts.",
+			"name": "Prepare supporting documents",
+			"text": "Prepare the documents that apply to you, including funeral receipts and the funeral expenses declaration form.",
+			"points": {
+				"items": [
+					"Provide relevant receipts for funeral expenses and the declaration form for funeral expenses.",
+					"Provide identification documents if you are not Singaporean.",
+					"Provide a death certificate if the deceased died outside Singapore.",
+					"Provide proof of your relationship to the deceased."
+				]
+			},
+			"about": {
+				"text": "The relationship documents differ depending on whether you are the deceased’s spouse, child, parent or sibling.",
+				"quote_refs": [
+					"q4"
+				]
+			},
 			"confirm_label": "I have the documents",
 			"quote_refs": [
-				"q4"
-			]
-		},
-		{
-			"position": 4,
-			"name": "Submit the claim",
-			"text": "Submit the required supporting documents, including the Declaration Form and relevant receipts for funeral expenses.",
-			"confirm_label": "I submitted my claim",
-			"quote_refs": [
-				"q5"
+				"q3"
 			]
 		}
 	],
@@ -86,7 +82,11 @@
 		"example_phrasings": [
 			"what help is there to pay for a funeral",
 			"Funeral costs",
-			"Can CPF pay funeral expenses"
+			"How can I claim for funeral expenses?",
+			"What help is there to pay for a funeral?",
+			"Can CPF help pay funeral costs?",
+			"How can I claim for reimbursement of funeral expenses out of the deceased's un-nominated CPF monies?",
+			"Claiming funeral costs from CPF"
 		]
 	},
 	"sources": [
@@ -96,7 +96,7 @@
 			"url": "https://ask.gov.sg/mlaw/questions/cmf0tebr201rzed2hu07ydcrf",
 			"page_title": "How can I claim for reimbursement of funeral expenses out of the deceased's un-nominated CPF monies?",
 			"source_modified_at": "2025-09-01",
-			"retrieved_at": "2026-09-19T11:07:37.978Z"
+			"retrieved_at": "2026-09-28T17:29:27.055Z"
 		}
 	],
 	"quotes": [
@@ -108,30 +108,25 @@
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "Only a beneficiary is eligible to claim for reimbursement of funeral expenses from the deceased's un-nominated CPF monies."
+			"text": "You can indicate the amount of funeral expenses which you would like to claim from the deceased's un-nominated CPF monies in the online application form."
 		},
 		{
 			"id": "q3",
 			"source": "src1",
-			"text": "You can indicate the amount of funeral expenses which you would like to claim from the deceased's un-nominated CPF monies in the online application form."
+			"text": "The claimant will have to submit the following supporting documents:"
 		},
 		{
 			"id": "q4",
 			"source": "src1",
-			"text": "The claimant will have to submit the following supporting documents:"
+			"text": "If claimant is: i) Spouse of deceased – Marriage Certificate; or ii) Child of deceased – Birth Certificate of Child and Marriage Certificate of parents; or iii) Parent of deceased – Birth Certificate of deceased and Marriage Certificate of parents; or iv) Sibling of deceased – Birth Certificate of deceased, Birth Certificate of sibling and Marriage Certificate and Death Certificates of deceased's parents."
 		},
 		{
 			"id": "q5",
 			"source": "src1",
-			"text": "Relevant receipts incurred for Funeral Expenses."
+			"text": "i) Spouse of deceased – Marriage Certificate; or ii) Child of deceased – Birth Certificate of Child and Marriage Certificate of parents; or iii) Parent of deceased – Birth Certificate of deceased and Marriage Certificate of parents; or iv) Sibling of deceased – Birth Certificate of deceased, Birth Certificate of sibling and Marriage Certificate and Death Certificates of deceased's parents."
 		},
 		{
 			"id": "q6",
-			"source": "src1",
-			"text": "If claimant is:"
-		},
-		{
-			"id": "q7",
 			"source": "src1",
 			"text": "Payment will be made to the claimant via PayNow (which has to be registered with your NRIC) or Direct Credit to the bank account."
 		}
@@ -139,13 +134,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T11:07:37.978Z"
+			"at": "2026-09-28T17:29:27.055Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T11:07:37.978Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:27.055Z"
 		}
 	},
 	"verification": {
@@ -154,19 +149,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T11:07:37.978Z",
+				"at": "2026-09-28T17:29:27.055Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmf0tebr201rzed2hu07ydcrf"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T11:07:37.978Z"
+				"at": "2026-09-28T17:29:27.055Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T11:07:37.978Z",
-		"updated_at": "2026-09-19T11:07:37.978Z"
+		"created_at": "2026-09-28T17:29:27.055Z",
+		"updated_at": "2026-09-28T17:29:27.055Z"
 	}
 }

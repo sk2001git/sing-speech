@@ -9,22 +9,15 @@
 		"full": "Using MediSave for family treatment"
 	},
 	"summary": {
-		"text": "Yes. You may use your MediSave for an approved dependant’s outpatient treatment if they do not have enough MediSave.",
+		"text": "You may use your MediSave for an approved dependant if they do not have enough MediSave. The withdrawal limit applies per patient.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "MediSave withdrawal limits",
-			"body": "The amount your family member can use is subject to the MediSave withdrawal limits. The limit applies to each patient, regardless of how many people pay.",
-			"quote_refs": [
-				"q4"
-			]
-		},
-		{
-			"heading": "If there is still a bill",
-			"body": "Any expenses left after the MediSave withdrawal limit must be paid in cash.",
+			"heading": "Withdrawal limits",
+			"body": "The MediSave withdrawal limit applies per patient, regardless of how many people pay. If expenses remain after the limit is used, the remainder must be paid in cash.",
 			"quote_refs": [
 				"q5"
 			]
@@ -33,17 +26,36 @@
 	"steps": [
 		{
 			"position": 1,
-			"name": "Check the family member",
-			"text": "Make sure the person is your spouse, child, parent, grandparent or sibling. Grandparents and siblings must be Singapore Citizens or Permanent Residents.",
-			"confirm_label": "I checked the person",
+			"name": "Check who qualifies",
+			"text": "You may use your MediSave if your family member is an approved dependant and does not have enough MediSave. Grandparents and siblings must be Singapore Citizens or Permanent Residents; other approved dependants can be of any nationality.",
+			"points": {
+				"items": [
+					"Your spouse, children, parents, grandparents and siblings are approved dependants.",
+					"Grandparents and siblings must be Singapore Citizens or Permanent Residents; other approved dependants can be of any nationality.",
+					"You may use your MediSave if they do not have sufficient MediSave."
+				]
+			},
+			"confirm_label": "I checked who qualifies",
 			"quote_refs": [
 				"q2"
 			]
 		},
 		{
 			"position": 2,
-			"name": "Sign the form",
-			"text": "Go to the Medical Institution where your family member is receiving treatment and sign the Medical Claims Authorisation Form. The hospital will submit the claim, and payment will go directly to the Medical Institution.",
+			"name": "Sign the authorisation form",
+			"text": "Approach the Medical Institution where your family member is receiving treatment and sign the Medical Claims Authorisation Form. The hospital will submit the claim, and payment will go directly to the Medical Institution.",
+			"points": {
+				"items": [
+					"Approach the Medical Institution where your family member is receiving treatment.",
+					"Sign the Medical Claims Authorisation Form (MCAF)."
+				]
+			},
+			"about": {
+				"text": "The hospital submits the claim, and payment from your MediSave goes directly to the Medical Institution.",
+				"quote_refs": [
+					"q4"
+				]
+			},
 			"confirm_label": "I signed the form",
 			"quote_refs": [
 				"q3"
@@ -60,9 +72,10 @@
 	"search": {
 		"example_phrasings": [
 			"Can I use my MediSave to pay for my family member’s outpatient treatment expenses?",
-			"Family MediSave",
-			"Can I use MediSave for my family member’s treatment?",
-			"Can my MediSave pay for outpatient care for a relative?"
+			"Can I use MediSave for family treatment?",
+			"Can I pay for my family member’s outpatient treatment with MediSave?",
+			"Can my MediSave cover a relative’s outpatient treatment?",
+			"Using MediSave for family treatment"
 		]
 	},
 	"sources": [
@@ -72,7 +85,7 @@
 			"url": "https://ask.gov.sg/cpf/questions/cm4bzmza9001s2777m1znm98t",
 			"page_title": "Can I use my MediSave to pay for my family member’s outpatient treatment expenses?",
 			"source_modified_at": "2024-12-06",
-			"retrieved_at": "2026-09-19T09:59:38.867Z"
+			"retrieved_at": "2026-09-28T17:28:44.939Z"
 		}
 	],
 	"quotes": [
@@ -84,7 +97,7 @@
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "Approved dependants refer to a member’s spouse, children, parents, grandparents and siblings. They can be of any nationality except for grandparents and siblings who must be Singapore Citizens or Permanent Residents."
+			"text": "Approved dependants refer to a member’s spouse, children, parents, grandparents and siblings."
 		},
 		{
 			"id": "q3",
@@ -94,24 +107,24 @@
 		{
 			"id": "q4",
 			"source": "src1",
-			"text": "While they can tap on your MediSave, the amount they can use is subject to the MediSave withdrawal limits, which is applied on a per patient basis regardless of the number of payers."
+			"text": "The hospital will then submit the claim to us and payment from your MediSave will be made directly to the MI."
 		},
 		{
 			"id": "q5",
 			"source": "src1",
-			"text": "If they still have outstanding medical expenses after utilising up to the MediSave withdrawal limit, they would have to pay the remainder in cash."
+			"text": "While they can tap on your MediSave, the amount they can use is subject to the MediSave withdrawal limits, which is applied on a per patient basis regardless of the number of payers. If they still have outstanding medical expenses after utilising up to the MediSave withdrawal limit, they would have to pay the remainder in cash."
 		}
 	],
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T09:59:38.867Z"
+			"at": "2026-09-28T17:28:44.939Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T09:59:38.867Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:44.939Z"
 		}
 	},
 	"verification": {
@@ -120,19 +133,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T09:59:38.867Z",
+				"at": "2026-09-28T17:28:44.939Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm4bzmza9001s2777m1znm98t"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T09:59:38.867Z"
+				"at": "2026-09-28T17:28:44.939Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T09:59:38.867Z",
-		"updated_at": "2026-09-19T09:59:38.867Z"
+		"created_at": "2026-09-28T17:28:44.939Z",
+		"updated_at": "2026-09-28T17:28:44.939Z"
 	}
 }

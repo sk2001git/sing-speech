@@ -1,0 +1,106 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.changing-contact-details-during-cooling",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Change details",
+		"full": "Changing contact details during cooling"
+	},
+	"summary": {
+		"text": "You can submit more changes while your current request is in the 12-hour cooling period.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Submit further changes",
+			"text": "Use the Account settings page with your Singpass to submit further changes to your contact details. Your most recent request will replace your previous submission, and the changes take effect after the 12-hour cooling period.",
+			"points": {
+				"items": [
+					"Use the Account settings page with your Singpass to submit further changes to your contact details.",
+					"Your most recent request supersedes your previous submission, and the changes take effect after the 12-hour cooling period."
+				]
+			},
+			"confirm_label": "I submitted changes",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"account-services",
+			"fighting-scams",
+			"updating-your-account-details"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I make further changes to my contact details while my current request is still in the 12-hour cooling period?",
+			"Change details",
+			"Can I update my contact details again during the cooling period?",
+			"Can I submit another contact detail change before the 12 hours are up?",
+			"Changing contact details during cooling"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq1006npnhlex3lpgs7",
+			"page_title": "Can I make further changes to my contact details while my current request is still in the 12-hour cooling period?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-28T17:27:47.824Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Yes, you can submit further changes to your contact details via the Account settings page with your Singpass."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Yes, you can submit further changes to your contact details via the Account settings page with your Singpass. Please note that your most recent request will supersede the previous submission and the changes will take effect after the 12-hour cooling period."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:27:47.824Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:47.824Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:27:47.824Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucq1006npnhlex3lpgs7"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:27:47.824Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:27:47.824Z",
+		"updated_at": "2026-09-28T17:27:47.824Z"
+	}
+}

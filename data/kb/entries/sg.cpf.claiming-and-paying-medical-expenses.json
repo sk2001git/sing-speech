@@ -1,0 +1,146 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.claiming-and-paying-medical-expenses",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Medical claims",
+		"full": "Claiming and paying medical expenses"
+	},
+	"summary": {
+		"text": "Tell the medical institution, then complete its form to authorise your claim and MediSave use.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Estimate what you can claim",
+			"body": "You may use the MediSave and MediShield Life claims calculator to estimate how much you can withdraw from MediSave and/or claim from MediShield Life.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Tell the medical institution",
+			"text": "Tell the participating medical institution that you wish to claim from MediShield Life or your Integrated Shield Plan and use MediSave for your medical expenses.",
+			"points": {
+				"items": [
+					"Say you wish to claim from MediShield Life or your Integrated Shield Plan.",
+					"Say you wish to use MediSave to pay for your medical expenses."
+				]
+			},
+			"confirm_label": "I told the institution",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Complete the form",
+			"text": "Complete the Medical Claims Authorisation Form from the medical institution. It authorises the institution to check how much you can use from your healthcare plans and submit the medical claim for you.",
+			"points": {
+				"items": [
+					"Complete the Medical Claims Authorisation Form the medical institution gives you.",
+					"The form authorises the institution to check how much you can use from your healthcare plans.",
+					"The form authorises the institution to submit the medical claim on your behalf."
+				]
+			},
+			"about": {
+				"text": "The form lets the medical institution check how much you can use and submit the claim for you.",
+				"quote_refs": [
+					"q3"
+				]
+			},
+			"confirm_label": "I completed the form",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"healthcare-financing",
+			"medishield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I claim from MediShield Life / Integrated Shield Plan (IP) and MediSave for my medical expenses?",
+			"How do I claim from MediShield Life or an Integrated Shield Plan and use MediSave?",
+			"How can I claim for medical expenses and pay with MediSave?",
+			"What do I need to do to claim from my health plan?",
+			"Claiming and paying medical expenses"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52l0e01t9pz7a8695pju0",
+			"page_title": "How do I claim from MediShield Life / Integrated Shield Plan (IP) and MediSave for my medical expenses?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-28T17:27:19.658Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may inform the participating medical institution(s) that you wish to make a claim from your MediShield Life or Integrated Shield Plan and use your MediSave to pay for your medical expenses."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "The medical institution will provide you with a copy of the Medical Claims Authorisation Form to complete."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "It authorises them to check how much you can utilise from your healthcare plans and submit the medical claim on your behalf."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You may use the MediSave and MediShield Life claims calculator to estimate how much you can withdraw from your MediSave and / or claim from MediShield Life."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:27:19.658Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:19.658Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:27:19.658Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52l0e01t9pz7a8695pju0"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:27:19.658Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:27:19.658Z",
+		"updated_at": "2026-09-28T17:27:19.658Z"
+	}
+}

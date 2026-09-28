@@ -1,0 +1,136 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.monthly-cpf-transfers-to-your-retirement-account",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF transfers",
+		"full": "Monthly CPF transfers to your Retirement Account"
+	},
+	"summary": {
+		"text": "If you are 55 or older, set up recurring transfers from your Ordinary Account to your Retirement Account.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What the transfers do",
+			"body": "Recurring transfers can help you earn higher interest on your CPF employment contributions credited to your Ordinary Account and build up your retirement savings in your Retirement Account.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "Transfers cannot be reversed",
+			"body": "CPF transfers are irreversible. The savings are set aside to boost your monthly payouts in retirement and cannot be withdrawn for other purposes.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Set up recurring transfers",
+			"text": "If you are 55 or older, set up recurring transfers to move your monthly CPF employment contributions from your Ordinary Account to your Retirement Account.",
+			"points": {
+				"items": [
+					"You must be aged 55 or above.",
+					"Set up recurring transfers from your Ordinary Account (OA) to your Retirement Account (RA)."
+				]
+			},
+			"about": {
+				"text": "After a successful application, transfers start on the 18th of the following month.",
+				"quote_refs": [
+					"q2"
+				]
+			},
+			"confirm_label": "I set up transfers",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"retirement-sum-topping-up-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I make monthly transfers of my CPF employment contributions from my Ordinary Account to Retirement Account?",
+			"CPF transfers",
+			"How do I transfer my CPF contributions each month to my Retirement Account?",
+			"Monthly CPF transfers to your Retirement Account"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm8jgd0ti007zwd6u9m52aj6o",
+			"page_title": "How can I make monthly transfers of my CPF employment contributions from my Ordinary Account to Retirement Account?",
+			"source_modified_at": "2025-03-22",
+			"retrieved_at": "2026-09-28T17:28:15.664Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you are aged 55 and above and would like to transfer your monthly CPF employment contributions regularly from your Ordinary Account (OA) to Retirement Account (RA), you can do so by setting up recurring CPF transfers ."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Upon successful application, your recurring transfer will take effect from the following month on the 18th."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "With this recurring transfer service, you can conveniently earn higher interest on your CPF employment contributions credited to your OA and build up your retirement savings in your RA."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please note that CPF transfers are irreversible. The savings are set aside to boost your monthly payouts in retirement and cannot be withdrawn for other purposes."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:28:15.664Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:15.664Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:28:15.664Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm8jgd0ti007zwd6u9m52aj6o"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:28:15.664Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:28:15.664Z",
+		"updated_at": "2026-09-28T17:28:15.664Z"
+	}
+}

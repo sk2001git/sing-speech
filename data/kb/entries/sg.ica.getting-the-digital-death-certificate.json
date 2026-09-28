@@ -5,11 +5,11 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "digital death",
+		"short": "Death record",
 		"full": "Getting the digital death certificate"
 	},
 	"summary": {
-		"text": "After the doctor certifies the death online, download the digital death certificate from My Legacy.",
+		"text": "Get the required details from the certifying doctor or hospital, then download the certificate from My Legacy.",
 		"quote_refs": [
 			"q1"
 		]
@@ -17,8 +17,16 @@
 	"steps": [
 		{
 			"position": 1,
-			"name": "Get the details",
-			"text": "Get these details from the certifying doctor or hospital: the death certificate number or Confirmation of Death document number, the deceased’s Identification Document number, and the deceased’s date of death.",
+			"name": "Get the required details",
+			"text": "Get the death certificate number or Confirmation of Death document number, the deceased’s Identification Document number, and the deceased’s date of death from the certifying doctor or hospital.",
+			"points": {
+				"lead": "Get these details from the certifying doctor or hospital:",
+				"items": [
+					"The death certificate number or Confirmation of Death document number.",
+					"The deceased’s Identification Document number.",
+					"The deceased’s date of death."
+				]
+			},
 			"confirm_label": "I have the details",
 			"quote_refs": [
 				"q2"
@@ -27,7 +35,12 @@
 		{
 			"position": 2,
 			"name": "Download the certificate",
-			"text": "After the doctor certifies the death online, visit the My Legacy website and download the digital death certificate.",
+			"text": "After the doctor certifies the death online, visit the My Legacy website to download the digital death certificate.",
+			"points": {
+				"items": [
+					"After the doctor certifies the death online, visit the My Legacy website to download the digital death certificate."
+				]
+			},
 			"confirm_label": "I downloaded it",
 			"quote_refs": [
 				"q1"
@@ -44,7 +57,9 @@
 	"search": {
 		"example_phrasings": [
 			"How do I get the death certificate?",
-			"How do I know the death was registered?",
+			"Death record",
+			"How can I download a digital death certificate?",
+			"Where do I get the digital death certificate?",
 			"Getting the digital death certificate"
 		]
 	},
@@ -55,7 +70,7 @@
 			"url": "https://ask.gov.sg/ica/questions/clw1fhgtk001lrjdsx1grsvy3",
 			"page_title": "How do I know that the death has been registered if I do not need to register the death? How do I obtain a death certificate?",
 			"source_modified_at": "2025-05-30",
-			"retrieved_at": "2026-09-19T11:10:32.203Z"
+			"retrieved_at": "2026-09-28T17:29:22.692Z"
 		}
 	],
 	"quotes": [
@@ -73,13 +88,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T11:10:32.203Z"
+			"at": "2026-09-28T17:29:22.692Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T11:10:32.203Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:22.692Z"
 		}
 	},
 	"verification": {
@@ -88,19 +103,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T11:10:32.203Z",
+				"at": "2026-09-28T17:29:22.692Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clw1fhgtk001lrjdsx1grsvy3"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T11:10:32.203Z"
+				"at": "2026-09-28T17:29:22.692Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T11:10:32.203Z",
-		"updated_at": "2026-09-19T11:10:32.203Z"
+		"created_at": "2026-09-28T17:29:22.692Z",
+		"updated_at": "2026-09-28T17:29:22.692Z"
 	}
 }

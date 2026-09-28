@@ -5,49 +5,49 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "CPF Safety",
+		"short": "Turn off switch",
 		"full": "Deactivating the CPF Safety Switch"
 	},
 	"summary": {
-		"text": "You can deactivate it by phone or at a CPF Service Centre. Processing takes around three to five working days after identity verification.",
+		"text": "Call CPF or visit a CPF Service Centre. Your request takes around three to five working days to process after your identity is verified.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "By phone",
-			"body": "Call 1800-227-1188. From overseas, call +65-6227-1188. Choose your language, then select option ‘8’ during operating hours.",
+			"heading": "How long it takes",
+			"body": "Your request takes around three to five working days to process after CPF successfully verifies your identity.",
 			"quote_refs": [
-				"q2"
-			]
-		},
-		{
-			"heading": "At a service centre",
-			"body": "Make an appointment to visit any CPF Service Centre during operating hours.",
-			"quote_refs": [
-				"q3"
-			]
-		},
-		{
-			"heading": "Processing time",
-			"body": "Your request takes around three to five working days after your identity is successfully verified.",
-			"quote_refs": [
-				"q4"
+				"q1"
 			]
 		}
 	],
 	"steps": [
 		{
 			"position": 1,
-			"name": "Choose one way",
-			"text": "Choose one way to request deactivation: call the CPF hotline, or make an appointment to visit any CPF Service Centre during operating hours.",
-			"confirm_label": "I chose a way",
+			"name": "Choose how to contact CPF",
+			"text": "Call the CPF hotline during operating hours and select option 8 after choosing your language. Or make an appointment to visit any CPF Service Centre during operating hours.",
+			"points": {
+				"items": [
+					"Call 1800-227-1188 during operating hours. Choose your language, then select option 8. If you are calling from overseas, call +65-6227-1188.",
+					"Make an appointment to visit any CPF Service Centre during operating hours."
+				]
+			},
+			"confirm_label": "I contacted CPF",
 			"quote_refs": [
-				"q1"
+				"q2"
 			]
 		}
 	],
+	"action": {
+		"type": "call",
+		"label": "Call 18002271188",
+		"value": "18002271188",
+		"quote_refs": [
+			"q2"
+		]
+	},
 	"topic": {
 		"area": "scams",
 		"tags": [
@@ -58,8 +58,10 @@
 	"search": {
 		"example_phrasings": [
 			"How do I deactivate the CPF Safety Switch?",
-			"How can I turn off the CPF Safety Switch?",
-			"I want to deactivate my CPF Safety Switch"
+			"Turn off switch",
+			"How can I switch off the CPF Safety Switch?",
+			"How do I turn off my CPF Safety Switch?",
+			"Deactivating the CPF Safety Switch"
 		]
 	},
 	"sources": [
@@ -69,41 +71,31 @@
 			"url": "https://ask.gov.sg/cpf/questions/cml5szxlj005icsd0km2y91sn",
 			"page_title": "How do I deactivate the CPF Safety Switch?",
 			"source_modified_at": "2026-02-02",
-			"retrieved_at": "2026-09-18T15:00:01.891Z"
+			"retrieved_at": "2026-09-28T17:27:19.818Z"
 		}
 	],
 	"quotes": [
 		{
 			"id": "q1",
 			"source": "src1",
-			"text": "You may request to deactivate the CPF Safety Switch through one of the following methods:"
+			"text": "Note that your deactivation request will take around three to five working days to process, after we successfully verify your identity."
 		},
 		{
 			"id": "q2",
 			"source": "src1",
 			"text": "Call the CPF hotline at 1800-227-1188 (+65-6227-1188 if calling from overseas) and select option ‘8’ after choosing your language during operating hours"
-		},
-		{
-			"id": "q3",
-			"source": "src1",
-			"text": "Make an appointment to visit any of the CPF Service Centres during operating hours"
-		},
-		{
-			"id": "q4",
-			"source": "src1",
-			"text": "Note that your deactivation request will take around three to five working days to process, after we successfully verify your identity."
 		}
 	],
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T15:00:01.891Z"
+			"at": "2026-09-28T17:27:19.818Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T15:00:01.891Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:19.818Z"
 		}
 	},
 	"verification": {
@@ -112,27 +104,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T15:00:01.891Z",
-				"note": "checked against https://ask.gov.sg/cpf/questions/cml5szxlj005icsd0km2y91sn as crawled"
+				"at": "2026-09-28T17:27:19.818Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cml5szxlj005icsd0km2y91sn"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T15:00:01.891Z"
+				"at": "2026-09-28T17:27:19.818Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T15:00:01.891Z",
-		"updated_at": "2026-09-18T15:00:01.891Z"
-	},
-	"action": {
-		"type": "call",
-		"label": "Call 18002271188",
-		"value": "18002271188",
-		"quote_refs": [
-			"q2"
-		]
+		"created_at": "2026-09-28T17:27:19.818Z",
+		"updated_at": "2026-09-28T17:27:19.818Z"
 	}
 }

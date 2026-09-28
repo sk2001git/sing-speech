@@ -5,11 +5,11 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "MediSave top-up",
+		"short": "Top-up limit",
 		"full": "Checking your MediSave top-up limit"
 	},
 	"summary": {
-		"text": "Use the online MediSave top-up form and log in with Singpass to see your limit.",
+		"text": "Open the top-up form, sign in with Singpass and select yourself to see your limit.",
 		"quote_refs": [
 			"q1"
 		]
@@ -19,6 +19,11 @@
 			"position": 1,
 			"name": "Open the form",
 			"text": "Go to the Top up MediSave Account form.",
+			"points": {
+				"items": [
+					"Go to the Top up MediSave Account form."
+				]
+			},
 			"confirm_label": "I have the form",
 			"quote_refs": [
 				"q2"
@@ -26,29 +31,31 @@
 		},
 		{
 			"position": 2,
-			"name": "Log in",
+			"name": "Sign in",
 			"text": "Log in with your Singpass.",
-			"confirm_label": "I have logged in",
+			"points": {
+				"items": [
+					"Log in with your Singpass."
+				]
+			},
+			"confirm_label": "I have signed in",
 			"quote_refs": [
 				"q3"
 			]
 		},
 		{
 			"position": 3,
-			"name": "Choose yourself",
-			"text": "Under “Recipient details”, select “I wish to make a top-up to Myself”.",
-			"confirm_label": "I chose myself",
+			"name": "Select yourself",
+			"text": "Under “Recipient details”, select “I wish to make a top-up to Myself”. Your top-up limit will then be displayed.",
+			"points": {
+				"items": [
+					"Under “Recipient details”, select “I wish to make a top-up to Myself”.",
+					"Your top-up limit will then be displayed."
+				]
+			},
+			"confirm_label": "I selected myself",
 			"quote_refs": [
 				"q4"
-			]
-		},
-		{
-			"position": 4,
-			"name": "See your limit",
-			"text": "Your top-up limit will then be displayed.",
-			"confirm_label": "I can see my limit",
-			"quote_refs": [
-				"q5"
 			]
 		}
 	],
@@ -62,8 +69,10 @@
 	"search": {
 		"example_phrasings": [
 			"How do I check my voluntary top-up limit to my MediSave Account?",
-			"Where can I see my MediSave top-up limit?",
-			"How much can I top up to my MediSave Account?"
+			"Top-up limit",
+			"Where can I see how much I can top up to MediSave?",
+			"How do I find my MediSave top-up limit?",
+			"Checking your MediSave top-up limit"
 		]
 	},
 	"sources": [
@@ -73,14 +82,14 @@
 			"url": "https://ask.gov.sg/cpf/questions/cm0f52kxl00gxpz7anmlrgmoh",
 			"page_title": "How do I check my voluntary top-up limit to my MediSave Account?",
 			"source_modified_at": "2024-08-29",
-			"retrieved_at": "2026-09-18T14:58:34.757Z"
+			"retrieved_at": "2026-09-28T17:27:14.791Z"
 		}
 	],
 	"quotes": [
 		{
 			"id": "q1",
 			"source": "src1",
-			"text": "When you make a MediSave top-up online, you will be shown the amount of MediSave top-up you can receive before you reach the top-up limit."
+			"text": "Your top-up limit will then be displayed."
 		},
 		{
 			"id": "q2",
@@ -96,23 +105,18 @@
 			"id": "q4",
 			"source": "src1",
 			"text": "Select “I wish to make a top-up to Myself” under “Recipient details”"
-		},
-		{
-			"id": "q5",
-			"source": "src1",
-			"text": "Your top-up limit will then be displayed."
 		}
 	],
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T14:58:34.757Z"
+			"at": "2026-09-28T17:27:14.791Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T14:58:34.757Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:14.791Z"
 		}
 	},
 	"verification": {
@@ -121,19 +125,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T14:58:34.757Z",
-				"note": "checked against https://ask.gov.sg/cpf/questions/cm0f52kxl00gxpz7anmlrgmoh as crawled"
+				"at": "2026-09-28T17:27:14.791Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kxl00gxpz7anmlrgmoh"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T14:58:34.757Z"
+				"at": "2026-09-28T17:27:14.791Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T14:58:34.757Z",
-		"updated_at": "2026-09-18T14:58:34.757Z"
+		"created_at": "2026-09-28T17:27:14.791Z",
+		"updated_at": "2026-09-28T17:27:14.791Z"
 	}
 }

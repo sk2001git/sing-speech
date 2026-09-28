@@ -9,14 +9,14 @@
 		"full": "Downloading the digital death certificate"
 	},
 	"summary": {
-		"text": "Yes. The Confirmation of Death is temporary. Download the digital death certificate after the doctor certifies the death online.",
+		"text": "Yes. The Confirmation of Death is temporary. Download the digital death certificate after the doctor’s online death certification.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "The Confirmation of Death",
+			"heading": "Why download it",
 			"body": "The Confirmation of Death is only a temporary document.",
 			"quote_refs": [
 				"q4"
@@ -27,7 +27,15 @@
 		{
 			"position": 1,
 			"name": "Get the details",
-			"text": "Find the Confirmation of Death Number, Deceased's ID Number and Date of Death on the Confirmation of Death.",
+			"text": "Have the Confirmation of Death Number, the deceased’s ID Number and the Date of Death ready.",
+			"points": {
+				"lead": "You will need:",
+				"items": [
+					"Confirmation of Death Number",
+					"Deceased's ID Number",
+					"Date of Death"
+				]
+			},
 			"confirm_label": "I have the details",
 			"quote_refs": [
 				"q2"
@@ -36,7 +44,12 @@
 		{
 			"position": 2,
 			"name": "Download the certificate",
-			"text": "After online death certification by the doctor, download the digital death certificate at the My Legacy website.",
+			"text": "After the doctor completes online death certification, download the digital death certificate at the My Legacy website.",
+			"points": {
+				"items": [
+					"Download the digital death certificate at the My Legacy website after online death certification by the doctor."
+				]
+			},
 			"confirm_label": "I downloaded it",
 			"quote_refs": [
 				"q3"
@@ -53,8 +66,9 @@
 	"search": {
 		"example_phrasings": [
 			"Do I need to download the digital death certificate if I have a Confirmation of Death?",
-			"Is the Confirmation of Death enough?",
-			"How do I get the digital death certificate?"
+			"Do I still need a digital death certificate?",
+			"How do I get the digital death certificate?",
+			"Downloading the digital death certificate"
 		]
 	},
 	"sources": [
@@ -64,7 +78,7 @@
 			"url": "https://ask.gov.sg/ica/questions/clos83ft1005j5k0wc0h4j39u",
 			"page_title": "Do I need to download the digital death certificate if I have a Confirmation of Death?",
 			"source_modified_at": "2025-05-30",
-			"retrieved_at": "2026-09-19T11:05:23.036Z"
+			"retrieved_at": "2026-09-28T17:29:17.741Z"
 		}
 	],
 	"quotes": [
@@ -92,13 +106,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T11:05:23.036Z"
+			"at": "2026-09-28T17:29:17.741Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T11:05:23.036Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:17.741Z"
 		}
 	},
 	"verification": {
@@ -107,19 +121,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T11:05:23.036Z",
+				"at": "2026-09-28T17:29:17.741Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clos83ft1005j5k0wc0h4j39u"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T11:05:23.036Z"
+				"at": "2026-09-28T17:29:17.741Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T11:05:23.036Z",
-		"updated_at": "2026-09-19T11:05:23.036Z"
+		"created_at": "2026-09-28T17:29:17.741Z",
+		"updated_at": "2026-09-28T17:29:17.741Z"
 	}
 }

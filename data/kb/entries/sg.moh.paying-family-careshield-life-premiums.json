@@ -1,0 +1,117 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.paying-family-careshield-life-premiums",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Family premiums",
+		"full": "Paying family CareShield Life premiums"
+	},
+	"summary": {
+		"text": "Use your MediSave to pay premiums for family members, or top up a MediSave account.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Another way to pay",
+			"body": "You or your family member may top up to your or their MediSave using the Top up MediSave Account online form.",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Apply to pay",
+			"text": "Use your MediSave to pay premiums for your spouse, parents, children, siblings or grandparents. Visit the Change Premium Payer e-Service, log in using Singpass and complete the application.",
+			"points": {
+				"items": [
+					"You can use your MediSave to pay premiums for your spouse, parents, children, siblings or grandparents.",
+					"Visit the Change Premium Payer e-Service, log in using Singpass and complete the application."
+				]
+			},
+			"confirm_label": "I applied to pay",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Can I help my family members pay for their CareShield Life premiums?",
+			"Can I pay my parents’ CareShield Life premiums?",
+			"Can I use my MediSave to pay a family member’s premiums?",
+			"Paying family CareShield Life premiums"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuop006uhipnxrbomoz2",
+			"page_title": "Can I help my family members pay for their CareShield Life premiums?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-28T17:30:57.057Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You can pay the CareShield Life premiums for your family members (i.e. spouse, parents, children, siblings or grandparents) using your MediSave."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To do so, you can visit the Change Premium Payer e-Service and log in using Singpass to complete the application."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Alternatively, you/your family member may top up to your or his/her MediSave via the Top up MediSave Account online form."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:30:57.057Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:57.057Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:30:57.057Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuop006uhipnxrbomoz2"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:30:57.057Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:30:57.057Z",
+		"updated_at": "2026-09-28T17:30:57.057Z"
+	}
+}

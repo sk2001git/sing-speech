@@ -1,0 +1,197 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mlaw.claiming-a-deceased-persons-shares",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Claim shares",
+		"full": "Claiming a deceased person’s shares"
+	},
+	"summary": {
+		"text": "If the shares are worth $5,000 or less, contact CDP. Otherwise, apply to the Public Trustee.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Documents that may be needed",
+			"body": "Common documents include the deceased person’s death and birth certificates; marriage certificate; and, if divorced, decree nisi absolute. The beneficiary’s birth certificate and identity card may also be needed. If a beneficiary has died, their death certificate may be needed. The deceased’s parents’ marriage certificate and a parent’s death certificate may be needed if the parent has died. Muslims may need a Certificate of Inheritance.",
+			"quote_refs": [
+				"q5"
+			]
+		},
+		{
+			"heading": "After applying",
+			"body": "You will get an email confirming receipt. A case officer will review the application and tell you if more documents are needed. You will be asked to pay an administration fee for the transfer of shares or a vehicle.",
+			"quote_refs": [
+				"q6"
+			]
+		},
+		{
+			"heading": "Get help",
+			"body": "Contact the Public Trustee’s Office at 1800 225 5529. Mobile calls may incur airtime charges. Office hours are Monday to Friday, 8:30 AM to 5:00 PM.",
+			"quote_refs": [
+				"q7"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the share value",
+			"text": "If the shares are worth $5,000 or less, contact CDP directly. Otherwise, apply online to the Public Trustee.",
+			"points": {
+				"items": [
+					"If the shareholding is worth $5,000 or less, approach CDP directly to claim it.",
+					"If it is worth more than $5,000, apply online to the Public Trustee."
+				]
+			},
+			"about": {
+				"text": "The Public Trustee can only help transfer CDP shares to the intended transferee if the total value of the estate is $50,000 or less.",
+				"quote_refs": [
+					"q4"
+				]
+			},
+			"confirm_label": "I checked the value",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Apply online",
+			"text": "If the shareholding is worth more than $5,000, submit an online application under “Deceased’s estate other than un-nominated CPF moneys / Baby Bonus / Edusave / PSEA”.",
+			"points": {
+				"items": [
+					"Submit an online application under “Deceased’s estate other than un-nominated CPF moneys / Baby Bonus / Edusave / PSEA”."
+				]
+			},
+			"confirm_label": "I sent the application",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Arrange the beneficiaries’ shares",
+			"text": "If there are multiple beneficiaries, such as a spouse and children, the others may give up their shares so you can claim the shares, or you may buy their shares. Only beneficiaries aged 21 or older can give up their shares.",
+			"points": {
+				"items": [
+					"If there are multiple beneficiaries, such as a spouse and children, the others may give up their shares so you can claim the shares.",
+					"Alternatively, you may buy the other beneficiaries’ shares.",
+					"Only beneficiaries aged 21 or older can give up their shares."
+				]
+			},
+			"confirm_label": "I spoke with them",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"action": {
+		"type": "call",
+		"label": "Call 18002255529",
+		"value": "18002255529",
+		"quote_refs": [
+			"q7"
+		]
+	},
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"public-trustee",
+			"deceased-persons-estate"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How to claim the Deceased's shares?",
+			"Claim shares",
+			"How can I claim a deceased person’s shares?",
+			"What do I do to get someone’s shares after they die?",
+			"Claiming a deceased person’s shares"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MLAW",
+			"url": "https://ask.gov.sg/mlaw/questions/cmo8039u8003w4a01ihu9qvgo",
+			"page_title": "How to claim the Deceased's shares?",
+			"source_modified_at": "2026-06-03",
+			"retrieved_at": "2026-09-28T17:29:30.422Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If the value of the shareholding is $5,000 or below, you can approach CDP directly to claim the Deceased’s shareholding."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You will need to submit an online application via https://go.gov.sg/pto under “Deceased’s estate other than un-nominated CPF moneys / Baby Bonus / Edusave / PSEA”."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "If there are multiple beneficiaries, (e.g., Deceased left behind a spouse and children) the other family members may choose to give up his / her share so claimant can claim the shares."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please take note that the Public Trustee can only assist in the transfer of the Deceased’s CDP shares, if the total value of the estate is $50,000 or less, to the intended transferee."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Common types of documents required are: Death Certificate of Deceased Birth Certificate of Deceased Marriage Certificate of Deceased Decree Nisi Absolute (if the Deceased was divorced) Birth Certificate of Beneficiary Identity Card of Beneficiary Death Certificate of Beneficiary (if Deceased) Marriage Certificate of Deceased’s Parents Death Certificate of Parent (if Deceased) Certificate of Inheritance (For Muslims only)"
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "You will get an email confirming your application was received"
+		},
+		{
+			"id": "q7",
+			"source": "src1",
+			"text": "Phone: 1800 225 5529 (airtime charges may apply for mobile calls)"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:29:30.422Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:30.422Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:29:30.422Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mlaw/questions/cmo8039u8003w4a01ihu9qvgo"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:29:30.422Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:29:30.422Z",
+		"updated_at": "2026-09-28T17:29:30.422Z"
+	}
+}

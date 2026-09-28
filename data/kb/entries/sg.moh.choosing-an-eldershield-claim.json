@@ -1,0 +1,128 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.choosing-an-eldershield-claim",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "ElderShield",
+		"full": "Choosing an ElderShield claim"
+	},
+	"summary": {
+		"text": "If you have severe disability and ElderShield insurance, apply to claim under ElderShield.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "CareShield Life eligibility",
+			"body": "You will not be eligible for CareShield Life if you have developed severe disability.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Apply to claim under ElderShield",
+			"text": "If you are unable to perform three or more Activities of Daily Living and are insured under ElderShield, apply to claim under ElderShield.",
+			"points": {
+				"items": [
+					"If you are unable to perform three or more Activities of Daily Living, apply to claim under ElderShield.",
+					"You must be an ElderShield insured."
+				]
+			},
+			"about": {
+				"text": "This lets you receive your monthly claim payouts in a timely manner.",
+				"quote_refs": [
+					"q3"
+				]
+			},
+			"confirm_label": "I applied to claim",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"careshield-life"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"Should I claim ElderShield or join CareShield Life?",
+			"ElderShield claim",
+			"I have ElderShield. Should I claim or join CareShield Life?",
+			"Choosing an ElderShield claim"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuuoc0008hipneb4i3pr3",
+			"page_title": "I am an existing ElderShield insured. If I am eligible for ElderShield claims, should I claim from ElderShield or join CareShield Life?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-28T17:30:27.242Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "you should apply to claim under ElderShield"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you are unable to perform three or more Activities of Daily Living (i.e. have developed severe disability), and is an ElderShield insured, you should apply to claim under ElderShield so that you can receive your monthly claim payouts in a timely manner."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "so that you can receive your monthly claim payouts in a timely manner."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "You will not be eligible for CareShield Life if you have developed severe disability."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:30:27.242Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:27.242Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:30:27.242Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuuoc0008hipneb4i3pr3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:30:27.242Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:30:27.242Z",
+		"updated_at": "2026-09-28T17:30:27.242Z"
+	}
+}

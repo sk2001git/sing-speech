@@ -1,0 +1,154 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.updating-your-mobile-number-in-singpass",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Update number",
+		"full": "Updating your mobile number in Singpass"
+	},
+	"summary": {
+		"text": "Update your mobile number in Singpass and verify it with an OTP.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Need more help?",
+			"body": "Contact the Singpass Helpdesk. It is open from 8am to 8pm on Mondays to Fridays, and from 8am to 2pm on Saturdays. It is closed on Sundays and public holidays.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Log in to Singpass",
+			"text": "Log in to the Singpass website.",
+			"points": {
+				"items": [
+					"Log in to the Singpass website."
+				]
+			},
+			"confirm_label": "I logged in",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Choose Update profile",
+			"text": "Select Menu, then Update profile under the My Account tab. Follow the instructions to update your mobile number.",
+			"points": {
+				"items": [
+					"Select ‘Menu’ > ‘Update profile’ under the ‘My Account’ tab.",
+					"Follow the instructions to update your mobile number."
+				]
+			},
+			"confirm_label": "I chose Update profile",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Verify your number",
+			"text": "Make sure you can access your mobile phone. Singpass will send an OTP to your updated number for verification.",
+			"points": {
+				"items": [
+					"Make sure you can access your mobile phone.",
+					"A One-Time Password (OTP) will be sent to your updated mobile number for verification."
+				]
+			},
+			"confirm_label": "I can access my phone",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I changed my handphone number but singpass never update",
+			"Update number",
+			"I changed my handphone number but Singpass never update",
+			"How do I update my mobile number in Singpass?",
+			"My number changed. How do I update it with Singpass?",
+			"My mobile number/email address is outdated. How can I update my records in Singpass?",
+			"Updating your mobile number in Singpass"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmczg781q00dv36wpo1my3xjn",
+			"page_title": "My mobile number/email address is outdated. How can I update my records in Singpass?",
+			"retrieved_at": "2026-09-28T17:28:23.284Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Please ensure that you have access to your mobile phone/email as a One-Time Password (OTP) will be sent to your updated mobile number/email address for verification."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Login to the Singpass website"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Select ‘Menu’ > ‘Update profile’ (under the ‘My Account’ tab) and follow the instructions on the website to complete the updating of your mobile number/email address"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you require further assistance, please contact the Singpass Helpdesk directly. The operating hours are from 8am to 8pm (Mondays to Fridays) and from 8am to 2pm (Saturdays) excluding Sundays and public holidays."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:28:23.284Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:23.284Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:28:23.284Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmczg781q00dv36wpo1my3xjn"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:28:23.284Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:28:23.284Z",
+		"updated_at": "2026-09-28T17:28:23.284Z"
+	}
+}

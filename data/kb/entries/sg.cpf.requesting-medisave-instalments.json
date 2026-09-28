@@ -5,7 +5,7 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "Instalment plan",
+		"short": "MediSave plan",
 		"full": "Requesting MediSave instalments"
 	},
 	"summary": {
@@ -14,21 +14,23 @@
 			"q1"
 		]
 	},
-	"details": [
-		{
-			"heading": "Approval and documents",
-			"body": "Your request is subject to the Board’s approval. You may be required to provide additional information or supporting documents, if necessary.",
-			"quote_refs": [
-				"q2"
-			]
-		}
-	],
 	"steps": [
 		{
 			"position": 1,
-			"name": "Submit the request",
-			"text": "Use the Manage your MediSave payable form to request an instalment plan for monthly MediSave contributions.",
-			"confirm_label": "I submitted the request",
+			"name": "Submit the form",
+			"text": "Use the Manage your MediSave payable form to request monthly instalments.",
+			"points": {
+				"items": [
+					"Request monthly instalments through the Manage your MediSave payable form."
+				]
+			},
+			"about": {
+				"text": "The Board must approve your request. You may need to provide more information or supporting documents.",
+				"quote_refs": [
+					"q2"
+				]
+			},
+			"confirm_label": "I sent the request",
 			"quote_refs": [
 				"q1"
 			]
@@ -44,8 +46,9 @@
 	"search": {
 		"example_phrasings": [
 			"How do I request an instalment plan for my MediSave contributions?",
-			"How can I pay my MediSave contributions monthly?",
-			"I want to request a MediSave instalment plan"
+			"MediSave plan",
+			"Can I pay my MediSave contributions in monthly instalments?",
+			"Requesting MediSave instalments"
 		]
 	},
 	"sources": [
@@ -55,7 +58,7 @@
 			"url": "https://ask.gov.sg/cpf/questions/cm0f52kw6005vpz7ap39llbnz",
 			"page_title": "How do I request an instalment plan for my MediSave contributions?",
 			"source_modified_at": "2024-08-29",
-			"retrieved_at": "2026-09-19T09:59:53.930Z"
+			"retrieved_at": "2026-09-28T17:28:14.525Z"
 		}
 	],
 	"quotes": [
@@ -73,13 +76,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-19T09:59:53.930Z"
+			"at": "2026-09-28T17:28:14.525Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-19T09:59:53.930Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:14.525Z"
 		}
 	},
 	"verification": {
@@ -88,19 +91,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-19T09:59:53.930Z",
+				"at": "2026-09-28T17:28:14.525Z",
 				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kw6005vpz7ap39llbnz"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-19T09:59:53.930Z"
+				"at": "2026-09-28T17:28:14.525Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-19T09:59:53.930Z",
-		"updated_at": "2026-09-19T09:59:53.930Z"
+		"created_at": "2026-09-28T17:28:14.525Z",
+		"updated_at": "2026-09-28T17:28:14.525Z"
 	}
 }

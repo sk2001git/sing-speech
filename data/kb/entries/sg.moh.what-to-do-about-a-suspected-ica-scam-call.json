@@ -1,0 +1,162 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.what-to-do-about-a-suspected-ica-scam-call",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Scam calls",
+		"full": "What to do about a suspected ICA scam call"
+	},
+	"summary": {
+		"text": "Ignore the call, do not share personal details, and report suspected fraud to Police.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Get scam-related advice",
+			"body": "Call the anti-scam centre at 1800-722-6688 for scam-related advice.",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Ignore the call",
+			"text": "If you have reason to believe the call is a scam, ignore it and the caller’s instructions.",
+			"points": {
+				"items": [
+					"If you have reason to believe that the call is a scam, ignore it and the caller’s instructions."
+				]
+			},
+			"confirm_label": "I ignored the call",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Keep your details private",
+			"text": "Do not provide personal information, including your identification or banking details.",
+			"points": {
+				"items": [
+					"Do not provide personal information such as your name, identification number, passport details, contact details, or banking and credit card details."
+				]
+			},
+			"confirm_label": "I shared no details",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Report suspected fraud",
+			"text": "Report it to Police if you suspect any fraudulent act or wrongdoing.",
+			"points": {
+				"items": [
+					"Report to Police if you suspect any fraudulent act or wrongdoing."
+				]
+			},
+			"confirm_label": "I reported it",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"action": {
+		"type": "call",
+		"label": "Call 18007226688",
+		"value": "18007226688",
+		"quote_refs": [
+			"q5"
+		]
+	},
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What should I do if I suspect the call claiming to be from ICA to be a scam?",
+			"Scam calls",
+			"How do I handle a suspected scam call from ICA?",
+			"What to do about a suspected ICA scam call"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clqety23r004d3k36wumehxez",
+			"page_title": "What should I do if I suspect the call claiming to be from ICA to be a scam?",
+			"source_modified_at": "2025-05-09",
+			"retrieved_at": "2026-09-28T17:31:59.655Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Ignore such calls and the caller’s instructions"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you have reason to believe that the call is a scam, you are advised to take the following precautions: Ignore such calls and the caller’s instructions"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Do not provide personal information such as your name, identification number, passport details, contact details, or banking and credit card details"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Report to Police if you suspect any fraudulent act or wrongdoing."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "Members of the public can seek scam-related advice by calling the anti-scam centre at 1800-722-6688"
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:31:59.655Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:59.655Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:31:59.655Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clqety23r004d3k36wumehxez"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:31:59.655Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:31:59.655Z",
+		"updated_at": "2026-09-28T17:31:59.655Z"
+	}
+}

@@ -1,0 +1,111 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-assessed-for-severe-disability",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Getting assessed",
+		"full": "Getting assessed for severe disability"
+	},
+	"summary": {
+		"text": "Visit a MOH-accredited severe disability assessor to find out whether you have severe disability.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "What counts as severe disability",
+			"body": "You are likely to be assessed as severely disabled if you are unable to perform at least three Activities of Daily Living. These are bathing, dressing, feeding oneself, using the toilet, moving around and transferring.",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Visit an assessor",
+			"text": "Visit a MOH-accredited severe disability assessor to find out whether you have developed severe disability.",
+			"points": {
+				"items": [
+					"Visit a MOH-accredited severe disability assessor for an assessment."
+				]
+			},
+			"confirm_label": "I visited an assessor",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"elderfund"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I know whether I have developed severe disability?",
+			"How can I tell if I have severe disability?",
+			"Who can assess whether I have severe disability?",
+			"Getting assessed for severe disability"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/clpjhuupb00hyhipnq4zjrog3",
+			"page_title": "How do I know whether I have developed severe disability?",
+			"source_modified_at": "2023-12-15",
+			"retrieved_at": "2026-09-28T17:31:29.802Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You would need to visit a MOH-accredited severe disability assessor to be assessed whether you are severely disabled."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You are likely to be assessed as severely disabled if you are unable to perform at least three Activities of Daily Living (ADLs). These ADLs are bathing, dressing, feeding oneself, using the toilet, moving around and transferring."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:31:29.802Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:29.802Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:31:29.802Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuupb00hyhipnq4zjrog3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:31:29.802Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:31:29.802Z",
+		"updated_at": "2026-09-28T17:31:29.802Z"
+	}
+}

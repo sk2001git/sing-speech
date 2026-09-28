@@ -1,0 +1,123 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.ica.checking-your-application-status",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Check status",
+		"full": "Checking your application status"
+	},
+	"summary": {
+		"text": "Use the e-Service with your application reference number and the e-mail address you gave when you applied.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open the e-Service",
+			"text": "Go to the e-Service to enquire about your extract or search application status.",
+			"points": {
+				"items": [
+					"Open the e-Service to check your application status."
+				]
+			},
+			"confirm_label": "I opened the e-Service",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Enter your details",
+			"text": "Enter your application reference number and the e-mail address you provided during your application to access the status function.",
+			"points": {
+				"items": [
+					"Enter your application reference number.",
+					"Enter the e-mail address you provided during your application."
+				]
+			},
+			"confirm_label": "I entered my details",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"birth-and-death-registration",
+			"extract"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I check the application status for the extract or search that I had applied for?",
+			"Check status",
+			"How can I check my application status?",
+			"Checking your application status"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "ICA",
+			"url": "https://ask.gov.sg/ica/questions/clos83ft3006r5k0wyjx8nzec",
+			"page_title": "How do I check the application status for the extract or search that I had applied for?",
+			"source_modified_at": "2025-04-25",
+			"retrieved_at": "2026-09-28T17:29:14.822Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may enquire the status of your extract or search application at the e-Service. You will need your application reference number and e-mail address provided during application to access this function."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You may enquire the status of your extract or search application at the e-Service."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You will need your application reference number and e-mail address provided during application to access this function."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:29:14.822Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:14.822Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:29:14.822Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/ica/questions/clos83ft3006r5k0wyjx8nzec"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:29:14.822Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:29:14.822Z",
+		"updated_at": "2026-09-28T17:29:14.822Z"
+	}
+}

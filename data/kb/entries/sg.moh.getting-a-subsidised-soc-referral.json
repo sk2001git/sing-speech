@@ -1,0 +1,105 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.getting-a-subsidised-soc-referral",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "SOC referral",
+		"full": "Getting a subsidised SOC referral"
+	},
+	"summary": {
+		"text": "Ask a CHAS clinic or polyclinic for a referral to subsidised care at public SOCs.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Ask for a referral",
+			"text": "To get subsidised care at public SOCs, ask a CHAS clinic or polyclinic for a referral. You must be a PG/MG/CHAS cardholder to get a subsidised SOC referral from a CHAS clinic.",
+			"points": {
+				"lead": "You can get a referral from:",
+				"items": [
+					"A CHAS clinic, if you are a PG/MG/CHAS cardholder.",
+					"A polyclinic."
+				]
+			},
+			"confirm_label": "I asked for a referral",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"subsidies"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How can I get a referral for subsidised care at public SOCs?",
+			"SOC referral",
+			"How do I get subsidised SOC care?",
+			"Can a polyclinic refer me for subsidised care?",
+			"Getting a subsidised SOC referral"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmojvefa700cl4d013249tu8g",
+			"page_title": "How can I get a referral for subsidised care at public SOCs?",
+			"source_modified_at": "2026-04-29",
+			"retrieved_at": "2026-09-28T17:30:43.513Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "A referral for subsidised care at public SOCs can be obtained from either CHAS clinics or polyclinics."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "A referral for subsidised care at public SOCs can be obtained from either CHAS clinics or polyclinics. Do note that you will need to be a PG/MG/CHAS cardholder to obtain subsidised SOC referrals from CHAS clinics."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:30:43.513Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:43.513Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:30:43.513Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmojvefa700cl4d013249tu8g"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:30:43.513Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:30:43.513Z",
+		"updated_at": "2026-09-28T17:30:43.513Z"
+	}
+}

@@ -1,0 +1,102 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.finding-your-propertys-annual-value",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Find property AV",
+		"full": "Finding your property's Annual Value"
+	},
+	"summary": {
+		"text": "Check your property tax bill, log in to myTax, or use the IRAS e-Valuation List for a nominal fee.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose a way to check",
+			"text": "Check your property tax bill, log in to myTax.iras.gov.sg, or use the IRAS e-Valuation List for a nominal fee.",
+			"points": {
+				"lead": "You can check:",
+				"items": [
+					"Your property tax bill.",
+					"myTax.iras.gov.sg.",
+					"The IRAS e-Valuation List, for a nominal fee."
+				]
+			},
+			"confirm_label": "I found my property's AV",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "health",
+		"tags": [
+			"medishield-life",
+			"information-used-for-means-testing"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I find out what is the Annual Value of my Property?",
+			"Find property AV",
+			"How can I check my property's Annual Value?",
+			"Where can I find the Annual Value of my property?",
+			"Finding your property's Annual Value"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cm2vqalb6002b66lwndim04n6",
+			"page_title": "How do I find out what is the Annual Value of my Property?",
+			"source_modified_at": "2025-01-10",
+			"retrieved_at": "2026-09-28T17:31:51.278Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "You may also check your property tax bill or log in to myTax.iras.gov.sg."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:31:51.278Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:51.278Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:31:51.278Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vqalb6002b66lwndim04n6"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:31:51.278Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:31:51.278Z",
+		"updated_at": "2026-09-28T17:31:51.278Z"
+	}
+}

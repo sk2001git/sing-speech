@@ -5,38 +5,32 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "Merdeka appeal",
+		"short": "MG appeal",
 		"full": "Appealing for the Merdeka Generation Package"
 	},
 	"summary": {
-		"text": "You can appeal if you meet the age and citizenship conditions and have a good claim. Contact MOH by email, phone or mail.",
+		"text": "You can appeal if you meet the age and citizenship conditions and have good claims to be counted among the MG.",
 		"quote_refs": [
 			"q1"
 		]
 	},
-	"details": [
-		{
-			"heading": "Age condition",
-			"body": "The Appeals Panel will not consider appeals if you miss the age condition. This means you must not have been born after 31 December 1959.",
-			"quote_refs": [
-				"q3"
-			]
-		}
-	],
 	"steps": [
 		{
 			"position": 1,
-			"name": "Check your eligibility",
-			"text": "Check that you were aged 60 or above in 2019, became a Singapore citizen after 31 December 1996, and have a good claim to be counted among the Merdeka Generation.",
-			"confirm_label": "I checked my eligibility",
-			"quote_refs": [
-				"q1"
-			]
-		},
-		{
-			"position": 2,
 			"name": "Send your appeal",
-			"text": "Send your appeal by email, phone or mail. Use contactus@merdeka.gov.sg, call 1800 2222 888, or mail it to Robinson Road P.O. Box 3060 Singapore 905060.",
+			"text": "If you meet the conditions, send your appeal by email, phone or mail. The Appeals Panel will not consider appeals if you miss the age criterion.",
+			"points": {
+				"items": [
+					"You must have been aged 60 or above in 2019, born on or earlier than 1959, and become a Singapore citizen after 31 December 1996. You must also have good claims to be counted among the MG.",
+					"Email contactus@merdeka.gov.sg, call 1800 2222 888, or mail Robinson Road P.O. Box 3060 Singapore 905060."
+				]
+			},
+			"about": {
+				"text": "The Appeals Panel will not consider your appeal if you were born after 31 December 1959.",
+				"quote_refs": [
+					"q3"
+				]
+			},
 			"confirm_label": "I sent my appeal",
 			"quote_refs": [
 				"q2"
@@ -53,8 +47,10 @@
 	"search": {
 		"example_phrasings": [
 			"I would like to appeal for the Merdeka Generation Package. Can I do so, and how?",
-			"Can I appeal for Merdeka Generation?",
-			"How do I appeal for the Merdeka Package?"
+			"MG appeal",
+			"Can I appeal for the Merdeka Generation Package?",
+			"How do I appeal for the Merdeka Generation Package?",
+			"Appealing for the Merdeka Generation Package"
 		]
 	},
 	"sources": [
@@ -64,7 +60,7 @@
 			"url": "https://ask.gov.sg/moh/questions/cm2ov1gbz00esr5bf2tyxhekf",
 			"page_title": "I would like to appeal for the Merdeka Generation Package. Can I do so, and how?",
 			"source_modified_at": "2024-10-25",
-			"retrieved_at": "2026-09-18T15:01:58.686Z"
+			"retrieved_at": "2026-09-28T17:29:54.843Z"
 		}
 	],
 	"quotes": [
@@ -87,13 +83,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T15:01:58.686Z"
+			"at": "2026-09-28T17:29:54.843Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T15:01:58.686Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:54.843Z"
 		}
 	},
 	"verification": {
@@ -102,19 +98,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T15:01:58.686Z",
-				"note": "checked against https://ask.gov.sg/moh/questions/cm2ov1gbz00esr5bf2tyxhekf as crawled"
+				"at": "2026-09-28T17:29:54.843Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2ov1gbz00esr5bf2tyxhekf"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T15:01:58.686Z"
+				"at": "2026-09-28T17:29:54.843Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T15:01:58.686Z",
-		"updated_at": "2026-09-18T15:01:58.686Z"
+		"created_at": "2026-09-28T17:29:54.843Z",
+		"updated_at": "2026-09-28T17:29:54.843Z"
 	}
 }

@@ -5,19 +5,19 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "Apply for APS",
+		"short": "Premium help",
 		"full": "Applying for Additional Premium Support"
 	},
 	"summary": {
-		"text": "You do not need to apply ahead of time. You will be invited to apply if you have insufficient MediSave.",
+		"text": "Wait for an invitation if you have insufficient MediSave, then follow the application details in the letter.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "Who APS is for",
-			"body": "Additional Premium Support provides financial assistance to members who are unable to afford their premiums after premium subsidies and MediSave use, and have limited family support.",
+			"heading": "What APS helps with",
+			"body": "Additional Premium Support provides financial assistance to members who cannot afford their MediShield Life and/or CareShield Life premiums after premium subsidies and MediSave use, and have limited family support.",
 			"quote_refs": [
 				"q3"
 			]
@@ -26,9 +26,29 @@
 	"steps": [
 		{
 			"position": 1,
-			"name": "Wait for letter",
-			"text": "Wait to receive an invitation letter in the mail. Details on the application process will be included in this letter.",
-			"confirm_label": "I have the letter",
+			"name": "Wait for an invitation",
+			"text": "If you have insufficient MediSave, you will be invited to apply for APS. You do not need to apply ahead of time.",
+			"points": {
+				"items": [
+					"You will be invited to apply if you have insufficient MediSave.",
+					"There is no need to apply for APS ahead of time."
+				]
+			},
+			"confirm_label": "I have an invitation",
+			"quote_refs": [
+				"q1"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Follow the letter",
+			"text": "Use the application details in your invitation letter to apply for APS.",
+			"points": {
+				"items": [
+					"The invitation letter includes details on the application process."
+				]
+			},
+			"confirm_label": "I followed the letter",
 			"quote_refs": [
 				"q2"
 			]
@@ -44,8 +64,10 @@
 	"search": {
 		"example_phrasings": [
 			"How can I apply for Additional Premium Support to pay for my MediShield Life and/or CareShield Life Premiums?",
-			"How do I apply for Additional Premium Support?",
-			"Can I apply for APS for my premiums?"
+			"Premium help",
+			"How do I apply for help with my MediShield Life or CareShield Life premiums?",
+			"How can I get Additional Premium Support?",
+			"Applying for Additional Premium Support"
 		]
 	},
 	"sources": [
@@ -55,19 +77,19 @@
 			"url": "https://ask.gov.sg/moh/questions/cm2vqixjm00bxa71bkq38cbhn",
 			"page_title": "How can I apply for Additional Premium Support to pay for my MediShield Life and/or CareShield Life Premiums?",
 			"source_modified_at": "2024-10-30",
-			"retrieved_at": "2026-09-18T14:56:15.305Z"
+			"retrieved_at": "2026-09-28T17:30:59.240Z"
 		}
 	],
 	"quotes": [
 		{
 			"id": "q1",
 			"source": "src1",
-			"text": "You will be invited to apply for APS should you have insufficient MediSave, and details on the application process will be included in the invitation letter. There is no need for you to apply for APS ahead of time."
+			"text": "You will be invited to apply for APS should you have insufficient MediSave, and details on the application process will be included in the invitation letter."
 		},
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "You will be invited to apply for APS should you have insufficient MediSave, and details on the application process will be included in the invitation letter."
+			"text": "details on the application process will be included in the invitation letter."
 		},
 		{
 			"id": "q3",
@@ -78,13 +100,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T14:56:15.305Z"
+			"at": "2026-09-28T17:30:59.240Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T14:56:15.305Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:59.240Z"
 		}
 	},
 	"verification": {
@@ -93,19 +115,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T14:56:15.305Z",
-				"note": "checked against https://ask.gov.sg/moh/questions/cm2vqixjm00bxa71bkq38cbhn as crawled"
+				"at": "2026-09-28T17:30:59.240Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cm2vqixjm00bxa71bkq38cbhn"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T14:56:15.305Z"
+				"at": "2026-09-28T17:30:59.240Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T14:56:15.305Z",
-		"updated_at": "2026-09-18T14:56:15.305Z"
+		"created_at": "2026-09-28T17:30:59.240Z",
+		"updated_at": "2026-09-28T17:30:59.240Z"
 	}
 }

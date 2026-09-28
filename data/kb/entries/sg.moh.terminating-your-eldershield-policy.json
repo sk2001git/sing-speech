@@ -9,33 +9,31 @@
 		"full": "Terminating your ElderShield policy"
 	},
 	"summary": {
-		"text": "Use the Termination of ElderShield e-Service. Ending your policy means losing existing benefits.",
+		"text": "Use the Termination of ElderShield e-Service if you do not wish to keep your cover.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "What you will lose",
-			"body": "You will lose all existing benefits when you terminate your ElderShield policy.",
+			"heading": "What to consider before ending cover",
+			"body": "You will lose all existing benefits. If you later wish to join CareShield Life, you may have to go for a medical assessment. MOH encourages you to keep your policy for basic protection for long-term care.",
 			"quote_refs": [
 				"q2"
-			]
-		},
-		{
-			"heading": "If you later join CareShield Life",
-			"body": "You may have to go for a medical assessment if you wish to join CareShield Life.",
-			"quote_refs": [
-				"q3"
 			]
 		}
 	],
 	"steps": [
 		{
 			"position": 1,
-			"name": "Terminate the policy",
-			"text": "Use the Termination of ElderShield e-Service to end your ElderShield policy.",
-			"confirm_label": "I used the service",
+			"name": "Use the termination e-Service",
+			"text": "If you do not wish to continue to be covered under ElderShield, use the Termination of ElderShield e-Service.",
+			"points": {
+				"items": [
+					"Use the Termination of ElderShield e-Service if you do not wish to continue to be covered under the scheme."
+				]
+			},
+			"confirm_label": "I used the e-Service",
 			"quote_refs": [
 				"q1"
 			]
@@ -51,8 +49,10 @@
 	"search": {
 		"example_phrasings": [
 			"How do I terminate my ElderShield policy?",
-			"How can I end ElderShield?",
-			"I want to stop my ElderShield policy"
+			"End ElderShield",
+			"How can I stop my ElderShield cover?",
+			"What happens if I end ElderShield?",
+			"Terminating your ElderShield policy"
 		]
 	},
 	"sources": [
@@ -62,36 +62,31 @@
 			"url": "https://ask.gov.sg/moh/questions/clpjhuup100cihipn943wfjdg",
 			"page_title": "How do I terminate my ElderShield policy?",
 			"source_modified_at": "2023-12-15",
-			"retrieved_at": "2026-09-18T15:02:31.857Z"
+			"retrieved_at": "2026-09-28T17:31:32.395Z"
 		}
 	],
 	"quotes": [
 		{
 			"id": "q1",
 			"source": "src1",
-			"text": "You can terminate your ElderShield via the Termination of ElderShield e-Service"
+			"text": "You can terminate your ElderShield via the Termination of ElderShield e-Service if you do not wish to continue to be covered under the scheme."
 		},
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "However, you will lose all existing benefits"
-		},
-		{
-			"id": "q3",
-			"source": "src1",
-			"text": "you may have to go for a medical assessment if you wish to join CareShield Life"
+			"text": "However, you will lose all existing benefits, and you may have to go for a medical assessment if you wish to join CareShield Life. We encourage you to consider keeping your ElderShield policy to ensure you continue to have basic protection for long-term care."
 		}
 	],
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T15:02:31.857Z"
+			"at": "2026-09-28T17:31:32.395Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T15:02:31.857Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:31:32.395Z"
 		}
 	},
 	"verification": {
@@ -100,19 +95,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T15:02:31.857Z",
-				"note": "checked against https://ask.gov.sg/moh/questions/clpjhuup100cihipn943wfjdg as crawled"
+				"at": "2026-09-28T17:31:32.395Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clpjhuup100cihipn943wfjdg"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T15:02:31.857Z"
+				"at": "2026-09-28T17:31:32.395Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T15:02:31.857Z",
-		"updated_at": "2026-09-18T15:02:31.857Z"
+		"created_at": "2026-09-28T17:31:32.395Z",
+		"updated_at": "2026-09-28T17:31:32.395Z"
 	}
 }

@@ -5,19 +5,19 @@
 	"language": "en",
 	"translation_of": null,
 	"title": {
-		"short": "Healthier SG",
+		"short": "Clinic choice",
 		"full": "Choosing a Healthier SG clinic"
 	},
 	"summary": {
-		"text": "Choose a participating Healthier SG clinic. You may keep visiting your current GP, but Healthier SG benefits will not apply there.",
+		"text": "You can enrol only with a participating clinic. You may keep visiting your current GP, but Healthier SG benefits will not apply there.",
 		"quote_refs": [
 			"q1"
 		]
 	},
 	"details": [
 		{
-			"heading": "Visiting your current GP",
-			"body": "You may continue visiting a non-Healthier SG clinic after enrolling. Healthier SG benefits will not apply there. You can still use existing schemes such as CHAS and MediSave.",
+			"heading": "Keep visiting your current GP",
+			"body": "You may continue to visit a non-Healthier SG clinic after enrolling. Healthier SG benefits will not apply there; you would only be able to enjoy existing schemes such as CHAS and MediSave.",
 			"quote_refs": [
 				"q4"
 			]
@@ -26,8 +26,14 @@
 	"steps": [
 		{
 			"position": 1,
-			"name": "Choose a clinic",
-			"text": "Choose a clinic from the list of Healthier SG clinics in HealthHub.",
+			"name": "Choose a participating clinic",
+			"text": "Choose a Healthier SG clinic in HealthHub to enrol and access Healthier SG benefits.",
+			"points": {
+				"items": [
+					"You can enrol only with a clinic that is participating in Healthier SG.",
+					"Choose from the Healthier SG clinics in HealthHub to access Healthier SG benefits."
+				]
+			},
 			"confirm_label": "I chose a clinic",
 			"quote_refs": [
 				"q2"
@@ -35,9 +41,14 @@
 		},
 		{
 			"position": 2,
-			"name": "Encourage your GP",
-			"text": "If your current GP is not a Healthier SG clinic, encourage your GP to onboard Healthier SG.",
-			"confirm_label": "I told my GP",
+			"name": "Ask your GP to join",
+			"text": "If your current GP is not a Healthier SG clinic, you could encourage your GP to join.",
+			"points": {
+				"items": [
+					"If your current GP is not on Healthier SG, you could encourage your GP to onboard Healthier SG."
+				]
+			},
+			"confirm_label": "I asked my GP",
 			"quote_refs": [
 				"q3"
 			]
@@ -52,8 +63,10 @@
 	"search": {
 		"example_phrasings": [
 			"Why can't I find my Healthier SG clinic of choice? What do I do if my existing GP is not a Healthier SG clinic?",
-			"My GP is not on Healthier SG. What should I do?",
-			"How do I choose a Healthier SG clinic?"
+			"Clinic choice",
+			"Why is my GP not available for Healthier SG?",
+			"Can I keep seeing my GP if they are not in Healthier SG?",
+			"Choosing a Healthier SG clinic"
 		]
 	},
 	"sources": [
@@ -63,7 +76,7 @@
 			"url": "https://ask.gov.sg/moh/questions/clkrnuwrw0019l40ge633s3si",
 			"page_title": "Why can't I find my Healthier SG clinic of choice? What do I do if my existing General Practitioner (GP) is not a Healthier SG clinic?",
 			"source_modified_at": "2023-08-01",
-			"retrieved_at": "2026-09-18T15:01:50.376Z"
+			"retrieved_at": "2026-09-28T17:30:26.352Z"
 		}
 	],
 	"quotes": [
@@ -75,7 +88,7 @@
 		{
 			"id": "q2",
 			"source": "src1",
-			"text": "As you will need to enrol with a Healthier SG GP clinic to access Healthier SG benefits, you are strongly encouraged to choose from the list of Healthier SG clinics in HealthHub."
+			"text": "For Healthier SG, residents can enrol only with a clinic that is participating in Healthier SG. GP clinics that are not Healthier SG will not be available for selection."
 		},
 		{
 			"id": "q3",
@@ -91,13 +104,13 @@
 	"provenance": {
 		"collected": {
 			"method": "sitemap-crawl",
-			"at": "2026-09-18T15:01:50.376Z"
+			"at": "2026-09-28T17:30:26.352Z"
 		},
 		"structured": {
 			"method": "model",
 			"model": null,
-			"prompt_version": "compose-1",
-			"at": "2026-09-18T15:01:50.376Z"
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:26.352Z"
 		}
 	},
 	"verification": {
@@ -106,19 +119,19 @@
 			{
 				"type": "quotes-found",
 				"passed": true,
-				"at": "2026-09-18T15:01:50.376Z",
-				"note": "checked against https://ask.gov.sg/moh/questions/clkrnuwrw0019l40ge633s3si as crawled"
+				"at": "2026-09-28T17:30:26.352Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/clkrnuwrw0019l40ge633s3si"
 			},
 			{
 				"type": "refs-resolve",
 				"passed": true,
-				"at": "2026-09-18T15:01:50.376Z"
+				"at": "2026-09-28T17:30:26.352Z"
 			}
 		]
 	},
 	"lifecycle": {
 		"version": 1,
-		"created_at": "2026-09-18T15:01:50.376Z",
-		"updated_at": "2026-09-18T15:01:50.376Z"
+		"created_at": "2026-09-28T17:30:26.352Z",
+		"updated_at": "2026-09-28T17:30:26.352Z"
 	}
 }

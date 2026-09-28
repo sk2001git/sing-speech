@@ -1,0 +1,130 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.applying-to-make-a-cpf-top-up",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF top-ups",
+		"full": "Applying to make a CPF top-up"
+	},
+	"summary": {
+		"text": "Choose your top-up type, then use its guide to apply.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "One-time cash top-ups",
+			"body": "You can make a one-time cash top-up via PayNow QR or OCBC Digital, using the CPF Mobile app only. Guides are available on the web and in the CPF Mobile app.",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"heading": "First-time CPF transfer to loved ones",
+			"body": "If you are making a first-time CPF transfer to your loved ones, find out which supporting documents you need to submit.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Choose your top-up type",
+			"text": "Choose recurring cash via GIRO, a recurring CPF transfer to yourself if you are 55 or above, a one-time cash top-up, or a one-time CPF transfer. Use the guide for your type.",
+			"points": {
+				"items": [
+					"Choose recurring cash top-ups via GIRO, recurring CPF transfers to yourself if you are aged 55 and above, one-time cash top-ups, or one-time CPF transfers.",
+					"Use the guide for your chosen type."
+				]
+			},
+			"confirm_label": "I chose my top-up type",
+			"quote_refs": [
+				"q2"
+			]
+		}
+	],
+	"topic": {
+		"area": "cpf-and-support",
+		"tags": [
+			"growing-your-savings",
+			"retirement-sum-topping-up-scheme"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I apply to make a top-up?",
+			"How can I top up my CPF?",
+			"Where do I find the guide for a CPF top-up?",
+			"Applying to make a CPF top-up"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cm0f52kwh00atpz7argmcpqv3",
+			"page_title": "How do I apply to make a top-up?",
+			"source_modified_at": "2024-08-29",
+			"retrieved_at": "2026-09-28T17:27:37.468Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To make a top-up, you can refer to the following table:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Recurring cash top-ups via GIRO"
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "One-time cash top-up via: PayNow QR OCBC Digital (CPF Mobile app only)"
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are making a first-time CPF transfer to your loved ones, find out the supporting documents that you need to submit."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:27:37.468Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:27:37.468Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:27:37.468Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cm0f52kwh00atpz7argmcpqv3"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:27:37.468Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:27:37.468Z",
+		"updated_at": "2026-09-28T17:27:37.468Z"
+	}
+}

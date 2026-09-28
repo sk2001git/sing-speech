@@ -1,0 +1,139 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.updating-contact-details-with-cpf",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "CPF contacts",
+		"full": "Updating contact details with CPF"
+	},
+	"summary": {
+		"text": "Singpass updates do not change your CPF contact details. Update them through CPF’s Account settings.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "After you change your details",
+			"body": "Changes to your contact details have a 12-hour cooling period. You may also need to go through enhanced authentication measures to verify your identity.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Open Account settings",
+			"text": "Use your Singpass to open Account settings in my cpf digital services.",
+			"points": {
+				"items": [
+					"Use your Singpass to open Account settings in my cpf digital services."
+				]
+			},
+			"confirm_label": "I opened settings",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Verify and submit",
+			"text": "Enter the One-Time PIN sent to your new mobile number or email address. This verifies your contact detail before you submit the changes.",
+			"points": {
+				"items": [
+					"Enter the One-Time PIN sent to your new mobile number or email address.",
+					"This verifies your contact detail before you submit the changes."
+				]
+			},
+			"confirm_label": "I verified my details",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"electronic-services",
+			"fighting-scams",
+			"updating-your-account-details"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"I have updated my email address or mobile number with Singpass. Why has CPF not updated it?",
+			"CPF contacts",
+			"Why did Singpass not update my CPF contact details?",
+			"Updating contact details with CPF"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucq1006rpnhlh5jiglgr",
+			"page_title": "I have updated my email address/mobile number with Singpass. Why are my Singpass contact details not updated with CPF Board?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-28T17:28:34.361Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "Updates to your Singpass mobile number and email address will not be automatically updated with the Board."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "You can update your mobile number and/or email address via my cpf digital services – Account settings with your Singpass."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "An SMS or email One-Time PIN (OTP) will be sent to your new mobile or email address for verification before the changes can be submitted."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please note that any changes to your contact details will be subject to a 12-hour cooling period and you may be subject to enhanced authentication measures to verify your identity."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:28:34.361Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:28:34.361Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:28:34.361Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucq1006rpnhlh5jiglgr"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:28:34.361Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:28:34.361Z",
+		"updated_at": "2026-09-28T17:28:34.361Z"
+	}
+}

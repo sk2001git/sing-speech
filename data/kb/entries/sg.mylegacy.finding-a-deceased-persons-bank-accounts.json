@@ -1,0 +1,146 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.mylegacy.finding-a-deceased-persons-bank-accounts",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Bank accounts",
+		"full": "Finding a deceased person’s bank accounts"
+	},
+	"summary": {
+		"text": "Contact the banks directly. Court documents may be needed before a bank can disclose account details.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "Why a bank may not share details",
+			"body": "Banks must protect customer information under the Banking Act. They cannot disclose the deceased person’s account details without the appropriate court documents.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Contact each bank",
+			"text": "Tell the bank your loved one has died and ask whether they held an account there. Each bank may have its own process.",
+			"points": {
+				"items": [
+					"Explain that your loved one has passed on.",
+					"Ask if they held an account with the bank.",
+					"Check the bank’s own process."
+				]
+			},
+			"about": {
+				"text": "Banks may not disclose account details without the appropriate court documents.",
+				"quote_refs": [
+					"q4"
+				]
+			},
+			"confirm_label": "I contacted the bank",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Ask about court documents",
+			"text": "If you need the bank to disclose account details, ask the Family Justice Courts how to apply for the right court document. The document depends on whether your loved one made a will.",
+			"points": {
+				"items": [
+					"If your loved one made a will, the document is a Grant of Probate.",
+					"If your loved one did not make a will, the document is a Grant of Letters of Administration.",
+					"Check the Family Justice Courts website or enquire with the Family Justice Courts about applying."
+				]
+			},
+			"confirm_label": "I asked the Courts",
+			"quote_refs": [
+				"q3"
+			]
+		}
+	],
+	"topic": {
+		"area": "digital-services",
+		"tags": [
+			"bank-insurance"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"How do I obtain more information on my deceased next-of-kin's bank accounts?",
+			"Bank accounts",
+			"How can I find out if my loved one had a bank account?",
+			"Who should I contact about a deceased person's bank accounts?",
+			"Finding a deceased person’s bank accounts"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MYLEGACY",
+			"url": "https://ask.gov.sg/mylegacy/questions/clof41iuu00875v0xiv8ih51k",
+			"page_title": "How do I obtain more information on my deceased next-of-kin's bank accounts?",
+			"source_modified_at": "2025-07-04",
+			"retrieved_at": "2026-09-28T17:32:11.944Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "To obtain more information on a deceased's bank accounts, the next-of-kin would have to contact the bank(s) directly and explain that your loved one has passed on and you would like to check if they held an account with the bank."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "To obtain more information on a deceased's bank accounts, the next-of-kin would have to contact the bank(s) directly and explain that your loved one has passed on and you would like to check if they held an account with the bank. Do note that each bank may have its own processes with regard to disclosure of this information."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "You may check the Family Justice Courts website or enquire with the Family Justice Courts for more information on applying for these court documents."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "As the banks are required to comply with customer information confidentiality requirements under the Banking Act, the banks are unable to disclose details pertaining to the bank account(s) held by the deceased without the appropriate court documents such as the Grant of Probate (if the deceased made a will) or Grant of Letters of Administration (if the deceased did not make a will)."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:32:11.944Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:32:11.944Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:32:11.944Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/mylegacy/questions/clof41iuu00875v0xiv8ih51k"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:32:11.944Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:32:11.944Z",
+		"updated_at": "2026-09-28T17:32:11.944Z"
+	}
+}

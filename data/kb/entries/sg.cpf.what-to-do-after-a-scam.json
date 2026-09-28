@@ -1,0 +1,184 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.cpf.what-to-do-after-a-scam",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Scam response",
+		"full": "What to do after a scam"
+	},
+	"summary": {
+		"text": "Act immediately: alert your bank, secure Singpass if needed, lock CPF withdrawals if eligible, and report to police.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"steps": [
+		{
+			"position": 1,
+			"name": "Alert your bank",
+			"text": "Alert your bank to freeze the affected bank account immediately.",
+			"points": {
+				"items": [
+					"Alert your bank to freeze the affected bank account immediately."
+				]
+			},
+			"confirm_label": "I alerted my bank",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Reset your Singpass password",
+			"text": "If you think your Singpass has been compromised, reset your password.",
+			"points": {
+				"items": [
+					"If you think your Singpass has been compromised, reset your password."
+				]
+			},
+			"about": {
+				"text": "For further assistance, contact the official Singpass helpdesk at 6335 3533.",
+				"quote_refs": [
+					"q6"
+				]
+			},
+			"confirm_label": "I reset my password",
+			"quote_refs": [
+				"q3"
+			]
+		},
+		{
+			"position": 3,
+			"name": "Activate the CPF Withdrawal Lock",
+			"text": "If you are 55 and above, activate the CPF Withdrawal Lock under Account settings to disable online CPF withdrawals instantly.",
+			"points": {
+				"items": [
+					"If you are 55 and above, activate the CPF Withdrawal Lock under Account settings.",
+					"This disables online CPF withdrawals instantly."
+				]
+			},
+			"confirm_label": "I activated the lock",
+			"quote_refs": [
+				"q4"
+			]
+		},
+		{
+			"position": 4,
+			"name": "File a police report",
+			"text": "File a police report and provide all details.",
+			"points": {
+				"items": [
+					"File a police report.",
+					"Provide all details."
+				]
+			},
+			"confirm_label": "I filed a report",
+			"quote_refs": [
+				"q5"
+			]
+		}
+	],
+	"action": {
+		"type": "call",
+		"label": "Call 63353533",
+		"value": "63353533",
+		"quote_refs": [
+			"q6"
+		]
+	},
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"general-information-useful-tips",
+			"protection-against-scams",
+			"fighting-scams",
+			"protecting-your-cpf-account"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What should I do if I fall prey to a malware/phishing scam?",
+			"Scam response",
+			"What do I do after a scam?",
+			"How can I respond to a phishing scam?",
+			"What to do after a scam"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "CPF",
+			"url": "https://ask.gov.sg/cpf/questions/cmkynucpy005dpnhl9jyto4fq",
+			"page_title": "What should I do if I fall prey to a malware/phishing scam?",
+			"source_modified_at": "2026-09-17",
+			"retrieved_at": "2026-09-28T17:29:02.394Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "In the unfortunate event that you fall prey to a scam, we recommend taking the following actions immediately:"
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "Alert your bank to freeze the affected bank account."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "Reset your Singpass password if you think your Singpass has been compromised."
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "If you are 55 and above, activate the CPF Withdrawal Lock under Account settings to disable online CPF withdrawals instantly."
+		},
+		{
+			"id": "q5",
+			"source": "src1",
+			"text": "File a police report and provide all details."
+		},
+		{
+			"id": "q6",
+			"source": "src1",
+			"text": "For further assistance, please contact the official Singpass helpdesk at 6335 3533."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:29:02.394Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:29:02.394Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:29:02.394Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/cpf/questions/cmkynucpy005dpnhl9jyto4fq"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:29:02.394Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:29:02.394Z",
+		"updated_at": "2026-09-28T17:29:02.394Z"
+	}
+}

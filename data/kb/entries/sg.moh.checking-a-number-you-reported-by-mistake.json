@@ -1,0 +1,144 @@
+{
+	"schema_version": "1.1.0",
+	"id": "sg.moh.checking-a-number-you-reported-by-mistake",
+	"kind": "process",
+	"language": "en",
+	"translation_of": null,
+	"title": {
+		"short": "Scam report",
+		"full": "Checking a number you reported by mistake"
+	},
+	"summary": {
+		"text": "Check whether the number is marked as scam. If it was wrongly marked, call 1799 to request an unblock.",
+		"quote_refs": [
+			"q1"
+		]
+	},
+	"details": [
+		{
+			"heading": "One report is not enough",
+			"body": "A single report alone does not automatically mark a number as scam. If the number is legitimate, it will not be incorrectly marked based on a single report.",
+			"quote_refs": [
+				"q4"
+			]
+		}
+	],
+	"steps": [
+		{
+			"position": 1,
+			"name": "Check the number",
+			"text": "Use Check for Scams to see whether the number is marked as scam. A red result says it looks like a scam; an unsure result means it has not been marked as scam or blocked.",
+			"points": {
+				"items": [
+					"Use Check for Scams to see whether the number is marked as scam.",
+					"A red result says, “Beware, this looks like a scam.”",
+					"An unsure result means the number has not been marked as scam or blocked."
+				]
+			},
+			"about": {
+				"text": "A number is only blocked when the result is red with the message “Beware, this looks like a scam.”",
+				"quote_refs": [
+					"q3"
+				]
+			},
+			"confirm_label": "I checked the number",
+			"quote_refs": [
+				"q2"
+			]
+		},
+		{
+			"position": 2,
+			"name": "Request an unblock",
+			"text": "If you believe the number has been wrongly marked as scam, call the ScamShield Helpline at 1799 to request an unblock.",
+			"points": {
+				"items": [
+					"If you believe the number has been wrongly marked as scam, call the ScamShield Helpline at 1799 to request an unblock."
+				]
+			},
+			"confirm_label": "I called 1799",
+			"quote_refs": [
+				"q1"
+			]
+		}
+	],
+	"topic": {
+		"area": "scams",
+		"tags": [
+			"blocking-of-phone-numbers",
+			"contact-us",
+			"call-blocking"
+		]
+	},
+	"search": {
+		"example_phrasings": [
+			"What should I do if I accidentally reported a number as scam?",
+			"Scam report",
+			"Checking a number you reported by mistake"
+		]
+	},
+	"sources": [
+		{
+			"id": "src1",
+			"publisher": "MOH",
+			"url": "https://ask.gov.sg/moh/questions/cmc34ckp6008p14lk9t8nt9rs",
+			"page_title": "What should I do if I accidentally reported a number as scam?",
+			"source_modified_at": "2025-08-04",
+			"retrieved_at": "2026-09-28T17:30:18.124Z"
+		}
+	],
+	"quotes": [
+		{
+			"id": "q1",
+			"source": "src1",
+			"text": "If you believe a phone number has been wrongly marked as scam, please reach out to the ScamShield Helpline at 1799 to request an unblock."
+		},
+		{
+			"id": "q2",
+			"source": "src1",
+			"text": "If you've accidentally reported a number as \"scam\", you may use the Check for Scams feature to check if the phone number is marked as scam in the ScamShield database."
+		},
+		{
+			"id": "q3",
+			"source": "src1",
+			"text": "A phone number is only blocked if the check outcome appears red with the message \"Beware, this looks like a scam.\""
+		},
+		{
+			"id": "q4",
+			"source": "src1",
+			"text": "Please be assured that a single report alone does not automatically mark a phone number as a scam. Our system uses multiple data points and verification processes to determine if a number is suspicious."
+		}
+	],
+	"provenance": {
+		"collected": {
+			"method": "sitemap-crawl",
+			"at": "2026-09-28T17:30:18.124Z"
+		},
+		"structured": {
+			"method": "model",
+			"model": null,
+			"prompt_version": "compose-2",
+			"at": "2026-09-28T17:30:18.124Z"
+		}
+	},
+	"verification": {
+		"status": "grounded",
+		"checks": [
+			{
+				"type": "quotes-found",
+				"passed": true,
+				"at": "2026-09-28T17:30:18.124Z",
+				"note": "checked against 1 crawled page(s): https://ask.gov.sg/moh/questions/cmc34ckp6008p14lk9t8nt9rs"
+			},
+			{
+				"type": "refs-resolve",
+				"passed": true,
+				"at": "2026-09-28T17:30:18.124Z"
+			}
+		]
+	},
+	"lifecycle": {
+		"version": 1,
+		"created_at": "2026-09-28T17:30:18.124Z",
+		"updated_at": "2026-09-28T17:30:18.124Z"
+	}
+}
