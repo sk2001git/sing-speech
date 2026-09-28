@@ -13,5 +13,13 @@
     "long":    {"choice": "window", "name": "Nearby bubbles and '...' beyond six stages", "status": "picked", "over": ["shrink", "seg"], "source": "Ant Design Steps maxCount"},
     "finish":  {"choice": "checks", "name": "A ticked list", "status": "picked", "over": ["big", "tracker"], "source": "GOV.UK task list"}
   },
-  "noneOfThese": 0
+  "noneOfThese": 0,
+  "round2": {
+    "date": "2026-09-29",
+    "note": "Owner on the round-1 prototype: circle outlines felt off; fewer bubbles; greyscale for the stages either side; a Back button. Only the bubbles changed; every round-1 pick above still holds.",
+    "bubbles": {"choice": "three", "name": "Three bubbles in view: before (grey tick), now (solid), next (grey); Start and Finish at the ends; no outlines", "status": "picked", "over": ["the whole row (round 1)"], "quote": "three bubbles is nice"},
+    "either_side": {"choice": "words", "name": "Grey words", "status": "picked", "over": ["skeleton bars"], "quote": "either side grey words is good"},
+    "back": {"choice": "top", "name": "Grey Back at the top, one step back; from step 1 it leaves", "status": "picked", "over": ["Airbnb footer: Back beside the main button"], "quote": "grey back button at the top exactly what we are looking for"},
+    "long": "superseded: three in view at any length, so no '...' folding"
+  }
 }

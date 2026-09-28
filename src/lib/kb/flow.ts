@@ -151,6 +151,10 @@ export type FlowEvent =
 	| { type: 'YES' }
 	| { type: 'NO' }
 	| { type: 'STEP_DONE' }
+	/** In a guide: one step back; from the first step it leaves, from the end it reopens the last. */
+	| { type: 'STEP_BACK' }
+	/** At the end of a guide: through it again from step 1. */
+	| { type: 'STEPS_AGAIN' }
 	| { type: 'BACK' }
 	| { type: 'HOME' }
 	/** Nothing in Suara: search the web instead (OpenAI routes only; the driver decides). */
@@ -283,6 +287,15 @@ export function next(state: FlowState, event: FlowEvent): FlowState {
 				? { ...state, index: state.index + 1 }
 				: { view, phase: 'done', entry: state.entry, back: state.back };
 		}
+		case 'STEP_BACK':
+			if (state.phase === 'steps' || state.phase === 'web-steps') return state.index > 0 ? { ...state, index: state.index - 1 } : state.back;
+			if (state.phase === 'done') return { view, phase: 'steps', entry: state.entry, index: (state.entry.steps?.length ?? 1) - 1, back: state.back };
+			if (state.phase === 'web-done') return { view, phase: 'web-steps', index: state.back.result.answer.steps.length - 1, back: state.back };
+			return state;
+		case 'STEPS_AGAIN':
+			if (state.phase === 'done') return { view, phase: 'steps', entry: state.entry, index: 0, back: state.back };
+			if (state.phase === 'web-done') return { view, phase: 'web-steps', index: 0, back: state.back };
+			return state;
 		case 'BACK':
 			if (state.phase === 'web') return state.from ?? state;
 			return state.phase === 'confirm' || state.phase === 'steps' || state.phase === 'done' || state.phase === 'web-confirm' || state.phase === 'web-steps' || state.phase === 'web-done'

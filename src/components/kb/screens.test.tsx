@@ -137,13 +137,31 @@ describe('Guided steps', () => {
 		expect(html).toContain('confirm-no');
 	});
 
-	it('shows one open step with its own confirm label, done steps above and later steps closed', () => {
+	it('shows one step on the page, with the stage before and the next either side of it', () => {
 		const html = render({ phase: 'steps', view: 'grid', entry: e, index: 1, back });
 		expect(html).toContain(`Step 2 of ${e.steps!.length}`);
+		expect(html).toContain('aria-current="step"');
 		expect(html).toContain(e.steps![1]!.confirm_label);
 		expect(html).toContain(e.steps![1]!.text);
-		expect(html).not.toContain(e.steps![2]!.text);
+		expect(html).toContain(`Cleared: step 1, ${e.steps![0]!.name}`);
 		expect(html).toContain(e.steps![2]!.name);
+		expect(html).not.toContain(e.steps![2]!.text);
+		if (e.steps!.length > 3) expect(html).not.toContain(e.steps![3]!.name);
+		expect(html).toContain('More about this step');
+		expect(html).toContain('Back');
+	});
+
+	it('marks the ends: Start before the first step, Finish after the last', () => {
+		const n = e.steps!.length;
+		expect(render({ phase: 'steps', view: 'grid', entry: e, index: 0, back })).toContain('Start');
+		expect(render({ phase: 'steps', view: 'grid', entry: e, index: n - 1, back })).toContain('Finish');
+	});
+
+	it('ends with every step ticked, and a way through it again', () => {
+		const html = render({ phase: 'done', view: 'grid', entry: e, back });
+		for (const st of e.steps!) expect(html).toContain(`Cleared: </span>${st.name}`);
+		expect(html).toContain('Go through it again');
+		expect(html).toContain('Ask something else');
 	});
 });
 
@@ -256,14 +274,17 @@ describe('Motion and state', () => {
 		expect(html).not.toContain('mx-fill-host');
 	});
 
-	it('shows how far through the steps they are', () => {
+	it('shows how far through the steps they are as three stages, not a bar (taste lab steps-10)', () => {
 		const html = render({ phase: 'steps', view: 'single', entry: e, index: 1, back });
-		expect(html).toContain('role="progressbar"');
-		expect(html).toContain(`aria-valuenow="${Math.round((2 / e.steps!.length) * 100)}"`);
+		expect(html.match(/class="k-trk[ "]/g)).toHaveLength(1);
+		expect(html.match(/<li class="k-trk-/g)).toHaveLength(3);
+		expect(html).not.toContain('role="progressbar"');
 	});
 
-	it('ends with one large tick', () => {
-		expect(render({ phase: 'done', view: 'single', entry: e, back })).toContain('--mx-size:80px');
+	it('ends with a ticked list, not one large tick (taste lab steps-10)', () => {
+		const html = render({ phase: 'done', view: 'single', entry: e, back });
+		expect(html.match(/class="k-checks-d"/g)).toHaveLength(e.steps!.length);
+		expect(html).not.toContain('--mx-size:80px');
 	});
 });
 

@@ -138,6 +138,18 @@ describe('guided steps', () => {
 		expect(next(s, { type: 'BACK' })).toEqual(results);
 	});
 
+	it('goes one step back, leaves from the first step, and returns from the end to the last step', () => {
+		const first = run([{ type: 'START', id: 'sg.moh.gpfirst-emergency-referral' }, { type: 'YES' }], results);
+		const third = run([{ type: 'STEP_DONE' }, { type: 'STEP_DONE' }], first);
+		expect(next(third, { type: 'STEP_BACK' })).toMatchObject({ phase: 'steps', index: 1 });
+		expect(next(first, { type: 'STEP_BACK' })).toEqual(results);
+		const done = run(Array.from({ length: 5 }, () => ({ type: 'STEP_DONE' }) as const), first);
+		expect(done.phase).toBe('done');
+		expect(next(done, { type: 'STEP_BACK' })).toMatchObject({ phase: 'steps', index: 4 });
+		expect(next(done, { type: 'STEPS_AGAIN' })).toMatchObject({ phase: 'steps', index: 0 });
+		expect(next(results, { type: 'STEP_BACK' })).toBe(results);
+	});
+
 	it('does not start steps for an answer card', () => {
 		expect(next(results, { type: 'START', id: 'sg.moh.chas-referral' })).toEqual(results);
 	});

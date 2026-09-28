@@ -189,19 +189,30 @@ describe('Web steps', () => {
 		expect(html).toContain('Not this');
 	});
 
-	it('opens the current step with its source, and folds the far ones', () => {
+	it('opens the current step with its source, and three stages in view', () => {
 		const html = render({ view: 'single', phase: 'web-steps', index: 0, back: answer });
 		expect(html).toContain('Step 1 of 4');
 		expect(html).toContain('Add a Singapore debit card.');
 		expect(html).toContain('Card added');
 		expect(html).toMatch(/href="https:\/\/help\.coinbase\.com\/a"[^>]*>From Coinbase Help · Payment methods/);
-		expect(html).toMatch(/<details class="k-later">.*1 more step/);
+		expect(html).toContain('Start');
+		expect(html).toContain('Start a purchase');
+		expect(html).not.toContain('Review and buy');
 	});
 
-	it('says every step is done at the end', () => {
+	it('names the stage before and marks it cleared', () => {
+		const html = render({ view: 'single', phase: 'web-steps', index: 3, back: answer });
+		expect(html).toMatch(/Cleared: step 3, Review and buy/);
+		expect(html).toContain('Finish');
+		expect(html).not.toContain('Add a payment method');
+	});
+
+	it('ends with every step ticked, and a way through it again', () => {
 		const html = render({ view: 'single', phase: 'web-done', back: answer });
 		expect(html).toContain('That is every step');
 		expect(html).toContain('How to buy Bitcoin on Coinbase');
+		for (const st of answer.result.answer.steps) expect(html).toContain(st.name);
+		expect(html).toContain('Go through it again');
 	});
 });
 

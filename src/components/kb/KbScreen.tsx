@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { ProgressFill, SuccessMark } from '../motion/motion';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { SuccessMark } from '../motion/motion';
 import LiveWaveform from './LiveWaveform';
 import { addressLine, displayName } from '../../lib/places/places';
 import { AREA_LABEL, AREAS, type Area } from '../../lib/kb/areas';
@@ -90,6 +90,18 @@ const WORDS = {
 		readAgain: 'Read again',
 		askElse: 'Ask something else',
 		allDone: 'That is every step',
+		stages: 'Stages',
+		stepBack: 'Back',
+		start: 'Start',
+		finish: 'Finish',
+		clearedGoBack: (i: number, name: string) => `Cleared: step ${i}, ${name}. Go back to it`,
+		nextIs: 'Next: ',
+		clearedIs: 'Cleared: ',
+		cleared: 'Cleared',
+		moreStep: 'More about this step',
+		aboutGuide: 'About this guide',
+		askStep: 'Ask about this step',
+		goAgain: 'Go through it again',
 		allDoneLead: 'You have gone through every step.',
 		notIn: 'Not in Suara yet',
 		tryTopic: 'Try a topic, or ask again.',
@@ -152,8 +164,6 @@ const WORDS = {
 		startWeb: (n: number) => `Start these ${n} ${n === 1 ? 'step' : 'steps'}?`,
 		confirmWeb: 'You confirm each one. You can stop at any time.',
 		answerBack: 'Answer',
-		moreSteps: (n: number) => `${n} more ${n === 1 ? 'step' : 'steps'}`,
-		stepsDone: (n: number) => `${n} steps done`,
 		fromSite: (site: string, title: string) => `From ${site}${title ? ` · ${title}` : ''}`,
 		noReliable: 'I could not find a reliable answer',
 		noReliableLead: 'I searched the web too. Try asking another way, or pick a topic.',
@@ -198,6 +208,18 @@ const WORDS = {
 		readAgain: '再读一次',
 		askElse: '问别的',
 		allDone: '所有步骤都完成了',
+		stages: '步骤',
+		stepBack: '返回',
+		start: '开始',
+		finish: '完成',
+		clearedGoBack: (i: number, name: string) => `已完成：第 ${i} 步，${name}。返回这一步`,
+		nextIs: '下一步：',
+		clearedIs: '已完成：',
+		cleared: '完成了',
+		moreStep: '这一步的详情',
+		aboutGuide: '关于这个指南',
+		askStep: '问这一步',
+		goAgain: '再做一遍',
 		allDoneLead: '您已经完成每一步。',
 		notIn: 'Suara 还没有这个答案',
 		tryTopic: '试试选一个主题，或再问一次。',
@@ -259,8 +281,6 @@ const WORDS = {
 		startWeb: (n: number) => `开始这 ${n} 个步骤？`,
 		confirmWeb: '每一步由您确认，随时可以停下。',
 		answerBack: '答案',
-		moreSteps: (n: number) => `还有 ${n} 步`,
-		stepsDone: (n: number) => `已完成 ${n} 步`,
 		fromSite: (site: string, title: string) => `来自 ${site}${title ? ` · ${title}` : ''}`,
 		noReliable: '找不到可靠的答案',
 		noReliableLead: '我也在网上找过了。请换个方式再问，或选一个主题。',
@@ -390,33 +410,13 @@ function Body(p: BodyProps) {
 		case 'web-steps':
 			return <WebSteps {...p} state={s} />;
 		case 'web-done':
-			return (
-				<>
-					<BackRow {...p} label={p.w.answerBack} />
-					<div className="k-done-mark">
-						<SuccessMark size={80} stroke={4.5} flourish="ripple" label={null} />
-					</div>
-					<h1 className="k-h1">{p.w.allDone}</h1>
-					<p className="k-lead">{s.back.result.answer.title_full}</p>
-					<AskButton {...p} label={p.w.askElse} primary />
-				</>
-			);
+			return <GuideDone {...p} title={s.back.result.answer.title_full} steps={s.back.result.answer.steps} />;
 		case 'confirm':
 			return <Confirm {...p} state={s} />;
 		case 'steps':
 			return <Steps {...p} state={s} />;
 		case 'done':
-			return (
-				<>
-					<BackRow {...p} />
-					<div className="k-done-mark">
-						<SuccessMark size={80} stroke={4.5} flourish="ripple" label={null} />
-					</div>
-					<h1 className="k-h1">{p.w.allDone}</h1>
-					<p className="k-lead">{s.entry.title.full}</p>
-					<AskButton {...p} label={p.w.askElse} primary />
-				</>
-			);
+			return <GuideDone {...p} title={s.entry.title.full} steps={s.entry.steps ?? []} />;
 		case 'notfound':
 			return (
 				<>
@@ -772,9 +772,9 @@ function Places(p: BodyProps & { state: Extract<FlowState, { phase: 'places' }> 
 /** "bedok north" as a person would see it on a card. */
 const titleWords = (text: string) => text.replace(/\b[a-z]/g, (c) => c.toUpperCase());
 
-function BackRow(p: BodyProps & { label?: string }) {
+function BackRow(p: BodyProps & { label?: string; event?: 'BACK' | 'STEP_BACK' }) {
 	return (
-		<button className="k-back" type="button" onClick={() => p.dispatch({ type: 'BACK' })}>
+		<button className="k-back" type="button" onClick={() => p.dispatch({ type: p.event ?? 'BACK' })}>
 			<BackIcon />
 			{p.label ?? p.w.back}
 		</button>
@@ -822,53 +822,276 @@ function Confirm(p: BodyProps & { state: Extract<FlowState, { phase: 'confirm' }
 	);
 }
 
-function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> }) {
-	const e = p.state.entry;
-	const steps = e.steps ?? [];
-	const current = steps[p.state.index]!;
+/*
+ * A guide as a process, Suara's own or from the web: the prototype the owner signed off
+ * (design/guide-steps c9be423, taste lab .taste/steps-10; vault plan
+ * suara-2026-09-29-feature-guide-as-a-process). Three bubbles on top, the stage before,
+ * the one in hand and the next; the step on the whole screen; more in a sheet from below;
+ * Back one step; a ticked list at the end.
+ */
+
+interface GuideStepLine {
+	name: string;
+	text: string;
+	confirm_label: string;
+}
+interface GuideLink {
+	url: string;
+	label: string;
+}
+interface GuideMore {
+	heading?: string;
+	body: string;
+}
+
+/** Long enough to see the button, the bubble and the line say "cleared" before the next step. */
+const CLEAR_MS = 700;
+
+function GuideStep(
+	p: BodyProps & {
+		title: string;
+		steps: readonly GuideStepLine[];
+		index: number;
+		language: EntryLanguage;
+		/** Where this step comes from, shown under it (web steps). */
+		from?: GuideLink | null;
+		/** The sheet: detail sections and the source. */
+		more: readonly GuideMore[];
+		moreLabel?: string;
+		source: GuideLink | null;
+	},
+) {
+	const { steps, index, w } = p;
+	const current = steps[index]!;
+	// Both belong to one step: moving on or back closes the sheet and ends the clearing.
+	const [clearingAt, setClearingAt] = useState<number | null>(null);
+	const [openAt, setOpenAt] = useState<number | null>(null);
+	const clearing = clearingAt === index;
+	const open = openAt === index;
+	// Which way the guide moved, so the step comes in from that side.
+	const at = useRef(index);
+	const dir = useRef<'fwd' | 'bwd'>('fwd');
+	if (at.current !== index) {
+		dir.current = index < at.current ? 'bwd' : 'fwd';
+		at.current = index;
+	}
+	// A step left before its clearing finished must not move the guide on afterwards.
+	const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+	useEffect(() => () => clearTimeout(timer.current), [index]);
+
+	const clear = () => {
+		if (clearing) return;
+		setClearingAt(index);
+		timer.current = setTimeout(() => p.dispatch({ type: 'STEP_DONE' }), CLEAR_MS);
+	};
+
 	return (
 		<>
-			<BackRow {...p} />
-			<div className="k-guide-head">
-				<p className="k-label">{p.w.stepOf(p.state.index + 1, steps.length)}</p>
-				<ProgressFill value={(p.state.index + 1) / steps.length} label={p.w.stepOf(p.state.index + 1, steps.length)} className="k-progress" />
-				<h1 className="k-h1">{e.title.short}</h1>
-			</div>
-			<ol className="k-steps">
-				{steps.map((st, i) =>
-					i === p.state.index ? (
-						<li key={st.position} className="k-step k-step-now">
-							<div className="k-step-row">
-								<span className="k-step-dot" data-state="now">
-									{i + 1}
-								</span>
-								<span className="k-step-name">{st.name}</span>
-							</div>
-							<p className="k-step-text">{current.text}</p>
-							<button className="k-btn k-btn-yes" type="button" onClick={() => p.dispatch({ type: 'STEP_DONE' })}>
-								<CheckIcon />
-								{current.confirm_label}
-							</button>
-							<button className="k-btn k-btn-quiet k-btn-mid" type="button" onClick={() => p.onSay(`${current.name}. ${current.text}`, e.language)}>
-								<SpeakerIcon />
-								{p.w.readAgain}
-							</button>
-						</li>
-					) : (
-						<li key={st.position} className="k-step" data-state={i < p.state.index ? 'done' : 'later'}>
-							<span className="k-step-dot" data-state={i < p.state.index ? 'done' : 'later'}>
-								{i < p.state.index ? <CheckIcon /> : i + 1}
-							</span>
-							<span className="k-step-name">{st.name}</span>
-						</li>
-					),
+			<BackRow {...p} event="STEP_BACK" label={p.w.stepBack} />
+			<p className="k-guide-title">{p.title}</p>
+			<GuideBar w={w} steps={steps} index={index} clearing={clearing} dir={dir.current} onBack={() => p.dispatch({ type: 'STEP_BACK' })} />
+			<div key={index} className={`k-guide-step k-guide-${dir.current}`}>
+				<h1 className="k-h1">{current.name}</h1>
+				<p className="k-guide-text">{current.text}</p>
+				{p.from && (
+					<a className="k-web-from" href={p.from.url} target="_blank" rel="noopener noreferrer">
+						{p.from.label}
+					</a>
 				)}
-			</ol>
-			<a className="k-source k-source-row" href={e.sources[0]?.url} target="_blank" rel="noopener noreferrer">
-				{p.w.from(publisherOf(e))}
-			</a>
-			<AskButton {...p} label={p.w.askElse} />
+				<button className="k-guide-more" type="button" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpenAt(index)}>
+					{w.moreStep}
+					<NextIcon />
+				</button>
+			</div>
+			<div className="k-guide-foot">
+				<button className="k-btn k-btn-primary k-guide-go" type="button" onClick={clear} {...(clearing ? { 'data-cleared': '' } : {})}>
+					<CheckIcon />
+					{clearing ? w.cleared : current.confirm_label}
+				</button>
+				<button className="k-btn k-btn-plain" type="button" onClick={() => p.onSay(`${current.name}. ${current.text}`, p.language)}>
+					<SpeakerIcon />
+					{w.readAgain}
+				</button>
+			</div>
+			<AskButton {...p} label={w.askElse} />
+			{open && <GuideSheet {...p} name={current.name} onClose={() => setOpenAt(null)} />}
 		</>
+	);
+}
+
+/**
+ * Three bubbles, no outlines: the stage before as a grey tick (tap to go back), the one in
+ * hand solid, the next grey. A Start point and a Finish flag fill the ends, so the one in
+ * hand stays in the middle. Names either side in grey words (owner, 2026-09-29).
+ */
+function GuideBar({ w, steps, index, clearing, dir, onBack }: { w: Words; steps: readonly GuideStepLine[]; index: number; clearing: boolean; dir: 'fwd' | 'bwd'; onBack: () => void }) {
+	const before = steps[index - 1];
+	const after = steps[index + 1];
+	return (
+		<ol key={index} className={`k-trk k-guide-${dir}`} aria-label={w.stages} {...(clearing ? { 'data-cleared': '' } : {})}>
+			{before ? (
+				<li className="k-trk-was">
+					<button className="k-trk-back" type="button" onClick={onBack} aria-label={w.clearedGoBack(index, before.name)}>
+						<span className="k-bub">
+							<i>
+								<CheckIcon />
+							</i>
+						</span>
+						<span className="k-trk-lbl">{before.name}</span>
+					</button>
+				</li>
+			) : (
+				<li className="k-trk-start" aria-hidden="true">
+					<span className="k-bub">
+						<i />
+					</span>
+					<span className="k-trk-lbl">{w.start}</span>
+				</li>
+			)}
+			<li className="k-trk-now" aria-current="step">
+				<span className="k-bub" aria-hidden="true">
+					<i>{clearing ? <CheckIcon /> : index + 1}</i>
+				</span>
+				<span className="k-trk-lbl">{w.stepOf(index + 1, steps.length)}</span>
+			</li>
+			{after ? (
+				<li className="k-trk-next">
+					<span className="k-bub" aria-hidden="true">
+						<i>{index + 2}</i>
+					</span>
+					<span className="k-trk-lbl">
+						<span className="k-sr">{w.nextIs}</span>
+						{after.name}
+					</span>
+				</li>
+			) : (
+				<li className="k-trk-next">
+					<span className="k-bub" aria-hidden="true">
+						<i>
+							<FlagIcon />
+						</i>
+					</span>
+					<span className="k-trk-lbl">{w.finish}</span>
+				</li>
+			)}
+		</ol>
+	);
+}
+
+/** More about the step, in a sheet from below: detail, where it comes from, and a question. */
+function GuideSheet(p: BodyProps & { name: string; more: readonly GuideMore[]; moreLabel?: string; source: GuideLink | null; onClose: () => void }) {
+	const close = useRef<HTMLButtonElement>(null);
+	const { onClose } = p;
+	useEffect(() => {
+		close.current?.focus();
+		const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+		document.addEventListener('keydown', esc);
+		return () => document.removeEventListener('keydown', esc);
+	}, [onClose]);
+	return (
+		<>
+			<div className="k-scrim" aria-hidden="true" onClick={p.onClose} />
+			<section className="k-sheet k-guide-sheet" role="dialog" aria-modal="true" aria-labelledby="k-guide-sheet-title">
+				<div className="k-guide-sheet-head">
+					<h2 className="k-guide-sheet-title" id="k-guide-sheet-title">
+						{p.name}
+					</h2>
+					<button ref={close} className="k-guide-x" type="button" aria-label={p.w.close} onClick={p.onClose}>
+						<CrossIcon />
+					</button>
+				</div>
+				{p.more.length > 0 && p.moreLabel && <p className="k-label">{p.moreLabel}</p>}
+				{p.more.map((d) => (
+					<div key={`${d.heading ?? ''}|${d.body}`} className="k-guide-sec">
+						{d.heading && <h3>{d.heading}</h3>}
+						<p>{d.body}</p>
+					</div>
+				))}
+				{p.source && (
+					<a className="k-web-from" href={p.source.url} target="_blank" rel="noopener noreferrer">
+						{p.source.label}
+					</a>
+				)}
+				<button
+					className="k-btn k-btn-quiet k-btn-mid"
+					type="button"
+					disabled={!canSpeak(p.state)}
+					onClick={() => {
+						p.onClose();
+						p.onSpeak();
+					}}
+				>
+					<MicIcon />
+					{p.w.askStep}
+				</button>
+			</section>
+		</>
+	);
+}
+
+/** Every step cleared: a ticked list (taste lab steps-10, over one large tick). */
+function GuideDone(p: BodyProps & { title: string; steps: readonly GuideStepLine[] }) {
+	return (
+		<>
+			<BackRow {...p} event="STEP_BACK" label={p.w.stepBack} />
+			<h1 className="k-h1">{p.w.allDone}</h1>
+			<p className="k-lead">{p.title}</p>
+			<ol className="k-checks">
+				{p.steps.map((st, i) => (
+					<li key={i}>
+						<span className="k-checks-d" aria-hidden="true">
+							<CheckIcon />
+						</span>
+						<span className="k-sr">{p.w.clearedIs}</span>
+						{st.name}
+					</li>
+				))}
+			</ol>
+			<AskButton {...p} label={p.w.askElse} primary />
+			<button className="k-btn k-btn-quiet k-btn-mid" type="button" onClick={() => p.dispatch({ type: 'STEPS_AGAIN' })}>
+				{p.w.goAgain}
+			</button>
+		</>
+	);
+}
+
+function Steps(p: BodyProps & { state: Extract<FlowState, { phase: 'steps' }> }) {
+	const e = p.state.entry;
+	const source = e.sources[0];
+	return (
+		<GuideStep
+			{...p}
+			title={e.title.full}
+			steps={e.steps ?? []}
+			index={p.state.index}
+			language={e.language}
+			// Entries carry detail for the whole guide, not per step, so the sheet says so.
+			more={e.details ?? []}
+			moreLabel={p.w.aboutGuide}
+			source={source ? { url: source.url, label: p.w.from(publisherOf(e)) } : null}
+		/>
+	);
+}
+
+/** Any number of steps from the web, each naming the page it came from. */
+function WebSteps(p: BodyProps & { state: Extract<FlowState, { phase: 'web-steps' }> }) {
+	const { index } = p.state;
+	const { answer: a, language } = p.state.back.result;
+	const url = a.steps[index]!.source_urls[0];
+	const from = url ? sourceFor(url, a.sources) : null;
+	return (
+		<GuideStep
+			{...p}
+			title={a.title_full}
+			steps={a.steps}
+			index={index}
+			language={language}
+			from={from ? { url: from.url, label: p.w.fromSite(from.site, from.title) } : null}
+			// The step names its page on the screen; the sheet holds the answer's cautions.
+			more={a.cautions.map((body) => ({ body }))}
+			moreLabel={p.w.goodToKnow}
+			source={null}
+		/>
 	);
 }
 
@@ -1094,78 +1317,6 @@ function WebConfirm(p: BodyProps & { state: Extract<FlowState, { phase: 'web-con
 	);
 }
 
-/** Any number of steps: the done ones fold into one row, the next two show, the rest fold. */
-function WebSteps(p: BodyProps & { state: Extract<FlowState, { phase: 'web-steps' }> }) {
-	const { index } = p.state;
-	const { answer: a, language } = p.state.back.result;
-	const n = a.steps.length;
-	const current = a.steps[index]!;
-	const from = current.source_urls[0] ? sourceFor(current.source_urls[0], a.sources) : null;
-	const soon = a.steps.slice(index + 1, index + 3);
-	const rest = a.steps.slice(index + 3);
-	const later = (name: string, at: number) => (
-		<li key={at} className="k-step" data-state="later">
-			<span className="k-step-dot" data-state="later">
-				{at + 1}
-			</span>
-			<span className="k-step-name">{name}</span>
-		</li>
-	);
-	return (
-		<>
-			<BackRow {...p} label={p.w.answerBack} />
-			<div className="k-guide-head">
-				<p className="k-label">{p.w.stepOf(index + 1, n)}</p>
-				<ProgressFill value={(index + 1) / n} label={p.w.stepOf(index + 1, n)} className="k-progress" />
-				<h1 className="k-h1">{a.title_short}</h1>
-			</div>
-			<ol className="k-steps">
-				{index > 0 && (
-					<li className="k-step" data-state="done">
-						<span className="k-step-dot" data-state="done">
-							<CheckIcon />
-						</span>
-						<span className="k-step-name">{index === 1 ? a.steps[0]!.name : p.w.stepsDone(index)}</span>
-					</li>
-				)}
-				<li className="k-step k-step-now">
-					<div className="k-step-row">
-						<span className="k-step-dot" data-state="now">
-							{index + 1}
-						</span>
-						<span className="k-step-name">{current.name}</span>
-					</div>
-					<p className="k-step-text">{current.text}</p>
-					{from && (
-						<a className="k-web-from" href={from.url} target="_blank" rel="noopener noreferrer">
-							{p.w.fromSite(from.site, from.title)}
-						</a>
-					)}
-					<button className="k-btn k-btn-yes" type="button" onClick={() => p.dispatch({ type: 'STEP_DONE' })}>
-						<CheckIcon />
-						{current.confirm_label}
-					</button>
-					<button className="k-btn k-btn-quiet k-btn-mid" type="button" onClick={() => p.onSay(`${current.name}. ${current.text}`, language)}>
-						<SpeakerIcon />
-						{p.w.readAgain}
-					</button>
-				</li>
-				{soon.map((st, j) => later(st.name, index + 1 + j))}
-			</ol>
-			{rest.length > 0 && (
-				<details className="k-later">
-					<summary>
-						<span>{p.w.moreSteps(rest.length)}</span>
-						<ChevronIcon />
-					</summary>
-					<ol className="k-steps">{rest.map((st, j) => later(st.name, index + 3 + j))}</ol>
-				</details>
-			)}
-			<AskButton {...p} label={p.w.askElse} />
-		</>
-	);
-}
-
 function AskButton(p: BodyProps & { label: string; primary?: boolean }) {
 	return (
 		<button className={`k-btn ${p.primary ? 'k-btn-primary' : 'k-btn-plain'}`} type="button" onClick={p.onSpeak} disabled={!canSpeak(p.state)}>
@@ -1211,6 +1362,16 @@ const SpeakerIcon = () => (
 const ChevronIcon = () => (
 	<Svg>
 		<path d="m6 9 6 6 6-6" />
+	</Svg>
+);
+const NextIcon = () => (
+	<Svg>
+		<path d="m9 6 6 6-6 6" />
+	</Svg>
+);
+const FlagIcon = () => (
+	<Svg>
+		<path d="M6 21V4M6 4h11l-2.5 4.5L17 13H6" />
 	</Svg>
 );
 const BackIcon = () => (

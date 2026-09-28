@@ -90,6 +90,17 @@ describe('web steps', () => {
 		expect(next(first, { type: 'BACK' })).toBe(answer);
 	});
 
+	it('goes one step back, leaves from the first step, and can go through it again', () => {
+		const answer = shown();
+		const first = run([{ type: 'WEB_START' }, { type: 'YES' }], answer);
+		const second = next(first, { type: 'STEP_DONE' });
+		expect(next(second, { type: 'STEP_BACK' })).toMatchObject({ phase: 'web-steps', index: 0 });
+		expect(next(first, { type: 'STEP_BACK' })).toBe(answer);
+		const done = next(second, { type: 'STEP_DONE' });
+		expect(next(done, { type: 'STEP_BACK' })).toMatchObject({ phase: 'web-steps', index: 1 });
+		expect(next(done, { type: 'STEPS_AGAIN' })).toMatchObject({ phase: 'web-steps', index: 0 });
+	});
+
 	it('has nothing to start on a direct answer', () => {
 		const answer = run([...toWebSearch, { type: 'WEB_ANSWER', answer: guide({ kind: 'answer', answer: 'No.', steps: [] }) }]);
 		expect(next(answer, { type: 'WEB_START' })).toBe(answer);
