@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Suara · a guide, stage by stage (prototype, round 2)</title>
+<title>Suara · a guide, stage by stage (prototype, round 4)</title>
 <!--
   Clickable prototype of the owner's picks in the guided-steps taste lab (.taste/steps-10,
   2026-09-28): numbered bubbles joined by a line (GOV.UK sizes), a cleared stage as a blue tick,
@@ -92,6 +92,24 @@ svg { display: block; flex: none; }
 .sn { font-size: 1rem; font-weight: 700; color: var(--muted); }
 .st { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 1.95rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
 .sx { font-size: 1.2rem; line-height: 1.5; }
+.xp { border: 1px solid var(--line); border-radius: 18px; }
+.xp-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 0 18px; font-size: 1.1rem; font-weight: 700; text-align: left; }
+.xp-h svg { transition: transform .2s cubic-bezier(.15, 1, .3, 1); transform: rotate(90deg); }
+.xp-h[aria-expanded="true"] svg { transform: rotate(-90deg); }
+.xp-b { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s var(--ease); }
+.xp.open .xp-b { grid-template-rows: 1fr; }
+.xp-b > div { overflow: hidden; }
+.xp-in { display: grid; gap: 14px; padding: 0 18px 18px; }
+.about { font-size: 1.15rem; line-height: 1.5; }
+.about b { font-weight: 700; }
+.xp .ask { min-height: 52px; font-size: 1.05rem; }
+.ov-h { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 1.95rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
+.ov-m { font-size: 1.05rem; color: var(--muted); margin-top: -8px; }
+.ov { list-style: none; padding: 0; display: grid; }
+.ov li { position: relative; display: flex; align-items: flex-start; gap: 14px; padding-bottom: 18px; }
+.ov li:not(:last-child)::before { content: ''; position: absolute; left: 19px; top: 34px; bottom: 0; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--skel); }
+.ov .n { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--skel); color: var(--ink); display: grid; place-items: center; font-weight: 700; }
+.ov .t { padding-top: 7px; font-size: 1.15rem; font-weight: 600; line-height: 1.3; }
 .lead { font-size: 1.2rem; line-height: 1.4; font-weight: 700; margin-bottom: -4px; }
 .pts { display: grid; gap: 10px; padding: 0; list-style: none; }
 .pts li { position: relative; padding-left: 26px; font-size: 1.2rem; line-height: 1.45; }
@@ -139,7 +157,7 @@ svg { display: block; flex: none; }
 </head>
 <body>
 <div class="demo">
-	<p>Prototype, round 3: every bubble named by its step; each step in points. Back goes one step back; after going back, a cleared stage ahead takes you forward.</p>
+	<p>Prototype, round 4: the steps before you start; each step in points; "More about this step" opens in place, two sentences at most. Back goes one step back.</p>
 	<div role="group" aria-label="Guide">
 		<button type="button" data-guide="gpfirst" aria-pressed="true">GPFirst · 5 steps</button>
 		<button type="button" data-guide="face" aria-pressed="false">Face verification · 6</button>
@@ -157,7 +175,7 @@ svg { display: block; flex: none; }
 	<div class="scrim" id="scrim"></div>
 	<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true"></section>
 </div>
-<p class="note">GPFirst and face verification are Suara's own guides. "In points" uses only each step's own words, reshaped: a heading that says the one thing to do, then the points, then the button to say it is done (the Cornell shape: cue, notes, summary). "As written now" is the text the app shows today. Their "more information" is the guide's own detail sections where one fits a step; every step also names its source and offers "Ask about this step". The nine-step guide is a sample: the bar shows three stages however long the guide.</p>
+<p class="note">GPFirst and face verification are Suara's own guides. "In points" reshapes each step's own words: a heading that says the one thing to do, the points, then the button to say it is done (Cornell: cue, notes, summary). "More about this step" is at most two sentences, the bottom line first and in bold (BLUF), every fact from MOH's own GPFirst pages as Suara stored them. Face verification has no more from Singpass yet, so its box says so.</p>
 
 <script>
 const IC = {
@@ -173,13 +191,13 @@ const GUIDES = {
 	gpfirst: {
 		title: 'GPFirst: paying less at the emergency department', source: 'Ministry of Health', url: 'https://www.moh.gov.sg/',
 		steps: [
-			{name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', pts: {items: ['Only participating GP clinics give this form.', 'These clinics are near the partner hospitals.']}, ok: 'I have the form',
+			{name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', pts: {items: ['Only participating GP clinics give this form.', 'These clinics are near the partner hospitals.']}, ok: 'I have the form', about: 'Only participating GP clinics near the partner hospitals give this form; MOH’s page has a search for one near you. GPFirst is open to everyone living in Singapore, including PRs and foreigners.',
 				more: [['Who can use it', 'Everyone living in Singapore, including permanent residents and foreigners.']]},
-			{name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', pts: {lead: 'The form must show:', items: ['The referral date', 'The referral time', 'The clinic’s stamp']}, ok: 'All three are there', more: []},
-			{name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', pts: {items: ['Go on the day the form was given.', 'Given between 10pm and midnight? You can go until 2am.']}, ok: 'I am at A&E',
+			{name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', pts: {lead: 'The form must show:', items: ['The referral date', 'The referral time', 'The clinic’s stamp']}, ok: 'All three are there', about: 'GPFirst is only valid with the original form, fully completed and clearly showing all three.', more: []},
+			{name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', pts: {items: ['Go on the day the form was given.', 'Given between 10pm and midnight? You can go until 2am.']}, ok: 'I am at A&E', about: 'GPFirst works only at the A&E of Changi General, Khoo Teck Puat, National University (adults only), Ng Teng Fong, Sengkang General, Singapore General and Tan Tock Seng hospitals. It also works at the Alexandra Hospital Urgent Care Centre.',
 				more: [['Which hospitals', 'Changi General, Khoo Teck Puat, National University (adult A&E only), Ng Teng Fong, Sengkang General, Singapore General and Tan Tock Seng hospitals, and the Alexandra Hospital Urgent Care Centre.']]},
-			{name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', pts: {lead: 'At registration, show:', items: ['The original form, fully completed', 'Your NRIC']}, ok: 'Done', more: []},
-			{name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', pts: {lead: 'Charged separately at A&E:', items: ['Special tests', 'Non-standard medicines']}, ok: 'Understood', more: []},
+			{name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', pts: {lead: 'At registration, show:', items: ['The original form, fully completed', 'Your NRIC']}, ok: 'Done', about: 'Show them at registration, not later. A passport, work permit or foreigner pass counts in place of an NRIC.', more: []},
+			{name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', pts: {lead: 'Charged separately at A&E:', items: ['Special tests', 'Non-standard medicines']}, ok: 'Understood', about: 'These are billed on top of what GPFirst covers. CHAS patients get the GPFirst subsidy too.', more: []},
 		],
 	},
 	face: {
@@ -199,7 +217,7 @@ const GUIDES = {
 			.map((name) => ({name, text: 'A short line says what to do here.', pts: {items: ['A short line says what to do here.']}, ok: 'Done', more: []})),
 	},
 };
-let G = GUIDES.gpfirst, cur = 0, reached = 0, busy = false, side = 'words', form = 'points';
+let G = GUIDES.gpfirst, cur = -1, reached = 0, busy = false, side = 'words', form = 'points';
 const page = document.getElementById('page'), app = document.getElementById('app'), sheet = document.getElementById('sheet');
 
 /** A stage either side of the one in hand: skeleton bars or grey words. The name stays in the page for screen readers. */
@@ -228,6 +246,15 @@ function bar(dir) {
 	return `<ol class="tri ${dir || ''}" aria-label="Stages">${was}${now}${nx}</ol>`;
 }
 
+/** Two sentences at most: the bottom line, then the one detail. Bold only on the bottom line. */
+function aboutHtml(s) {
+	const src = `<p class="src">From ${G.source}${G.url !== '#' ? ` · <a href="${G.url}" target="_blank" rel="noopener">open the page</a>` : ''}</p>`;
+	const ask = `<button class="ask" type="button">${IC.mic}Ask about this step</button>`;
+	if (!s.about) return `<p class="about">${G.source} says nothing more about this step.</p>${src}${ask}`;
+	const [first, ...rest] = s.about.split(/(?<=\.)\s+/);
+	return `<p class="about"><b>${first}</b>${rest.length ? ' ' + rest.join(' ') : ''}</p>${src}${ask}`;
+}
+
 function stepHtml(i, cls) {
 	const s = G.steps[i];
 	const one = s.pts.items.length === 1 && !s.pts.lead;
@@ -235,10 +262,22 @@ function stepHtml(i, cls) {
 		: one ? `<p class="sx">${s.pts.items[0]}</p>`
 		: `${s.pts.lead ? `<p class="lead">${s.pts.lead}</p>` : ''}<ul class="pts">${s.pts.items.map((t) => `<li>${t}</li>`).join('')}</ul>`;
 	return `<div class="step ${cls}"><h1 class="st">${s.name}</h1>${body}
-		<button class="more" type="button" aria-expanded="false" aria-controls="sheet">More about this step ${IC.chev}</button></div>`;
+		<div class="xp"><button class="xp-h" type="button" aria-expanded="false" aria-controls="xp-b">More about this step ${IC.chev}</button>
+			<div class="xp-b" id="xp-b" role="region" aria-label="More about this step"><div><div class="xp-in">${aboutHtml(s)}</div></div></div></div></div>`;
+}
+
+function overview() {
+	page.innerHTML = `<button class="back" type="button" id="ovBack">${IC.back}Back</button>
+		<div class="fin"><h1 class="ov-h">${G.title}</h1><p class="ov-m">${G.steps.length} steps · from ${G.source}</p>
+		<ol class="ov" aria-label="The steps">${G.steps.map((s, i) => `<li><span class="n" aria-hidden="true">${i + 1}</span><span class="t">${s.name}</span></li>`).join('')}</ol></div>
+		<div class="foot"><button class="primary" type="button" id="begin">Start the guide</button>
+		<button class="hear" type="button">${IC.spk}Read the steps</button></div>`;
+	page.querySelector('#begin').addEventListener('click', () => { cur = 0; render('fwd'); });
+	page.querySelector('#ovBack').addEventListener('click', exit);
 }
 
 function render(dir) {
+	if (cur < 0) return overview();
 	if (cur >= G.steps.length) return finish();
 	const s = G.steps[cur];
 	page.innerHTML = `<button class="back" type="button" data-back>${IC.back}Back</button><p class="gt">${G.title}</p><div id="bar">${bar(dir)}</div>
@@ -250,7 +289,10 @@ function render(dir) {
 
 function wire() {
 	page.querySelector('#go')?.addEventListener('click', clear);
-	page.querySelector('.more')?.addEventListener('click', openSheet);
+	page.querySelector('.xp-h')?.addEventListener('click', (e) => {
+		const b = e.currentTarget, open = b.getAttribute('aria-expanded') !== 'true';
+		b.setAttribute('aria-expanded', String(open)); b.closest('.xp').classList.toggle('open', open);
+	});
 	page.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', back));
 	page.querySelectorAll('[data-fwd]').forEach((b) => b.addEventListener('click', () => { if (busy) return; cur += 1; render('fwd'); }));
 }
@@ -270,7 +312,7 @@ function clear() {
 /** One step back. From the first step, Back leaves the guide. */
 function back() {
 	if (busy) return;
-	if (cur === 0) return exit();
+	if (cur === 0) { cur = -1; return overview(); }
 	busy = true;
 	page.querySelector('.step')?.classList.add('out-r');
 	setTimeout(() => { cur -= 1; busy = false; render('bwd'); }, 280);
@@ -278,9 +320,9 @@ function back() {
 
 function exit() {
 	closeSheet();
-	page.innerHTML = `<div class="stub"><p>Back on the answer. The guide remembers where you stopped: step ${Math.min(cur, G.steps.length - 1) + 1} of ${G.steps.length}.</p>
+	page.innerHTML = `<div class="stub"><p>Back on the answer. The guide remembers where you stopped: step ${Math.max(0, Math.min(cur, G.steps.length - 1)) + 1} of ${G.steps.length}.</p>
 		<button class="primary" type="button" id="resume">Carry on with the guide</button></div>`;
-	page.querySelector('#resume').addEventListener('click', () => render());
+	page.querySelector('#resume').addEventListener('click', () => { if (cur < 0) cur = -1; render(); });
 }
 
 function openSheet() {
@@ -314,7 +356,7 @@ const group = (attr, set) => document.querySelectorAll(`[${attr}]`).forEach((b) 
 	document.querySelectorAll(`[${attr}]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
 	set(b.getAttribute(attr)); closeSheet(); render();
 }));
-group('data-guide', (v) => { G = GUIDES[v]; cur = 0; reached = 0; });
+group('data-guide', (v) => { G = GUIDES[v]; cur = -1; reached = 0; });
 group('data-form', (v) => { form = v; });
 render();
 </script>
