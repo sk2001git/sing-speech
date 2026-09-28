@@ -1,0 +1,419 @@
+{
+  "state": {
+    "v": 1,
+    "lab": "suara-steps-8",
+    "rounds": 8,
+    "mode": "explore",
+    "post": {
+      "tracker": {
+        "numbers": [
+          5,
+          1
+        ],
+        "named": [
+          1,
+          2
+        ],
+        "dots": [
+          1,
+          2
+        ]
+      },
+      "done": {
+        "black": [
+          1,
+          2
+        ],
+        "blue": [
+          3,
+          1
+        ],
+        "green": [
+          1,
+          2
+        ]
+      },
+      "layout": {
+        "card": [
+          1,
+          2
+        ],
+        "list": [
+          1,
+          2
+        ],
+        "page": [
+          3,
+          1
+        ]
+      },
+      "more": {
+        "expand": [
+          3,
+          2
+        ],
+        "panel": [
+          1,
+          2
+        ],
+        "sheet": [
+          3,
+          1
+        ]
+      },
+      "button": {
+        "wide": [
+          3,
+          1
+        ],
+        "tick": [
+          1,
+          2
+        ],
+        "split": [
+          1,
+          2
+        ]
+      },
+      "clear": {
+        "fill": [
+          3,
+          1
+        ],
+        "stamp": [
+          1,
+          2
+        ],
+        "collapse": [
+          1,
+          2
+        ]
+      },
+      "long": {
+        "shrink": [
+          1,
+          2
+        ],
+        "window": [
+          3,
+          1
+        ],
+        "seg": [
+          1,
+          2
+        ]
+      },
+      "finish": {
+        "tracker": [
+          1,
+          2
+        ],
+        "checks": [
+          3,
+          1
+        ],
+        "big": [
+          1,
+          2
+        ]
+      }
+    },
+    "history": [
+      {
+        "t": 1790608938568,
+        "mode": "choose",
+        "gene": "tracker",
+        "scene": "step",
+        "shown": [
+          "named",
+          "numbers",
+          "dots"
+        ],
+        "best": "numbers",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790608959762,
+        "mode": "choose",
+        "gene": "done",
+        "scene": "step",
+        "shown": [
+          "black",
+          "green",
+          "blue"
+        ],
+        "best": "blue",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790608972338,
+        "mode": "choose",
+        "gene": "layout",
+        "scene": "step",
+        "shown": [
+          "list",
+          "card",
+          "page"
+        ],
+        "best": "page",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790608983965,
+        "mode": "choose",
+        "gene": "more",
+        "scene": "more",
+        "shown": [
+          "expand",
+          "panel",
+          "sheet"
+        ],
+        "best": "sheet",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790608992064,
+        "mode": "choose",
+        "gene": "button",
+        "scene": "step",
+        "shown": [
+          "wide",
+          "tick",
+          "split"
+        ],
+        "best": "wide",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790609030526,
+        "mode": "choose",
+        "gene": "clear",
+        "scene": "clearing",
+        "shown": [
+          "stamp",
+          "collapse",
+          "fill"
+        ],
+        "best": "fill",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790609041060,
+        "mode": "choose",
+        "gene": "long",
+        "scene": "long",
+        "shown": [
+          "shrink",
+          "seg",
+          "window"
+        ],
+        "best": "window",
+        "worst": null,
+        "pick": "best"
+      },
+      {
+        "t": 1790609054163,
+        "mode": "choose",
+        "gene": "finish",
+        "scene": "finish",
+        "shown": [
+          "checks",
+          "big",
+          "tracker"
+        ],
+        "best": "checks",
+        "worst": null,
+        "pick": "best"
+      }
+    ],
+    "order": null,
+    "idx": 0,
+    "lastGene": "finish"
+  },
+  "summary": {
+    "lab": "suara-steps-8",
+    "rounds": 8,
+    "neitherRate": 0,
+    "favourite": {
+      "tracker": {
+        "choice": "numbers",
+        "name": "Numbered bubbles, joined",
+        "status": "leaning",
+        "source": {
+          "name": "GOV.UK step by step",
+          "url": "https://github.com/alphagov/govuk_publishing_components/blob/main/app/assets/stylesheets/govuk_publishing_components/components/_step-by-step-nav.scss"
+        }
+      },
+      "done": {
+        "choice": "blue",
+        "name": "Blue tick",
+        "status": "leaning",
+        "hex": "#007AFF"
+      },
+      "layout": {
+        "choice": "page",
+        "name": "The whole screen, no card",
+        "status": "leaning",
+        "source": "Generated: the extreme"
+      },
+      "more": {
+        "choice": "sheet",
+        "name": "A sheet from below",
+        "status": "leaning"
+      },
+      "button": {
+        "choice": "wide",
+        "name": "One wide black button",
+        "status": "leaning",
+        "source": "Current Suara"
+      },
+      "clear": {
+        "choice": "fill",
+        "name": "The line runs on to the next",
+        "status": "leaning"
+      },
+      "long": {
+        "choice": "window",
+        "name": "Nearby bubbles and \"\u2026\"",
+        "status": "leaning",
+        "source": {
+          "name": "Ant Design Steps, maxCount",
+          "url": "https://github.com/ant-design/ant-design/blob/master/components/steps/index.tsx"
+        }
+      },
+      "finish": {
+        "choice": "checks",
+        "name": "A ticked list",
+        "status": "leaning",
+        "source": {
+          "name": "GOV.UK task list",
+          "url": "https://design-system.service.gov.uk/patterns/complete-multiple-tasks/"
+        }
+      }
+    },
+    "posteriors": {
+      "tracker": {
+        "numbers": {
+          "winRate": 0.833,
+          "seen": 2
+        },
+        "named": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "dots": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "done": {
+        "black": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "blue": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "green": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "layout": {
+        "card": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "list": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "page": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "more": {
+        "expand": {
+          "winRate": 0.6,
+          "seen": 1
+        },
+        "panel": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "sheet": {
+          "winRate": 0.75,
+          "seen": 2
+        }
+      },
+      "button": {
+        "wide": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "tick": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "split": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "clear": {
+        "fill": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "stamp": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "collapse": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "long": {
+        "shrink": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "window": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "seg": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      },
+      "finish": {
+        "tracker": {
+          "winRate": 0.333,
+          "seen": 1
+        },
+        "checks": {
+          "winRate": 0.75,
+          "seen": 2
+        },
+        "big": {
+          "winRate": 0.333,
+          "seen": 1
+        }
+      }
+    },
+    "recentDecisive": [],
+    "consistency": {},
+    "notes": []
+  },
+  "updatedAt": "2026-09-28T15:24:14.163Z"
+}

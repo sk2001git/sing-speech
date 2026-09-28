@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suara · a guide, stage by stage (prototype)</title>
+<!--
+  Clickable prototype of the owner's picks in the guided-steps taste lab (.taste/steps-10,
+  2026-09-28): numbered bubbles joined by a line (GOV.UK sizes), a cleared stage as a blue tick,
+  the step on the whole screen (no card), more information in a sheet from below, one wide black
+  button, the line running on to the next bubble when a stage clears, nearby bubbles and "..." for
+  long guides (Ant Design maxCount), and a ticked list at the end (GOV.UK task list).
+  Accessibility from the research (vault obs-0072): an <ol> with aria-current="step", a tick and
+  hidden "Cleared" text on every cleared stage (never colour alone), aria-expanded on the sheet link.
+-->
+<style>
+@font-face { font-family: 'Atkinson Hyperlegible Next'; src: url('../../public/fonts/atkinson-hyperlegible-next-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+:root {
+  --ink: #1d1d1f; --muted: #5f5f64; --line: #e5e5ea; --line-strong: #c7c7cc; --subtle: #f5f5f7;
+  --blue: #007aff; --r: 20px; --pad: clamp(18px, 5vw, 28px); --col: 520px; --node: 34px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: 'Atkinson Hyperlegible Next', system-ui, sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+svg { display: block; flex: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Prototype controls, outside the phone */
+.demo { max-width: var(--col); margin: 16px auto 0; padding: 0 var(--pad); display: grid; gap: 8px; }
+.demo p { font-size: .85rem; color: var(--muted); }
+.demo div { display: flex; gap: 8px; flex-wrap: wrap; }
+.demo button { min-height: 40px; padding: 0 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); font-size: .9rem; font-weight: 600; }
+.demo button[aria-pressed="true"] { background: #000; color: #fff; box-shadow: none; }
+
+.app { max-width: var(--col); margin: 12px auto 24px; min-height: 760px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+@media (min-width: 720px) { body { background: var(--subtle); } .app { border-radius: 32px; background: #fff; box-shadow: 0 0 0 1px var(--line); } }
+.top { display: flex; align-items: center; gap: 10px; padding: 14px var(--pad) 8px; }
+.mk { width: 40px; height: 40px; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; }
+.nm { font-size: 1.3rem; font-weight: 700; letter-spacing: -.02em; margin-right: auto; }
+.lang { display: grid; place-items: center; min-height: 40px; padding: 0 14px; border-radius: 999px; background: var(--subtle); font-size: .95rem; font-weight: 600; }
+.page { flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 6px var(--pad) calc(24px + env(safe-area-inset-bottom)); }
+.back { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: 1.05rem; font-weight: 600; color: var(--muted); width: max-content; }
+.gt { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-top: -6px; }
+
+/* The bar: numbered bubbles joined by a line */
+.trk { list-style: none; padding: 6px 2px 0; display: flex; align-items: center; }
+.trk li:not(.link):not(.gap) { display: contents; }
+.node { width: var(--node); height: var(--node); border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 1rem; font-weight: 700;
+  background: #fff; color: var(--muted); box-shadow: inset 0 0 0 2px var(--line-strong); transition: background .3s, box-shadow .3s, color .3s, transform .3s var(--ease); }
+.node svg { width: 19px; height: 19px; }
+.node[data-s="done"] { background: var(--blue); color: #fff; box-shadow: none; }
+.node[data-s="done"]:hover { transform: scale(1.06); }
+.node[data-s="now"] { color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink), 0 0 0 6px rgb(0 0 0 / 7%); transform: scale(1.12); }
+.node:disabled { cursor: default; }
+.link { flex: 1; height: 3px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; min-width: 6px; }
+.link i { position: absolute; inset: 0; background: var(--blue); transform-origin: left; transform: scaleX(var(--f, 0)); transition: transform .5s var(--ease); }
+.gap { flex: none; width: 22px; text-align: center; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
+.cap { display: flex; justify-content: space-between; gap: 12px; font-size: 1rem; color: var(--muted); margin-top: -6px; }
+.cap b { color: var(--ink); }
+
+/* The step, on the whole screen */
+.stage { display: grid; }
+.stage > .step { grid-area: 1 / 1; display: grid; gap: 14px; align-content: start; }
+.step.out { opacity: 0; transform: translateX(-28px); transition: opacity .35s var(--ease), transform .35s var(--ease); }
+.step.in { animation: in .45s var(--ease) .12s both; }
+@keyframes in { from { opacity: 0; transform: translateX(28px); } }
+.sn { font-size: 1rem; font-weight: 700; color: var(--muted); }
+.st { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 1.95rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
+.sx { font-size: 1.2rem; line-height: 1.5; }
+.more { display: inline-flex; align-items: center; gap: 6px; min-height: 48px; font-size: 1.1rem; font-weight: 700; color: var(--blue); width: max-content; }
+.foot { margin-top: auto; display: grid; gap: 6px; }
+.go { position: relative; overflow: hidden; min-height: 60px; border-radius: 999px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.15rem; font-weight: 700; }
+.go svg { width: 22px; height: 22px; }
+.go .ok { position: absolute; inset: 0; background: var(--blue); display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity .2s; }
+.go.pressed .ok { opacity: 1; }
+.hear { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; font-size: 1.05rem; font-weight: 600; color: var(--muted); }
+
+/* More information: a sheet from below */
+.scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 30%); opacity: 0; pointer-events: none; transition: opacity .35s; z-index: 4; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; max-height: 78%; overflow: auto; background: #fff; border-radius: 26px 26px 0 0;
+  box-shadow: 0 -12px 34px rgb(0 0 0 / 18%); padding: 10px var(--pad) calc(24px + env(safe-area-inset-bottom)); display: grid; gap: 16px;
+  transform: translateY(105%); transition: transform .42s var(--ease); }
+.open .scrim { opacity: 1; pointer-events: auto; }
+.open .sheet { transform: none; }
+.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line-strong); justify-self: center; }
+.sh { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.sh h2 { font-size: 1.35rem; letter-spacing: -.02em; line-height: 1.2; }
+.x { width: 44px; height: 44px; border-radius: 50%; background: var(--subtle); display: grid; place-items: center; flex: none; }
+.sec h3 { font-size: .95rem; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+.sec p { font-size: 1.1rem; line-height: 1.5; }
+.src { font-size: 1rem; color: var(--muted); }
+.src a { color: inherit; }
+.ask { min-height: 56px; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--line-strong); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; font-weight: 700; }
+
+/* Every stage cleared: a ticked list */
+.fin { display: grid; gap: 14px; animation: in .45s var(--ease) both; }
+.fin h1 { font-size: 1.9rem; letter-spacing: -.025em; line-height: 1.15; }
+.fin p { font-size: 1.1rem; color: var(--muted); line-height: 1.45; }
+.checks { list-style: none; padding: 0; display: grid; }
+.checks li { display: flex; align-items: center; gap: 12px; min-height: 56px; border-bottom: 1px solid var(--line); font-size: 1.1rem; font-weight: 600; }
+.checks .d { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; }
+.checks .d svg { width: 16px; height: 16px; }
+.again { min-height: 56px; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--line-strong); font-size: 1.1rem; font-weight: 700; }
+.primary { min-height: 60px; border-radius: 999px; background: #000; color: #fff; font-size: 1.15rem; font-weight: 700; }
+.note { max-width: var(--col); margin: 0 auto 40px; padding: 0 var(--pad); font-size: .9rem; color: var(--muted); line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="demo">
+	<p>Prototype: pick a guide, then tap through it. Tap a blue bubble to go back to that stage.</p>
+	<div role="group" aria-label="Guide">
+		<button type="button" data-guide="gpfirst" aria-pressed="true">GPFirst · 5 steps</button>
+		<button type="button" data-guide="face" aria-pressed="false">Face verification · 6</button>
+		<button type="button" data-guide="long" aria-pressed="false">A long guide · 9 (sample)</button>
+	</div>
+</div>
+
+<div class="app" id="app">
+	<div class="top"><span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg></span><span class="nm">Suara</span><span class="lang">English</span></div>
+	<main class="page" id="page"></main>
+	<div class="scrim" id="scrim"></div>
+	<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true"></section>
+</div>
+<p class="note">GPFirst and face verification are Suara's own guides, word for word. Their "more information" is the guide's own detail sections where one fits a step; every step also names its source and offers "Ask about this step". The nine-step guide is a sample to show the bar folding.</p>
+
+<script>
+const IC = {
+	tick: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12.5l4 4 8-9"/></svg>',
+	chev: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+	back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>',
+	spk: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>',
+	x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+	mic: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
+};
+const GUIDES = {
+	gpfirst: {
+		title: 'GPFirst: paying less at the emergency department', source: 'Ministry of Health', url: 'https://www.moh.gov.sg/',
+		steps: [
+			{name: 'Get the form from your doctor', text: 'Only participating GP clinics near the partner hospitals give a GPFirst referral form.', ok: 'I have the form',
+				more: [['Who can use it', 'Everyone living in Singapore, including permanent residents and foreigners.']]},
+			{name: 'Check date, time, stamp', text: 'The form must show the referral date, the referral time and the clinic’s stamp.', ok: 'All three are there', more: []},
+			{name: 'Go to A&E the same day', text: 'Go the same day. If the form was given between 10pm and midnight, you can go until 2am.', ok: 'I am at A&E',
+				more: [['Which hospitals', 'Changi General, Khoo Teck Puat, National University (adult A&E only), Ng Teng Fong, Sengkang General, Singapore General and Tan Tock Seng hospitals, and the Alexandra Hospital Urgent Care Centre.']]},
+			{name: 'Show the form and your NRIC', text: 'At registration, show the original, fully completed form together with your NRIC.', ok: 'Done', more: []},
+			{name: 'Extra tests cost extra', text: 'Special tests or non-standard medicines at A&E are charged separately.', ok: 'Understood', more: []},
+		],
+	},
+	face: {
+		title: 'Improving face verification', source: 'Singpass', url: 'https://www.singpass.gov.sg/',
+		steps: [
+			{name: 'Uncover your face', text: 'Make sure your face is not covered before scanning.', ok: 'My face is uncovered', more: []},
+			{name: 'Keep still', text: 'Keep still while the scan is in progress.', ok: 'I am staying still', more: []},
+			{name: 'Improve the lighting', text: 'Use an environment that is not too dark, and avoid strong lighting behind you.', ok: 'My lighting is better', more: []},
+			{name: 'Check the background', text: 'Make sure there is no strong lighting in the background.', ok: 'My background is clear', more: []},
+			{name: 'Check the camera', text: 'Use a camera with a minimum resolution of two megapixels. If you are using a laptop, try again with a mobile phone that has a better camera.', ok: 'I checked my camera', more: []},
+			{name: 'Contact Singpass', text: 'If verification still fails, contact the Singpass Helpdesk directly.', ok: 'I contacted Singpass', more: []},
+		],
+	},
+	long: {
+		title: 'Renewing a passport (sample)', source: 'Sample', url: '#',
+		steps: ['Check you can renew', 'Get a photo taken', 'Sign in with Singpass', 'Fill in the form', 'Upload the photo', 'Pay the fee', 'Wait for the SMS', 'Book a collection slot', 'Collect it']
+			.map((name) => ({name, text: 'A short line says what to do here.', ok: 'Done', more: []})),
+	},
+};
+const FOLD_OVER = 6; // more stages than this, and the bar shows nearby bubbles and "..."
+
+let G = GUIDES.gpfirst, cur = 0, busy = false;
+const page = document.getElementById('page'), app = document.getElementById('app'), sheet = document.getElementById('sheet');
+
+function bar() {
+	const n = G.steps.length;
+	let idx = [...Array(n).keys()], lead = false, tail = false;
+	if (n > FOLD_OVER) {
+		// Two either side of the stage in hand, the rest folded into "..." (Ant Design maxCount).
+		const a = Math.max(0, Math.min(cur - 2, n - 5)), b = Math.min(n, a + 5);
+		idx = idx.slice(a, b); lead = a > 0; tail = b < n;
+	}
+	const node = (i) => {
+		const s = i < cur ? 'done' : i === cur ? 'now' : 'later';
+		const label = `${s === 'done' ? 'Cleared: ' : s === 'now' ? 'Now: ' : ''}step ${i + 1}, ${G.steps[i].name}`;
+		return `<li${s === 'now' ? ' aria-current="step"' : ''}><button class="node" data-s="${s}" data-i="${i}" aria-label="${label}"${s === 'done' ? '' : ' disabled'}>${s === 'done' ? IC.tick : i + 1}</button></li>`;
+	};
+	const link = (i) => `<li aria-hidden="true" class="link"><i style="--f:${i < cur ? 1 : 0}"></i></li>`;
+	let html = lead ? '<li aria-hidden="true" class="gap">…</li>' : '';
+	idx.forEach((i, k) => { html += node(i) + (k < idx.length - 1 ? link(i) : ''); });
+	if (tail) html += '<li aria-hidden="true" class="gap">…</li>';
+	return `<ol class="trk" aria-label="Stages">${html}</ol>`;
+}
+
+function stepHtml(i) {
+	const s = G.steps[i];
+	return `<div class="step in"><p class="sn">Step ${i + 1} of ${G.steps.length}</p><h1 class="st">${s.name}</h1><p class="sx">${s.text}</p>
+		<button class="more" type="button" aria-expanded="false" aria-controls="sheet">More about this step ${IC.chev}</button></div>`;
+}
+
+function render() {
+	if (cur >= G.steps.length) return finish();
+	const s = G.steps[cur];
+	page.innerHTML = `<button class="back" type="button">${IC.back}Back</button><p class="gt">${G.title}</p><div id="bar">${bar()}</div>
+		<div class="stage" id="stage">${stepHtml(cur)}</div>
+		<div class="foot"><button class="go" type="button" id="go">${IC.tick}<span>${s.ok}</span><span class="ok">${IC.tick}Cleared</span></button>
+		<button class="hear" type="button">${IC.spk}Read it again</button></div>`;
+	wire();
+}
+
+function wire() {
+	page.querySelector('#go')?.addEventListener('click', clear);
+	page.querySelector('.more')?.addEventListener('click', openSheet);
+	page.querySelectorAll('.node[data-s="done"]').forEach((b) => b.addEventListener('click', () => { if (!busy) { cur = +b.dataset.i; render(); } }));
+}
+
+/** The stage clears: the button says so, the bubble takes a blue tick, the line runs on, the next step comes in. */
+function clear() {
+	if (busy) return; busy = true;
+	const go = page.querySelector('#go'); go.classList.add('pressed');
+	setTimeout(() => {
+		const n = page.querySelector(`.node[data-i="${cur}"]`);
+		if (n) { n.dataset.s = 'done'; n.innerHTML = IC.tick; }
+		const links = page.querySelectorAll('.link i'); const k = [...page.querySelectorAll('.node')].indexOf(n);
+		if (links[k]) links[k].style.setProperty('--f', 1);
+		const next = page.querySelector(`.node[data-i="${cur + 1}"]`); if (next) { next.dataset.s = 'now'; }
+	}, 350);
+	setTimeout(() => page.querySelector('.step')?.classList.add('out'), 700);
+	setTimeout(() => { cur += 1; busy = false; render(); }, 1050);
+}
+
+function openSheet() {
+	const s = G.steps[cur];
+	sheet.innerHTML = `<span class="grab"></span><div class="sh"><h2 id="sheetTitle">${s.name}</h2><button class="x" type="button" aria-label="Close">${IC.x}</button></div>
+		${s.more.map(([h, b]) => `<div class="sec"><h3>${h}</h3><p>${b}</p></div>`).join('')}
+		<p class="src">From ${G.source}${G.url !== '#' ? ` · <a href="${G.url}" target="_blank" rel="noopener">open the page</a>` : ''}</p>
+		<button class="ask" type="button">${IC.mic}Ask about this step</button>`;
+	app.classList.add('open'); sheet.setAttribute('aria-hidden', 'false');
+	page.querySelector('.more')?.setAttribute('aria-expanded', 'true');
+	sheet.querySelector('.x').addEventListener('click', closeSheet);
+	sheet.querySelector('.x').focus();
+}
+function closeSheet() {
+	app.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true');
+	const m = page.querySelector('.more'); m?.setAttribute('aria-expanded', 'false'); m?.focus();
+}
+document.getElementById('scrim').addEventListener('click', closeSheet);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
+
+function finish() {
+	page.innerHTML = `<button class="back" type="button">${IC.back}Back</button><div class="fin"><h1>Every step done</h1><p>${G.title}</p>
+		<ol class="checks">${G.steps.map((s) => `<li><span class="d">${IC.tick}</span><span class="sr">Cleared: </span>${s.name}</li>`).join('')}</ol></div>
+		<div class="foot"><button class="primary" type="button">Ask something else</button><button class="again" type="button" id="again">Go through it again</button></div>`;
+	page.querySelector('#again').addEventListener('click', () => { cur = 0; render(); });
+}
+
+document.querySelectorAll('[data-guide]').forEach((b) => b.addEventListener('click', () => {
+	document.querySelectorAll('[data-guide]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+	G = GUIDES[b.dataset.guide]; cur = 0; closeSheet(); render();
+}));
+render();
+</script>
+</body>
+</html>

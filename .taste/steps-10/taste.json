@@ -1,0 +1,17 @@
+{
+  "lab": "suara-steps-8",
+  "date": "2026-09-28",
+  "method": "taste-discovery 0.3, one screen per decision, three options, one pick each, no repeats (owner's limits). One pick is a direct choice, not a settled estimate.",
+  "prototype": "design/guide-steps/index.html",
+  "choices": {
+    "tracker": {"choice": "numbers", "name": "Numbered bubbles, joined by a line", "status": "picked", "over": ["named", "dots"], "source": "GOV.UK step by step (30 px circles); lines 3 px for older readers"},
+    "done":    {"choice": "blue", "name": "Blue tick", "hex": "#007AFF", "status": "picked", "over": ["black", "green"]},
+    "layout":  {"choice": "page", "name": "The whole screen, no card", "status": "picked", "over": ["card", "list"], "source": "Generated: the extreme"},
+    "more":    {"choice": "sheet", "name": "A sheet from below", "status": "picked", "over": ["expand", "panel"], "note": "Overturned the prior from the owner's words ('confluence like drop box')."},
+    "button":  {"choice": "wide", "name": "One wide black button", "status": "picked", "over": ["tick", "split"], "source": "Current Suara"},
+    "clear":   {"choice": "fill", "name": "The bubble takes a tick and the line runs on to the next", "status": "picked", "over": ["stamp", "collapse"]},
+    "long":    {"choice": "window", "name": "Nearby bubbles and '...' beyond six stages", "status": "picked", "over": ["shrink", "seg"], "source": "Ant Design Steps maxCount"},
+    "finish":  {"choice": "checks", "name": "A ticked list", "status": "picked", "over": ["big", "tracker"], "source": "GOV.UK task list"}
+  },
+  "noneOfThese": 0
+}
