@@ -1,6 +1,7 @@
 import { CLOUDFLARE_TEXT_MODEL } from './cloudflare';
 import { OpenAiWsRoute } from './openai-ws';
 import { RouteUnavailable, type HearingRoute } from './types';
+import type { StageTimer } from '../timing';
 
 /**
  * The local route (vault plan-suara-0018): the recording goes to Qwen3-ASR running on this PC
@@ -17,6 +18,7 @@ export interface LocalRouteOptions {
 	/** Where local-asr/server.py listens. */
 	url?: string;
 	fetchImpl?: typeof fetch;
+	timing?: StageTimer;
 }
 
 export function localRoute(opts: LocalRouteOptions): HearingRoute {
@@ -30,6 +32,7 @@ export function localRoute(opts: LocalRouteOptions): HearingRoute {
 		model: CLOUDFLARE_TEXT_MODEL,
 		socket: false,
 		fetchImpl: doFetch,
+		...(opts.timing ? { timing: opts.timing } : {}),
 		transcribe: async (audio, mime, hint) => {
 			let res: Response;
 			try {

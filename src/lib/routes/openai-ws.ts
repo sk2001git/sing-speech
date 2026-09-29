@@ -1,3 +1,4 @@
+import { noTimer, type StageTimer } from '../timing';
 import { Hearing, HEARING_SCHEMA, hearingPrompt } from '../kb/hearing';
 import { RouteUnavailable, type HearingHint, type HearingRoute } from './types';
 
@@ -39,6 +40,8 @@ export interface OpenAiWsOptions {
 	fetchImpl?: typeof fetch;
 	connect?: Connect;
 	timeoutMs?: number;
+	/** Where the transcription and the reading are timed (Server-Timing). */
+	timing?: StageTimer;
 	/** Another route built on this one (the Cloudflare route): its own id, vendor and label. */
 	id?: string;
 	vendor?: string;
@@ -95,7 +98,8 @@ export class OpenAiWsRoute implements HearingRoute {
 		const key = this.opts.apiKey;
 		if (!key) throw new RouteUnavailable(this.id, 'missing-key', 'OPENAI_API_KEY is not set');
 
-		const transcript = this.opts.transcribe ? await this.opts.transcribe(audio, mimeType, hint) : await this.transcribe(key, audio, mimeType);
+		const timing = this.opts.timing ?? noTimer;
+		const transcript = await timing.time('transcribe', () => (this.opts.transcribe ? this.opts.transcribe(audio, mimeType, hint) : this.transcribe(key, audio, mimeType)));
 		if (transcript.trim() === '') throw new RouteUnavailable(this.id, 'nothing-heard', 'the transcript was empty');
 
 		const request = {
@@ -107,17 +111,18 @@ export class OpenAiWsRoute implements HearingRoute {
 			text: { format: { type: 'json_schema', name: 'hearing', strict: true, schema: STRICT_HEARING } },
 		};
 
-		let text: string;
-		try {
-			if (this.opts.socket === false) throw new Error('HTTP only');
-			text = await this.overSocket(key, request);
-		} catch (err) {
-			if (err instanceof RouteUnavailable) throw err;
-			// The socket was refused (the Luna model page lists WebSocket as not supported):
-			// the same payload over HTTP, so the route still serves.
-			if (this.opts.socket !== false) console.warn(`${this.id}: websocket unavailable, using HTTP:`, err instanceof Error ? err.message : err);
-			text = await this.overHttp(key, request);
-		}
+		const text = await timing.time('read', async () => {
+			try {
+				if (this.opts.socket === false) throw new Error('HTTP only');
+				return await this.overSocket(key, request);
+			} catch (err) {
+				if (err instanceof RouteUnavailable) throw err;
+				// The socket was refused (the Luna model page lists WebSocket as not supported):
+				// the same payload over HTTP, so the route still serves.
+				if (this.opts.socket !== false) console.warn(`${this.id}: websocket unavailable, using HTTP:`, err instanceof Error ? err.message : err);
+				return this.overHttp(key, request);
+			}
+		});
 		const reply = JSON.parse(text) as { greeting?: boolean; meaning_en?: string };
 		if (!reply.greeting && !reply.meaning_en?.trim()) throw new RouteUnavailable(this.id, 'nothing-heard', 'no request in the transcript');
 		// What they said is the transcript itself, not the model's retelling of it.

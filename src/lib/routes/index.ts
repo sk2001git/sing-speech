@@ -1,3 +1,4 @@
+import type { StageTimer } from '../timing';
 import { NothingHeard, type Hearing } from '../kb/hearing';
 
 export { NothingHeard } from '../kb/hearing';
@@ -54,14 +55,15 @@ export interface RouteEnv {
 	SUARA_CF_REASONING?: string;
 }
 
-function build(id: ChainRouteId, env: RouteEnv): HearingRoute {
+function build(id: ChainRouteId, env: RouteEnv, timing?: StageTimer): HearingRoute {
+	const timed = timing ? { timing } : {};
 	switch (id) {
 		case 'local':
-			return localRoute({ apiKey: env.OPENAI_API_KEY, ...(env.SUARA_LOCAL_ASR_URL ? { url: env.SUARA_LOCAL_ASR_URL } : {}) });
+			return localRoute({ apiKey: env.OPENAI_API_KEY, ...(env.SUARA_LOCAL_ASR_URL ? { url: env.SUARA_LOCAL_ASR_URL } : {}), ...timed });
 		case 'cloudflare':
-			return cloudflareRoute({ ai: env.AI, apiKey: env.OPENAI_API_KEY, ...(env.SUARA_CF_REASONING === 'low' ? { reasoning: 'low' as const } : {}) });
+			return cloudflareRoute({ ai: env.AI, apiKey: env.OPENAI_API_KEY, ...(env.SUARA_CF_REASONING === 'low' ? { reasoning: 'low' as const } : {}), ...timed });
 		case 'openai-ws':
-			return new OpenAiWsRoute({ apiKey: env.OPENAI_API_KEY, model: env.SUARA_OPENAI_HEAR_MODEL });
+			return new OpenAiWsRoute({ apiKey: env.OPENAI_API_KEY, model: env.SUARA_OPENAI_HEAR_MODEL, ...timed });
 		case 'gemini': {
 			const hearer = env.GEMINI_API_KEY ? new GeminiHearer({ apiKey: env.GEMINI_API_KEY, model: env.SUARA_MODEL }) : undefined;
 			return {
@@ -81,11 +83,11 @@ function build(id: ChainRouteId, env: RouteEnv): HearingRoute {
  * The chosen route first, then every other route as failover. A live session that falls
  * back to a recording starts at the OpenAI recording route.
  */
-export function buildRoutes(primary: RouteId, env: RouteEnv): HearingRoute[] {
-	if (primary === 'local') return (['local', 'cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env));
-	if (primary === 'cloudflare') return (['cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env));
+export function buildRoutes(primary: RouteId, env: RouteEnv, timing?: StageTimer): HearingRoute[] {
+	if (primary === 'local') return (['local', 'cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env, timing));
+	if (primary === 'cloudflare') return (['cloudflare', ...HEARING_ROUTE_IDS] as const).map((id) => build(id, env, timing));
 	const first: HearingRouteId = primary === 'openai-live' ? 'openai-ws' : primary;
-	return [first, ...HEARING_ROUTE_IDS.filter((id) => id !== first)].map((id) => build(id, env));
+	return [first, ...HEARING_ROUTE_IDS.filter((id) => id !== first)].map((id) => build(id, env, timing));
 }
 
 export interface Heard {

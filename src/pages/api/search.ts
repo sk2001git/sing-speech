@@ -9,7 +9,8 @@ import { runtimeEnv } from '../../lib/env';
 import { OpenAi } from '../../lib/providers/openai';
 import { buildRoutes, hearVia, resolveRoute } from '../../lib/routes';
 import { writerFor } from '../../lib/routes/write';
-import { openaiJudge } from '../../lib/kb/judge';
+import { openaiJudge, type Judge } from '../../lib/kb/judge';
+import { stageTimer, type StageTimer } from '../../lib/timing';
 import { webAllowed } from '../../lib/kb/web-answer';
 import { guidesFor } from '../../lib/kb/web-guides';
 import { resolveQuestion } from '../../lib/kb/thread';
@@ -53,7 +54,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		if (!env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
 		const openai = new OpenAi({ apiKey: env.OPENAI_API_KEY });
 		const route = resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE);
-		const chain = buildRoutes(route, env);
+		const timing = stageTimer();
+		const chain = buildRoutes(route, env, timing);
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
 		// The Cloudflare route writes and translates with gpt-6-luna alone (plan-suara-0016).
@@ -73,36 +75,37 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const cf = lean && env.AI && vectorize ? { embed: cloudflareEmbed(env.AI), nearest: vectorizeNearest(vectorize, shared.entries.keys(), () => cfWritten) } : null;
 		const deps: SearchDeps = {
 			corpus: cf ? { entries: shared.entries, vectors: cfWritten } : shared,
-			...(cf ? { nearest: cf.nearest } : {}),
+			...(cf ? { nearest: (vector: number[]) => timing.time('nearest', () => cf.nearest(vector)) } : {}),
 			places: loadPlaces(),
 			journeys: loadJourneys(),
-			embed: cf ? cf.embed : async (text, kind) => (await openai.embed(EMBEDDING.model, [kind === 'query' ? queryText(text) : text], EMBEDDING.dimensions))[0]!,
+			embed: (text, kind) => timing.time('embed', async () => (cf ? cf.embed(text, kind) : (await openai.embed(EMBEDDING.model, [kind === 'query' ? queryText(text) : text], EMBEDDING.dimensions))[0]!)),
 			hear: async (audio, mime, hint) => {
 				const heard = await hearVia(chain, audio, mime, hint);
 				served = heard.route;
 				return heard.hearing;
 			},
-			translate: (entry, language) => translateEntry(entry, language, lean ? LUNA_6_TRANSLATORS : DEFAULT_TRANSLATORS, openai.chatJson, new Date().toISOString()),
+			translate: (entry, language) => timing.time('translate', () => translateEntry(entry, language, lean ? LUNA_6_TRANSLATORS : DEFAULT_TRANSLATORS, openai.chatJson, new Date().toISOString())),
 			cache: translations,
 			// Tier B: a question no entry answers is looked up in the crawl and written into a
 			// card by the route's own model, then kept. Grounding decides whether it is shown.
 			// The crawl is a static asset, fetched on the first request that needs it.
 			raw: () => loadRaw(() => crawledQuestions(request, locals)),
-			...(writer ? { write: writer } : {}),
+			...(writer ? { write: (prompt: string) => timing.time('write', () => writer(prompt)) } : {}),
 			// Near is not answered: the six nearest are read, and the web is next if none answers.
 			// Only where there is a web to go to.
-			...(webAllowed(route) ? { judge: openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), guides: guidesFor(env.SUARA_GUIDES, cf ? 'cloudflare' : 'openai') } : {}),
+			...(webAllowed(route) ? { judge: timedJudge(openaiJudge(env.OPENAI_API_KEY, env.SUARA_WEB_MODEL), timing), guides: guidesFor(env.SUARA_GUIDES, cf ? 'cloudflare' : 'openai') } : {}),
 			thresholds: cf ? CF_THRESHOLDS : THRESHOLDS,
 			// A correction's thread, resolved to the one question meant now (lib/kb/thread.ts).
 			// The same model reads a question asked about a step, with the step as context (plan-suara-0020).
-			resolve: (turns, context) => resolveQuestion(turns, { apiKey: env.OPENAI_API_KEY!, ...(context ? { context } : {}) }),
+			resolve: (turns, context) => timing.time('resolve', () => resolveQuestion(turns, { apiKey: env.OPENAI_API_KEY!, ...(context ? { context } : {}) })),
 			// MOH's A&E ward-bed waits (plan-suara-0017): KV's copy, else MOH, else the built-in one.
 			edWait: () => loadEdWait({ kv: env.SUARA_GUIDES, snapshot: edWaitSnapshot as EdWaitChart, ...(ctx?.waitUntil ? { waitUntil: (p) => ctx.waitUntil!(p) } : {}) }),
 			translateBudgetMs: 4000,
 			now: () => new Date().toISOString(),
 			...(ctx?.waitUntil ? { waitUntil: (p) => ctx.waitUntil!(p) } : {}),
 		};
-		return json({ ...(await runSearch(parsed, deps)), ...(served ? { route: served } : {}) });
+		const reply = await timing.time('total', () => runSearch(parsed, deps));
+		return json({ ...reply, ...(served ? { route: served } : {}) }, 200, { 'server-timing': timing.header() });
 	} catch (err) {
 		// Nothing about the person reaches the log: no audio, no query text.
 		console.error('search failed:', err instanceof Error ? err.message.slice(0, 200) : err);
@@ -126,6 +129,11 @@ async function crawledQuestions(request: Request, locals: unknown): Promise<{ qu
 	return (await res.json()) as { questions: RawDoc[] };
 }
 
-function json(body: unknown, status = 200): Response {
-	return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+function json(body: unknown, status = 200, headers: Record<string, string> = {}): Response {
+	return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } });
+}
+
+/** The judge, timed: it reads the six nearest cards with gpt-6-luna before anything is shown. */
+function timedJudge(judge: Judge, timing: StageTimer): Judge {
+	return (question, cards) => timing.time('judge', () => judge(question, cards));
 }

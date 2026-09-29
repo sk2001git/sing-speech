@@ -1,5 +1,6 @@
 import { OpenAiWsRoute } from './openai-ws';
 import { RouteUnavailable, type HearingRoute } from './types';
+import type { StageTimer } from '../timing';
 
 /**
  * The economical route (vault plan-suara-0016): Workers AI hears, gpt-6-luna reads.
@@ -27,6 +28,7 @@ export interface CloudflareRouteOptions {
 	model?: string;
 	fetchImpl?: typeof fetch;
 	reasoning?: 'none' | 'low';
+	timing?: StageTimer;
 }
 
 /** Base64 without Buffer, which the Workers runtime lacks unless nodejs_compat supplies it. */
@@ -47,6 +49,7 @@ export function cloudflareRoute(opts: CloudflareRouteOptions): HearingRoute {
 		socket: false,
 		...(opts.reasoning ? { reasoning: opts.reasoning } : {}),
 		...(opts.fetchImpl ? { fetchImpl: opts.fetchImpl } : {}),
+		...(opts.timing ? { timing: opts.timing } : {}),
 		transcribe: async (audio, _mime, hint) => {
 			if (!opts.ai) throw new RouteUnavailable(ID, 'missing-key', 'the Worker has no AI binding');
 			let out: { text?: string };
