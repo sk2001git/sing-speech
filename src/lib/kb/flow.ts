@@ -124,7 +124,8 @@ type Phase =
 	/** `web`: the web was searched too, and had no reliable answer either. */
 	| { view: View; phase: 'notfound'; heard: Heard; web?: true }
 	| { view: View; phase: 'denied'; reason: MicFailure }
-	| { view: View; phase: 'offline' };
+	/** `held`: the guard refused it (plan-suara-0021): the day's budget, this visitor's, or too fast. */
+	| { view: View; phase: 'offline'; held?: Held };
 
 /** A guide, Suara's or the web's, on the step the person was on. */
 export type GuideState = Extract<Phase, { phase: 'steps' | 'web-steps' }>;
@@ -136,6 +137,9 @@ export type GuideState = Extract<Phase, { phase: 'steps' | 'web-steps' }>;
  */
 export type FlowState = Phase & { guide?: GuideState };
 
+/** Why the guard said no: the whole day's budget is spent, this visitor's is, or they are going too fast. */
+export type Held = 'resting' | 'enough' | 'busy';
+
 export type FlowEvent =
 	| { type: 'PRESS' }
 	| { type: 'GRANTED' }
@@ -143,7 +147,7 @@ export type FlowEvent =
 	| { type: 'STOP' }
 	/** Their words are heard; the answer is still being found. */
 	| { type: 'HEARD'; said: string }
-	| { type: 'FAIL' }
+	| { type: 'FAIL'; held?: Held }
 	| { type: 'RESULTS'; result: SearchResult }
 	| { type: 'GREETING' }
 	/** No words: the silence gate gave up before speech, or the route heard none. */
@@ -223,7 +227,7 @@ function advance(state: FlowState, event: FlowEvent): FlowState {
 		case 'STOP':
 			return state.phase === 'listening' ? { view, phase: 'searching', topic: null } : state;
 		case 'FAIL':
-			return state.phase === 'searching' || state.phase === 'arming' ? { view, phase: 'offline' } : state;
+			return state.phase === 'searching' || state.phase === 'arming' ? { view, phase: 'offline', ...(event.held ? { held: event.held } : {}) } : state;
 		case 'RESULTS':
 			return state.phase === 'searching' ? { view, phase: 'results', result: event.result, openId: null } : state;
 		case 'GREETING':

@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import type { Area } from '../../lib/kb/areas';
 import type { EntryLanguage } from '../../lib/kb/entry';
-import { canSpeak, initial, next, type Heard, type View } from '../../lib/kb/flow';
+import { canSpeak, initial, next, type FlowEvent, type Heard, type Held, type View } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
 import type { SearchResponse } from '../../lib/kb/search';
 import { webAllowed, type WebAnswer, type WebStage } from '../../lib/kb/web-answer';
@@ -130,6 +130,20 @@ const NOT_ON_WEB: Record<EntryLanguage, string> = {
 	en: 'I could not find a reliable answer on the web either.',
 	'zh-Hans': '我在网上也找不到可靠的答案。',
 };
+
+/** The guard said no (plan-suara-0021): why, so the screen can say it plainly. */
+class HeldBack extends Error {
+	constructor(readonly held: Held) {
+		super(held);
+	}
+}
+
+async function heldBack(res: Response): Promise<HeldBack> {
+	const { error } = (await res.json().catch(() => ({}))) as { error?: string };
+	return new HeldBack(error === 'resting' ? 'resting' : error === 'enough-for-today' ? 'enough' : 'busy');
+}
+
+const failed = (err: unknown): FlowEvent => (err instanceof HeldBack ? { type: 'FAIL', held: err.held } : { type: 'FAIL' });
 
 /** What is said aloud when a web answer arrives: one sentence, then the screen carries the rest. */
 function webLine(a: WebAnswer): string {
@@ -339,8 +353,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			remember(reply, 'speech', isCorrection);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
 			show(reply, { asked: true });
-		} catch {
-			dispatch({ type: 'FAIL' });
+		} catch (err) {
+			dispatch(failed(err));
 		}
 	}
 	finishRef.current = (how) => void finish(how);
@@ -388,8 +402,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 									? 'Hello. Ask me about health costs, CPF or your Singpass.'
 									: 'That is not in Suara yet. Ask again in another way.',
 						);
-					} catch {
-						dispatch({ type: 'FAIL' });
+					} catch (err) {
+						dispatch(failed(err));
 						answer('Sorry, I could not reach the answers just now.');
 					}
 				},
@@ -445,6 +459,7 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			body: JSON.stringify({ ...body, reply: setting, route }),
 			...(signal ? { signal } : {}),
 		});
+		if (res.status === 429) throw await heldBack(res);
 		if (!res.ok || !res.body) throw new Error(String(res.status));
 		const reader = res.body.getReader();
 		const decoder = new TextDecoder();
@@ -625,8 +640,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		try {
 			last.current = { kind: 'text', query: label, heard };
 			show(await post({ kind: 'text', query: label, heard, offset: 0 }));
-		} catch {
-			dispatch({ type: 'FAIL' });
+		} catch (err) {
+			dispatch(failed(err));
 		}
 	}
 
@@ -658,8 +673,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			remember(reply, 'text', true, text);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
 			show(reply, { asked: true });
-		} catch {
-			dispatch({ type: 'FAIL' });
+		} catch (err) {
+			dispatch(failed(err));
 		}
 	}
 
@@ -678,8 +693,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			remember(reply, 'text', false, text);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard };
 			show(reply, { asked: true });
-		} catch {
-			dispatch({ type: 'FAIL' });
+		} catch (err) {
+			dispatch(failed(err));
 		}
 	}
 
@@ -691,8 +706,8 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		try {
 			last.current = { kind: 'topic', area };
 			show(await post({ kind: 'topic', area, offset: 0 }));
-		} catch {
-			dispatch({ type: 'FAIL' });
+		} catch (err) {
+			dispatch(failed(err));
 		}
 	}
 

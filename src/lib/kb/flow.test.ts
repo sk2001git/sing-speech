@@ -292,3 +292,11 @@ describe('hearing before the answer (plan-suara-0021, L2)', () => {
 		expect(next(listening, { type: 'HEARD', said: 'too early' })).toBe(listening);
 	});
 });
+
+describe('held back by the guard (plan-suara-0021, H4)', () => {
+	it('says why when Suara is resting, has done enough for this visitor today, or is busy', () => {
+		const searching = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }]);
+		expect(next(searching, { type: 'FAIL', held: 'resting' })).toMatchObject({ phase: 'offline', held: 'resting' });
+		expect(next(searching, { type: 'FAIL' })).not.toHaveProperty('held');
+	});
+});

@@ -126,6 +126,20 @@ describe('Results', () => {
 	});
 });
 
+describe('Held back', () => {
+	it('says Suara is resting for the day, with nothing to tap that would only be refused', () => {
+		const html = render({ phase: 'offline', view: 'grid', held: 'resting' });
+		expect(html).toContain('Suara is resting');
+		expect(html).not.toContain('Try again');
+		expect(html).not.toContain('I could not connect');
+	});
+	it('asks a busy visitor to wait a minute, and lets them try again', () => {
+		const html = render({ phase: 'offline', view: 'grid', held: 'busy' });
+		expect(html).toContain('wait a minute');
+		expect(html).toContain('Try again');
+	});
+});
+
 describe('Searching', () => {
 	it('shows what they said as soon as it is heard, while the answer is found', () => {
 		const html = render({ phase: 'searching', view: 'grid', topic: null, said: 'medisave for my father can or not' });

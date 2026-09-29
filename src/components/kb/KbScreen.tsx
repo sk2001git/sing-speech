@@ -8,7 +8,7 @@ import SaidBox from './Said';
 import JourneyView from './JourneyView';
 import Palette from './Palette';
 import type { Entry, EntryLanguage } from '../../lib/kb/entry';
-import { canSpeak, type FlowEvent, type FlowState } from '../../lib/kb/flow';
+import { canSpeak, type FlowEvent, type FlowState, type Held } from '../../lib/kb/flow';
 import type { ReplySetting } from '../../lib/kb/hearing';
 import type { StepContext } from '../../lib/kb/thread';
 import type { WebAnswer, WebSource } from '../../lib/kb/web-answer';
@@ -121,6 +121,11 @@ const WORDS = {
 		offlineTitle: 'I could not connect',
 		offline: 'Please check your connection, then tap to try again.',
 		tryAgain: 'Try again',
+		held: {
+			resting: ['Suara is resting', 'Suara has answered all it can for today. Please come back tomorrow.'],
+			enough: ['That is enough for today', 'You have asked many questions today. Please come back tomorrow.'],
+			busy: ['One moment', 'Many questions at once. Please wait a minute, then tap to try again.'],
+		} as Record<Held, [string, string]>,
 		home: 'Home',
 		language: 'Language',
 		find: 'Find',
@@ -241,6 +246,11 @@ const WORDS = {
 		offlineTitle: '连接不上',
 		offline: '请检查网络，然后点一下再试。',
 		tryAgain: '再试一次',
+		held: {
+			resting: ['Suara 今天休息了', '今天能回答的都回答了，请明天再来。'],
+			enough: ['今天问得够多了', '您今天问了很多问题，请明天再来。'],
+			busy: ['稍等一下', '一下子问了很多，请等一分钟，然后点一下再试。'],
+		} as Record<Held, [string, string]>,
 		home: '首页',
 		language: '语言',
 		find: '查找',
@@ -458,7 +468,18 @@ function Screen(p: BodyProps) {
 					<AskButton {...p} label={p.w.tryAgain} primary />
 				</>
 			);
-		case 'offline':
+		case 'offline': {
+			// Held back by the guard: say why, and offer nothing that would only be refused again.
+			if (s.held) {
+				const [title, text] = p.w.held[s.held];
+				return (
+					<>
+						<h1 className="k-h1">{title}</h1>
+						<p className="k-lead">{text}</p>
+						{s.held === 'busy' && <AskButton {...p} label={p.w.tryAgain} primary />}
+					</>
+				);
+			}
 			return (
 				<>
 					<Chip tone="alert" text={p.w.offlineTitle} />
@@ -468,6 +489,7 @@ function Screen(p: BodyProps) {
 					<Topics {...p} />
 				</>
 			);
+		}
 	}
 }
 
