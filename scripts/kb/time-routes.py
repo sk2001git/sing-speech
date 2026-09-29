@@ -12,7 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 ap = argparse.ArgumentParser()
-ap.add_argument('--base', default='http://localhost:4388')
+# 127.0.0.1, not localhost: on Windows, Python tries IPv6 first and every request waited 2 s more.
+ap.add_argument('--base', default='http://127.0.0.1:4388')
 ap.add_argument('--routes', default='openai-ws,cloudflare')
 ap.add_argument('--clips', default='chas-clean.mp4,appt-clean-noise.mp4,appt-two-needs.mp4')
 ap.add_argument('--runs', type=int, default=2)

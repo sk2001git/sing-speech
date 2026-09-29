@@ -20,8 +20,6 @@ const VOICE: Record<EntryLanguage, string> = { en: 'en-SG', 'zh-Hans': 'zh-SG' }
 /** The route's own voice while it plays, so a new line or a tap can cut it off. */
 let playing: HTMLAudioElement | null = null;
 let speechTurn = 0;
-/** The line still being fetched: a voice that is slow to speak (the local route) is told to stop. */
-let fetching: AbortController | null = null;
 
 function phoneSay(text: string, language: EntryLanguage): void {
 	if (typeof speechSynthesis === 'undefined') return;
@@ -36,10 +34,13 @@ function phoneSay(text: string, language: EntryLanguage): void {
 function silence(): void {
 	speechTurn += 1;
 	if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
-	playing?.pause();
+	// Pausing is not enough while a line still streams in: dropping its source stops the download.
+	if (playing) {
+		playing.pause();
+		playing.removeAttribute('src');
+		playing.load();
+	}
 	playing = null;
-	fetching?.abort();
-	fetching = null;
 }
 
 /**
@@ -49,25 +50,18 @@ function silence(): void {
 async function routeSay(text: string, language: EntryLanguage, route: string): Promise<void> {
 	silence();
 	const turn = speechTurn;
-	const request = new AbortController();
-	fetching = request;
+	// Played as it arrives (GET, plan-suara-0021, L5), instead of after the whole clip is fetched.
+	// No voice on the route (204) or a failure is an error on the element: the phone speaks.
+	const audio = new Audio(`/api/speak?${new URLSearchParams({ text: text.slice(0, 1000), language, route })}`);
+	const fallBack = () => {
+		if (turn === speechTurn) phoneSay(text, language);
+	};
+	audio.onerror = fallBack;
+	playing = audio;
 	try {
-		const res = await fetch('/api/speak', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ text: text.slice(0, 1000), language, route }),
-			signal: request.signal,
-		});
-		if (turn !== speechTurn) return;
-		if (res.status !== 200) return phoneSay(text, language);
-		const url = URL.createObjectURL(await res.blob());
-		if (turn !== speechTurn) return URL.revokeObjectURL(url);
-		const audio = new Audio(url);
-		audio.onended = () => URL.revokeObjectURL(url);
-		playing = audio;
 		await audio.play();
 	} catch {
-		if (turn === speechTurn) phoneSay(text, language);
+		if (playing === audio) fallBack();
 	}
 }
 
