@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createSilenceGate, rms, SILENCE_MS } from './silence';
+import { createSilenceGate, EARLY_MS, rms, SILENCE_MS } from './silence';
 
 /** Feed `levels` at 100 ms steps from `start`, returning the first non-'listen' verdict and when. */
 function run(gate: ReturnType<typeof createSilenceGate>, levels: number[], start = 0) {
@@ -21,6 +21,17 @@ describe('createSilenceGate', () => {
 		expect(r.verdict).toBe('done');
 		// Speech ends at 2400 ms; the 3 s pause is complete at 5400 ms.
 		expect(r.at).toBe(5400);
+	});
+
+	it('says when speech was last heard, so a question can be sent early and recalled if they go on', () => {
+		const gate = createSilenceGate();
+		expect(gate.lastSpeech).toBeNull();
+		run(gate, [...quiet(5), ...speech(20), ...quiet(15)]);
+		// Speech ends at 2400 ms; 1.5 s later the turn is not over, but the question can go.
+		expect(gate.lastSpeech).toBe(2400);
+		expect(EARLY_MS).toBe(1500);
+		run(gate, [...speech(5)], 4000);
+		expect(gate.lastSpeech).toBe(4400);
 	});
 
 	it('does not end on a short pause between words', () => {

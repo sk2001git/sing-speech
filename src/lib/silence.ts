@@ -7,6 +7,11 @@
  * microphone. Loudness is RMS of the time-domain samples, 0 to 1.
  */
 export const SILENCE_MS = 3000;
+/**
+ * Quiet long enough to send the question while still listening (vault plan-suara-0021, L1):
+ * the answer is on its way when the 3 s pause ends. Speech again recalls it.
+ */
+export const EARLY_MS = 1500;
 
 export type Verdict = 'listen' | 'done' | 'nothing';
 
@@ -68,6 +73,10 @@ export function createSilenceGate(opts: GateOptions = {}) {
 		},
 		get heardSpeech() {
 			return heardSpeech;
+		},
+		/** When speech was last heard, or null before any: a question sent early is stale once this moves. */
+		get lastSpeech(): number | null {
+			return heardSpeech ? lastLoud : null;
 		},
 	};
 }

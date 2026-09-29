@@ -8,8 +8,8 @@ import { webAllowed, type WebAnswer, type WebStage } from '../../lib/kb/web-answ
 import { connectLive, LiveUnavailable, type LiveLink } from '../../lib/live-client';
 import { micFailure } from '../../lib/mic';
 import { commentaryFor } from '../../lib/routes/live';
-import { blobToBase64, pickMimeType } from '../../lib/record';
-import { createSilenceGate, rms } from '../../lib/silence';
+import { bytesToBase64, encodeWav } from '../../lib/wav';
+import { createSilenceGate, EARLY_MS, rms } from '../../lib/silence';
 import { chartHeadline } from './ChartCard';
 import { readBack } from '../../lib/kb/readback';
 import type { StepContext, Turn } from '../../lib/kb/thread';
@@ -75,14 +75,28 @@ async function routeSay(text: string, language: EntryLanguage, route: string): P
  * Loudness readings from the open microphone, about ten a second. The analyser is also handed
  * to the listening screen, which reads its frequency bands every frame to draw the wave.
  */
-function watchLevel(stream: MediaStream, onLevel: (level: number, now: number) => void, onAnalyser?: (a: AnalyserNode | null) => void): () => void {
+function watchLevel(
+	stream: MediaStream,
+	onLevel: (level: number, now: number) => void,
+	onAnalyser?: (a: AnalyserNode | null) => void,
+	onSamples?: (block: Float32Array, rate: number) => void,
+): () => void {
 	const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 	if (!Ctx) return () => {};
 	const ctx = new Ctx();
 	const analyser = ctx.createAnalyser();
 	analyser.fftSize = 1024;
-	ctx.createMediaStreamSource(stream).connect(analyser);
+	const source = ctx.createMediaStreamSource(stream);
+	source.connect(analyser);
 	onAnalyser?.(analyser);
+	// The recording itself, as samples (lib/wav.ts): a processor must reach the destination to
+	// run, and it writes silence there, so nothing is heard.
+	if (onSamples) {
+		const processor = ctx.createScriptProcessor(4096, 1, 1);
+		processor.onaudioprocess = (e) => onSamples(new Float32Array(e.inputBuffer.getChannelData(0)), ctx.sampleRate);
+		source.connect(processor);
+		processor.connect(ctx.destination);
+	}
 	const buf = new Float32Array(analyser.fftSize);
 	const timer = setInterval(() => {
 		analyser.getFloatTimeDomainData(buf);
@@ -158,13 +172,30 @@ async function fetchWeb(question: string, query: string | undefined, language: E
 type LastQuery ={ kind: 'text'; query: string; heard: { short: string; sentence: string } } | { kind: 'topic'; area: Area };
 
 interface Recording {
-	rec: MediaRecorder;
 	stream: MediaStream;
-	mimeType: string;
-	chunks: Blob[];
+	/** The microphone's samples so far, and their rate; sent as WAV (lib/wav.ts). */
+	blocks: Float32Array[];
+	rate: number;
 	stopWatching: () => void;
 	/** Whether the silence gate heard speech; a recording with none is not sent. */
 	heardSpeech: () => boolean;
+	/** When speech was last heard, from the silence gate. */
+	lastSpeech: () => number | null;
+	/** The question sent early, at 1.5 s of quiet, if any (plan-suara-0021, L1). */
+	early: Early | null;
+}
+
+/** What has been recorded so far, as base64 WAV. */
+const wavOf = (r: Recording) => bytesToBase64(encodeWav(r.blocks.slice(), r.rate));
+
+/**
+ * A question sent while the person may still be talking: `at` is the moment of speech it was
+ * cut after. If speech is heard again, it is recalled and the turn goes on as before.
+ */
+interface Early {
+	at: number;
+	reply: Promise<SearchResponse | null>;
+	abort: AbortController;
 }
 
 /**
@@ -282,29 +313,23 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		if (!current) return;
 		recording.current = null;
 		current.stopWatching();
-		const stopped = new Promise<void>((resolve) => (current.rec.onstop = () => resolve()));
-		current.rec.stop();
-		await stopped;
 		current.stream.getTracks().forEach((t) => t.stop());
 
-		if (how === 'nothing' || (how === 'tap' && !current.heardSpeech() && current.chunks.length === 0)) {
+		if (how === 'nothing' || (how === 'tap' && !current.heardSpeech() && current.blocks.length === 0)) {
+			current.early?.abort.abort();
 			dispatch({ type: 'SILENCE' });
 			return;
 		}
 		dispatch({ type: 'STOP' });
 		try {
-			const type = current.rec.mimeType || current.mimeType || 'audio/webm';
 			const isCorrection = correcting.current && thread.current.length > 0;
+			// The question sent early stands if nothing was said after it: its answer is already
+			// on its way, often here (plan-suara-0021, L1). Otherwise it is recalled.
+			const early = current.early && current.early.at === current.lastSpeech() ? await current.early.reply : null;
+			if (!early) current.early?.abort.abort();
+			const reply = early ?? (await post(speechBody(wavOf(current))));
 			correcting.current = false;
-			const context = askContext.current;
 			askContext.current = null;
-			const reply = await post({
-				kind: 'speech',
-				audioBase64: await blobToBase64(new Blob(current.chunks, { type })),
-				mimeType: type,
-				...(isCorrection ? { thread: thread.current } : {}),
-				...(context ? { context } : {}),
-			});
 			remember(reply, 'speech', isCorrection);
 			if (reply.kind === 'results') last.current = { kind: 'text', query: reply.result.query, heard: reply.result.heard };
 			show(reply, { asked: true });
@@ -379,11 +404,32 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		}
 	}
 
-	async function post(body: Record<string, unknown>): Promise<SearchResponse> {
+	/** A spoken question as sent: the recording, and the thread or step it goes with. Read, not cleared. */
+	function speechBody(audioBase64: string): Record<string, unknown> {
+		const isCorrection = correcting.current && thread.current.length > 0;
+		const context = askContext.current;
+		return { kind: 'speech', audioBase64, mimeType: 'audio/wav', ...(isCorrection ? { thread: thread.current } : {}), ...(context ? { context } : {}) };
+	}
+
+	/** Send what has been said so far, while still listening; null if it is recalled or fails. */
+	function sendEarly(current: Recording, at: number): Early {
+		const abort = new AbortController();
+		const reply = (async () => {
+			try {
+				return await post(speechBody(wavOf(current)), abort.signal);
+			} catch {
+				return null;
+			}
+		})();
+		return { at, reply, abort };
+	}
+
+	async function post(body: Record<string, unknown>, signal?: AbortSignal): Promise<SearchResponse> {
 		const res = await fetch('/api/search', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ ...body, reply: setting, route }),
+			...(signal ? { signal } : {}),
 		});
 		if (!res.ok) throw new Error(String(res.status));
 		return (await res.json()) as SearchResponse;
@@ -492,22 +538,41 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 		dispatch({ type: 'PRESS' });
 		try {
 			const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, noiseSuppression: true } });
-			const mimeType = pickMimeType();
-			const rec = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-			const chunks: Blob[] = [];
-			rec.ondataavailable = (e) => chunks.push(e.data);
+			const blocks: Float32Array[] = [];
+			let rate = 48000;
 			const gate = createSilenceGate();
 			let ended = false;
 			const stopWatching = watchLevel(stream, (loudness, now) => {
 				setLevel(loudness);
 				const verdict = gate.push(loudness, now);
+				const mine = recording.current;
+				const spoke = gate.lastSpeech;
+				if (mine && spoke !== null && verdict === 'listen') {
+					// They went on after the early question: recall it; the next pause sends another.
+					if (mine.early && mine.early.at !== spoke) {
+						mine.early.abort.abort();
+						mine.early = null;
+					}
+					if (!mine.early && now - spoke >= EARLY_MS) mine.early = sendEarly(mine, spoke);
+				}
 				if (verdict !== 'listen' && !ended) {
 					ended = true;
 					finishRef.current(verdict);
 				}
-			}, setAnalyser);
-			recording.current = { rec, stream, mimeType, chunks, stopWatching, heardSpeech: () => gate.heardSpeech };
-			rec.start();
+			}, setAnalyser, (block, r) => {
+				blocks.push(block);
+				rate = r;
+				if (recording.current) recording.current.rate = r;
+			});
+			recording.current = {
+				stream,
+				blocks,
+				rate,
+				stopWatching,
+				heardSpeech: () => gate.heardSpeech,
+				lastSpeech: () => gate.lastSpeech,
+				early: null,
+			};
 			dispatch({ type: 'GRANTED' });
 		} catch (err) {
 			dispatch({ type: 'DENIED', reason: micFailure(err, window.isSecureContext) });
