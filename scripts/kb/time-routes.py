@@ -7,7 +7,7 @@ base64 to /api/search, against the dev server.
 Prints the time to the answer per clip and route, and the server's own stage timings when it
 sends a Server-Timing header. Costs a few cents of model calls per run.
 """
-import argparse, base64, json, statistics, time, urllib.request
+import argparse, base64, http.cookiejar, json, statistics, time, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,11 +19,15 @@ ap.add_argument('--clips', default='chas-clean.mp4,appt-clean-noise.mp4,appt-two
 ap.add_argument('--runs', type=int, default=2)
 args = ap.parse_args()
 
+# The API needs the page's session (vault plan-suara-0021, H3); the dev server issues one freely.
+opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+opener.open(urllib.request.Request(f'{args.base}/api/session', data=b'{}', headers={'content-type': 'application/json'}), timeout=30).read()
+
 def post(route, audio):
     body = json.dumps({'kind': 'speech', 'audioBase64': audio, 'mimeType': 'audio/mp4', 'reply': 'en', 'route': route}).encode()
     req = urllib.request.Request(f'{args.base}/api/search', data=body, headers={'content-type': 'application/json'})
     t = time.time()
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with opener.open(req, timeout=120) as r:
         out = json.loads(r.read().decode('utf-8'))
         timing = r.headers.get('server-timing', '')
     return time.time() - t, out, timing

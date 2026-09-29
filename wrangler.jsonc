@@ -12,7 +12,9 @@
 	//   npx wrangler secret put GEMINI_API_KEY
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "suara",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	// Astro's handler plus the daily budget's Durable Object (src/worker.ts; vault plan-suara-0021),
+	// the custom entry the Astro Cloudflare adapter documents for exporting one.
+	"main": "./src/worker.ts",
 	// Astro sets this for the build, but wrangler's own commands (`types`, `deploy`)
 	// require it in the file, so it is explicit.
 	"compatibility_date": "2026-09-07",
@@ -37,6 +39,22 @@
 	// Built by scripts/kb/build-vectorize.ts. Vectorize has no local copy, so the dev server
 	// reads the real index (remote); it is read-only there.
 	"vectorize": [{ "binding": "SUARA_CARDS", "index_name": "suara-cards-bge-m3", "remote": true }],
+	// The guard in front of the paid APIs (src/lib/guard, vault plan-suara-0021). One Durable Object
+	// per day holds the day's spend, strongly consistent; each bucket has its own rate per minute
+	// (Workers Rate Limiting, counted per Cloudflare location, "not an accurate accounting system":
+	// bursts only, never the budget). Limits are in src/lib/guard/policy.ts PER_MINUTE.
+	//   npx wrangler secret put SUARA_SESSION_SECRET     (required: without it paid APIs are closed)
+	//   npx wrangler secret put SUARA_TURNSTILE_SECRET   (with it, a session needs a Turnstile pass)
+	"durable_objects": { "bindings": [{ "name": "SUARA_BUDGET", "class_name": "Budget" }] },
+	"exports": { "Budget": { "type": "durable-object", "storage": "sqlite" } },
+	"ratelimits": [
+		{ "name": "SUARA_RL_SEARCH", "namespace_id": "2101", "simple": { "limit": 12, "period": 60 } },
+		{ "name": "SUARA_RL_WEB", "namespace_id": "2102", "simple": { "limit": 4, "period": 60 } },
+		{ "name": "SUARA_RL_SPEAK", "namespace_id": "2103", "simple": { "limit": 40, "period": 60 } },
+		{ "name": "SUARA_RL_LIVE", "namespace_id": "2104", "simple": { "limit": 3, "period": 60 } },
+		{ "name": "SUARA_RL_SESSION", "namespace_id": "2105", "simple": { "limit": 5, "period": 60 } },
+		{ "name": "SUARA_RL_OTHER", "namespace_id": "2106", "simple": { "limit": 10, "period": 60 } }
+	],
 	// OPENAI_API_KEY is also a secret, needed only when SUARA_MODE is "openai":
 	//   npx wrangler secret put OPENAI_API_KEY
 	"vars": {
@@ -45,6 +63,9 @@
 		"SUARA_MODE": "gemini",
 		"SUARA_TRANSCRIBER": "none",
 		"SUARA_OPENAI_MODEL": "gpt-realtime-2.1",
-		"SUARA_DEMO": "false"
+		"SUARA_DEMO": "false",
+		// US dollars a day for the whole site, and for one session; over either, Suara rests.
+		"SUARA_DAILY_BUDGET_USD": "3",
+		"SUARA_SESSION_BUDGET_USD": "0.25"
 	}
 }

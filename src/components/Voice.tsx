@@ -1,3 +1,4 @@
+import '../lib/session-client';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { cardsFor } from '../lib/cards';
 import { factsFor } from '../lib/catalogue';

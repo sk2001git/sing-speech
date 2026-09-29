@@ -9,6 +9,7 @@ import { connectLive, LiveUnavailable, type LiveLink } from '../../lib/live-clie
 import { micFailure } from '../../lib/mic';
 import { commentaryFor } from '../../lib/routes/live';
 import { bytesToBase64, encodeWav } from '../../lib/wav';
+import { ensureSession } from '../../lib/session-client';
 import { createSilenceGate, EARLY_MS, rms } from '../../lib/silence';
 import { chartHeadline } from './ChartCard';
 import { readBack } from '../../lib/kb/readback';
@@ -50,6 +51,9 @@ function silence(): void {
 async function routeSay(text: string, language: EntryLanguage, route: string): Promise<void> {
 	silence();
 	const turn = speechTurn;
+	// An audio element cannot go through the page's fetch, so it waits for the session here.
+	await ensureSession().catch(() => {});
+	if (turn !== speechTurn) return;
 	// Played as it arrives (GET, plan-suara-0021, L5), instead of after the whole clip is fetched.
 	// No voice on the route (204) or a failure is an error on the element: the phone speaks.
 	const audio = new Audio(`/api/speak?${new URLSearchParams({ text: text.slice(0, 1000), language, route })}`);

@@ -1,0 +1,18 @@
+# Suara answers older Singaporeans' questions out loud. The pages are for people.
+# The API costs money on every call and is closed to anything but Suara's own page.
+User-agent: *
+Disallow: /api/
+Disallow: /admin
+Allow: /
+
+# No training on Suara, and no agents working through it.
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /

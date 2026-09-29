@@ -1,3 +1,4 @@
+import '../../lib/session-client';
 import { useEffect, useReducer, useRef, type FormEvent, type ReactNode } from 'react';
 import { adminNext, adminStart, visible, type AdminAction, type AdminEvent, type AdminState } from '../../lib/admin-flow';
 import type { WebStage } from '../../lib/kb/web-answer';
