@@ -57,7 +57,7 @@ await send('Page.enable');
 await send('Page.navigate', { url: `${base}?route=${route}` });
 await sleep(6000);
 // Listening shows the stop button; an answer shows a card, a web answer or a "not in Suara" heading.
-const phase = () => evaluate(`(() => document.querySelector('.k-stop') ? 'listening' : document.querySelector('[data-card], .k-web-card, .k-web-searching, .k-webstages') ? 'answer' : 'other')()`);
+const phase = () => evaluate(`(() => document.querySelector('.k-stop') ? 'listening' : document.querySelector('[data-card], .k-web-card, .k-web-searching, .k-webstages') ? 'answer' : document.querySelector('.k-skeleton') && /You said/.test(document.querySelector('main')?.innerText ?? '') ? 'heard' : 'other')()`);
 const t0 = Date.now();
 await evaluate(`document.querySelector('.k-orb')?.click()`);
 const seen = {};
@@ -69,10 +69,12 @@ while (Date.now() - t0 < 40000) {
 	await sleep(100);
 }
 const searches = events.filter((e) => e.method === 'Network.requestWillBeSent' && e.params.request.url.includes('/api/search'));
-const failed = new Set(events.filter((e) => e.method === 'Network.loadingFailed').map((e) => e.params.requestId));
+// Recalled means aborted by the page; a stream the page stopped reading after its answer is not.
+const failed = new Set(events.filter((e) => e.method === 'Network.loadingFailed' && !e.params.canceled).map((e) => e.params.requestId));
+const canceled = new Set(events.filter((e) => e.method === 'Network.loadingFailed' && e.params.canceled).map((e) => e.params.requestId));
 console.log(`route ${route}, times from the tap:`);
-for (const s of searches) console.log(`  /api/search sent at ${s.t - t0} ms${failed.has(s.params.requestId) ? ' (recalled)' : ''}`);
-console.log(`  stopped listening at ${seen.stopped ?? '?'} ms; answer on screen at ${seen.answer ?? 'never'} ms`);
+for (const s of searches) console.log(`  /api/search sent at ${s.t - t0} ms${failed.has(s.params.requestId) ? ' (failed)' : canceled.has(s.params.requestId) ? ' (cancelled by the page)' : ''}`);
+console.log(`  stopped listening at ${seen.stopped ?? '?'} ms; their words on screen at ${seen.heard ?? 'never'} ms; answer on screen at ${seen.answer ?? 'never'} ms`);
 if (seen.stopped && seen.answer) console.log(`  wait after the phone stopped listening: ${seen.answer - seen.stopped} ms`);
 if (process.env.SAVE_BODY && searches[0]) {
 	const body = await send('Network.getRequestPostData', { requestId: searches[0].params.requestId });

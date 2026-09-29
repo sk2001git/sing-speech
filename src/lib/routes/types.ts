@@ -11,7 +11,8 @@ export interface HearingRoute {
 	/** Shown small at the foot of the page. */
 	label: string;
 	/** `hint`: the reader's language, when they chose one; Whisper guesses badly on short Singlish. */
-	hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint): Promise<Hearing>;
+	/** `onTranscript`: the words, as soon as they are heard and before they are read. */
+	hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint, onTranscript?: (transcript: string) => void): Promise<Hearing>;
 }
 
 /** The language a recording is in, as far as the reader's setting says (vault obs-0054). */

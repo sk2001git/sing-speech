@@ -106,7 +106,8 @@ type Phase =
 	| { view: View; phase: 'home'; greeting: boolean; notice?: 'nothing' }
 	| { view: View; phase: 'arming' }
 	| { view: View; phase: 'listening' }
-	| { view: View; phase: 'searching'; topic: Area | null }
+	/** `said`: their words, shown as soon as they are heard, before the answer (plan-suara-0021, L2). */
+	| { view: View; phase: 'searching'; topic: Area | null; said?: string }
 	| Results
 	| JourneyPhase
 	| { view: View; phase: 'places'; result: PlacesResult }
@@ -140,6 +141,8 @@ export type FlowEvent =
 	| { type: 'GRANTED' }
 	| { type: 'DENIED'; reason: MicFailure }
 	| { type: 'STOP' }
+	/** Their words are heard; the answer is still being found. */
+	| { type: 'HEARD'; said: string }
 	| { type: 'FAIL' }
 	| { type: 'RESULTS'; result: SearchResult }
 	| { type: 'GREETING' }
@@ -215,6 +218,8 @@ function advance(state: FlowState, event: FlowEvent): FlowState {
 			return state.phase === 'arming' ? { view, phase: 'listening' } : state;
 		case 'DENIED':
 			return state.phase === 'arming' ? { view, phase: 'denied', reason: event.reason } : state;
+		case 'HEARD':
+			return state.phase === 'searching' ? { ...state, said: event.said } : state;
 		case 'STOP':
 			return state.phase === 'listening' ? { view, phase: 'searching', topic: null } : state;
 		case 'FAIL':

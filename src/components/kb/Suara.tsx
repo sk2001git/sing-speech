@@ -196,6 +196,10 @@ interface Early {
 	at: number;
 	reply: Promise<SearchResponse | null>;
 	abort: AbortController;
+	/** Their words, once the server has heard them: shown when this question is kept. */
+	said?: string;
+	/** Set when the question is kept, so words heard after that go to the screen. */
+	onHeard?: (said: string) => void;
 }
 
 /**
@@ -325,9 +329,13 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 			const isCorrection = correcting.current && thread.current.length > 0;
 			// The question sent early stands if nothing was said after it: its answer is already
 			// on its way, often here (plan-suara-0021, L1). Otherwise it is recalled.
-			const early = current.early && current.early.at === current.lastSpeech() ? await current.early.reply : null;
-			if (!early) current.early?.abort.abort();
-			const reply = early ?? (await post(speechBody(wavOf(current))));
+			const kept = current.early && current.early.at === current.lastSpeech() ? current.early : null;
+			if (!kept) current.early?.abort.abort();
+			// Their words may already be heard; show them while the answer finishes (L2).
+			if (kept?.said) dispatch({ type: 'HEARD', said: kept.said });
+			if (kept) kept.onHeard = (said) => dispatch({ type: 'HEARD', said });
+			const early = kept ? await kept.reply : null;
+			const reply = early ?? (await post(speechBody(wavOf(current)), undefined, (said) => dispatch({ type: 'HEARD', said })));
 			correcting.current = false;
 			askContext.current = null;
 			remember(reply, 'speech', isCorrection);
@@ -414,25 +422,53 @@ export default function Suara({ route, routeLabel }: { route: string; routeLabel
 	/** Send what has been said so far, while still listening; null if it is recalled or fails. */
 	function sendEarly(current: Recording, at: number): Early {
 		const abort = new AbortController();
-		const reply = (async () => {
+		const early: Early = { at, abort, reply: Promise.resolve(null) };
+		early.reply = (async () => {
 			try {
-				return await post(speechBody(wavOf(current)), abort.signal);
+				return await post(speechBody(wavOf(current)), abort.signal, (said) => {
+					early.said = said;
+					early.onHeard?.(said);
+				});
 			} catch {
 				return null;
 			}
 		})();
-		return { at, reply, abort };
+		return early;
 	}
 
-	async function post(body: Record<string, unknown>, signal?: AbortSignal): Promise<SearchResponse> {
+	/**
+	 * A question to /api/search, read as it streams (plan-suara-0021, L2): their words as soon as
+	 * they are heard, then the answer.
+	 */
+	async function post(body: Record<string, unknown>, signal?: AbortSignal, onHeard?: (said: string) => void): Promise<SearchResponse> {
 		const res = await fetch('/api/search', {
 			method: 'POST',
-			headers: { 'content-type': 'application/json' },
+			headers: { 'content-type': 'application/json', accept: 'application/x-ndjson' },
 			body: JSON.stringify({ ...body, reply: setting, route }),
 			...(signal ? { signal } : {}),
 		});
-		if (!res.ok) throw new Error(String(res.status));
-		return (await res.json()) as SearchResponse;
+		if (!res.ok || !res.body) throw new Error(String(res.status));
+		const reader = res.body.getReader();
+		const decoder = new TextDecoder();
+		let buf = '';
+		for (;;) {
+			const { value, done } = await reader.read();
+			buf += decoder.decode(value, { stream: !done });
+			let nl: number;
+			while ((nl = buf.indexOf('\n')) >= 0) {
+				const line = buf.slice(0, nl).trim();
+				buf = buf.slice(nl + 1);
+				if (!line) continue;
+				const event = JSON.parse(line) as { type: 'heard'; said: string } | { type: 'answer'; reply: SearchResponse } | { type: 'error' };
+				if (event.type === 'heard') onHeard?.(event.said);
+				else if (event.type === 'answer') {
+					void reader.cancel().catch(() => {});
+					return event.reply;
+				}
+				else throw new Error('search failed');
+			}
+			if (done) throw new Error('the answer never came');
+		}
 	}
 
 	/**

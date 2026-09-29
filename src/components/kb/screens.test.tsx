@@ -126,6 +126,14 @@ describe('Results', () => {
 	});
 });
 
+describe('Searching', () => {
+	it('shows what they said as soon as it is heard, while the answer is found', () => {
+		const html = render({ phase: 'searching', view: 'grid', topic: null, said: 'medisave for my father can or not' });
+		expect(html).toContain('medisave for my father can or not');
+		expect(html).toContain('Finding answers');
+	});
+});
+
 describe('Guided steps', () => {
 	const e: Entry = aProcess();
 	const back = results(result({ cards: [e] })) as Extract<FlowState, { phase: 'results' }>;

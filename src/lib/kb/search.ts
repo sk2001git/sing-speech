@@ -146,7 +146,8 @@ export interface SearchDeps {
 	 */
 	nearest?: (vector: number[]) => Promise<{ entryId: string; score: number }[]>;
 	/** `hint`: the language the reader chose, en or zh; none on Automatic (vault obs-0054). */
-	hear?: (audio: ArrayBuffer, mimeType?: string, hint?: 'en' | 'zh') => Promise<Hearing>;
+	/** `onTranscript`: called with the words as soon as they are heard, before they are read. */
+	hear?: (audio: ArrayBuffer, mimeType?: string, hint?: 'en' | 'zh', onTranscript?: (transcript: string) => void) => Promise<Hearing>;
 	translate?: (original: Entry, language: EntryLanguage) => Promise<Entry | null>;
 	cache: TranslationCache;
 	thresholds: Thresholds;

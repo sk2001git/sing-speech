@@ -56,6 +56,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 		const route = resolveRoute((raw as { route?: string }).route, env.SUARA_ROUTE);
 		const timing = stageTimer();
 		const chain = buildRoutes(route, env, timing);
+		// Their words, the moment they are transcribed; only a streamed reply sends them (L2).
+		let onHeard: (said: string) => void = () => {};
 		let served: string | undefined;
 		const ctx = (locals as { cfContext?: { waitUntil?: (p: Promise<unknown>) => void } }).cfContext;
 		// The Cloudflare route writes and translates with gpt-6-luna alone (plan-suara-0016).
@@ -80,7 +82,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			journeys: loadJourneys(),
 			embed: (text, kind) => timing.time('embed', async () => (cf ? cf.embed(text, kind) : (await openai.embed(EMBEDDING.model, [kind === 'query' ? queryText(text) : text], EMBEDDING.dimensions))[0]!)),
 			hear: async (audio, mime, hint) => {
-				const heard = await hearVia(chain, audio, mime, hint);
+				const heard = await hearVia(chain, audio, mime, hint, (said) => onHeard(said));
 				served = heard.route;
 				return heard.hearing;
 			},
@@ -104,6 +106,32 @@ export const POST: APIRoute = async ({ request, locals }) => {
 			now: () => new Date().toISOString(),
 			...(ctx?.waitUntil ? { waitUntil: (p) => ctx.waitUntil!(p) } : {}),
 		};
+		/*
+		 * The phone asks for NDJSON (plan-suara-0021, L2): a "heard" line with their words as soon as
+		 * they are transcribed, about two seconds before the reading and the search are done, then
+		 * the answer with its stage timings. Anything else, a script say, gets one JSON reply.
+		 */
+		if ((request.headers.get('accept') ?? '').includes('application/x-ndjson')) {
+			const encoder = new TextEncoder();
+			const stream = new ReadableStream<Uint8Array>({
+				start(controller) {
+					const send = (line: unknown) => controller.enqueue(encoder.encode(`${JSON.stringify(line)}\n`));
+					onHeard = (said) => send({ type: 'heard', said: said.slice(0, 1000) });
+					void (async () => {
+						try {
+							const reply = await timing.time('total', () => runSearch(parsed, deps));
+							send({ type: 'answer', reply: { ...reply, ...(served ? { route: served } : {}) }, timing: timing.header() });
+						} catch (err) {
+							console.error('search failed:', err instanceof Error ? err.message.slice(0, 200) : err);
+							send({ type: 'error' });
+						} finally {
+							controller.close();
+						}
+					})();
+				},
+			});
+			return new Response(stream, { headers: { 'content-type': 'application/x-ndjson', 'cache-control': 'no-store' } });
+		}
 		const reply = await timing.time('total', () => runSearch(parsed, deps));
 		return json({ ...reply, ...(served ? { route: served } : {}) }, 200, { 'server-timing': timing.header() });
 	} catch (err) {

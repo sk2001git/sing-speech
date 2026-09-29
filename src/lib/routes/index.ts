@@ -96,11 +96,11 @@ export interface Heard {
 	skipped: { route: string; reason: UnavailableReason }[];
 }
 
-export async function hearVia(chain: readonly HearingRoute[], audio: ArrayBuffer, mimeType?: string, hint?: HearingHint): Promise<Heard> {
+export async function hearVia(chain: readonly HearingRoute[], audio: ArrayBuffer, mimeType?: string, hint?: HearingHint, onTranscript?: (transcript: string) => void): Promise<Heard> {
 	const skipped: Heard['skipped'] = [];
 	for (const route of chain) {
 		try {
-			return { hearing: await route.hear(audio, mimeType, hint), route: route.id, skipped };
+			return { hearing: await route.hear(audio, mimeType, hint, onTranscript), route: route.id, skipped };
 		} catch (err) {
 			if (err instanceof RouteUnavailable && err.reason === 'nothing-heard') throw new NothingHeard(err.message);
 			skipped.push({ route: route.id, reason: err instanceof RouteUnavailable ? err.reason : 'vendor-error' });

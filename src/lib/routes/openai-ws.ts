@@ -94,13 +94,14 @@ export class OpenAiWsRoute implements HearingRoute {
 		this.timeoutMs = opts.timeoutMs ?? 20_000;
 	}
 
-	async hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint): Promise<Hearing> {
+	async hear(audio: ArrayBuffer, mimeType?: string, hint?: HearingHint, onTranscript?: (transcript: string) => void): Promise<Hearing> {
 		const key = this.opts.apiKey;
 		if (!key) throw new RouteUnavailable(this.id, 'missing-key', 'OPENAI_API_KEY is not set');
 
 		const timing = this.opts.timing ?? noTimer;
 		const transcript = await timing.time('transcribe', () => (this.opts.transcribe ? this.opts.transcribe(audio, mimeType, hint) : this.transcribe(key, audio, mimeType)));
 		if (transcript.trim() === '') throw new RouteUnavailable(this.id, 'nothing-heard', 'the transcript was empty');
+		onTranscript?.(transcript.trim());
 
 		const request = {
 			model: this.model,

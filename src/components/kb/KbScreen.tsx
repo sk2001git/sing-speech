@@ -492,6 +492,8 @@ function Talk(p: BodyProps) {
 	if (s.phase === 'searching') {
 		return (
 			<>
+				{/* Their words, as soon as they are heard: the wait reads as work, not as nothing. */}
+				{s.said && <Said w={p.w} said={s.said} lang={p.lang} />}
 				<h1 className="k-h1" aria-live="polite">
 					{p.w.finding}
 				</h1>

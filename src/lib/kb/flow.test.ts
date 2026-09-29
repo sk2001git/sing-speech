@@ -283,3 +283,12 @@ describe('a journey', () => {
 		expect(state.phase).toBe('journey');
 	});
 });
+
+describe('hearing before the answer (plan-suara-0021, L2)', () => {
+	it('shows what they said while the answer is still being found, and only then', () => {
+		const searching = run([{ type: 'PRESS' }, { type: 'GRANTED' }, { type: 'STOP' }]);
+		expect(next(searching, { type: 'HEARD', said: 'medisave for my father can or not' })).toMatchObject({ phase: 'searching', said: 'medisave for my father can or not' });
+		const listening = run([{ type: 'PRESS' }, { type: 'GRANTED' }]);
+		expect(next(listening, { type: 'HEARD', said: 'too early' })).toBe(listening);
+	});
+});
